@@ -5,8 +5,8 @@ module.exports = {
     return rewritesConfig;
   },
   images: {
-    loader: 'akamai',
-    path: '',
+    // loader: 'akamai',
+    // path: '',
     domains: ['raw.githubusercontent.com'],
   },
   // i18n: {
