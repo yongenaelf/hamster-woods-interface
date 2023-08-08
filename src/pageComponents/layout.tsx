@@ -17,14 +17,9 @@ import { SupportedELFChainId } from 'types';
 
 const Layout = dynamic(async () => {
   const info = store.getState().info.baseInfo;
-  const { WebLoginState, useWebLogin, useCallContract, WebLoginEvents, useWebLoginEvent } = await import(
-    'aelf-web-login'
-  ).then((module) => module);
 
   return (props: React.PropsWithChildren<{}>) => {
     const { children } = props;
-
-    const webLoginContext = useWebLogin();
 
     const initAwsConfig = () => {
       AWS.config.update({
@@ -34,17 +29,6 @@ const Layout = dynamic(async () => {
         }),
       });
     };
-
-    useEffect(() => {
-      console.log('webLoginContext.loginState', webLoginContext.loginState);
-      if (webLoginContext.loginState === WebLoginState.logined) {
-        // do something
-      }
-    }, [webLoginContext.loginState]);
-
-    useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
-      // do something
-    });
 
     useEffect(() => {
       initAwsConfig();
@@ -66,11 +50,9 @@ const Layout = dynamic(async () => {
     return (
       <>
         <AntdLayout className={`xx-wrapper`}>
-          <Header />
           <AntdLayout.Content className={`marketplace-content min-h-[100vh]`} id={`marketplace-content`}>
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </AntdLayout.Content>
-          <Footer />
         </AntdLayout>
       </>
     );
