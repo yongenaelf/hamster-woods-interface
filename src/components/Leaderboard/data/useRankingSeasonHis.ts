@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 interface IRankingResult {
-  Score: number;
+  score: number;
   rank: number;
 }
 
@@ -18,24 +18,24 @@ export const useRankingSeasonHis = (seasonId: string, address: string) => {
       const mockFetcher = async () => {
         return {
           season: {
-            Score: 261,
+            score: 261,
             rank: 0,
           },
           weeks: [
             {
-              Score: 1,
+              score: 1,
               rank: 1,
             },
             {
-              Score: 2,
+              score: 2,
               rank: 2,
             },
             {
-              Score: 0,
+              score: 0,
               rank: 0,
             },
             {
-              Score: 0,
+              score: 0,
               rank: 0,
             },
           ],

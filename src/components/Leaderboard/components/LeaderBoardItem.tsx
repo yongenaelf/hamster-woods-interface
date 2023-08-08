@@ -1,6 +1,12 @@
 import { LeaderBoardRankItem } from "./LeaderBoardRankItem";
 import { LeaderBoardNormalItem } from "./LeaderBoardNormalItem";
 
+enum Rank {
+  First = 1,
+  Second = 2,
+  Third = 3,
+}
+
 export const LeaderBoardItem = ({
   rank,
   address,
@@ -11,7 +17,7 @@ export const LeaderBoardItem = ({
   beans: number;
 }) => {
   switch (rank) {
-    case 1:
+    case Rank.First:
       return (
         <LeaderBoardRankItem
           src={require("../images/gold.png").default.src}
@@ -22,7 +28,7 @@ export const LeaderBoardItem = ({
           beans={beans}
         />
       );
-    case 2:
+    case Rank.Second:
       return (
         <LeaderBoardRankItem
           src={require("../images/silver.png").default.src}
@@ -33,7 +39,7 @@ export const LeaderBoardItem = ({
           beans={beans}
         />
       );
-    case 3:
+    case Rank.Third:
       return (
         <LeaderBoardRankItem
           src={require("../images/bronze.png").default.src}

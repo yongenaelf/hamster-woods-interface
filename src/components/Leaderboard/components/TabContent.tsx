@@ -12,28 +12,26 @@ export const TabContent = ({
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full flex-grow bg-blue-400 rounded-2xl shadow-inner p-2 mb-2">
-      <div className="w-full h-full bg-blue-700 shadow-inner rounded-2xl p-4 flex flex-col">
-        <div className="flex justify-between mb-4 mt-2">
+    <div className="mb-2 w-full flex-grow rounded-2xl bg-blue-400 p-2 shadow-inner">
+      <div className="flex h-full w-full flex-col rounded-2xl bg-blue-700 p-4 shadow-inner">
+        <div className="mb-4 mt-2 flex justify-between">
           <div
-            className={[
-              "opacity-60 text-white font-roboto",
-              isMobile ? "text-md" : "text-3xl",
-            ].join(" ")}
+            className={`font-roboto text-white opacity-60 ${
+              isMobile ? "text-md" : "text-3xl"
+            }`}
           >
             Refresh Time: {refreshTime}
           </div>
           <div
-            className={[
-              "opacity-60 text-right text-white underline leading-none font-roboto",
-              isMobile ? "text-md" : "text-3xl",
-            ].join(" ")}
+            className={`text-right font-roboto leading-none text-white underline opacity-60 ${
+              isMobile ? "text-md" : "text-3xl"
+            }`}
           >
             Reward
           </div>
         </div>
-        <div className="flex-grow overflow-y-scroll h-1 -mr-8">
-          <div className="overflow-y-auto h-full">
+        <div className="-mr-8 h-1 flex-grow overflow-y-scroll">
+          <div className="h-full overflow-y-auto">
             {data?.rankingList.map((i) => (
               <LeaderBoardItem
                 key={i.rank}
@@ -47,8 +45,8 @@ export const TabContent = ({
         <div className="flex h-24 items-center">
           <div
             className={[
-              "bg-white rounded-3xl text-center font-bold text-slate-500 p-1 ml-4",
-              isMobile ? "w-16 text-3xl mr-4" : "w-24 text-4xl mr-6",
+              "ml-4 rounded-3xl bg-white p-1 text-center font-bold text-slate-500",
+              isMobile ? "mr-4 w-16 text-3xl" : "mr-6 w-24 text-4xl",
             ].join(" ")}
           >
             {data?.selfRank.rank || 100 > 99 ? "99+" : data?.selfRank.rank}
@@ -56,7 +54,7 @@ export const TabContent = ({
           <div
             className={[
               "text-white",
-              isMobile ? "mr-2 text-md" : "mr-4 text-3xl",
+              isMobile ? "text-md mr-2" : "mr-4 text-3xl",
             ].join(" ")}
           >
             {data?.selfRank.caAddress}
@@ -70,14 +68,14 @@ export const TabContent = ({
           </div>
           <div
             className={[
-              "text-white font-normal leading-none",
+              "font-normal leading-none text-white",
               isMobile ? "text-2xl" : "text-3xl",
             ].join(" ")}
           >
             {(data?.selfRank.score || 0).toLocaleString()}
           </div>
           <img
-            className={isMobile ? "h-8 mx-3" : "h-16 mx-8"}
+            className={isMobile ? "mx-3 h-8" : "mx-8 h-16"}
             src={require("../images/bean.png").default.src}
           />
         </div>

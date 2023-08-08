@@ -13,38 +13,33 @@ export const LeaderBoardNormalItem = ({
 
   return (
     <div
-      className={[
-        "w-full rounded-3xl shadow-inner border border-[#003658] flex p-1 items-center mb-2 bg-[#81A2D7]",
-        "shadow-[0px_2px_4px_0px_rgba(0,0,0,0.12),0px_-3px_0px_0px_#6D8EC3_inset]",
-        isMobile ? "h-20" : "h-28",
-      ].join(" ")}
+      className={`mb-2 flex w-full items-center rounded-3xl border border-[#003658] bg-[#81A2D7] p-1 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.12),0px_-3px_0px_0px_#6D8EC3_inset] shadow-inner ${
+        isMobile ? "h-20" : "h-28"
+      }`}
     >
       <div
-        className={[
-          "bg-[#4F6C9B] text-white font-bold p-2 rounded-3xl ml-2 text-center font-paytone",
-          isMobile ? "text-2xl w-16 mr-3" : "text-4xl w-24 mr-4",
-        ].join(" ")}
+        className={`ml-2 rounded-3xl bg-[#4F6C9B] p-2 text-center font-paytone font-bold text-white ${
+          isMobile ? "mr-3 w-16 text-2xl" : "mr-4 w-24 text-4xl"
+        }`}
       >
         {rank}
       </div>
       <div
-        className={[
-          "text-white flex-grow ml-2 font-roboto font-bold",
-          isMobile ? "text-xl" : "text-3xl",
-        ].join(" ")}
+        className={`ml-2 flex-grow font-roboto font-bold text-white ${
+          isMobile ? "text-xl" : "text-3xl"
+        }`}
       >
         {address}
       </div>
       <div
-        className={[
-          "text-white font-roboto font-bold",
-          isMobile ? "text-xl" : "text-3xl",
-        ].join(" ")}
+        className={`font-roboto font-bold text-white ${
+          isMobile ? "text-xl" : "text-3xl"
+        }`}
       >
         {beans.toLocaleString()}
       </div>
       <img
-        className={isMobile ? "h-8 mx-3" : "h-16 mx-8"}
+        className={isMobile ? "mx-3 h-8" : "mx-8 h-16"}
         src={require("../images/bean.png").default.src}
       />
     </div>
