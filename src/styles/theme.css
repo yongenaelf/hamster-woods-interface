@@ -1,7 +1,8 @@
 :root {
-    --brand-base: #1b76e2;
+  --brand-base: #1b76e2;
+  --color-main: #3989ff;
 }
 
 .dark-theme {
-    --brand-base: #136dd7;
+  --brand-base: #136dd7;
 }

@@ -1,0 +1,50 @@
+.inputForm {
+  :global {
+    .web2design-qrcode-icon,
+    .divider-center.portkey-ant-divider-with-text,
+    .social-content-wrapper {
+      @apply hidden;
+    }
+  }
+}
+
+.qrcodeBox {
+  :global {
+    .back-icon-wrapper {
+      @apply !hidden;
+    }
+  }
+}
+
+.loadingContainer {
+  @apply items-center flex-col flex justify-end w-full h-screen !bg-cover bg-no-repeat px-10 pb-4 text-base text-white bg-[url('../../assets//images//loading-bg.png')];
+  .more {
+    @apply cursor-pointer;
+  }
+  .loginBtn {
+    @apply h-14 w-full mb-6  flex items-center justify-center cursor-pointer rounded-[30px] bg-[var(--color-main)];
+  }
+}
+.loginMethodDrawer {
+  @apply text-base;
+  :global {
+    .ant-drawer-header {
+      @apply hidden;
+    }
+    .ant-drawer-content {
+      @apply rounded-tl-2xl rounded-tr-2xl;
+    }
+    .ant-drawer-wrapper-body {
+      @apply text-base text-white bg-[var(--color-main)];
+    }
+    .ant-drawer-body {
+      @apply p-10 pt-6;
+    }
+  }
+  .loginBtn {
+    @apply h-14 w-full mb-4  flex items-center justify-center cursor-pointer rounded-[36px] border-2 border-solid;
+  }
+  .drawerHeader {
+    @apply mb-8 text-center;
+  }
+}
