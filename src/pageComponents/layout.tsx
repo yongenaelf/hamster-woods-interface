@@ -51,6 +51,7 @@ const Layout = dynamic(async () => {
     return (
       <>
         <AntdLayout className={`xx-wrapper`}>
+          <Header />
           <AntdLayout.Content className={`marketplace-content min-h-[100vh]`} id={`marketplace-content`}>
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </AntdLayout.Content>

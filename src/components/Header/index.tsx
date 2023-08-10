@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <div className="bg-gray-500 w-full h-16">
+    <div className="h-16 w-full bg-gray-500">
       <p>header </p>
     </div>
   );

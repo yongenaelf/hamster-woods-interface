@@ -1,6 +1,6 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { useIsMobile } from "redux/selector/mobile";
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import { useIsMobile } from 'redux/selector/mobile';
 
 interface ModalProps extends React.PropsWithChildren {
   isOpen: boolean;
@@ -21,8 +21,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
           enterTo="opacity-100"
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
+          leaveTo="opacity-0">
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
         <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -33,28 +32,22 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             enterTo="opacity-100 scale-100"
             leave="ease-in duration-200"
             leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
+            leaveTo="opacity-0 scale-95">
             <Dialog.Panel>
-              <div className="w-[90vw] h-[80vh] bg-blue-500 rounded-2xl shadow-inner border border-sky-900 px-2 flex flex-col relative">
-                <div className="text-center my-3">
+              <div className="relative flex h-[80vh] w-[90vw] flex-col rounded-2xl border border-sky-900 bg-blue-500 px-2 shadow-inner">
+                <div className="my-3 text-center">
                   <Dialog.Title>
                     <span
                       className={[
-                        isMobile ? "text-4xl" : "text-[5rem]",
-                        "text-white font-normal leading-normal font-paytone text-stroke-black",
-                      ].join(" ")}
-                    >
+                        isMobile ? 'text-4xl' : 'text-[5rem]',
+                        'font-paytone font-normal leading-normal text-white text-stroke-black',
+                      ].join(' ')}>
                       {title}
                     </span>
                   </Dialog.Title>
                 </div>
                 <button className="absolute right-5 top-7" onClick={onClose}>
-                  <img
-                    className={isMobile ? "h-8" : "h-16"}
-                    src={require("./close.png").default.src}
-                    alt="close"
-                  />
+                  <img className={isMobile ? 'h-8' : 'h-16'} src={require('./close.png').default.src} alt="close" />
                 </button>
                 {children}
               </div>

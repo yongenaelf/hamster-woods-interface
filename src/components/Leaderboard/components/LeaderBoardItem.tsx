@@ -1,5 +1,5 @@
-import { LeaderBoardRankItem } from "./LeaderBoardRankItem";
-import { LeaderBoardNormalItem } from "./LeaderBoardNormalItem";
+import { LeaderBoardRankItem } from './LeaderBoardRankItem';
+import { LeaderBoardNormalItem } from './LeaderBoardNormalItem';
 
 enum Rank {
   First = 1,
@@ -7,20 +7,12 @@ enum Rank {
   Third = 3,
 }
 
-export const LeaderBoardItem = ({
-  rank,
-  address,
-  beans,
-}: {
-  rank: number;
-  address: string;
-  beans: number;
-}) => {
+export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; address: string; beans: number }) => {
   switch (rank) {
     case Rank.First:
       return (
         <LeaderBoardRankItem
-          src={require("../images/gold.png").default.src}
+          src={require('../images/gold.png').default.src}
           bgClassName="bg-[#F5BF49]"
           textClassName="text-stroke-[#DE7B3D]"
           shadowInsetColor="#DE7B3D"
@@ -31,7 +23,7 @@ export const LeaderBoardItem = ({
     case Rank.Second:
       return (
         <LeaderBoardRankItem
-          src={require("../images/silver.png").default.src}
+          src={require('../images/silver.png').default.src}
           bgClassName="bg-[#CEDFF7]"
           textClassName="text-stroke-[#6976CD]"
           shadowInsetColor="#B8B8EB"
@@ -42,7 +34,7 @@ export const LeaderBoardItem = ({
     case Rank.Third:
       return (
         <LeaderBoardRankItem
-          src={require("../images/bronze.png").default.src}
+          src={require('../images/bronze.png').default.src}
           bgClassName="bg-[#E97D3C]"
           textClassName="text-stroke-[#B5412C]"
           shadowInsetColor="#B5412C"
@@ -51,8 +43,6 @@ export const LeaderBoardItem = ({
         />
       );
     default:
-      return (
-        <LeaderBoardNormalItem rank={rank} address={address} beans={beans} />
-      );
+      return <LeaderBoardNormalItem rank={rank} address={address} beans={beans} />;
   }
 };

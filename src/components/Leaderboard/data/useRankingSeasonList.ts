@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR from 'swr';
 
 interface IRankingSeasonItem {
   id: string;
@@ -11,7 +11,7 @@ interface IRankingSeasonListResult {
 }
 
 export const useRankingSeasonList = () => {
-  return useSWR<IRankingSeasonListResult>("getRankingSeasonList", async () => {
+  return useSWR<IRankingSeasonListResult>('getRankingSeasonList', async () => {
     // handle logic to fetch here.
     const mockFetcher = async () => {
       return {
@@ -19,14 +19,8 @@ export const useRankingSeasonList = () => {
           .fill(0)
           .map((_, idx) => ({
             id: `Season ${idx + 1}`,
-            beginTime: new Date(2023, idx, 1)
-              .toISOString()
-              .slice(0, 10)
-              .replaceAll("-", "."),
-            endTime: new Date(2023, idx + 1, 1)
-              .toISOString()
-              .slice(0, 10)
-              .replaceAll("-", "."),
+            beginTime: new Date(2023, idx, 1).toISOString().slice(0, 10).replaceAll('-', '.'),
+            endTime: new Date(2023, idx + 1, 1).toISOString().slice(0, 10).replaceAll('-', '.'),
           })),
       };
     };
