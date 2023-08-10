@@ -23,6 +23,7 @@
     "antd": "^4.21.7",
     "aws-sdk": "^2.1399.0",
     "axios": "^0.24.0",
+    "date-fns": "^2.30.0",
     "eslint-plugin-no-inline-styles": "^1.0.5",
     "next": "13.4.4",
     "next-babel-conditional-ssg-ssr": "^1.0.0",
