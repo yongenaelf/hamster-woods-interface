@@ -32,6 +32,13 @@ import openPageInDiscover from 'utils/openDiscoverPage';
 
 const KEY_NAME = 'BEANGOTOWN';
 
+ConfigProvider.setGlobalConfig({
+  storageMethod: new Store(),
+  requestDefaults: {
+    baseURL: '/portkey',
+  },
+});
+
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
 
@@ -45,7 +52,7 @@ export default function Login() {
 
   const isInAndroid = isMobile().android.device;
 
-  const { isLock, isLogin } = useLogin();
+  // const { isLock, isLogin } = useLogin();
 
   const router = useRouter();
 
@@ -179,12 +186,6 @@ export default function Login() {
   }, []);
 
   useEffect(() => {
-    ConfigProvider.setGlobalConfig({
-      storageMethod: new Store(),
-      requestDefaults: {
-        baseURL: '/portkey',
-      },
-    });
     if (typeof window !== undefined && window.localStorage.getItem(KEY_NAME)) {
       setIsWalletExist(true);
     }
@@ -322,6 +323,7 @@ export default function Login() {
         defaultLifeCycle={currentLifeCircle}
         className={style}
         onFinish={handleFinish}
+        isShowScan={true}
       />
 
       <Unlock
