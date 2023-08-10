@@ -25,7 +25,7 @@ function Provider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <StoreProvider>
-        <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'xx'}>
+        <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'ant'}>
           {loading ? <Loading></Loading> : <WebLoginProvider>{children}</WebLoginProvider>}
         </ConfigProvider>
       </StoreProvider>
