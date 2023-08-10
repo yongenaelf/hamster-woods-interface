@@ -25,7 +25,7 @@ export const LeaderBoardRankItem = ({
       style={{
         boxShadow: `0px 2px 4px 0px rgba(0, 0, 0, 0.12), 0px -3px 0px 0px ${shadowInsetColor} inset`,
       }}>
-      <img className="h-full" src={src} />
+      <img className="h-full" src={src} alt="rank" />
       <div
         className={`ml-2 flex-grow font-paytone font-normal leading-none text-white ${textClassName} ${
           isMobile ? 'text-2xl' : 'text-4xl'
@@ -38,7 +38,7 @@ export const LeaderBoardRankItem = ({
         }`}>
         {beans.toLocaleString()}
       </div>
-      <img className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'} src={require('../images/bean.png').default.src} />
+      <img className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'} src={require('../images/bean.png').default.src} alt="bean" />
     </div>
   );
 };

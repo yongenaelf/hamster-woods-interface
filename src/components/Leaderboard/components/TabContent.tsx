@@ -43,7 +43,11 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
           <div className={['font-normal leading-none text-white', isMobile ? 'text-2xl' : 'text-3xl'].join(' ')}>
             {(data?.selfRank.score || 0).toLocaleString()}
           </div>
-          <img className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'} src={require('../images/bean.png').default.src} />
+          <img
+            className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'}
+            src={require('../images/bean.png').default.src}
+            alt="bean"
+          />
         </div>
       </div>
     </div>

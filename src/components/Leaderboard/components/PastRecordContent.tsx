@@ -19,7 +19,7 @@ export const PastRecordContent = () => {
     if (selected) return `${selected.beginTime} - ${selected.endTime}`;
 
     return '-';
-  }, [selectedSeason]);
+  }, [selectedSeason, data]);
 
   return (
     <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
