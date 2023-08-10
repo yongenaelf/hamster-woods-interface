@@ -14,6 +14,7 @@ import { store, dispatch } from 'redux/store';
 import { selectInfo, setIsMobile } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import { SupportedELFChainId } from 'types';
+import Leaderboard from 'components/Leaderboard';
 
 const Layout = dynamic(async () => {
   const info = store.getState().info.baseInfo;
@@ -50,9 +51,12 @@ const Layout = dynamic(async () => {
     return (
       <>
         <AntdLayout className={`xx-wrapper`}>
+          <Header />
           <AntdLayout.Content className={`marketplace-content min-h-[100vh]`} id={`marketplace-content`}>
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </AntdLayout.Content>
+          <Footer />
+          <Leaderboard />
         </AntdLayout>
       </>
     );
