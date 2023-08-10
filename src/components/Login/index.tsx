@@ -7,12 +7,14 @@ import {
   socialLoginAuth,
   SignIn,
   did,
+  ConfigProvider,
+  Unlock,
 } from '@portkey/did-ui-react';
 import { Button, Drawer, Modal, Image, Input } from 'antd';
 import detectProvider from '@portkey/detect-provider';
 import { isMobileDevices } from 'utils/isMobile';
 import { IPortkeyProvider } from '@portkey/provider-types';
-import { MouseEventHandler, useCallback, useRef, useState } from 'react';
+import { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import { setAccountInfoSync, setDiscoverInfo, setLoginStatus, setWalletInfo } from 'redux/reducer/info';
 import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
@@ -22,7 +24,13 @@ import isPortkeyApp from 'utils/inPortkeyApp';
 import { Network, ChainId, portKeyExtensionUrl } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, AccountsType } from 'types/index';
 import useLogin from 'hooks/useLogin';
+import { Store } from 'utils/store';
 import styles from './style.module.css';
+import { useRouter } from 'next/navigation';
+import { useDebounceFn } from 'ahooks';
+import openPageInDiscover from 'utils/openDiscoverPage';
+
+const KEY_NAME = 'BEANGOTOWN';
 
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
@@ -39,9 +47,13 @@ export default function Login() {
 
   const { isLock, isLogin } = useLogin();
 
+  const router = useRouter();
+
   const isInIOS = isMobile().apple.device;
 
   const isInApp = isPortkeyApp();
+
+  const [isWalletExist, setIsWalletExist] = useState(false);
 
   const handleSocialStep1Success = (value: IGuardianIdentifierInfo) => {
     setCurrentLifeCircle({
@@ -69,6 +81,7 @@ export default function Login() {
   });
 
   const handleGoogle = async () => {
+    setVisible(false);
     const res = await getSocialToken({ type: 'Google' });
     await signHandle.onSocialFinish({
       type: res.provider,
@@ -77,6 +90,7 @@ export default function Login() {
   };
 
   const handleApple = async () => {
+    setVisible(false);
     const res = await getSocialToken({ type: 'Apple' });
     await signHandle.onSocialFinish({
       type: res.provider,
@@ -101,35 +115,47 @@ export default function Login() {
     return tokenRes;
   };
 
-  const handlePortKey = async () => {
-    if (!window?.portkey && !isMobileDevices()) {
-      window?.open(portKeyExtensionUrl, '_blank')?.focus();
-      return;
-    }
-    const provider: IPortkeyProvider | null = await detectProvider();
-    if (!provider) {
-      console.log('unknow');
-      return;
-    }
-    const network = await provider?.request({ method: 'network' });
-    if (network !== Network) {
-      console.log('network error');
-      return;
-    }
-    let accounts = await provider?.request({ method: 'accounts' });
-    if (accounts[ChainId] && accounts[ChainId].length > 0) {
-      onAccountsSuccess(provider, accounts);
-      store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-      return;
-    }
-    accounts = await provider?.request({ method: 'requestAccounts' });
-    if (accounts[ChainId] && accounts[ChainId].length > 0) {
-      onAccountsSuccess(provider, accounts);
-      store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-    } else {
-      console.log('account error');
-    }
-  };
+  const { run: handlePortKey } = useDebounceFn(
+    async () => {
+      if (isMobileDevices() && !isInApp) {
+        openPageInDiscover();
+        return;
+      }
+      if (!window?.portkey && !isMobileDevices()) {
+        window?.open(portKeyExtensionUrl, '_blank')?.focus();
+        return;
+      }
+      const provider: IPortkeyProvider | null = await detectProvider();
+      if (!provider) {
+        console.log('unknow');
+        return;
+      }
+      const network = await provider?.request({ method: 'network' });
+      if (network !== Network) {
+        console.log('network error');
+        return;
+      }
+      let accounts = await provider?.request({ method: 'accounts' });
+      if (accounts[ChainId] && accounts[ChainId].length > 0) {
+        onAccountsSuccess(provider, accounts);
+        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+        return;
+      }
+      accounts = await provider?.request({ method: 'requestAccounts' });
+      if (accounts[ChainId] && accounts[ChainId].length > 0) {
+        onAccountsSuccess(provider, accounts);
+        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+      } else {
+        console.log('account error');
+      }
+    },
+    {
+      wait: 500,
+      maxWait: 500,
+      leading: true,
+      trailing: false,
+    },
+  );
 
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';
@@ -149,9 +175,23 @@ export default function Login() {
         provider,
       }),
     );
+    router.push('/');
+  }, []);
+
+  useEffect(() => {
+    ConfigProvider.setGlobalConfig({
+      storageMethod: new Store(),
+      requestDefaults: {
+        baseURL: '/portkey',
+      },
+    });
+    if (typeof window !== undefined && window.localStorage.getItem(KEY_NAME)) {
+      setIsWalletExist(true);
+    }
   }, []);
 
   const handleEmail = () => {
+    setVisible(false);
     setStyle(styles.inputForm);
     setDesign('Web2Design');
     setCurrentLifeCircle({ LoginByScan: undefined });
@@ -162,6 +202,7 @@ export default function Login() {
   };
 
   const handlePhone = () => {
+    setVisible(false);
     setStyle(styles.inputForm);
     setDesign('Web2Design');
     setCurrentLifeCircle({ LoginByScan: undefined });
@@ -169,6 +210,7 @@ export default function Login() {
   };
 
   const handleQrcode = () => {
+    setVisible(false);
     setStyle(styles.qrcodeBox);
     setDesign('SocialDesign');
     setCurrentLifeCircle({ LoginByScan: undefined });
@@ -179,9 +221,11 @@ export default function Login() {
     console.log('wallet', wallet);
     store.dispatch(setWalletInfo(wallet));
     store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+    did.save(wallet.pin, KEY_NAME);
     const accountInfoSync = await getAccountInfoSync(ChainId, wallet);
     console.log(accountInfoSync);
     store.dispatch(setAccountInfoSync(accountInfoSync));
+    router.push('/');
   };
 
   const [visible, setVisible] = useState(false);
@@ -216,22 +260,37 @@ export default function Login() {
     ));
   };
 
-  const handleUnLock = () => {
+  const unlock = useCallback(async () => {
     setIsUnlockShow(true);
-  };
+    let wallet;
+    try {
+      wallet = await did.load(passwordValue, KEY_NAME);
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+    console.log('wallet', wallet);
+    if (!wallet.didWallet.accountInfo.loginAccount) {
+      setIsErrorTipShow(true);
+      return;
+    }
+    const updateWallet = {
+      caInfo: { ...wallet.didWallet.caInfo[ChainId] },
+      pin: '',
+      walletInfo: wallet.didWallet.managementAccount,
+    };
+    store.dispatch(setWalletInfo(updateWallet));
+    setIsUnlockShow(false);
+    store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+    router.push('/');
+  }, [passwordValue, router]);
 
   return (
     <div className={styles.loadingContainer}>
-      {isLock ? (
-        <Button onClick={handleUnLock}>unLock</Button>
+      {isWalletExist ? (
+        <Button onClick={unlock}>unLock</Button>
       ) : (
         <>
-          <div
-            onClick={() => {
-              store.dispatch(setLoginStatus(LoginStatus.LOCK));
-            }}>
-            lock
-          </div>
           {renderLoginMethods(false)}
           {!isInApp && (
             <div
@@ -265,41 +324,19 @@ export default function Login() {
         onFinish={handleFinish}
       />
 
-      <Modal
+      <Unlock
+        onUnlock={unlock}
         open={isUnlockShow}
-        closable={false}
-        centered
-        title={null}
-        footer={null}
-        maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-        className={styles.portkeyUnlockModal}
-        width={430}
         onCancel={() => {
           setIsUnlockShow(false);
-        }}>
-        <div className={styles.unlockBody}>
-          <Image src="./portkey.svg" alt="" width={88} height={88} />
-          <h1>Welcome back!</h1>
-          <div className={styles.passwordWrap}>
-            <span className={styles.passwordLabel}>Enter Pin</span>
-            <Input.Password
-              value={passwordValue}
-              placeholder="Enter Pin"
-              className={styles.passwordInput}
-              maxLength={16}
-              onChange={(e) => {
-                setIsErrorTipShow(false);
-                setPasswordValue(e.target.value);
-              }}
-            />
-            <div className={styles.errorTips}>{isErrorTipShow ? 'Incorrect pin' : ''}</div>
-          </div>
-
-          <Button disabled={passwordValue.length < 6} className={styles.submitBtn} type="primary">
-            Unlock
-          </Button>
-        </div>
-      </Modal>
+        }}
+        value={passwordValue}
+        onChange={(v) => {
+          setIsErrorTipShow(false);
+          setPasswordValue(v);
+        }}
+        isWrongPassword={true}
+      />
     </div>
   );
 }
