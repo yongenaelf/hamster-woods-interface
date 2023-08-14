@@ -16,8 +16,8 @@ export const useRankingSeasonHis = (seasonId: string, address: string) => {
     const mockFetcher = async () => {
       return {
         season: {
-          score: 261,
-          rank: 0,
+          score: 2613,
+          rank: 14,
         },
         weeks: [
           {

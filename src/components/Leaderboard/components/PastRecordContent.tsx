@@ -3,6 +3,21 @@ import { useRankingSeasonList } from '../data/useRankingSeasonList';
 import { useRankingSeasonHis } from '../data/useRankingSeasonHis';
 import { useIsMobile } from 'redux/selector/mobile';
 
+const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; leftText: string; value?: number }) => {
+  return (
+    <div className="mb-4 flex justify-between rounded-[7px] border-[#00335C] bg-[#0538C9] shadow-[0px_0px_4px_rgba(0,0,0,0.25)_inset]">
+      <div className="flex w-1/2 items-center rounded-bl-[7px] rounded-tl-[7px] bg-white bg-opacity-10">
+        {icon}
+        <span className="mr-4 font-roboto font-bold text-white">{leftText}</span>
+        <div className="ml-auto h-full w-8 diagonal-bg-[#0538C9]"></div>
+      </div>
+      <div className="flex flex-1 items-center justify-center font-roboto text-[2rem] font-bold text-[#FFD200]">
+        <div>{typeof value === 'number' ? value?.toLocaleString() : '-'}</div>
+      </div>
+    </div>
+  );
+};
+
 export const PastRecordContent = () => {
   const { data } = useRankingSeasonList();
   const [selectedSeason, setSelectedSeason] = useState('');
@@ -38,41 +53,50 @@ export const PastRecordContent = () => {
         </div>
       </div>
       <div
-        className={`h-1 w-full flex-grow rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner ${
+        className={`h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner ${
           isMobile ? 'text-md' : 'text-3xl'
         }`}>
-        <div className="flex py-8">
+        <div className="flex gap-32 p-8">
           <div className="flex-1">
-            <div className="mb-2 font-normal leading-none text-white text-opacity-60">Points</div>
-            <div className={`text-3xl font-bold leading-tight text-white ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
-              {his?.season.score || '-'}
+            <img
+              src={require('assets/images/past-record-icon.png').default.src}
+              className="mx-auto w-[22rem] px-4 pb-8"
+              alt="Past Record"
+            />
+            <div>
+              <DiagonalContainer
+                icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className="m-4 w-8" />}
+                leftText="Ranking"
+                value={his?.season.rank}
+              />
+              <DiagonalContainer
+                icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className="m-4 w-8" />}
+                leftText="Points"
+                value={his?.season.score}
+              />
             </div>
           </div>
           <div className="flex-1">
-            <div className="mb-2 font-normal leading-none text-white text-opacity-60">Ranking</div>
-            <div className={`text-3xl font-bold leading-tight text-white ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
-              {his?.season.rank || '-'}
-            </div>
+            <table className="w-full text-white">
+              <thead className="bg-white bg-opacity-20 text-white text-opacity-70">
+                <tr>
+                  <th className="w-1/2 p-4 text-left">Time</th>
+                  <th className="py-4 text-left">Points</th>
+                  <th className="p-4 text-right">Ranking</th>
+                </tr>
+              </thead>
+              <tbody>
+                {his?.weeks.map((i, idx) => (
+                  <tr key={idx} className="border-b border-white border-opacity-40">
+                    <td className="p-4">Week {idx + 1}</td>
+                    <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
+                    <td className="p-4 text-right">{i.rank}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <table className="w-full text-white">
-          <thead className="bg-white bg-opacity-40 text-white text-opacity-70">
-            <tr>
-              <th className="w-1/2 p-4 text-left">Time</th>
-              <th className="py-4 text-left">Points</th>
-              <th className="p-4 text-right">Ranking</th>
-            </tr>
-          </thead>
-          <tbody>
-            {his?.weeks.map((i, idx) => (
-              <tr key={idx} className="border-b border-white border-opacity-40">
-                <td className="p-4">Week {idx + 1}</td>
-                <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
-                <td className="p-4 text-right">{i.rank}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             <Dialog.Panel>
               <div
                 className={`relative flex flex-col overflow-auto rounded-2xl border border-sky-900 bg-blue-500 p-2 shadow-inner ${
-                  isMobile ? 'h-[80vh] w-[90vw]' : 'h-[50vh] min-h-[50rem] w-[40vw]'
+                  isMobile ? 'h-[80vh] w-[90vw]' : 'h-[60vh] min-h-[50rem] w-[40vw]'
                 }`}>
                 <div className="my-3 text-center">
                   <Dialog.Title>
