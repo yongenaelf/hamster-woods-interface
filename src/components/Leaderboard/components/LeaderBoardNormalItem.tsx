@@ -28,7 +28,11 @@ export const LeaderBoardNormalItem = ({
       <div className={`font-roboto font-bold text-white ${isMobile ? 'text-xl' : 'text-3xl'}`}>
         {beans.toLocaleString()}
       </div>
-      <img className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'} src={require('../images/bean.png').default.src} alt="bean" />
+      <img
+        className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'}
+        src={require('assets/images/bean.png').default.src}
+        alt="bean"
+      />
     </div>
   );
 };

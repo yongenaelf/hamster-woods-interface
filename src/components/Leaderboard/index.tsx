@@ -26,7 +26,7 @@ export const Leaderboard = () => {
       <button className="fixed right-0 top-32" onClick={() => setOpen(true)}>
         <img
           className={isMobile ? 'w-32' : 'w-64'}
-          src={require('./images/leaderboard-icon.png').default.src}
+          src={require('assets/images/leaderboard-icon.png').default.src}
           alt="open Leaderboard"
         />
       </button>

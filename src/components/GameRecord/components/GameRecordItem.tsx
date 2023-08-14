@@ -4,15 +4,17 @@ import { parseISO, format } from 'date-fns';
 import { useMemo } from 'react';
 import { copyText } from 'utils/copyText';
 import { middleEllipsis } from 'utils/middleEllipsis';
+import { useIsMobile } from 'redux/selector/mobile';
 
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
   <div
     {...props}
-    className="w-full rounded-2xl bg-[#5197FF] p-4 font-roboto shadow-[0px_1px_2px_0px_#64A2FF_inset,0px_-1px_2px_0px_#3A80E8_inset]"
+    className="mb-2 w-full rounded-2xl bg-[#5197FF] p-4 font-roboto shadow-[0px_1px_2px_0px_#64A2FF_inset,0px_-1px_2px_0px_#3A80E8_inset]"
   />
 );
 
 export const GameRecordItem = ({ data }: { data: IGameItem }) => {
+  const isMobile = useIsMobile();
   const { GridNum, Score, TranscationFee, PlayTransactionInfo, BingoTransactionInfo } = data;
 
   const playTransactionDate = useMemo(
@@ -29,14 +31,17 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
       {({ open }) => (
         <>
           <div className="flex justify-between pb-4">
-            <div className="text-lg font-bold leading-normal text-white">{format(bingoTransactionDate, 'dd MMM')}</div>
+            <div
+              className={`text-lg font-bold leading-normal text-white ${isMobile ? 'text-[1rem]' : 'text-[2.5rem]'}`}>
+              {format(bingoTransactionDate, 'dd MMM')}
+            </div>
             <div className="text-md text-right text-white text-opacity-60">
               {format(bingoTransactionDate, 'HH:mm:ss')}
             </div>
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className="text-[1rem] text-white text-opacity-60">
+              <tr className={`text-white text-opacity-60 ${isMobile ? 'text-[1rem]' : 'text-md'}`}>
                 <th className="pb-2 text-left">Random step result</th>
                 <th className="text-left">Earn points</th>
                 <th className="text-right">Transaction Fee</th>
@@ -85,7 +90,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
                       <td className="text-right">
                         {middleEllipsis(i.TransactionId)}{' '}
                         <button onClick={() => copyText(i.TransactionId)}>
-                          <img src={require('../images/copy.png').default.src} alt="copy" className="h-4" />
+                          <img src={require('assets/images/copy.png').default.src} alt="copy" className="h-4" />
                         </button>
                       </td>
                     </tr>

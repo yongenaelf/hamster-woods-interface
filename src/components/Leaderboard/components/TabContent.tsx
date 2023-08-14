@@ -38,14 +38,14 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
             {data?.selfRank.caAddress}
           </div>
           <div className="flex-grow">
-            <img className="w-16" src={require('../images/me.png').default.src} alt="me" />
+            <img className="w-16" src={require('assets/images/me.png').default.src} alt="me" />
           </div>
           <div className={['font-normal leading-none text-white', isMobile ? 'text-2xl' : 'text-3xl'].join(' ')}>
             {(data?.selfRank.score || 0).toLocaleString()}
           </div>
           <img
             className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'}
-            src={require('../images/bean.png').default.src}
+            src={require('assets/images/bean.png').default.src}
             alt="bean"
           />
         </div>
