@@ -7,7 +7,12 @@ module.exports = {
   images: {
     // loader: 'akamai',
     // path: '',
-    domains: ['raw.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.com',
+      },
+    ],
   },
   // i18n: {
   //   locales: ['en-US', 'zh'],
