@@ -5,7 +5,7 @@ import { useGameHis } from './data/useGameHis';
 import { useIsMobile } from 'redux/selector/mobile';
 
 export const GameRecord = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
   const { data } = useGameHis('test');
 

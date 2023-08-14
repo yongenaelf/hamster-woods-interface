@@ -34,14 +34,16 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95">
             <Dialog.Panel>
-              <div className="relative flex h-[80vh] w-[90vw] max-w-[750px] flex-col rounded-2xl border border-sky-900 bg-blue-500 shadow-inner">
+              <div
+                className={`relative flex flex-col overflow-auto rounded-2xl border border-sky-900 bg-blue-500 p-2 shadow-inner ${
+                  isMobile ? 'h-[80vh] w-[90vw]' : 'h-[50vh] min-h-[50rem] w-[40vw]'
+                }`}>
                 <div className="my-3 text-center">
                   <Dialog.Title>
                     <span
-                      className={[
-                        isMobile ? 'text-4xl' : 'text-[3rem]',
-                        'font-paytone font-normal leading-normal text-white text-stroke-black',
-                      ].join(' ')}>
+                      className={`font-paytone font-normal leading-normal text-white text-stroke-black ${
+                        isMobile ? 'text-4xl' : 'text-[3rem]'
+                      }`}>
                       {title}
                     </span>
                   </Dialog.Title>
