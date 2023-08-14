@@ -19,7 +19,7 @@ export const Leaderboard = () => {
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
 
-  const tabClassName = [_tabClassName, isMobile ? 'text-md p-2' : 'text-4xl p-4'].join(' ');
+  const tabClassName = `${_tabClassName} ${isMobile ? 'text-md p-2' : 'text-4xl p-4'}`;
 
   return (
     <Fragment>
@@ -33,17 +33,17 @@ export const Leaderboard = () => {
       <Modal isOpen={open} title="Leader Board" onClose={() => setOpen(false)}>
         <div className="mx-10 flex">
           <button
-            className={[tabClassName, tab === Tabs.Weekly ? 'bg-blue-400' : 'bg-blue-700'].join(' ')}
+            className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
             onClick={() => setTab(Tabs.Weekly)}>
             {Tabs.Weekly}
           </button>
           <button
-            className={[tabClassName, tab === Tabs.Season ? 'bg-blue-400' : 'bg-blue-700'].join(' ')}
+            className={`${tabClassName} ${tab === Tabs.Season ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
             onClick={() => setTab(Tabs.Season)}>
             {Tabs.Season}
           </button>
           <button
-            className={[tabClassName, tab === Tabs.PastRecord ? 'bg-blue-400' : 'bg-blue-700'].join(' ')}
+            className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
             onClick={() => setTab(Tabs.PastRecord)}>
             {Tabs.PastRecord}
           </button>

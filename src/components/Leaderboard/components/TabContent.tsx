@@ -54,19 +54,18 @@ export const TabContent = ({
             </div>
             <div className="flex h-24 items-center">
               <div
-                className={[
-                  'ml-4 rounded-3xl bg-white p-1 text-center font-bold text-slate-500',
-                  isMobile ? 'mr-4 w-16 text-3xl' : 'mr-6 w-24 text-4xl',
-                ].join(' ')}>
+                className={`ml-4 rounded-3xl bg-white p-1 text-center font-bold text-slate-500 ${
+                  isMobile ? 'mr-4 w-16 text-3xl' : 'mr-6 w-24 text-4xl'
+                }`}>
                 {data?.selfRank.rank || 100 > 99 ? '99+' : data?.selfRank.rank}
               </div>
-              <div className={['text-white', isMobile ? 'text-md mr-2' : 'mr-4 text-3xl'].join(' ')}>
+              <div className={`text-white ${isMobile ? 'text-md mr-2' : 'mr-4 text-3xl'}`}>
                 {data?.selfRank.caAddress}
               </div>
               <div className="flex-grow">
                 <img className="w-16" src={require('assets/images/me.png').default.src} alt="me" />
               </div>
-              <div className={['font-normal leading-none text-white', isMobile ? 'text-2xl' : 'text-3xl'].join(' ')}>
+              <div className={`font-normal leading-none text-white ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
                 {(data?.selfRank.score || 0).toLocaleString()}
               </div>
               <img

@@ -23,9 +23,9 @@ export const PastRecordContent = () => {
 
   return (
     <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
-      <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 shadow-inner">
+      <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-4 shadow-inner">
         <select
-          className={`bg-blue-700 font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
+          className={`bg-[#0C40D4] font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
           onChange={(e) => setSelectedSeason(e.target.value)}>
           {data?.Season.map((i) => (
             <option key={i.id} value={i.id}>
@@ -38,7 +38,7 @@ export const PastRecordContent = () => {
         </div>
       </div>
       <div
-        className={`h-1 w-full flex-grow rounded-bl-2xl rounded-br-2xl bg-blue-700 p-4 shadow-inner ${
+        className={`h-1 w-full flex-grow rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner ${
           isMobile ? 'text-md' : 'text-3xl'
         }`}>
         <div className="flex py-8">
