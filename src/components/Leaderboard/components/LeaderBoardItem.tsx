@@ -7,7 +7,17 @@ enum Rank {
   Third = 3,
 }
 
-export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; address: string; beans: number }) => {
+export const LeaderBoardItem = ({
+  rank,
+  address,
+  beans,
+  isCurrentUserRank,
+}: {
+  rank: number;
+  address: string;
+  beans: number;
+  isCurrentUserRank?: boolean;
+}) => {
   switch (rank) {
     case Rank.First:
       return (
@@ -43,6 +53,8 @@ export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; addres
         />
       );
     default:
-      return <LeaderBoardNormalItem rank={rank} address={address} beans={beans} />;
+      return (
+        <LeaderBoardNormalItem rank={rank} address={address} beans={beans} isCurrentUserRank={isCurrentUserRank} />
+      );
   }
 };

@@ -16,7 +16,7 @@ export const useWeeklyRank = (address: string) => {
         selfRank: {
           caAddress: 'ELF_2t8...81_AELF',
           score: 20,
-          rank: 1,
+          rank: 5,
         },
       };
     };
