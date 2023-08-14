@@ -9,12 +9,17 @@ import {
   did,
   ConfigProvider,
   Unlock,
+  TStep3LifeCycle,
+  TStep2SignUpLifeCycle,
+  handleErrorMessage,
+  errorTip,
+  setLoading,
 } from '@portkey/did-ui-react';
-import { Button, Drawer, Modal, Image, Input } from 'antd';
+import { Drawer } from 'antd';
 import detectProvider from '@portkey/detect-provider';
 import { isMobileDevices } from 'utils/isMobile';
 import { IPortkeyProvider } from '@portkey/provider-types';
-import { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { setAccountInfoSync, setDiscoverInfo, setLoginStatus, setWalletInfo } from 'redux/reducer/info';
 import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
@@ -22,13 +27,15 @@ import getAccountInfoSync from 'utils/getAccountInfoSync';
 import isMobile from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import { Network, ChainId, portKeyExtensionUrl } from 'constants/platform';
-import { SignInDesignType, SocialLoginType, AccountsType } from 'types/index';
+import { SignInDesignType, SocialLoginType, AccountsType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import useLogin from 'hooks/useLogin';
 import { Store } from 'utils/store';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
 import { useDebounceFn } from 'ahooks';
 import openPageInDiscover from 'utils/openDiscoverPage';
+import { sleep } from 'utils/common';
+import useVerifier from 'hooks/useVarified';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -37,6 +44,7 @@ ConfigProvider.setGlobalConfig({
   requestDefaults: {
     baseURL: '/portkey',
   },
+  graphQLUrl: '/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql',
 });
 
 export default function Login() {
@@ -46,7 +54,9 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
-  const [currentLifeCircle, setCurrentLifeCircle] = useState<TStep2SignInLifeCycle | TStep1LifeCycle>({
+  const [currentLifeCircle, setCurrentLifeCircle] = useState<
+    TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
+  >({
     LoginByScan: undefined,
   });
 
@@ -62,20 +72,24 @@ export default function Login() {
 
   const [isWalletExist, setIsWalletExist] = useState(false);
 
-  const handleSocialStep1Success = (value: IGuardianIdentifierInfo) => {
-    setCurrentLifeCircle({
-      GuardianApproval: {
-        guardianIdentifierInfo: {
-          chainId: value.chainId,
-          isLoginGuardian: value.isLoginGuardian,
-          identifier: value.identifier,
-          accountType: value.accountType,
+  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+    if (!value.isLoginGuardian) {
+      await onSignUp(value as IGuardianIdentifierInfo);
+    } else {
+      setCurrentLifeCircle({
+        GuardianApproval: {
+          guardianIdentifierInfo: {
+            chainId: value.chainId,
+            isLoginGuardian: value.isLoginGuardian,
+            identifier: value.identifier,
+            accountType: value.accountType,
+          },
         },
-      },
-    });
-    setTimeout(() => {
-      signInRef.current?.setOpen(true);
-    }, 500);
+      });
+      setTimeout(() => {
+        signInRef.current?.setOpen(true);
+      }, 500);
+    }
   };
 
   const signHandle = useSignHandler({
@@ -89,7 +103,7 @@ export default function Login() {
 
   const handleGoogle = async () => {
     setVisible(false);
-    const res = await getSocialToken({ type: 'Google' });
+    const res = await getSocialToken({ type: SocialLoginType.GOOGLE });
     await signHandle.onSocialFinish({
       type: res.provider,
       data: { accessToken: res.token },
@@ -98,7 +112,7 @@ export default function Login() {
 
   const handleApple = async () => {
     setVisible(false);
-    const res = await getSocialToken({ type: 'Apple' });
+    const res = await getSocialToken({ type: SocialLoginType.APPLE });
     await signHandle.onSocialFinish({
       type: res.provider,
       data: { accessToken: res.token },
@@ -239,23 +253,23 @@ export default function Login() {
 
   const renderLoginMethods = (inModel: boolean) => {
     const allMethods = [
-      { name: 'Login with Google', onclick: handleGoogle },
-      { name: 'Login with Apple', onclick: handleApple },
       { name: 'Login with Portkey', onclick: handlePortKey },
+      { name: 'Login with Google', onclick: handleGoogle, yellowColor: !inModel ? true : undefined },
+      { name: 'Login with Apple', onclick: handleApple, yellowColor: !inModel ? true : undefined },
       { name: 'Login with Email', onclick: handleEmail },
       { name: 'Login with Phone', onclick: handlePhone },
       { name: 'Login with QR code', onclick: handleQrcode },
     ];
-    let filterMethods: Array<{ name: string; onclick: MouseEventHandler<HTMLDivElement> }> = [];
+    let filterMethods = [];
     if (isInApp) {
       filterMethods = [allMethods[2]];
     } else if (isInIOS) {
-      filterMethods = inModel ? [allMethods[0], ...allMethods.slice(3, 6)] : [allMethods[1], allMethods[2]];
-    } else {
       filterMethods = inModel ? [allMethods[1], ...allMethods.slice(3, 6)] : [allMethods[0], allMethods[2]];
+    } else {
+      filterMethods = inModel ? [allMethods[2], ...allMethods.slice(3, 6)] : [allMethods[0], allMethods[1]];
     }
     return filterMethods.map((item, index) => (
-      <div key={index} onClick={item.onclick} className={styles.loginBtn}>
+      <div key={index} onClick={item.onclick} className={item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn}>
         {item.name}
       </div>
     ));
@@ -286,10 +300,86 @@ export default function Login() {
     router.push('/');
   }, [passwordValue, router]);
 
+  const { getRecommendationVerifier, verifySocialToken, sendVerifyCode } = useVerifier();
+
+  const onStep2OfSignUpFinish = useCallback((res: TSignUpVerifier, value?: IGuardianIdentifierInfo) => {
+    const identifier = value;
+    if (!identifier) return console.error('No guardianIdentifier!');
+    const list = [
+      {
+        type: identifier?.accountType,
+        identifier: identifier?.identifier,
+        verifierId: res.verifier.id,
+        verificationDoc: res.verificationDoc,
+        signature: res.signature,
+      },
+    ];
+    console.log(list);
+    setCurrentLifeCircle({
+      SetPinAndAddManager: {
+        guardianIdentifierInfo: identifier,
+        approvedList: list,
+      },
+    });
+    setTimeout(() => {
+      signInRef.current?.setOpen(true);
+    }, 500);
+  }, []);
+
+  const onSignUp = useCallback(
+    async (value: IGuardianIdentifierInfo) => {
+      try {
+        setLoading(true, 'Assigning a verifier on-chain…');
+        await sleep(2000);
+        const verifier = await getRecommendationVerifier(ChainId);
+        setLoading(false);
+        const { accountType, authenticationInfo, identifier } = value;
+        if (accountType === SocialLoginType.APPLE || accountType === SocialLoginType.GOOGLE) {
+          setLoading(true);
+          console.log('authenticationInfo', authenticationInfo);
+          const result = await verifySocialToken({
+            accountType,
+            token: authenticationInfo?.appleIdToken || authenticationInfo?.googleAccessToken,
+            guardianIdentifier: identifier,
+            verifier,
+            chainId: ChainId,
+            operationType: OperationTypeEnum.register,
+          });
+          setLoading(false);
+          console.log(result);
+          onStep2OfSignUpFinish(
+            {
+              verifier,
+              verificationDoc: result.verificationDoc,
+              signature: result.signature,
+            },
+            value,
+          );
+        }
+      } catch (error) {
+        setLoading(false);
+        const errorMsg = handleErrorMessage(error);
+        errorTip(
+          {
+            errorFields: 'Check sign up',
+            error: errorMsg,
+          },
+          true,
+          () => {
+            console.log('error');
+          },
+        );
+      }
+    },
+    [getRecommendationVerifier, onStep2OfSignUpFinish, verifySocialToken],
+  );
+
   return (
     <div className={styles.loadingContainer}>
       {isWalletExist ? (
-        <Button onClick={unlock}>unLock</Button>
+        <div onClick={unlock} className={styles.unlockBtn}>
+          unLock
+        </div>
       ) : (
         <>
           {renderLoginMethods(false)}
@@ -324,6 +414,7 @@ export default function Login() {
         className={style}
         onFinish={handleFinish}
         isShowScan={true}
+        defaultChainId={ChainId}
       />
 
       <Unlock

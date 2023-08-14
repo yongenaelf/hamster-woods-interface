@@ -4,7 +4,7 @@ module.exports = {
     autoprefixer: {},
     'postcss-nested': {},
     'postcss-pxtorem': {
-      rootValue: 10,
+      rootValue: 16,
       unitPrecision: 5,
       propList: ['*'],
       mediaQuery: false,

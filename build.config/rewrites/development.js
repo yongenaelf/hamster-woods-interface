@@ -11,4 +11,8 @@ module.exports = [
     source: '/api/:path*',
     destination: 'http://192.168.66.225:5006/api/:path*',
   },
+  {
+    source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
+    destination: 'http://192.168.67.51:8083/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
+  },
 ];

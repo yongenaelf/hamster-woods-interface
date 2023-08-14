@@ -1,3 +1,4 @@
+import { IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
 import { IPortkeyProvider } from '@portkey/provider-types';
 
 export type TokenInfo = {
@@ -20,6 +21,11 @@ export enum SupportedELFChainId {
 export enum ContractMethodType {
   SEND = 'send',
   VIEW = 'view',
+}
+
+export enum SocialLoginType {
+  APPLE = 'Apple',
+  GOOGLE = 'Google',
 }
 
 export interface IContractError extends Error {
@@ -56,8 +62,6 @@ export type Step1StyleType = 'input-form' | 'qrcode-box';
 
 export type SignInDesignType = 'Web2Design' | 'SocialDesign' | 'CryptoDesign';
 
-export type SocialLoginType = 'Google' | 'Apple';
-
 export interface IAccountInfoSync {
   accountType: string;
   authenticationInfo?: {
@@ -78,3 +82,24 @@ export interface IDiscoverInfo {
   provider: IPortkeyProvider;
   accounts: ChainIdType;
 }
+
+export enum OperationTypeEnum {
+  // unknown
+  unknown = 0,
+  // register
+  register = 1,
+  // community recovery
+  communityRecovery = 2,
+  // add guardian
+  addGuardian = 3,
+  // delete guardian
+  deleteGuardian = 4,
+  // edit guardian
+  editGuardian = 5,
+  // remove other manager
+  removeOtherManager = 6,
+  // set login account
+  setLoginAccount = 7,
+}
+
+export type TSignUpVerifier = { verifier: TVerifierItem } & IVerifyInfo;

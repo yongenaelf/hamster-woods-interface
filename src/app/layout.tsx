@@ -30,8 +30,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 var fn = function () {
                   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                   var width = docEle.clientWidth;
-                  var unitWidth = isMobile ? 375 : 1920;
-                  width && (docEle.style.fontSize = 10 * (width / unitWidth) + 'px');
+                  var unitWidth = isMobile ? 390 : 1920;
+                  width && (docEle.style.fontSize = 16 * (width / unitWidth) + 'px');
                 };
                 fn();
                 win.addEventListener(event, fn, false);
