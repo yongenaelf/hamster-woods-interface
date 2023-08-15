@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { IRankResult } from './rankResult';
+import { getRandomAddress } from 'utils/getRandomAddress';
 
 export const useWeeklyRank = (address: string) => {
   return useSWR<IRankResult>([address, 'getWeekRank'], async () => {
@@ -9,12 +10,12 @@ export const useWeeklyRank = (address: string) => {
         rankingList: Array(99)
           .fill(0)
           .map((_, idx) => ({
-            caAddress: 'ELF_2t8...81_AELF',
+            caAddress: getRandomAddress(),
             score: 20,
             rank: idx + 1,
           })),
         selfRank: {
-          caAddress: 'ELF_2t8...81_AELF',
+          caAddress: getRandomAddress(),
           score: 20,
           rank: 5,
         },

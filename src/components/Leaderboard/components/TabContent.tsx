@@ -1,6 +1,11 @@
 import { useIsMobile } from 'redux/selector/mobile';
 import { IRankResult } from '../data/rankResult';
 import { LeaderBoardItem } from './LeaderBoardItem';
+import { Bean } from './Bean';
+import { Rank } from './Rank';
+import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
+import { LeaderboardTextColors } from './LeaderBoardItemText';
+import { LeaderBoardItemScore } from './LeaderBoardItemScore';
 
 export const TabContent = ({
   data,
@@ -12,6 +17,9 @@ export const TabContent = ({
   isEmpty?: boolean;
 }) => {
   const isMobile = useIsMobile();
+
+  const top99 = (data?.selfRank.rank || 1) <= 99;
+  const color = top99 ? LeaderboardTextColors.Blue : LeaderboardTextColors.White;
 
   return (
     <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 pb-2 shadow-inner">
@@ -54,51 +62,19 @@ export const TabContent = ({
               </div>
             </div>
           </div>
-          {(data?.selfRank.rank || 1) > 99 ? (
-            <div className="flex h-24 items-center rounded-bl-2xl rounded-br-2xl bg-blue-700 pl-3 pr-4">
-              <div
-                className={`ml-4 rounded-3xl bg-white p-1 text-center font-bold text-slate-500 ${
-                  isMobile ? 'mr-4 w-16 text-3xl' : 'mr-6 w-24 text-4xl'
-                }`}>
-                99+
-              </div>
-              <div className={`font-bold text-white ${isMobile ? 'text-md mr-2' : 'mr-4 text-3xl'}`}>
-                {data?.selfRank.caAddress}
-              </div>
-              <div className="flex-grow">
-                <img className="w-16" src={require('assets/images/me.png').default.src} alt="me" />
-              </div>
-              <div className={`font-bold text-white ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
-                {(data?.selfRank.score || 0).toLocaleString()}
-              </div>
-              <img
-                className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'}
-                src={require('assets/images/bean.png').default.src}
-                alt="bean"
-              />
-            </div>
-          ) : (
-            <div className="flex h-24 items-center rounded-bl-2xl rounded-br-2xl bg-gradient-to-b from-[#FFD304] to-[#FFF4C1] pl-3 pr-4">
-              <div
-                className={`ml-4 rounded-3xl bg-white p-1 text-center font-bold text-[#0538C9] ${
-                  isMobile ? 'mr-4 w-16 text-3xl' : 'mr-6 w-24 text-4xl'
-                }`}>
-                {data?.selfRank.rank}
-              </div>
-              <div className={`font-bold text-[#0538C9] ${isMobile ? 'text-md mr-2' : 'mr-4 text-3xl'}`}>
-                {data?.selfRank.caAddress}
-              </div>
-              <div className="flex-grow"></div>
-              <div className={`font-bold text-[#0538C9] ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
-                {(data?.selfRank.score || 0).toLocaleString()}
-              </div>
-              <img
-                className={isMobile ? 'mx-3 h-8' : 'mx-8 h-16'}
-                src={require('assets/images/bean.png').default.src}
-                alt="bean"
-              />
-            </div>
-          )}
+          <div
+            className={`flex h-24 items-center rounded-bl-2xl rounded-br-2xl pb-4 pl-3 pr-4 pt-4 ${
+              top99 ? 'bg-gradient-to-b from-[#FFD304] to-[#FFF4C1]' : 'bg-blue-700'
+            }`}>
+            <span className="ml-2"></span>
+            <Rank rank={top99 ? data?.selfRank.rank : '99+'} />
+            <LeaderBoardItemAddress address={data?.selfRank.caAddress} color={color} />
+            {top99 ? null : <img className="ml-2 w-16" src={require('assets/images/me.png').default.src} alt="me" />}
+            <div className="flex-grow"></div>
+            <LeaderBoardItemScore score={data?.selfRank.score} color={color} />
+            <Bean />
+            <span className="mr-2"></span>
+          </div>
         </>
       )}
     </div>

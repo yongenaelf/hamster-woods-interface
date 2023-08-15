@@ -1,4 +1,4 @@
-export function middleEllipsis(str: string, maxLength = 15, charsStart = 7, charsEnd = 6) {
+export function middleEllipsis(str = '', maxLength = 15, charsStart = 7, charsEnd = 7) {
   if (str.length > maxLength) {
     return str.slice(0, charsStart) + '...' + str.slice(str.length - charsEnd, str.length);
   }

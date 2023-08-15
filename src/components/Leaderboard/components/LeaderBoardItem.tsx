@@ -1,5 +1,6 @@
 import { LeaderBoardRankItem } from './LeaderBoardRankItem';
 import { LeaderBoardNormalItem } from './LeaderBoardNormalItem';
+import { LeaderboardTextColors } from './LeaderBoardItemText';
 
 enum Rank {
   First = 1,
@@ -24,7 +25,7 @@ export const LeaderBoardItem = ({
         <LeaderBoardRankItem
           src={require('assets/images/gold.png').default.src}
           bgClassName="bg-[#F5BF49]"
-          textClassName="text-stroke-[#DE7B3D]"
+          textClassName={LeaderboardTextColors.Gold}
           shadowInsetColor="#DE7B3D"
           address={address}
           beans={beans}
@@ -35,7 +36,7 @@ export const LeaderBoardItem = ({
         <LeaderBoardRankItem
           src={require('assets/images/silver.png').default.src}
           bgClassName="bg-[#CEDFF7]"
-          textClassName="text-stroke-[#6976CD]"
+          textClassName={LeaderboardTextColors.Silver}
           shadowInsetColor="#B8B8EB"
           address={address}
           beans={beans}
@@ -46,7 +47,7 @@ export const LeaderBoardItem = ({
         <LeaderBoardRankItem
           src={require('assets/images/bronze.png').default.src}
           bgClassName="bg-[#E97D3C]"
-          textClassName="text-stroke-[#B5412C]"
+          textClassName={LeaderboardTextColors.Bronze}
           shadowInsetColor="#B5412C"
           address={address}
           beans={beans}
