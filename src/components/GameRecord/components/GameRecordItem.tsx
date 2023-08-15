@@ -1,9 +1,53 @@
 import { Disclosure } from '@headlessui/react';
-import { IGameItem } from '../data/useGameHis';
+import { IGameItem, ITransactionInfo } from '../data/useGameHis';
 import { copyText } from 'utils/copyText';
 import { middleEllipsis } from 'utils/middleEllipsis';
 import { useIsMobile } from 'redux/selector/mobile';
 import { getDateFormat } from 'utils/getDateFormat';
+
+const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
+  if (!data) return null;
+
+  return (
+    <div className="mb-2 w-full rounded-2xl bg-[#144CEA] p-4 text-white">
+      <table className="w-full">
+        <thead>
+          <tr>
+            <th className="pb-4 text-left">Roll</th>
+            <th className="pb-4 text-right">
+              <a href="#" className="text-white underline" target="_blank" rel="noopener noreferrer">
+                View on Explore
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="text-white text-opacity-60">Date</td>
+            <td className="text-right">{getDateFormat(data.triggerTime, 'MMM dd HH:mm:ss')}</td>
+          </tr>
+          <tr>
+            <td className="text-white text-opacity-60">Status</td>
+            <td className="text-right">Confirmed</td>
+          </tr>
+          <tr>
+            <td className="text-white text-opacity-60">Transaction Fee</td>
+            <td className="text-right">{data.transactionFee} ELF</td>
+          </tr>
+          <tr>
+            <td className="text-white text-opacity-60">Transaction ID</td>
+            <td className="text-right">
+              {middleEllipsis(data.transactionId)}{' '}
+              <button onClick={() => copyText(data.transactionId)}>
+                <img src={require('assets/images/copy.png').default.src} alt="copy" className="h-4" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
   <div
@@ -23,10 +67,10 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           <div className="flex justify-between pb-4">
             <div
               className={`text-lg font-bold leading-normal text-white ${isMobile ? 'text-[1rem]' : 'text-[2.5rem]'}`}>
-              {getDateFormat(bingoTransactionInfo.triggerTime, 'dd MMM')}
+              {getDateFormat(playTransactionInfo.triggerTime, 'dd MMM')}
             </div>
             <div className="text-md text-right text-white text-opacity-60">
-              {getDateFormat(bingoTransactionInfo.triggerTime, 'HH:mm:ss')}
+              {getDateFormat(playTransactionInfo.triggerTime, 'HH:mm:ss')}
             </div>
           </div>
           <table className="mb-4 w-full">
@@ -50,43 +94,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           ) : null}
           <Disclosure.Panel>
             {[playTransactionInfo, bingoTransactionInfo].map((i, key) => (
-              <div key={key} className="mb-2 w-full rounded-2xl bg-[#144CEA] p-4 text-white">
-                <table className="w-full">
-                  <thead>
-                    <tr>
-                      <th className="pb-4 text-left">Roll</th>
-                      <th className="pb-4 text-right">
-                        <a href="#" className="text-white underline" target="_blank" rel="noopener noreferrer">
-                          View on Explore
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="text-white text-opacity-60">Date</td>
-                      <td className="text-right">{getDateFormat(i.triggerTime, 'MMM dd HH:mm:ss')}</td>
-                    </tr>
-                    <tr>
-                      <td className="text-white text-opacity-60">Status</td>
-                      <td className="text-right">Confirmed</td>
-                    </tr>
-                    <tr>
-                      <td className="text-white text-opacity-60">Transaction Fee</td>
-                      <td className="text-right">{i.transactionFee} ELF</td>
-                    </tr>
-                    <tr>
-                      <td className="text-white text-opacity-60">Transaction ID</td>
-                      <td className="text-right">
-                        {middleEllipsis(i.transactionId)}{' '}
-                        <button onClick={() => copyText(i.transactionId)}>
-                          <img src={require('assets/images/copy.png').default.src} alt="copy" className="h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <GameRecordItemChild key={key} data={i} />
             ))}
             {open ? <Disclosure.Button className="py-2 text-[#003658]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>

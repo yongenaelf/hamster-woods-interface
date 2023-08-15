@@ -30,7 +30,7 @@ module.exports = {
             const colorString = `rgb(${color[0]} ${color[1]} ${color[2]})`;
 
             return {
-              background: `linear-gradient(to right bottom, rgba(255, 255, 255, 0.01) 50%, ${colorString} 50.3%)`,
+              background: `linear-gradient(to right bottom, rgba(255, 255, 255, 0.1) 50%, ${colorString} 50.3%)`,
             };
           },
         },

@@ -26,13 +26,13 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
       </div>
       {!data?.rankingList || data?.rankingList.length === 0 ? (
         <div className="flex flex-grow items-center justify-center bg-blue-700">
-          <div className={`${isMobile ? 'px-2' : 'px-32'}`}>
+          <div className={`${isMobile ? 'px-8' : 'px-32'}`}>
             <img
               src={require('assets/images/no-record.png').default.src}
               alt="No Record"
-              className={`mx-auto ${isMobile ? 'mb-8 w-32' : 'mb-16 w-64'}`}
+              className={`mx-auto w-32 mb-8`}
             />
-            <div className={`text-center font-roboto text-[#89A5F5] ${isMobile ? 'text-[1.7rem]' : 'text-[3rem]'}`}>
+            <div className={`text-center font-roboto text-[#89A5F5] ${isMobile ? 'text-lg' : 'text-2xl'}`}>
               Leaderboards will be displayed at the end of the first week of rankings.
             </div>
           </div>

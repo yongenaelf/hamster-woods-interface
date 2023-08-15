@@ -1,7 +1,7 @@
 import { graphQLRequest } from 'api/graphql';
 import useSWR from 'swr';
 
-interface ITransactionInfo {
+export interface ITransactionInfo {
   transactionId: string;
   transactionFee: number;
   triggerTime: string;
@@ -13,7 +13,7 @@ export interface IGameItem {
   score: number;
   transcationFee: number;
   playTransactionInfo: ITransactionInfo;
-  bingoTransactionInfo: ITransactionInfo;
+  bingoTransactionInfo: ITransactionInfo | null;
 }
 
 interface IGameHistoryResult {
@@ -50,6 +50,8 @@ export const useGameHis = (address: string) => {
       }
     }
   `);
+
+    console.log(getGameHis);
 
     return getGameHis;
   });

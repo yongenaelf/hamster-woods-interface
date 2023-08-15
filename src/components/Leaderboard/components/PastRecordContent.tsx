@@ -8,17 +8,17 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
   const isMobile = useIsMobile();
 
   return (
-    <div className="mb-4 flex justify-between rounded-[7px] border-[#00335C] bg-[#0538C9] shadow-[0px_0px_4px_rgba(0,0,0,0.25)_inset]">
+    <div className="mb-4 flex rounded-[7px] border-[#00335C] bg-[#0538C9] shadow-[0px_0px_4px_rgba(0,0,0,0.25)_inset]">
       <div
         className={`flex items-center rounded-bl-[7px] rounded-tl-[7px] bg-white bg-opacity-10 ${
-          isMobile ? 'w-3/5' : 'w-1/2'
+          isMobile ? 'w-1/2' : 'w-1/2'
         }`}>
         {icon}
-        <span className="mr-4 font-roboto font-bold text-white">{leftText}</span>
-        <div className="ml-auto h-full w-8 diagonal-bg-[#0538C9]"></div>
+        <span className={`mr-4 font-roboto font-bold text-white text-sm`}>{leftText}</span>
       </div>
-      <div className="flex flex-1 items-center justify-center font-roboto text-[2rem] font-bold text-[#FFD200]">
-        <div>{typeof value === 'number' ? value.toLocaleString() : '-'}</div>
+      <span className="diagonal-bg-[#0538C9] w-8"></span>
+      <div className="ml-2 flex items-center justify-center font-roboto text-xl font-bold text-[#FFD200]">
+        <div>{value?.toLocaleString() ?? '-'}</div>
       </div>
     </div>
   );
@@ -72,12 +72,12 @@ export const PastRecordContent = () => {
               />
               <div className="flex-1">
                 <DiagonalContainer
-                  icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className="m-4 w-8" />}
+                  icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className="w-8 p-2" />}
                   leftText="Ranking"
                   value={his?.season.rank}
                 />
                 <DiagonalContainer
-                  icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className="m-4 w-8" />}
+                  icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className="w-8 p-2" />}
                   leftText="Points"
                   value={his?.season.score}
                 />
@@ -105,8 +105,8 @@ export const PastRecordContent = () => {
         </>
       ) : (
         <>
-          <div className="h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 text-3xl shadow-inner">
-            <div className="flex gap-32 p-8">
+          <div className="h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 text-md shadow-inner">
+            <div className="flex gap-8 p-8">
               <div className="flex-1">
                 <img
                   src={require('assets/images/past-record-icon.png').default.src}
@@ -115,12 +115,12 @@ export const PastRecordContent = () => {
                 />
                 <div>
                   <DiagonalContainer
-                    icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className="m-4 w-8" />}
+                    icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className="w-12 p-2" />}
                     leftText="Ranking"
                     value={his?.season.rank}
                   />
                   <DiagonalContainer
-                    icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className="m-4 w-8" />}
+                    icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className="w-12 p-2" />}
                     leftText="Points"
                     value={his?.season.score}
                   />
