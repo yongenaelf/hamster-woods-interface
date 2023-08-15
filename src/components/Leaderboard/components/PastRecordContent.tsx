@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRankingSeasonList } from '../data/useRankingSeasonList';
 import { useRankingSeasonHis } from '../data/useRankingSeasonHis';
 import { useIsMobile } from 'redux/selector/mobile';
+import { getDateFormat } from 'utils/getDateFormat';
 
 const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; leftText: string; value?: number }) => {
   const isMobile = useIsMobile();
@@ -23,20 +24,23 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
   );
 };
 
+const formatDate = (dateStr: string) => getDateFormat(dateStr, 'yyyy.M.d');
+
 export const PastRecordContent = () => {
   const { data } = useRankingSeasonList();
   const [selectedSeason, setSelectedSeason] = useState('');
-  const { data: his } = useRankingSeasonHis(selectedSeason, 'id');
+  const { data: his } = useRankingSeasonHis(selectedSeason, '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD');
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const selected = data?.Season?.[0];
+    const selected = data?.season?.[0];
     if (selected) setSelectedSeason(selected.id);
   }, [data]);
 
   const dateString = useMemo(() => {
-    const selected = data?.Season.find((i) => i.id === selectedSeason);
-    if (selected) return `${selected.beginTime} - ${selected.endTime}`;
+    const selected = data?.season.find((i) => i.id === selectedSeason);
+
+    if (selected) return `${formatDate(selected.rankBeginTime)} - ${formatDate(selected.rankEndTime)}`;
 
     return '-';
   }, [selectedSeason, data]);
@@ -47,9 +51,9 @@ export const PastRecordContent = () => {
         <select
           className={`bg-[#0C40D4] font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
           onChange={(e) => setSelectedSeason(e.target.value)}>
-          {data?.Season.map((i) => (
+          {data?.season.map((i) => (
             <option key={i.id} value={i.id}>
-              {i.id}
+              {i.name}
             </option>
           ))}
         </select>

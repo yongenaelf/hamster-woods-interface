@@ -7,7 +7,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 export const GameRecord = () => {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
-  const { data } = useGameHis('test');
+  const { data } = useGameHis('21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD');
 
   return (
     <Fragment>
@@ -15,7 +15,7 @@ export const GameRecord = () => {
         Game Record
       </button>
       <Modal isOpen={open} title="Game Record" onClose={() => setOpen(false)}>
-        {!data || data.GameList.length === 0 ? (
+        {!data || data.gameList.length === 0 ? (
           <div className={`flex flex-grow items-center justify-center`}>
             <div>
               <img
@@ -30,7 +30,7 @@ export const GameRecord = () => {
           </div>
         ) : (
           <div className={`overflow-auto ${isMobile ? 'p-2' : 'px-16 py-8'}`}>
-            {data?.GameList.map((i, key) => (
+            {data?.gameList.map((i, key) => (
               <GameRecordItem data={i} key={key} />
             ))}
           </div>

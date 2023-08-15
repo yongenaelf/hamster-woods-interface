@@ -15,4 +15,8 @@ module.exports = [
     source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
     destination: 'http://192.168.67.51:8083/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
   },
+  {
+    source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+    destination: 'http://192.168.66.159:8095/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+  },
 ];

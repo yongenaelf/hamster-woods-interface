@@ -7,15 +7,7 @@ import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
 import { LeaderBoardItemScore } from './LeaderBoardItemScore';
 
-export const TabContent = ({
-  data,
-  refreshTime,
-  isEmpty,
-}: {
-  data?: IRankResult;
-  refreshTime: string;
-  isEmpty?: boolean;
-}) => {
+export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshTime: string }) => {
   const isMobile = useIsMobile();
 
   const top99 = (data?.selfRank.rank || 1) <= 99;
@@ -25,14 +17,14 @@ export const TabContent = ({
     <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 pb-2 shadow-inner">
       <div
         className={`mt-2 rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner ${
-          isMobile ? 'text-md' : 'text-3xl'
+          isMobile ? 'text-md' : 'text-xl'
         }`}>
-        <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-paytone text-white text-stroke-black">
+        <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-paytone text-white text-stroke-black font-bold">
           i
         </span>
         <span className="font-roboto text-white opacity-60">Next update: {refreshTime}</span>
       </div>
-      {isEmpty ? (
+      {!data?.rankingList || data?.rankingList.length === 0 ? (
         <div className="flex flex-grow items-center justify-center bg-blue-700">
           <div className={`${isMobile ? 'px-2' : 'px-32'}`}>
             <img

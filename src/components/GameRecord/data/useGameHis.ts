@@ -1,51 +1,56 @@
+import { graphQLRequest } from 'api/graphql';
 import useSWR from 'swr';
 
 interface ITransactionInfo {
-  TransactionId: string;
-  TranscationFee: number;
-  /**
-   * Timestamp
-   */
-  TriggerTime: string;
+  transactionId: string;
+  transactionFee: number;
+  triggerTime: string;
 }
 
 export interface IGameItem {
-  GridNum: number;
-  Score: number;
-  TranscationFee: number;
-  PlayTransactionInfo: ITransactionInfo;
-  BingoTransactionInfo: ITransactionInfo;
+  id: string;
+  gridNum: number;
+  score: number;
+  transcationFee: number;
+  playTransactionInfo: ITransactionInfo;
+  bingoTransactionInfo: ITransactionInfo;
 }
 
 interface IGameHistoryResult {
-  GameList: IGameItem[];
+  gameList: IGameItem[];
 }
 
 export const useGameHis = (address: string) => {
   return useSWR<IGameHistoryResult>([address, 'getGameHis'], async () => {
-    // handle logic to fetch here.
-    const mockFetcher = async () => {
-      return {
-        GameList: [
-          {
-            GridNum: 3,
-            Score: 20,
-            TranscationFee: 20,
-            PlayTransactionInfo: {
-              TransactionId: 'dfkljasldfjlasdjflksdafl',
-              TranscationFee: 80,
-              TriggerTime: new Date().toISOString(), //timestamp
-            },
-            BingoTransactionInfo: {
-              TransactionId: 'jasdlfjasldjfklasjdlfkjs',
-              TranscationFee: 80,
-              TriggerTime: new Date().toISOString(),
-            },
-          },
-        ],
-      };
-    };
+    const { getGameHis } = await graphQLRequest<{
+      getGameHis: IGameHistoryResult;
+    }>(`
+    query {
+      getGameHis(
+        getGameHisDto: {
+          caAddress: "${address}"
+        }
+      ) {
+        gameList {
+          id
+          gridNum
+          score
+          transcationFee
+          playTransactionInfo {
+            transactionId
+            transactionFee
+            triggerTime
+          }
+          bingoTransactionInfo {
+            transactionId
+            transactionFee
+            triggerTime
+          }
+        }
+      }
+    }
+  `);
 
-    return await mockFetcher();
+    return getGameHis;
   });
 };

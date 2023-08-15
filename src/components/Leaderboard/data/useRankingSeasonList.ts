@@ -1,30 +1,38 @@
+import { graphQLRequest } from 'api/graphql';
 import useSWR from 'swr';
 
 interface IRankingSeasonItem {
   id: string;
-  beginTime: string;
-  endTime: string;
+  name: string;
+  rankBeginTime: string;
+  rankEndTime: string;
+  showBeginTime: string;
+  showEndTime: string;
 }
 
 interface IRankingSeasonListResult {
-  Season: IRankingSeasonItem[];
+  season: IRankingSeasonItem[];
 }
 
 export const useRankingSeasonList = () => {
   return useSWR<IRankingSeasonListResult>('getRankingSeasonList', async () => {
-    // handle logic to fetch here.
-    const mockFetcher = async () => {
-      return {
-        Season: Array(10)
-          .fill(0)
-          .map((_, idx) => ({
-            id: `Season ${idx + 1}`,
-            beginTime: new Date(2023, idx, 1).toISOString().slice(0, 10).replaceAll('-', '.'),
-            endTime: new Date(2023, idx + 1, 1).toISOString().slice(0, 10).replaceAll('-', '.'),
-          })),
-      };
-    };
+    const { getRankingSeasonList } = await graphQLRequest<{
+      getRankingSeasonList: IRankingSeasonListResult;
+    }>(`
+    query {
+      getRankingSeasonList {
+        season {
+          id
+          name
+          rankBeginTime
+          rankEndTime
+          showBeginTime
+          showEndTime
+        }
+      }
+    }
+  `);
 
-    return await mockFetcher();
+    return getRankingSeasonList;
   });
 };

@@ -1,10 +1,9 @@
 import { Disclosure } from '@headlessui/react';
 import { IGameItem } from '../data/useGameHis';
-import { parseISO, format } from 'date-fns';
-import { useMemo } from 'react';
 import { copyText } from 'utils/copyText';
 import { middleEllipsis } from 'utils/middleEllipsis';
 import { useIsMobile } from 'redux/selector/mobile';
+import { getDateFormat } from 'utils/getDateFormat';
 
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
   <div
@@ -15,16 +14,7 @@ const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
 
 export const GameRecordItem = ({ data }: { data: IGameItem }) => {
   const isMobile = useIsMobile();
-  const { GridNum, Score, TranscationFee, PlayTransactionInfo, BingoTransactionInfo } = data;
-
-  const playTransactionDate = useMemo(
-    () => parseISO(PlayTransactionInfo.TriggerTime),
-    [PlayTransactionInfo.TriggerTime],
-  );
-  const bingoTransactionDate = useMemo(
-    () => parseISO(BingoTransactionInfo.TriggerTime),
-    [BingoTransactionInfo.TriggerTime],
-  );
+  const { gridNum, score, transcationFee, playTransactionInfo, bingoTransactionInfo } = data;
 
   return (
     <Disclosure as={Wrapper}>
@@ -33,10 +23,10 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           <div className="flex justify-between pb-4">
             <div
               className={`text-lg font-bold leading-normal text-white ${isMobile ? 'text-[1rem]' : 'text-[2.5rem]'}`}>
-              {format(bingoTransactionDate, 'dd MMM')}
+              {getDateFormat(bingoTransactionInfo.triggerTime, 'dd MMM')}
             </div>
             <div className="text-md text-right text-white text-opacity-60">
-              {format(bingoTransactionDate, 'HH:mm:ss')}
+              {getDateFormat(bingoTransactionInfo.triggerTime, 'HH:mm:ss')}
             </div>
           </div>
           <table className="mb-4 w-full">
@@ -49,9 +39,9 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             </thead>
             <tbody>
               <tr className="font-bold text-white">
-                <td>{GridNum}</td>
-                <td>{Score}</td>
-                <td className="text-right">{TranscationFee} ELF</td>
+                <td>{gridNum}</td>
+                <td>{score}</td>
+                <td className="text-right">{transcationFee} ELF</td>
               </tr>
             </tbody>
           </table>
@@ -59,7 +49,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <Disclosure.Button className="py-2 font-bold text-[#003658]">More &#x25BC;</Disclosure.Button>
           ) : null}
           <Disclosure.Panel>
-            {[PlayTransactionInfo, BingoTransactionInfo].map((i, key) => (
+            {[playTransactionInfo, bingoTransactionInfo].map((i, key) => (
               <div key={key} className="mb-2 w-full rounded-2xl bg-[#144CEA] p-4 text-white">
                 <table className="w-full">
                   <thead>
@@ -75,7 +65,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
                   <tbody>
                     <tr>
                       <td className="text-white text-opacity-60">Date</td>
-                      <td className="text-right">{format(playTransactionDate, 'MMM dd HH:mm:ss')}</td>
+                      <td className="text-right">{getDateFormat(i.triggerTime, 'MMM dd HH:mm:ss')}</td>
                     </tr>
                     <tr>
                       <td className="text-white text-opacity-60">Status</td>
@@ -83,13 +73,13 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
                     </tr>
                     <tr>
                       <td className="text-white text-opacity-60">Transaction Fee</td>
-                      <td className="text-right">{i.TranscationFee} ELF</td>
+                      <td className="text-right">{i.transactionFee} ELF</td>
                     </tr>
                     <tr>
                       <td className="text-white text-opacity-60">Transaction ID</td>
                       <td className="text-right">
-                        {middleEllipsis(i.TransactionId)}{' '}
-                        <button onClick={() => copyText(i.TransactionId)}>
+                        {middleEllipsis(i.transactionId)}{' '}
+                        <button onClick={() => copyText(i.transactionId)}>
                           <img src={require('assets/images/copy.png').default.src} alt="copy" className="h-4" />
                         </button>
                       </td>

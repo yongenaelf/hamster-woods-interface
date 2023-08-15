@@ -1,27 +1,28 @@
 import useSWR from 'swr';
 import { IRankResult } from './rankResult';
-import { getRandomAddress } from 'utils/getRandomAddress';
+import { graphQLRequest } from 'api/graphql';
 
 export const useWeeklyRank = (address: string) => {
   return useSWR<IRankResult>([address, 'getWeekRank'], async () => {
-    // handle logic to fetch here.
-    const mockFetcher = async () => {
-      return {
-        rankingList: Array(99)
-          .fill(0)
-          .map((_, idx) => ({
-            caAddress: getRandomAddress(),
-            score: 20,
-            rank: idx + 1,
-          })),
-        selfRank: {
-          caAddress: getRandomAddress(),
-          score: 20,
-          rank: 5,
-        },
-      };
-    };
+    const { getWeekRank } = await graphQLRequest<{
+      getWeekRank: IRankResult;
+    }>(`
+    query {
+      getWeekRank(getRankDto: { caAddress: "${address}" }) {
+        rankingList {
+          rank
+          score
+          caAddress
+        }
+        selfRank {
+          rank
+          score
+          caAddress
+        }
+      }
+    }
+  `);
 
-    return await mockFetcher();
+    return getWeekRank;
   });
 };
