@@ -10,8 +10,8 @@ function Lattice(props: { value: ICheckerboardItem }) {
   if (value.image) {
     return (
       <div
-        className={`relative z-10 flex h-full w-full flex-col items-center justify-center rounded-[0.6rem] ${styles['lattice-container']} bg-transparent`}>
-        <Image width={60} height={60} className="h-full w-full" src={value.image} alt="image" />
+        className={`relative z-10 w-full h-full rounded-[0.6rem] flex flex-col items-center justify-center ${styles['lattice-container']} bg-transparent`}>
+        <Image width={60} height={60} className="w-full h-full" src={value.image} alt="image" />
         {value.arrowColor && (
           <div className={`absolute text-[1.6rem] text-[${value.arrowColor}]`}>
             <Arrow className={`text-[1.6rem] text-[${value.arrowColor}]`} />

@@ -50,7 +50,7 @@ const Layout = dynamic(async () => {
 
     return (
       <>
-        <AntdLayout className="xx-wrapper flex h-[100vh] w-[100vw] flex-col overflow-hidden">
+        <AntdLayout className="xx-wrapper h-[100vh] w-[100vw] overflow-hidden flex flex-col">
           <Header />
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             <Suspense fallback={<Loading />}>{children}</Suspense>

@@ -101,12 +101,12 @@ export default function Game() {
 
   return (
     <div className={styles.game}>
-      <div className="flex w-full flex-1 overflow-hidden">
+      <div className="flex-1 flex w-full overflow-hidden">
         <Side side="left" />
-        <div className="relative flex-1 pl-[1.6rem] pt-[3.3rem]">
+        <div className="relative flex-1 pt-[3.3rem] pl-[1.6rem]">
           <div
             id="animationId"
-            className={`absolute left-[1.6rem] top-[3.3rem] z-50 flex aspect-[56/60] translate-x-[0rem] translate-y-[0rem] items-center justify-center pb-[0.8rem] pr-[1.2rem] duration-[3000]`}
+            className={`absolute top-[3.3rem] pr-[1.2rem] pb-[0.8rem] left-[1.6rem] flex items-center justify-center aspect-[56/60] translate-x-[0rem] translate-y-[0rem] duration-[3000] z-50`}
             style={{
               // eslint-disable-next-line no-inline-styles/no-inline-styles
               width: `calc(100% / ${checkerboardData?.[0]?.length})`,
@@ -141,7 +141,7 @@ export default function Game() {
       <div className="h-[12rem] w-full bg-[#D9D9D9]">bottom</div>
 
       <div className="flex">
-        <Button disabled={disabled} className="h-[4rem] w-[10rem] bg-blue-600" onClick={() => jump(4)}>
+        <Button disabled={disabled} className="w-[10rem] h-[4rem] bg-blue-600" onClick={() => jump(4)}>
           jump
         </Button>
       </div>
