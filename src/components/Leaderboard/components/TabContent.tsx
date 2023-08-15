@@ -2,8 +2,6 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { IRankResult } from '../data/rankResult';
 import { LeaderBoardItem } from './LeaderBoardItem';
 
-// flex h-full w-full flex-col rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 shadow-inner
-
 export const TabContent = ({
   data,
   refreshTime,
