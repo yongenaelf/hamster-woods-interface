@@ -33,6 +33,11 @@ export const GameRecord = () => {
             {data?.gameList.map((i, key) => (
               <GameRecordItem data={i} key={key} />
             ))}
+            <div className="flex items-center py-8">
+              <div className="flex-grow h-px bg-white bg-opacity-40 ml-32"></div>
+              <span className="flex-shrink text-white text-opacity-40 px-4">Recent 150 records</span>
+              <div className="flex-grow h-px bg-white bg-opacity-40 mr-32"></div>
+            </div>
           </div>
         )}
       </Modal>
