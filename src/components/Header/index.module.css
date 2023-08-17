@@ -1,0 +1,37 @@
+.headerContainer {
+  @apply flex h-[110px] w-full items-end border-b-2 border-solid border-[#003A90] bg-[var(--color-main)];
+  .header__menu {
+    @apply flex h-14 w-full items-center px-4;
+    .menu__wallet {
+      @apply h-10 w-10 object-cover;
+    }
+    .menu__award {
+      @apply ml-16 flex h-9 w-[148px] items-center rounded-[20px] bg-[#305CD9] px-2;
+
+      box-shadow: 0 -0.9px 0.9px 0 rgb(54 135 255 / 30%), 0 0.9px 3.6px 0 #0048b6 inset;
+    }
+    .award__coin {
+      @apply h-8 w-8;
+    }
+    .award__amount {
+      @apply ml-2 font-paytone text-[20px] leading-6 text-white;
+    }
+    .menu__intro {
+      @apply ml-[14px] h-10 w-10;
+    }
+    .menu__setting {
+      @apply ml-3 h-10 w-10;
+    }
+  }
+}
+
+.settingModal {
+  :global(.ant-modal-body) {
+    @apply !pb-[27px];
+  }
+}
+.assetModal {
+  :global(.ant-modal-footer) {
+    @apply hidden;
+  }
+}

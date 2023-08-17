@@ -7,18 +7,21 @@
       @apply hidden;
     }
     .ant-modal-content {
-      @apply rounded-[20px] bg-[var(--color-main)] p-0;
+      @apply rounded-[20px] bg-[var(--color-main)] p-0 text-white;
 
       box-shadow: 0 1.1666667461395264px 2.3333334922790527px 0 #3687ff inset,
         0 -1.1666667461395264px 2.3333334922790527px 0 #005ae1 inset,
         0 9.333333969116211px 9.333333969116211px 0 rgb(0 0 0 / 30%);
       .ant-modal-body {
-        @apply px-4 pb-8 pt-0;
+        @apply px-4 pb-8 pt-0 leading-6;
       }
     }
   }
   .modal__title {
-    @apply relative h-[72px] text-2xl leading-6;
+    @apply relative h-[72px]  text-2xl leading-6 text-white;
+    span {
+      @apply font-paytone;
+    }
 
     text-shadow: 0 0 1px rgb(0 0 0 / 25%);
   }

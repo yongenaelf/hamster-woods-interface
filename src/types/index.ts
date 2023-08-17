@@ -1,5 +1,6 @@
-import { IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
-import { IPortkeyProvider } from '@portkey/provider-types';
+import { DIDWalletInfo, IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
+import { IPortkeyProvider, Accounts, ChainIds } from '@portkey/provider-types';
+import type { IHolderInfo, Manager } from '@portkey/services';
 
 export type TokenInfo = {
   decimals: number;
@@ -63,12 +64,7 @@ export type Step1StyleType = 'input-form' | 'qrcode-box';
 export type SignInDesignType = 'Web2Design' | 'SocialDesign' | 'CryptoDesign';
 
 export interface IAccountInfoSync {
-  accountType: string;
-  authenticationInfo?: {
-    googleAccessToken?: string;
-  };
-  chainId: SupportedELFChainId;
-  isLoginGuardian: boolean;
+  [key: string]: any;
 }
 
 export type ChainIdType = 'AELF' | 'tDVV' | 'tDVW';
@@ -77,10 +73,10 @@ export type AccountsType = {
 };
 
 export interface IDiscoverInfo {
-  address: string;
-  nickName: string;
-  provider: IPortkeyProvider;
-  accounts: ChainIdType;
+  address?: string;
+  nickName?: string;
+  provider?: IPortkeyProvider;
+  accounts?: Accounts;
 }
 
 export enum OperationTypeEnum {
@@ -122,3 +118,16 @@ export interface IPlayerInformation {
   sumScore: number;
   curGridNum: number;
 }
+export enum WalletType {
+  unknown = 'unknown',
+  discover = 'discover',
+  portkey = 'portkey',
+}
+
+export type PortkeyInfoType = DIDWalletInfo & { accounts?: { [key: string]: any } };
+
+export type WalletInfoType = {
+  portkeyInfo?: PortkeyInfoType;
+  discoverInfo?: IDiscoverInfo;
+  accountInfoSync?: Array<Manager>;
+};

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { InfoStateType, LoginStatus } from 'redux/types/reducerTypes';
+import { WalletType } from 'types';
 
 const initialState: InfoStateType = {
   isMobile: false,
@@ -9,8 +10,8 @@ const initialState: InfoStateType = {
     rpcUrl: '',
   },
   theme: 'light',
-  discoverInfo: null,
   walletInfo: null,
+  walletType: WalletType.unknown,
   accountInfoSync: null,
   loginStatus: LoginStatus.UNLOGIN,
 };
@@ -23,11 +24,11 @@ export const infoSlice = createSlice({
     setIsMobile(state, action) {
       state.isMobile = action.payload;
     },
-    setDiscoverInfo(state, action) {
-      state.discoverInfo = action.payload;
-    },
     setWalletInfo(state, action) {
       state.walletInfo = action.payload;
+    },
+    setWalletType(state, action) {
+      state.walletType = action.payload;
     },
     setLoginStatus(state, action) {
       state.loginStatus = action.payload;
@@ -48,6 +49,6 @@ export const infoSlice = createSlice({
   },
 });
 
-export const { setIsMobile, setDiscoverInfo, setLoginStatus, setWalletInfo, setAccountInfoSync } = infoSlice.actions;
+export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;
