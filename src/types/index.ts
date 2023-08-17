@@ -103,3 +103,22 @@ export enum OperationTypeEnum {
 }
 
 export type TSignUpVerifier = { verifier: TVerifierItem } & IVerifyInfo;
+
+export interface CallContractParams<T> {
+  contractAddress: string;
+  methodName: string;
+  args: T;
+}
+
+export interface IBoutInformation {
+  score: number;
+  playId: number;
+  roundNumber: number;
+  gridNum: number;
+}
+
+export interface IPlayerInformation {
+  playableCount: number;
+  sumScore: number;
+  curGridNum: number;
+}

@@ -61,3 +61,12 @@ export const getTransactionId = async (tokenContract: any) => {
   });
   return transactionId.TransactionId;
 };
+
+export const getAElfInstance = (rpcUrl: string) => {
+  return new AElf(new AElf.providers.HttpProvider(rpcUrl));
+};
+
+export const getViewWallet = () => {
+  const wallet = AElf.wallet.createNewWallet();
+  return wallet;
+};
