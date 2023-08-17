@@ -36,6 +36,9 @@ import { useDebounceFn } from 'ahooks';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import { sleep } from 'utils/common';
 import useVerifier from 'hooks/useVarified';
+import ContractRequest from 'contract/contractRequest';
+import { WalletType } from 'constants/index';
+import { GetPlayerInformation } from 'contract/bingo';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -159,13 +162,11 @@ export default function Login() {
       let accounts = await provider?.request({ method: 'accounts' });
       if (accounts[ChainId] && accounts[ChainId].length > 0) {
         onAccountsSuccess(provider, accounts);
-        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
         return;
       }
       accounts = await provider?.request({ method: 'requestAccounts' });
       if (accounts[ChainId] && accounts[ChainId].length > 0) {
         onAccountsSuccess(provider, accounts);
-        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else {
         console.log('account error');
       }
@@ -178,6 +179,19 @@ export default function Login() {
     },
   );
 
+  const initializeContract = async (wallet: any) => {
+    const contract = ContractRequest.get();
+    const config = {
+      chainId: ChainId,
+      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io',
+    };
+    contract.setWallet(wallet, WalletType.discover);
+    contract.setConfig(config);
+
+    const information = await GetPlayerInformation(wallet.address);
+    console.log(information);
+  };
+
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';
     const address = accounts[ChainId]?.[0].split('_')[1];
@@ -188,14 +202,16 @@ export default function Login() {
     }
     // localStorage.setItem(LOGIN_EARGLY_KEY, "true");
 
-    store.dispatch(
-      setDiscoverInfo({
-        address,
-        accounts,
-        nickName,
-        provider,
-      }),
-    );
+    const walletInfo = {
+      address,
+      accounts,
+      nickName,
+      provider,
+    };
+    store.dispatch(setDiscoverInfo(walletInfo));
+    store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+    initializeContract(walletInfo);
+
     router.push('/');
   }, []);
 
