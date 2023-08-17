@@ -1,0 +1,42 @@
+.button-mobile {
+  
+  @apply mt-[-41px];
+
+  .button__border {
+    @apply absolute z-50 top-0 bottom-0 left-0 m-auto w-full h-max pb-[9px];
+
+    .button__border__top {
+      @apply  w-full h-[18px] shadow-[0_1px_2px_0_#FFF_inset] bg-[#E0DDCB];
+    }
+    .button__border__bottom {
+    @apply w-full h-[6px] shadow-[3px_0_3px_0_#FFFFFF29_inset] bg-[#E0DDCB];
+    
+      background: linear-gradient(270deg, #898694 15.84%, #95919B 53.29%);
+    }
+  }
+
+  .button__icon {
+    @apply relative z-50 w-[128px] h-[106px];
+
+    /* cursor: url('../../../../assets/images/recreation/bean.png'); */
+
+    svg {
+      @apply w-full h-auto;
+    }
+  }
+}
+
+.button {
+  @apply pb-[78px] mt-0 w-[398px] h-[142px];
+  .button__icon {
+    @apply relative z-50 w-[398px] h-[142px];
+
+    cursor: pointer;
+    cursor: url('../../../../assets/images/recreation/cursor.png'), auto;
+
+    /* cursor: url('../../../../assets/images/recreation/bean.png'), auto; */
+    svg {
+      @apply w-full h-auto;
+    }
+  }
+}
