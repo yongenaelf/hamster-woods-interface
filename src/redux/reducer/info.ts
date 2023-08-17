@@ -5,7 +5,6 @@ import { InfoStateType, LoginStatus } from 'redux/types/reducerTypes';
 
 const initialState: InfoStateType = {
   isMobile: false,
-  isSmallScreen: false,
   baseInfo: {
     rpcUrl: '',
   },

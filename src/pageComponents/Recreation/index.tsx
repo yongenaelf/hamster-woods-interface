@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDirection, ICheckerboardItem } from './checkerboard';
-import { Button } from 'antd';
+import { ArrowDirection, CheckerboardNode, ICheckerboardItem, IJumpCallbackParams } from './checkerboard';
 import { CheckerboardList } from './checkerboard';
 import styles from './index.module.css';
 
-import Lottie, { LottieRefCurrentProps } from 'lottie-react';
-import dataAnimation from './data1.json';
 import Checkerboard from './components/Checkerboard';
-import Side from './components/Side';
+import SideBorder from './components/SideBorder';
+import { LottieRefCurrentProps } from 'lottie-react';
+import Role from './components/Role';
+
 import { checkerboardData } from './mockdata';
+
+import Bus from 'assets/images/recreation/bus.svg';
+import RoleImg from 'assets/images/recreation/role.svg';
+import Board from './components/Board';
+import GoButton from './components/GoButton';
+import { ANIMATION_DURATION } from 'contract/animation';
+import useGetState from 'redux/state/useGetState';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -18,11 +25,16 @@ export default function Game() {
     x: 0,
     y: 0,
   });
-  const firstNode = checkerboardData[0][0];
-  const firstNodePosition: [number, number] = [0, 0];
+  const firstNode = checkerboardData[5][4];
+  const firstNodePosition: [number, number] = [5, 4];
   const linkedList = useRef<CheckerboardList>();
 
+  const [currentNode, setCurrentNode] = useState<CheckerboardNode>();
+
+  const { isMobile } = useGetState();
+
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [showAdd, setShowAdd] = useState<boolean>(false);
 
   const animationRef = useRef<LottieRefCurrentProps>(null);
   const translateRef = useRef<{
@@ -33,18 +45,29 @@ export default function Game() {
     y: 0,
   });
 
-  const updatePosition = (x: number, y: number, state: boolean) => {
+  const updatePosition = ({ x, y, state, currentNode }: IJumpCallbackParams) => {
     setTranslate({
       x: x,
       y: y,
     });
-    setDisabled(state);
+    if (!state) {
+      const timer = setTimeout(() => {
+        setDisabled(false);
+        setShowAdd(true);
+        clearTimeout(timer);
+      }, ANIMATION_DURATION);
+    }
+
+    if (currentNode) {
+      setCurrentNode(currentNode);
+    }
   };
 
   const getList = (node: ICheckerboardItem, nodePosition: [number, number]) => {
     const current = {
       row: nodePosition[0],
       column: nodePosition[1],
+      info: node,
     };
 
     linkedList.current?.append(current);
@@ -78,16 +101,31 @@ export default function Game() {
     if (linkedList.current) {
       const next = linkedList.current.jump({
         step,
-        animation: animationRef.current!,
+        // animation: animationRef.current!,
         baseWidth: translateRef.current.x,
         baseHeight: translateRef.current.y,
       });
-      next((x, y, state) => updatePosition(x, y, state));
+      next(({ x, y, state, currentNode }) =>
+        updatePosition({
+          x,
+          y,
+          state,
+          currentNode,
+        }),
+      );
     }
   };
 
-  useEffect(() => {
-    animationRef.current?.pause();
+  const hideAdd = () => {
+    setShowAdd(false);
+  };
+
+  const initCheckerboard = () => {
+    setTranslate({
+      x: 0,
+      y: 0,
+    });
+    // animationRef.current?.pause();
     translateRef.current = {
       x: document.getElementById('animationId')?.clientWidth || 0,
       y: document.getElementById('animationId')?.clientHeight || 0,
@@ -95,56 +133,91 @@ export default function Game() {
     linkedList.current = new CheckerboardList({
       baseWidth: translateRef.current.x,
       baseHeight: translateRef.current.y,
+      animationDuration: ANIMATION_DURATION,
     });
     getList(firstNode, firstNodePosition);
+  };
+
+  const go = () => {
+    if (disabled) return;
+    setDisabled(true);
+    setShowAdd(false);
+    jump(3);
+  };
+
+  useEffect(() => {
+    initCheckerboard();
   }, [checkerboardData]);
 
+  useEffect(() => {
+    window.addEventListener('resize', initCheckerboard);
+    return () => {
+      window.removeEventListener('resize', initCheckerboard);
+    };
+  }, []);
+
   return (
-    <div className={styles.game}>
-      <div className="flex-1 flex w-full overflow-hidden">
-        <Side side="left" />
-        <div className="relative flex-1 pt-[3.3rem] pl-[1.6rem]">
-          <div
-            id="animationId"
-            className={`absolute top-[3.3rem] pr-[1.2rem] pb-[0.8rem] left-[1.6rem] flex items-center justify-center aspect-[56/60] translate-x-[0rem] translate-y-[0rem] duration-[3000] z-50`}
-            style={{
-              // eslint-disable-next-line no-inline-styles/no-inline-styles
-              width: `calc(100% / ${checkerboardData?.[0]?.length})`,
-              // eslint-disable-next-line no-inline-styles/no-inline-styles
-              transition: 'transform 2s linear',
-              transform: `translate(${translate.x}px, ${translate.y}px)`,
-            }}>
-            <Lottie lottieRef={animationRef} animationData={dataAnimation} />
-          </div>
-          {checkerboardData.map((row, index) => {
-            return (
-              <div key={index} className="flex">
-                {row.map((column) => {
-                  return (
-                    <div
-                      key={column.id}
-                      className={`aspect-[56/60]`}
-                      style={{
-                        width: `calc(100% / ${row.length})`,
-                      }}>
-                      <Checkerboard value={column} />
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+    <div className={`${styles.game} ${isMobile && 'flex-col'}`}>
+      {!isMobile && (
+        <div className={styles['game__pc__side']}>
+          <div className={styles['game__pc__blur']}></div>
         </div>
-        <Side />
-      </div>
+      )}
+      <div
+        className={`${styles['game__content']} flex overflow-y-auto ${
+          isMobile ? 'w-full flex-1' : 'h-full w-[784px]'
+        }`}>
+        <SideBorder side="left" />
+        <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pb-[72px] pt-[80px]'}`}>
+          <div className="relative z-30">
+            {isMobile && <Board />}
 
-      <div className="h-[12rem] w-full bg-[#D9D9D9]">bottom</div>
+            <Role
+              id="animationId"
+              width={`calc(100% / ${checkerboardData?.[0]?.length})`}
+              translate={translate}
+              bean={currentNode?.info.info.bean}
+              animationDuration={ANIMATION_DURATION}
+              showAdd={showAdd}
+              hideAdd={hideAdd}>
+              {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
+              <RoleImg />
+            </Role>
 
-      <div className="flex">
-        <Button disabled={disabled} className="w-[10rem] h-[4rem] bg-blue-600" onClick={() => jump(4)}>
-          jump
-        </Button>
+            {checkerboardData.map((row, index) => {
+              return (
+                <div key={index} className="flex">
+                  {row.map((column) => {
+                    return (
+                      <div
+                        key={column.id}
+                        style={{
+                          width: `calc(100% / ${row.length})`,
+                        }}>
+                        <Checkerboard value={column} />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+          <div className="ml-[-16px] mt-[-50px] w-full">
+            <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+          </div>
+        </div>
+        <SideBorder side="right" />
       </div>
+      {!isMobile && (
+        <div className={`${styles['game__pc__side']}`}>
+          <div className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}></div>
+          <div className="z-10 h-full w-full">
+            <Board go={go} />
+          </div>
+        </div>
+      )}
+
+      {isMobile && <GoButton disabled={disabled} go={go} />}
     </div>
   );
 }
