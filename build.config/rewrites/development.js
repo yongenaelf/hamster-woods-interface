@@ -1,7 +1,7 @@
 module.exports = [
   {
     source: '/connect/:path*',
-    destination: 'https://did-portkey-test.portkey.finance/connect/:path*',
+    destination: 'http://192.168.67.51:8080/connect/:path*',
   },
   {
     source: '/portkey/:path*',

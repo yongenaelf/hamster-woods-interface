@@ -1,5 +1,4 @@
-import { DIDWalletInfo } from '@portkey/did-ui-react';
-import { IAccountInfoSync, IDiscoverInfo } from 'types';
+import { IAccountInfoSync, WalletInfoType, WalletType } from 'types';
 
 export type InfoStateType = {
   isMobile?: boolean;
@@ -9,8 +8,8 @@ export type InfoStateType = {
     identityPoolID?: string;
     // some config
   };
-  discoverInfo: IDiscoverInfo | null;
-  walletInfo: DIDWalletInfo | null;
+  walletInfo: WalletInfoType | null;
+  walletType: WalletType;
   accountInfoSync: IAccountInfoSync | null;
   loginStatus: LoginStatus;
 };

@@ -6,3 +6,7 @@ export const portKeyExtensionUrl =
   'https://chrome.google.com/webstore/detail/portkey-did-crypto-nft/hpjiiechbbhefmpggegmahejiiphbmij';
 
 export const portkeyDidUIPrefix = '@portkey/did-ui-sdk:';
+
+export const LOGIN_EARGLY_KEY = 'discover.loginEargly';
+
+export const KEY_NAME = 'BEANGOTOWN';
