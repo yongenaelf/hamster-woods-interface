@@ -11,6 +11,12 @@ module.exports = {
         paytone: ['Paytone One', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
       },
+      colors: {
+        'leaderboard-gold': '#DE7B3D',
+        'leaderboard-silver': '#6976CD',
+        'leaderboard-bronze': '#B5412C',
+        'leaderboard-blue': '#0538C9',
+      },
     },
   },
   plugins: [

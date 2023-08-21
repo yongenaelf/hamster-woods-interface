@@ -1,21 +1,20 @@
-import { useState, Fragment } from 'react';
+import { Fragment } from 'react';
 import { Modal } from 'components/Modal';
 import { GameRecordItem } from './components/GameRecordItem';
 import { useGameHis } from './data/useGameHis';
 import { useIsMobile } from 'redux/selector/mobile';
+import { dispatch, useSelector } from 'redux/store';
+import { toggleShowGameRecord } from 'redux/reducer/info';
 
 export const GameRecord = () => {
-  const [open, setOpen] = useState(false);
+  const open = useSelector((state) => state.info.showGameRecord);
   const isMobile = useIsMobile();
   const { data } = useGameHis('21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD');
 
   return (
     <Fragment>
-      <button className="text-white" onClick={() => setOpen(true)}>
-        Game Record
-      </button>
-      <Modal isOpen={open} title="Game Record" onClose={() => setOpen(false)}>
-        {!data || data.gameList.length === 0 ? (
+      <Modal isOpen={open} title="Game Record" onClose={() => dispatch(toggleShowGameRecord())}>
+        {data?.gameList?.length ? (
           <div className={`flex flex-grow items-center justify-center`}>
             <div>
               <img
@@ -30,8 +29,8 @@ export const GameRecord = () => {
           </div>
         ) : (
           <div className={`overflow-auto ${isMobile ? 'p-2' : 'px-16 py-8'}`}>
-            {data?.gameList.map((i, key) => (
-              <GameRecordItem data={i} key={key} />
+            {data?.gameList.map((i) => (
+              <GameRecordItem data={i} key={i.id} />
             ))}
             <div className="flex items-center py-8">
               <div className="flex-grow h-px bg-white bg-opacity-40 ml-32"></div>

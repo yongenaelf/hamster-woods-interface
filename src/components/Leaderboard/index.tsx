@@ -4,6 +4,8 @@ import { SeasonTabContent } from './components/SeasonTabContent';
 import { Modal } from 'components/Modal';
 import { PastRecordContent } from './components/PastRecordContent';
 import { useIsMobile } from 'redux/selector/mobile';
+import { dispatch, useSelector } from 'redux/store';
+import { toggleShowLeaderboard } from 'redux/reducer/info';
 
 enum Tabs {
   Weekly = 'Weekly',
@@ -15,7 +17,7 @@ const _tabClassName =
   'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center text-stroke-black font-paytone font-bold';
 
 export const Leaderboard = () => {
-  const [open, setOpen] = useState(false);
+  const open = useSelector((state) => state.info.showLeaderboard);
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
 
@@ -23,14 +25,7 @@ export const Leaderboard = () => {
 
   return (
     <Fragment>
-      <button className="fixed right-0 top-32" onClick={() => setOpen(true)}>
-        <img
-          className={isMobile ? 'w-32' : 'w-64'}
-          src={require('assets/images/leaderboard-icon.png').default.src}
-          alt="open Leaderboard"
-        />
-      </button>
-      <Modal isOpen={open} title="Leader Board" onClose={() => setOpen(false)}>
+      <Modal isOpen={open} title="Leader Board" onClose={() => dispatch(toggleShowLeaderboard())}>
         <div className="mx-10 flex">
           <button
             className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}

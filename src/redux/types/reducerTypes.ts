@@ -12,6 +12,8 @@ export type InfoStateType = {
   walletType: WalletType;
   accountInfoSync: IAccountInfoSync | null;
   loginStatus: LoginStatus;
+  showLeaderboard: boolean;
+  showGameRecord: boolean;
 };
 
 export enum LoginStatus {

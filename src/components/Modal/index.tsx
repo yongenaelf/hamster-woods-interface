@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
 
 interface ModalProps extends React.PropsWithChildren {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   title?: string;
 }
@@ -12,7 +12,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={isOpen || false} as={Fragment}>
       <Dialog as="div" onClose={onClose} className="relative z-50">
         <Transition.Child
           as={Fragment}

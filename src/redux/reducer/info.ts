@@ -14,6 +14,8 @@ const initialState: InfoStateType = {
   walletType: WalletType.unknown,
   accountInfoSync: null,
   loginStatus: LoginStatus.UNLOGIN,
+  showLeaderboard: false,
+  showGameRecord: false,
 };
 
 // Actual Slice
@@ -36,6 +38,12 @@ export const infoSlice = createSlice({
     setAccountInfoSync(state, action) {
       state.accountInfoSync = action.payload;
     },
+    toggleShowLeaderboard(state) {
+      state.showLeaderboard = !state.showLeaderboard;
+    },
+    toggleShowGameRecord(state) {
+      state.showGameRecord = !state.showGameRecord;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -49,6 +57,13 @@ export const infoSlice = createSlice({
   },
 });
 
-export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync } = infoSlice.actions;
+export const {
+  setIsMobile,
+  setLoginStatus,
+  setWalletInfo,
+  setAccountInfoSync,
+  toggleShowLeaderboard,
+  toggleShowGameRecord,
+} = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;
