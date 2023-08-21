@@ -8,10 +8,9 @@ export type BeanPassModalPropsType = {
 };
 
 export enum GetBeanPassStatus {
-  Unacclaimed = 'unaccalimed',
+  Display = 'display',
   Recharge = 'recharge',
   Abled = 'abled',
   Noneleft = 'noneleft',
   Notfound = 'notfound',
-  Waiting = 'waiting',
 }

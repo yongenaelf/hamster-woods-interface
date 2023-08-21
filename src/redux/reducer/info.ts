@@ -49,6 +49,6 @@ export const infoSlice = createSlice({
   },
 });
 
-export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync } = infoSlice.actions;
+export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync, setWalletType } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;

@@ -94,30 +94,15 @@ export default function Login() {
       signHandle,
     });
 
-  const initializeContract = async (wallet: any) => {
-    const contract = ContractRequest.get();
-    const config = {
-      chainId: ChainId,
-      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io',
-    };
-    contract.setWallet(wallet, WalletType.discover);
-    contract.setConfig(config);
-
-    const information = await GetPlayerInformation(wallet.address);
-    console.log(information);
-  };
+  const router = useRouter();
 
   useEffect(() => {
     if (isLogin) {
-      //init
-      console.log('islogin');
-      // router.push('/');
+      router.push('/');
     }
-  }, [isLogin]);
+  }, [isLogin, router]);
 
   const isInAndroid = isMobile().android.device;
-
-  const router = useRouter();
 
   const isInIOS = isMobile().apple.device;
 

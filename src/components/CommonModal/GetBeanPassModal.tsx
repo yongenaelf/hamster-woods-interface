@@ -7,10 +7,10 @@ import { useMemo } from 'react';
 export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsType) {
   const displayText = useMemo(() => {
     return {
-      [GetBeanPassStatus.Unacclaimed]: {
-        title: 'Notice',
-        btnText: 'Confirm',
-        contentArr: ['Requires a BeanPass NFT', 'to start the game！'],
+      [GetBeanPassStatus.Display]: {
+        title: '',
+        btnText: '',
+        contentArr: [],
       },
       [GetBeanPassStatus.Recharge]: {
         title: 'Get a BeanPass',
@@ -43,11 +43,6 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
           'You need to have a BeanPass NFT to start the game！',
           'You have already claimed the BeanPass NFT, but it is not in your address.',
         ],
-      },
-      [GetBeanPassStatus.Waiting]: {
-        title: 'Notice',
-        btnText: 'Confirm',
-        contentArr: ['Your game count for today has been used up. The game count will be remade after:'],
       },
     }[type];
   }, [type]);

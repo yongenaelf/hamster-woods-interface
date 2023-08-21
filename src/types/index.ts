@@ -131,3 +131,20 @@ export type WalletInfoType = {
   discoverInfo?: IDiscoverInfo;
   accountInfoSync?: Array<Manager>;
 };
+
+export enum BeanPassResons {
+  Claimed = 'Claimed',
+  InsufficientElfAmount = 'insufficient elf amount',
+  DoubleClaim = 'double claim',
+}
+
+export interface IBeanPassClaimRes {
+  claimable: boolean;
+  reason: BeanPassResons;
+}
+
+export interface IBeanPassClaimReq {
+  token: string;
+  caAddress: string;
+  CaHash: string;
+}

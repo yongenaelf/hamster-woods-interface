@@ -8,5 +8,9 @@ interface ICommonBtnProps {
 }
 
 export default function CommonBtn({ title = 'Confirm', onClick, className }: ICommonBtnProps) {
-  return <div className={`${styles.commonBtn} ${className}`}>{title}</div>;
+  return (
+    <div className={`${styles.commonBtn} ${className}`} onClick={onClick}>
+      {title}
+    </div>
+  );
 }

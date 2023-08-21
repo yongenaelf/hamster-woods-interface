@@ -8,7 +8,6 @@ import enUS from 'antd/lib/locale/en_US';
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
 import { store } from 'redux/store';
-import Loading from 'components/Loading';
 
 import { fetchConfig } from 'api/request';
 
@@ -26,7 +25,7 @@ function Provider({ children }: { children: React.ReactNode }) {
     <>
       <StoreProvider>
         <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'ant'}>
-          {loading ? <Loading></Loading> : <WebLoginProvider>{children}</WebLoginProvider>}
+          <WebLoginProvider>{children}</WebLoginProvider>
         </ConfigProvider>
       </StoreProvider>
     </>

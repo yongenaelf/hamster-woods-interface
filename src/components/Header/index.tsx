@@ -18,7 +18,6 @@ export default function Header() {
   const router = useRouter();
 
   const { walletInfo } = useSelector(selectInfo);
-  console.log('walletInfo', walletInfo);
 
   const handleSetting = () => {
     setSettingModalVisible(true);
