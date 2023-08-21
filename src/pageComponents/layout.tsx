@@ -1,9 +1,10 @@
 'use client';
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, useRef, useState } from 'react';
 import { Layout as AntdLayout } from 'antd';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
+import LoadingAnimation from 'components/Loading/LoadingAnimation';
 import Loading from 'components/Loading';
 // import WebLoginInstance from 'contract/webLogin';
 
@@ -15,12 +16,60 @@ import { selectInfo, setIsMobile } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import { SupportedELFChainId } from 'types';
 import Leaderboard from 'components/Leaderboard';
+import { Store } from 'utils/store';
+import { ConfigProvider } from '@portkey/did-ui-react';
+import sourceMap from 'constants/resource';
+
+ConfigProvider.setGlobalConfig({
+  storageMethod: new Store(),
+  requestDefaults: {
+    baseURL: '/portkey',
+  },
+  graphQLUrl: '/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql',
+});
 
 const Layout = dynamic(async () => {
   const info = store.getState().info.baseInfo;
 
   return (props: React.PropsWithChildren<{}>) => {
     const { children } = props;
+
+    const unLoadSourceRef = useRef(0);
+
+    const [hasLoadedSource, setHasLoadedSource] = useState(false);
+
+    const loadResourceList = () => {
+      const timeTask = new Promise(function (resolve) {
+        setTimeout(resolve, 60000, false);
+      });
+
+      const scheduleTask = new Promise(function (resolve) {
+        const start = Date.now();
+        const schedule = (src: string) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.onload = () => {
+            unLoadSourceRef.current = unLoadSourceRef.current + 1;
+            if (unLoadSourceRef.current >= sourceMap.length) {
+              if (Date.now() - start > 3000) {
+                resolve(true);
+              } else {
+                setTimeout(() => {
+                  resolve(true);
+                }, 3000 - (Date.now() - start));
+              }
+            }
+          };
+        };
+        sourceMap.forEach((src) => {
+          schedule(src);
+        });
+      });
+
+      Promise.race([timeTask, scheduleTask]).then(() => {
+        setHasLoadedSource(true);
+      });
+    };
 
     const initAwsConfig = () => {
       AWS.config.update({
@@ -32,6 +81,7 @@ const Layout = dynamic(async () => {
     };
 
     useEffect(() => {
+      loadResourceList();
       initAwsConfig();
 
       const resize = () => {
@@ -48,9 +98,9 @@ const Layout = dynamic(async () => {
       };
     }, []);
 
-    return (
+    return hasLoadedSource ? (
       <>
-        <AntdLayout className="xx-wrapper h-[100vh] w-[100vw] overflow-hidden flex flex-col">
+        <AntdLayout className="xx-wrapper flex h-[100vh] w-[100vw] flex-col overflow-hidden">
           <Header />
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             <Suspense fallback={<Loading />}>{children}</Suspense>
@@ -59,6 +109,8 @@ const Layout = dynamic(async () => {
           <Leaderboard />
         </AntdLayout>
       </>
+    ) : (
+      <LoadingAnimation />
     );
   };
 });

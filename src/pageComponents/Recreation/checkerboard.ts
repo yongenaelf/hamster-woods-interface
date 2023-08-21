@@ -1,3 +1,4 @@
+import { ANIMATION_DURATION } from 'contract/animation';
 import { LottieRefCurrentProps } from 'lottie-react';
 
 export enum ArrowDirection {
@@ -11,12 +12,24 @@ export interface ICheckerboardItem {
   id: number;
   arrow?: ArrowDirection;
   arrowColor?: string;
+  bean?: number;
+  positionImage?: string;
   image?: string;
+  width?: number;
+  height?: number;
 }
 
 export interface ICheckerboardNode {
   row: number;
   column: number;
+  info: ICheckerboardItem;
+}
+
+export interface IJumpCallbackParams {
+  x: number;
+  y: number;
+  state: boolean;
+  currentNode?: CheckerboardNode;
 }
 
 export class CheckerboardNode {
@@ -34,6 +47,7 @@ export class CheckerboardList {
   private step: number;
   private baseWidth: number;
   private baseHeight: number;
+  private animationDuration: number;
   private translate: {
     x: number;
     y: number;
@@ -42,6 +56,7 @@ export class CheckerboardList {
   constructor(props?: {
     baseWidth?: number;
     baseHeight?: number;
+    animationDuration?: number;
     translate?: {
       x: number;
       y: number;
@@ -52,36 +67,51 @@ export class CheckerboardList {
     this.step = 0;
     this.baseWidth = props?.baseWidth ?? 60;
     this.baseHeight = props?.baseHeight ?? 60;
+    this.animationDuration = props?.animationDuration ?? ANIMATION_DURATION;
     this.translate = {
       x: props?.translate?.x ?? 0,
       y: props?.translate?.y ?? 0,
     };
   }
 
-  private next(animation: LottieRefCurrentProps, callback: (x: number, y: number, state: boolean) => void) {
+  private next({
+    animation,
+    callback,
+  }: {
+    animation?: LottieRefCurrentProps;
+    callback: (props: IJumpCallbackParams) => void;
+  }) {
     const current = this.currentNode || this.head;
     if (current?.next) {
       const nextNode = current.next;
       const x = (nextNode.info.column - current.info.column) * this.baseWidth;
       const y = (nextNode.info.row - current.info.row) * this.baseHeight;
       this.currentNode = nextNode;
-      animation.play();
+      animation && animation.play();
       this.translate = {
         x: x + this.translate.x,
         y: y + this.translate.y,
       };
-      callback(this.translate.x, this.translate.y, this.step - 1 > 0);
+      this.step -= 1;
+      callback({
+        x: this.translate.x,
+        y: this.translate.y,
+        state: this.step > 0,
+        currentNode: this.step > 0 ? undefined : this.currentNode,
+      });
       const timer = setTimeout(() => {
-        animation.pause();
+        animation && animation.pause();
         clearTimeout(timer);
-      }, 2000);
+      }, this.animationDuration);
       const timer2 = setTimeout(() => {
-        this.step -= 1;
         if (this.step > 0) {
-          this.next(animation, callback);
+          this.next({
+            animation,
+            callback,
+          });
         }
         clearTimeout(timer2);
-      }, 2500);
+      }, this.animationDuration + 500);
     }
   }
 
@@ -101,11 +131,14 @@ export class CheckerboardList {
     }
   }
 
-  jump(params: { step: number; animation: LottieRefCurrentProps; baseWidth?: number; baseHeight?: number }) {
+  jump(params: { step: number; animation?: LottieRefCurrentProps; baseWidth?: number; baseHeight?: number }) {
     this.step = params.step;
 
-    return (callback: (x: number, y: number, state: boolean) => void) => {
-      this.next(params.animation, callback);
+    return (callback: (props: IJumpCallbackParams) => void) => {
+      this.next({
+        animation: params.animation,
+        callback,
+      });
     };
   }
 }

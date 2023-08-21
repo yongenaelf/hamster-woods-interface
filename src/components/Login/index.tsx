@@ -4,7 +4,6 @@ import {
   IGuardianIdentifierInfo,
   TStep1LifeCycle,
   TStep2SignInLifeCycle,
-  socialLoginAuth,
   SignIn,
   did,
   ConfigProvider,
@@ -15,37 +14,38 @@ import {
   errorTip,
   setLoading,
 } from '@portkey/did-ui-react';
-import { Drawer } from 'antd';
-import detectProvider from '@portkey/detect-provider';
-import { isMobileDevices } from 'utils/isMobile';
-import { IPortkeyProvider } from '@portkey/provider-types';
+import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { setAccountInfoSync, setDiscoverInfo, setLoginStatus, setWalletInfo } from 'redux/reducer/info';
+import { setLoginStatus, setWalletInfo } from 'redux/reducer/info';
 import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import getAccountInfoSync from 'utils/getAccountInfoSync';
-import isMobile from 'utils/isMobile';
+import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { Network, ChainId, portKeyExtensionUrl } from 'constants/platform';
-import { SignInDesignType, SocialLoginType, AccountsType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
-import useLogin from 'hooks/useLogin';
+import { ChainId, LOGIN_EARGLY_KEY } from 'constants/platform';
 import { Store } from 'utils/store';
+import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
-import { useDebounceFn } from 'ahooks';
-import openPageInDiscover from 'utils/openDiscoverPage';
 import { sleep } from 'utils/common';
 import useVerifier from 'hooks/useVarified';
+import ContractRequest from 'contract/contractRequest';
+import { WalletType } from 'constants/index';
+import { GetPlayerInformation } from 'contract/bingo';
+import { PortkeyIcon, AppleIcon, QrCodeIcon, PhoneIcon, EmailIcon, GoogleIcon } from 'assets/images/index';
+import { CloseIcon } from 'assets/images/index';
+import useWebLogin from 'hooks/useWebLogin';
+import { KEY_NAME } from 'constants/platform';
 
-const KEY_NAME = 'BEANGOTOWN';
+const components = {
+  phone: PhoneIcon,
+  email: EmailIcon,
+  apple: AppleIcon,
+  portkey: PortkeyIcon,
+  qrcode: QrCodeIcon,
+  google: GoogleIcon,
+};
 
-ConfigProvider.setGlobalConfig({
-  storageMethod: new Store(),
-  requestDefaults: {
-    baseURL: '/portkey',
-  },
-  graphQLUrl: '/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql',
-});
+type IconType = 'apple' | 'google' | 'portkey' | 'email' | 'phone' | 'qrcode';
 
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
@@ -59,18 +59,6 @@ export default function Login() {
   >({
     LoginByScan: undefined,
   });
-
-  const isInAndroid = isMobile().android.device;
-
-  // const { isLock, isLogin } = useLogin();
-
-  const router = useRouter();
-
-  const isInIOS = isMobile().apple.device;
-
-  const isInApp = isPortkeyApp();
-
-  const [isWalletExist, setIsWalletExist] = useState(false);
 
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
     if (!value.isLoginGuardian) {
@@ -101,112 +89,56 @@ export default function Login() {
     onError: undefined,
   });
 
-  const handleGoogle = async () => {
-    setVisible(false);
-    const res = await getSocialToken({ type: SocialLoginType.GOOGLE });
-    await signHandle.onSocialFinish({
-      type: res.provider,
-      data: { accessToken: res.token },
+  const { isLogin, loading, wallet, walletType, handlePortKey, handleFinish, handleApple, handleGoogle, loginEagerly } =
+    useWebLogin({
+      signHandle,
     });
+
+  const initializeContract = async (wallet: any) => {
+    const contract = ContractRequest.get();
+    const config = {
+      chainId: ChainId,
+      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io',
+    };
+    contract.setWallet(wallet, WalletType.discover);
+    contract.setConfig(config);
+
+    const information = await GetPlayerInformation(wallet.address);
+    console.log(information);
   };
-
-  const handleApple = async () => {
-    setVisible(false);
-    const res = await getSocialToken({ type: SocialLoginType.APPLE });
-    await signHandle.onSocialFinish({
-      type: res.provider,
-      data: { accessToken: res.token },
-    });
-  };
-
-  const getSocialToken = async ({
-    type,
-    clientId = '',
-    redirectURI = '',
-  }: {
-    type: SocialLoginType;
-    clientId?: string;
-    redirectURI?: string;
-  }) => {
-    const tokenRes = await socialLoginAuth({
-      type,
-      clientId,
-      redirectURI,
-    });
-    return tokenRes;
-  };
-
-  const { run: handlePortKey } = useDebounceFn(
-    async () => {
-      if (isMobileDevices() && !isInApp) {
-        openPageInDiscover();
-        return;
-      }
-      if (!window?.portkey && !isMobileDevices()) {
-        window?.open(portKeyExtensionUrl, '_blank')?.focus();
-        return;
-      }
-      const provider: IPortkeyProvider | null = await detectProvider();
-      if (!provider) {
-        console.log('unknow');
-        return;
-      }
-      const network = await provider?.request({ method: 'network' });
-      if (network !== Network) {
-        console.log('network error');
-        return;
-      }
-      let accounts = await provider?.request({ method: 'accounts' });
-      if (accounts[ChainId] && accounts[ChainId].length > 0) {
-        onAccountsSuccess(provider, accounts);
-        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-        return;
-      }
-      accounts = await provider?.request({ method: 'requestAccounts' });
-      if (accounts[ChainId] && accounts[ChainId].length > 0) {
-        onAccountsSuccess(provider, accounts);
-        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-      } else {
-        console.log('account error');
-      }
-    },
-    {
-      wait: 500,
-      maxWait: 500,
-      leading: true,
-      trailing: false,
-    },
-  );
-
-  const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
-    let nickName = 'Wallet 01';
-    const address = accounts[ChainId]?.[0].split('_')[1];
-    try {
-      nickName = await provider.request({ method: 'wallet_getWalletName' });
-    } catch (error) {
-      console.warn(error);
-    }
-    // localStorage.setItem(LOGIN_EARGLY_KEY, "true");
-
-    store.dispatch(
-      setDiscoverInfo({
-        address,
-        accounts,
-        nickName,
-        provider,
-      }),
-    );
-    router.push('/');
-  }, []);
 
   useEffect(() => {
-    if (typeof window !== undefined && window.localStorage.getItem(KEY_NAME)) {
-      setIsWalletExist(true);
+    if (isLogin) {
+      //init
+      console.log('islogin');
+      // router.push('/');
+    }
+  }, [isLogin]);
+
+  const isInAndroid = isMobile().android.device;
+
+  const router = useRouter();
+
+  const isInIOS = isMobile().apple.device;
+
+  const isInApp = isPortkeyApp();
+
+  const [isWalletExist, setIsWalletExist] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
+        loginEagerly();
+        return;
+      }
+      if (window.localStorage.getItem(KEY_NAME)) {
+        setIsWalletExist(true);
+      }
     }
   }, []);
 
   const handleEmail = () => {
-    setVisible(false);
+    closeModal();
     setStyle(styles.inputForm);
     setDesign('Web2Design');
     setCurrentLifeCircle({ LoginByScan: undefined });
@@ -216,8 +148,13 @@ export default function Login() {
     }, 1000);
   };
 
+  const closeModal = () => {
+    setDrawerVisible(false);
+    setModalVisible(false);
+  };
+
   const handlePhone = () => {
-    setVisible(false);
+    closeModal();
     setStyle(styles.inputForm);
     setDesign('Web2Design');
     setCurrentLifeCircle({ LoginByScan: undefined });
@@ -225,25 +162,15 @@ export default function Login() {
   };
 
   const handleQrcode = () => {
-    setVisible(false);
+    closeModal();
     setStyle(styles.qrcodeBox);
     setDesign('SocialDesign');
     setCurrentLifeCircle({ LoginByScan: undefined });
     signInRef.current?.setOpen(true);
   };
 
-  const handleFinish = async (wallet: DIDWalletInfo) => {
-    console.log('wallet', wallet);
-    store.dispatch(setWalletInfo(wallet));
-    store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-    did.save(wallet.pin, KEY_NAME);
-    const accountInfoSync = await getAccountInfoSync(ChainId, wallet);
-    console.log(accountInfoSync);
-    store.dispatch(setAccountInfoSync(accountInfoSync));
-    router.push('/');
-  };
-
-  const [visible, setVisible] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [isUnlockShow, setIsUnlockShow] = useState(false);
 
@@ -253,12 +180,17 @@ export default function Login() {
 
   const renderLoginMethods = (inModel: boolean) => {
     const allMethods = [
-      { name: 'Login with Portkey', onclick: handlePortKey },
-      { name: 'Login with Google', onclick: handleGoogle, yellowColor: !inModel ? true : undefined },
-      { name: 'Login with Apple', onclick: handleApple, yellowColor: !inModel ? true : undefined },
-      { name: 'Login with Email', onclick: handleEmail },
-      { name: 'Login with Phone', onclick: handlePhone },
-      { name: 'Login with QR code', onclick: handleQrcode },
+      { name: 'Login with Portkey', onclick: handlePortKey, iconName: 'portkey' },
+      {
+        name: 'Login with Google',
+        onclick: handleGoogle,
+        yellowColor: !inModel ? true : undefined,
+        iconName: 'google',
+      },
+      { name: 'Login with Apple', onclick: handleApple, yellowColor: !inModel ? true : undefined, iconName: 'apple' },
+      { name: 'Login with Email', onclick: handleEmail, iconName: 'email' },
+      { name: 'Login with Phone', onclick: handlePhone, iconName: 'phone' },
+      { name: 'Login with QR code', onclick: handleQrcode, iconName: 'qrcode' },
     ];
     let filterMethods = [];
     if (isInApp) {
@@ -270,9 +202,33 @@ export default function Login() {
     }
     return filterMethods.map((item, index) => (
       <div key={index} onClick={item.onclick} className={item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn}>
-        {item.name}
+        {getIconComponent(item.iconName as IconType, inModel)} {item.name}
       </div>
     ));
+  };
+
+  const renderMoreContent = () => {
+    return (
+      <>
+        <div className={styles.drawerHeader}>
+          Login method
+          {
+            <CloseIcon
+              className={styles.drawer__close}
+              onClick={() => {
+                closeModal();
+              }}
+            />
+          }
+        </div>
+        {renderLoginMethods(true)}
+      </>
+    );
+  };
+
+  const getIconComponent = (name: IconType, inModel: boolean) => {
+    const Con = components[name] || null;
+    return <Con className={inModel ? styles.loginBtnBlueIcon : styles.loginBtnIcon} />;
   };
 
   const unlock = useCallback(async () => {
@@ -294,7 +250,11 @@ export default function Login() {
       pin: '',
       walletInfo: wallet.didWallet.managementAccount,
     };
-    store.dispatch(setWalletInfo(updateWallet));
+    store.dispatch(
+      setWalletInfo({
+        portkeyInfo: updateWallet,
+      }),
+    );
     setIsUnlockShow(false);
     store.dispatch(setLoginStatus(LoginStatus.LOGGED));
     router.push('/');
@@ -374,8 +334,23 @@ export default function Login() {
     [getRecommendationVerifier, onStep2OfSignUpFinish, verifySocialToken],
   );
 
+  const handlePortKeyLoginFinish = useCallback(
+    (wallet: DIDWalletInfo) => {
+      handleFinish(WalletType.portkey, wallet);
+    },
+    [handleFinish],
+  );
+
+  const setModalOpen = () => {
+    if (isMobileDevices()) {
+      setDrawerVisible(true);
+    } else {
+      setModalVisible(true);
+    }
+  };
+
   return (
-    <div className={styles.loadingContainer}>
+    <div className={styles.loginContainer}>
       {isWalletExist ? (
         <div onClick={unlock} className={styles.unlockBtn}>
           unLock
@@ -387,7 +362,7 @@ export default function Login() {
             <div
               className={styles.more}
               onClick={() => {
-                setVisible(true);
+                setModalOpen();
               }}>
               More
             </div>
@@ -396,23 +371,31 @@ export default function Login() {
       )}
 
       <Drawer
-        open={visible}
+        open={drawerVisible}
         placement={'bottom'}
         className={styles.loginMethodDrawer}
         onClose={() => {
-          setVisible(false);
+          closeModal();
         }}
         maskClosable={true}>
-        <div className={styles.drawerHeader}>Login method</div>
-        {renderLoginMethods(true)}
+        {renderMoreContent()}
       </Drawer>
+
+      <Modal
+        open={modalVisible}
+        className={styles.loginMethodModal}
+        onCancel={() => closeModal()}
+        maskClosable={true}
+        closable={false}>
+        {renderMoreContent()}
+      </Modal>
 
       <SignIn
         ref={signInRef}
         design={design}
         defaultLifeCycle={currentLifeCircle}
         className={style}
-        onFinish={handleFinish}
+        onFinish={handlePortKeyLoginFinish}
         isShowScan={true}
         defaultChainId={ChainId}
       />

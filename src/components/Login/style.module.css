@@ -16,46 +16,100 @@
   }
 }
 
-.loadingContainer {
-  @apply items-center flex-col flex justify-end w-screen h-screen !bg-cover bg-no-repeat px-10 pb-4  text-base text-white bg-[url('../../assets//images//login-bg-m.png')] md:bg-[url('../../assets//images//login-bg-pc.png')];
+.loginContainer {
+  @apply flex h-screen w-screen flex-col items-center justify-end bg-[url('../../assets//images//login-bg-m.png')] !bg-cover bg-center bg-no-repeat px-10 text-base text-white sm:bg-[url('../../assets//images//login-bg-pc.png')] md:justify-start md:pt-[46.7vh];
   .more {
-    @apply cursor-pointer underline md:text-2xl;
+    @apply z-20 mb-4 cursor-pointer font-paytone underline md:mb-0 md:text-2xl;
   }
   .loginBtn,
   .unlockBtn,
   .loginBtnYellow {
-    @apply h-14 md:h-[78px] md:text-[32px] w-full md:w-[430px] md:border-white md:border-2  mb-6 flex items-center justify-center cursor-pointer rounded-[30px] md:rounded-[38px] bg-[var(--color-main)];
+    @apply relative z-20 mb-6 flex h-14 w-full cursor-pointer items-center justify-center rounded-[30px]  border-2 bg-[var(--bg-blue-btn)] px-5 font-paytone md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:!border-white md:px-8 md:text-[32px] md:leading-6;
+
+    border-color: rgb(0 0 0 / 10%);
+    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%);
   }
   .unlockBtn {
-    @apply mb-[78px];
+    @apply mb-[94px] bg-[var(--color-main)] md:mb-0 md:mt-[3.7vh] md:justify-center;
   }
   .loginBtnYellow {
     @apply bg-[var(--btn-bg-yellow)];
   }
 }
-.loginMethodDrawer {
+
+.loginBtnIcon,
+.loginBtnBlueIcon {
+  @apply absolute left-5 top-[50%] -translate-y-[50%] text-2xl md:left-8 md:text-[44px];
+  path {
+    @apply fill-white;
+  }
+}
+
+.loginBtnBlueIcon {
+  path {
+    @apply fill-[var(--color-blue-icon)];
+  }
+}
+
+.loginMethodModal {
+  @apply !w-[750px];
+  :global {
+    .ant-modal-body {
+      @apply !px-[145px] !pb-[28px] text-[32px] leading-6;
+    }
+  }
+  .loginBtn {
+    @apply !mb-5 !h-[77px] !justify-end !rounded-[39px] !px-10;
+
+    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%) !important;
+  }
+  .drawerHeader {
+    @apply !mb-[44px] mt-[13px] text-center font-paytone !text-[32px] leading-6;
+  }
+  .drawer__close {
+    @apply absolute !right-[26px] !top-[37px] !text-[30px];
+  }
+  .loginBtnBlueIcon {
+    @apply left-[44.7px];
+    path {
+      @apply fill-white;
+    }
+  }
+}
+
+.loginMethodDrawer,
+.loginMethodModal {
   @apply text-base;
   :global {
-    .ant-drawer-header {
+    .ant-drawer-header,
+    .ant-modal-header,
+    .ant-modal-footer {
       @apply hidden;
     }
     .ant-drawer-content {
       @apply rounded-tl-2xl rounded-tr-2xl;
     }
-    .ant-drawer-wrapper-body {
-      @apply text-base text-white bg-[var(--color-main)]  overflow-auto;
+    .ant-modal-content {
+      @apply overflow-auto rounded-2xl bg-[var(--color-main)] bg-[var(--color-main)] text-base  text-white;
     }
-    .ant-drawer-body {
-      @apply px-10 pt-6 pb-2;
+    .ant-drawer-wrapper-body {
+      @apply overflow-auto bg-[var(--color-main)] text-base  text-white;
+    }
+    .ant-drawer-body,
+    .ant-modal-body {
+      @apply relative px-10 pb-6;
     }
     .ant-drawer-content-wrapper {
       @apply min-h-[392px];
     }
   }
   .loginBtn {
-    @apply h-14 w-full mb-4  flex items-center justify-center cursor-pointer rounded-[36px] border-2 border-solid bg-[var(--color-blue-bg-btn)] border-[var(--border-blue-btn)];
+    @apply relative mb-4 flex h-14 w-full cursor-pointer items-center justify-center rounded-[36px] border-2 border-solid border-[var(--border-blue-btn)] bg-[var(--color-blue-bg-btn)] px-5 font-paytone text-white;
   }
   .drawerHeader {
-    @apply mb-8 text-center text-2xl;
+    @apply mb-8 text-center font-paytone text-2xl leading-6;
+  }
+  .drawer__close {
+    @apply absolute right-6 top-6;
   }
 }

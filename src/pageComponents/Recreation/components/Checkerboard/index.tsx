@@ -7,21 +7,21 @@ function Checkerboard(props: { value: ICheckerboardItem }) {
 
   const Side = {
     [ArrowDirection.TOP]: (
-      <div className="z-0 h-[1.2rem] w-[1.6rem] bg-[#656C8A] absolute left-0 right-0 top-[-1rem] m-auto" />
+      <div className="absolute left-0 right-0 top-[-10px] z-0 m-auto h-[12px] w-[16px] bg-[#656C8A]" />
     ),
     [ArrowDirection.BOTTOM]: (
-      <div className="z-0 h-[1.2rem] w-[1.6rem] bg-[#656C8A] absolute left-0 right-0 bottom-[-0.2rem] m-auto" />
+      <div className="absolute bottom-[-2px] left-0 right-0 z-0 m-auto h-[12px] w-[16px] bg-[#656C8A]" />
     ),
     [ArrowDirection.LEFT]: (
-      <div className="z-0 h-[1.6rem] w-[2rem] bg-[#656C8A] absolute left-[-1.6rem] top-0 bottom-0 m-auto" />
+      <div className="absolute bottom-0 left-[-16px] top-0 z-0 m-auto h-[16px] w-[20px] bg-[#656C8A]" />
     ),
     [ArrowDirection.RIGHT]: (
-      <div className="z-0 h-[1.6rem] w-[2rem] bg-[#656C8A] absolute right-0 top-0 bottom-0 m-auto" />
+      <div className="absolute bottom-0 right-0 top-0 z-0 m-auto h-[16px] w-[20px] bg-[#656C8A]" />
     ),
   };
 
   return (
-    <div className={`w-full h-full pr-[1.2rem] pb-[0.8rem] relative`}>
+    <div className={`relative h-full w-full pb-[8px] pr-[12px]`}>
       <Lattice value={value} />
       {value.image && value.arrow && Side[value.arrow]}
     </div>
