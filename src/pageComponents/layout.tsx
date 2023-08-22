@@ -117,12 +117,6 @@ const Layout = dynamic(async () => {
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             {children}
           </AntdLayout.Content>
-          {showHeaderAndFooter && (
-            <>
-              <Footer />
-              <Leaderboard />
-            </>
-          )}
         </AntdLayout>
       </>
     ) : (

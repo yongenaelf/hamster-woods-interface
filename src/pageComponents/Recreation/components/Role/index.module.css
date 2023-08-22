@@ -1,5 +1,9 @@
 .appears-animation {
-  animation: appears-animation 2.4s;
+  animation: appears-animation 1.5s;
+}
+
+.appears-animation-right {
+  animation: appears-animation-right 1.5s;
 }
 
 @keyframes appears-animation
@@ -22,6 +26,34 @@
   60% {
     transform: scale(1);
     top: 0;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+@keyframes appears-animation-right
+{
+  0%, 100% {
+    transform: scale(0);
+    left: 40%;
+    top: 100%;
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  40% {
+    transform: scale(1);
+    left: 100%;
+    top: 100%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  50% {
+    transform: scale(1);
+    left: 100%;
+    top: 100%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  60% {
+    transform: scale(1);
+    left: 100%;
+    top: 100%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
 }
