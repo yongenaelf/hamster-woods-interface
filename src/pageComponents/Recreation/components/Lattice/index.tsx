@@ -39,7 +39,7 @@ function Lattice(props: { value: ICheckerboardItem }) {
             alt="image"
           />
         )}
-        <Image width={60} height={60} className={`h-full w-full`} src={value.image} alt="image" />
+        <img className={`h-full w-full`} src={value.image} alt="image" />
       </div>
       {value.arrowColor && value.arrow && (
         <div

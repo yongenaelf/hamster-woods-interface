@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
-import { ANIMATION_DURATION } from 'contract/animation';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { ANIMATION_DURATION } from 'constants/animation';
 
 import beanImage from 'assets/images/recreation/bean.png';
 
 import styles from './index.module.css';
 import Image from 'next/image';
+import { useDeepCompareEffect } from 'react-use';
+import useGetState from 'redux/state/useGetState';
 
 interface IRole {
   id?: string;
@@ -16,8 +18,17 @@ interface IRole {
   };
   animationDuration?: number;
   showAdd?: boolean;
+  position?: {
+    x?: number;
+    y?: number;
+  };
   hideAdd?: () => void;
   children?: React.ReactNode;
+}
+
+enum PlacementType {
+  TOP = 'TOP',
+  RIGHT = 'RIGHT',
 }
 
 function Role(props: IRole) {
@@ -30,16 +41,57 @@ function Role(props: IRole) {
     showAdd,
     hideAdd,
     children,
+    position,
   } = props;
+
+  const [popoverPlacement, setPopoverPlacement] = useState<PlacementType>(PlacementType.TOP);
+  const { isMobile } = useGetState();
+
+  const PopoverComponent = (
+    <div className={`flex h-full w-full items-center pb-[8px] pl-[6px] ${styles['role__info']}`}>
+      <Image className={`${isMobile ? 'h-[32px] w-[32px]' : 'h-[64px] w-[64px]'}`} src={beanImage} alt="bean" />
+      <span className={`ml-[4px] leading-[24px] text-[#FFFFFF] ${isMobile ? 'text-[20px]' : 'text-[40px]'}`}>
+        +{bean}
+      </span>
+    </div>
+  );
+
+  const Popover: Record<PlacementType, ReactElement> = {
+    [PlacementType.TOP]: (
+      <div
+        className={`relative h-full w-full bg-[url(/images/recreation/add-bean.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}>
+        {PopoverComponent}
+      </div>
+    ),
+    [PlacementType.RIGHT]: (
+      <div
+        className={`relative left-[90%] top-[100%] h-full w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation-right']}`}>
+        {PopoverComponent}
+      </div>
+    ),
+  };
 
   useEffect(() => {
     if (showAdd) {
       const timer = setTimeout(() => {
         hideAdd && hideAdd();
         clearTimeout(timer);
-      }, 2000);
+      }, 1300);
     }
   }, [showAdd]);
+
+  useDeepCompareEffect(() => {
+    if (position) {
+      switch (position.x) {
+        case 0:
+          setPopoverPlacement(PlacementType.RIGHT);
+          return;
+        default:
+          setPopoverPlacement(PlacementType.TOP);
+          return;
+      }
+    }
+  }, [position]);
 
   return (
     <div
@@ -52,17 +104,7 @@ function Role(props: IRole) {
       }}>
       <div className="aspect-[56/60] w-full">
         <div className={styles.role}>
-          <div className="mb-[4px] aspect-[82/50] h-auto w-[150%] overflow-hidden">
-            {showAdd && bean && (
-              <div
-                className={`relative h-full w-full bg-[url(/images/recreation/add-bean.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}>
-                <div className={`flex h-full w-full items-center pb-[8px] pl-[6px] ${styles['role__info']}`}>
-                  <Image className="h-[32px] w-[32px]" src={beanImage} alt="bean" />
-                  <span className="ml-[4px] text-[20px] leading-[24px] text-[#FFFFFF]">+{bean}</span>
-                </div>
-              </div>
-            )}
-          </div>
+          <div className="mb-[4px] aspect-[82/50] h-auto w-[150%]">{showAdd && bean && Popover[popoverPlacement]}</div>
           {children}
         </div>
       </div>

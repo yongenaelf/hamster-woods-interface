@@ -175,9 +175,13 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
     console.log('wallet.address', address);
 
-    const information = await GetPlayerInformation(address);
-    store.dispatch(setPlayerInfo(information));
-    console.log(information);
+    try {
+      const information = await GetPlayerInformation(address);
+      store.dispatch(setPlayerInfo(information));
+      console.log(information);
+    } catch (error) {
+      /* empty */
+    }
   }, [walletInfo, walletType]);
 
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {

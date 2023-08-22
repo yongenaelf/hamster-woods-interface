@@ -5,6 +5,6 @@
   }
 
   .board__bean__number {
-    @apply pl-[58px] flex flex-1 text-[#fff] text-[40px] leading-[48px];
+    @apply pl-[58px] flex flex-1 text-[#fff] text-[40px] leading-[48px] font-fonarto;
   }
 }

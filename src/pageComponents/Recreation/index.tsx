@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowDirection, CheckerboardNode, ICheckerboardItem, IJumpCallbackParams } from './checkerboard';
+import {
+  ArrowDirection,
+  CheckerboardNode,
+  CheckerboardType,
+  ICheckerboardItem,
+  IJumpCallbackParams,
+} from './checkerboard';
 import { CheckerboardList } from './checkerboard';
 import styles from './index.module.css';
 
@@ -13,12 +19,15 @@ import { checkerboardData } from './mockdata';
 import Bus from 'assets/images/recreation/bus.svg';
 import RoleImg from 'assets/images/recreation/role.svg';
 import Board from './components/Board';
-import GoButton from './components/GoButton';
-import { ANIMATION_DURATION } from 'contract/animation';
+import GoButton, { Status } from './components/GoButton';
+import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
+import RecreationModal, { RecreationModalType } from './components/RecreationModal';
+import { useEffectOnce } from 'react-use';
+import { CheckBeanPass, GetBingoReward, GetBoutInformation, GetPlayerInformation, Play } from 'contract/bingo';
+import { sleep } from '@portkey/utils';
 import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
-import { CheckBeanPass } from 'contract/bingo';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
 import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
@@ -36,15 +45,29 @@ export default function Game() {
     x: 0,
     y: 0,
   });
+  const address = useAddress();
+  const router = useRouter();
+  const { initializeContract } = useWebLogin({});
+
   const firstNode = checkerboardData[5][4];
   const firstNodePosition: [number, number] = [5, 4];
   const linkedList = useRef<CheckerboardList>();
 
   const [currentNode, setCurrentNode] = useState<CheckerboardNode>();
+  const [score, setScore] = useState<number>(0);
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [treasureOpen, setTreasureOpen] = useState<boolean>(false);
+
+  const [playableCount, setPlayableCount] = useState<number>(0);
+  const [sumScore] = useState<number>(5);
+  const [hasNft, setHasNft] = useState<boolean>(false);
+  const [resetStart, setResetStart] = useState<boolean>(true);
+  const [step, setStep] = useState<number>(0);
 
   const { isMobile, isLogin } = useGetState();
 
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [goStatus, setGoStatus] = useState<Status>(Status.DISABLED);
   const [showAdd, setShowAdd] = useState<boolean>(false);
 
   const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
@@ -72,14 +95,16 @@ export default function Game() {
     });
     if (!state) {
       const timer = setTimeout(() => {
-        setDisabled(false);
+        setGoStatus(Status.NONE);
         setShowAdd(true);
         clearTimeout(timer);
+        if (currentNode) {
+          setCurrentNode(currentNode);
+          if (currentNode.info.info.type === CheckerboardType.TREASURE) {
+            setTreasureOpen(true);
+          }
+        }
       }, ANIMATION_DURATION);
-    }
-
-    if (currentNode) {
-      setCurrentNode(currentNode);
     }
   };
 
@@ -158,20 +183,69 @@ export default function Game() {
     getList(firstNode, firstNodePosition);
   };
 
-  const go = () => {
-    if (disabled) return;
-    setDisabled(true);
-    setShowAdd(false);
-    jump(3);
+  const go = async () => {
+    if (goStatus !== Status.NONE) {
+      if (!hasNft) {
+        console.log('no nft modal'); // TODO
+        return;
+      }
+      if (hasNft && playableCount === 0) {
+        console.log('countdown modal'); // TODO
+        return;
+      }
+    }
+    try {
+      setGoStatus(Status.LOADING);
+      const res = await Play(resetStart);
+      setResetStart(false);
+
+      if (res.TransactionId) {
+        await sleep(4000);
+        const bingoRes = await GetBingoReward(res.TransactionId);
+        const step = bingoRes.gridNum;
+        setScore(bingoRes.score);
+        init();
+        setStep(step);
+        setOpen(true);
+        await sleep(1500);
+        setOpen(false);
+        setGoStatus(Status.DISABLED);
+        setShowAdd(false);
+        jump(step);
+      }
+    } catch (error) {
+      console.error('=====error', error);
+      setGoStatus(Status.NONE);
+    }
   };
 
-  const address = useAddress();
+  const init = async () => {
+    try {
+      const res = await GetPlayerInformation('2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y'); // TODO
+      console.log('=====GetPlayerInformation res', res);
+      setPlayableCount(res.playableCount);
 
-  const router = useRouter();
+      if (res.playableCount === 0) {
+        setGoStatus(Status.DISABLED);
+      } else {
+        setGoStatus(Status.NONE);
+      }
+    } catch (error) {
+      console.error('=====GetPlayerInformation error', error);
+      /* empty */
+    }
+  };
 
   const initCheckBeanPass = useCallback(async () => {
-    const hasBeanPass = await CheckBeanPass(address);
-    console.log('hasBeanPass', hasBeanPass); //{value:true/false}
+    try {
+      const hasBeanPass = await CheckBeanPass(address);
+      setHasNft(hasBeanPass.value);
+      if (!hasBeanPass.value) setGoStatus(Status.DISABLED);
+    } catch (error) {
+      console.error('=====CheckBeanPass error', error);
+    }
+
+    // TODO
     // if (hasBeanPass.value) {
     //   setBeanPassModalType(GetBeanPassStatus.Display);
     //   setBeanPassModalVisible(true);
@@ -214,7 +288,12 @@ export default function Game() {
     }
   };
 
-  const { initializeContract } = useWebLogin({});
+  useEffect(() => {
+    if (address) {
+      init();
+      initCheckBeanPass();
+    }
+  }, [address]);
 
   useEffect(() => {
     if (!isLogin) {
@@ -225,19 +304,19 @@ export default function Game() {
   }, [isLogin, router]);
 
   useEffect(() => {
-    initCheckBeanPass();
     initCheckerboard();
-  }, [checkerboardData]);
+  }, [checkerboardData, hasNft]);
 
-  useEffect(() => {
+  useEffectOnce(() => {
+    setResetStart(true);
     window.addEventListener('resize', initCheckerboard);
     return () => {
       window.removeEventListener('resize', initCheckerboard);
     };
-  }, []);
+  });
 
   return (
-    <div className={`${styles.game} ${isMobile && 'flex-col'}`}>
+    <div className={`${styles.game} relative ${isMobile && 'flex-col'}`}>
       {!isMobile && (
         <div className={styles['game__pc__side']}>
           <div className={styles['game__pc__blur']}></div>
@@ -249,20 +328,26 @@ export default function Game() {
         }`}>
         <SideBorder side="left" />
         <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pb-[72px] pt-[80px]'}`}>
-          <div className="relative z-30">
+          <div className="relative z-[30]">
             {isMobile && <Board />}
 
-            <Role
-              id="animationId"
-              width={`calc(100% / ${checkerboardData?.[0]?.length})`}
-              translate={translate}
-              bean={currentNode?.info.info.bean}
-              animationDuration={ANIMATION_DURATION}
-              showAdd={showAdd}
-              hideAdd={hideAdd}>
-              {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-              <RoleImg />
-            </Role>
+            {hasNft && (
+              <Role
+                id="animationId"
+                width={`calc(100% / ${checkerboardData?.[0]?.length})`}
+                translate={translate}
+                bean={score}
+                position={{
+                  x: currentNode?.info.row,
+                  y: currentNode?.info.column,
+                }}
+                animationDuration={ANIMATION_DURATION}
+                showAdd={showAdd}
+                hideAdd={hideAdd}>
+                {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
+                <RoleImg />
+              </Role>
+            )}
 
             {checkerboardData.map((row, index) => {
               return (
@@ -292,12 +377,23 @@ export default function Game() {
         <div className={`${styles['game__pc__side']}`}>
           <div className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}></div>
           <div className="z-10 h-full w-full">
-            <Board go={go} />
+            <Board playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
           </div>
         </div>
       )}
 
-      {isMobile && <GoButton disabled={disabled} go={go} />}
+      {isMobile && (
+        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
+      )}
+
+      <RecreationModal open={open} type={RecreationModalType.DICE} step={step} />
+      <RecreationModal
+        open={treasureOpen}
+        onClose={() => setTreasureOpen(false)}
+        type={RecreationModalType.TREASURE}
+        step={step}
+        bean={score}
+      />
       <GetBeanPassModal
         type={beanPassModalType}
         open={beanPassModalVisible}

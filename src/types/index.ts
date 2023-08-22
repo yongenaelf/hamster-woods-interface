@@ -31,7 +31,12 @@ export enum SocialLoginType {
 
 export interface IContractError extends Error {
   code?: number;
-  error?: number;
+  error?:
+    | number
+    | string
+    | {
+        message?: string;
+      };
   errorMessage?: {
     message: string;
     name?: string;
@@ -47,11 +52,6 @@ export interface IContractError extends Error {
   TransactionId?: string;
   transactionId?: string;
   value?: any;
-}
-
-export interface IContractOptions {
-  chain?: Chain | null;
-  type?: ContractMethodType;
 }
 
 export interface ISendResult {
@@ -111,6 +111,7 @@ export interface IBoutInformation {
   playId: number;
   roundNumber: number;
   gridNum: number;
+  expectedBlockHeight: number;
 }
 
 export interface IPlayerInformation {
