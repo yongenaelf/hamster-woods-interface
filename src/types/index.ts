@@ -75,7 +75,6 @@ export type AccountsType = {
 export interface IDiscoverInfo {
   address?: string;
   nickName?: string;
-  provider?: IPortkeyProvider;
   accounts?: Accounts;
 }
 
