@@ -170,7 +170,7 @@ export default function Game() {
   const router = useRouter();
 
   const initCheckBeanPass = useCallback(async () => {
-    const hasBeanPass: any = await CheckBeanPass('2HXqRXoAVdJmGbhpwuRFUKgACBypE9gMU696qoyhZzh348gyNt');
+    const hasBeanPass = await CheckBeanPass(address);
     console.log('hasBeanPass', hasBeanPass); //{value:true/false}
     // if (hasBeanPass.value) {
     //   setBeanPassModalType(GetBeanPassStatus.Display);

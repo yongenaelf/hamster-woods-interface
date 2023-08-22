@@ -3,7 +3,14 @@ import { isMobileDevices } from 'utils/isMobile';
 import { ChainId, LOGIN_EARGLY_KEY, Network, portKeyExtensionUrl } from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
-import { selectInfo, setAccountInfoSync, setLoginStatus, setWalletInfo, setWalletType } from 'redux/reducer/info';
+import {
+  selectInfo,
+  setAccountInfoSync,
+  setLoginStatus,
+  setPlayerInfo,
+  setWalletInfo,
+  setWalletType,
+} from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
@@ -169,6 +176,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     console.log('wallet.address', address);
 
     const information = await GetPlayerInformation(address);
+    store.dispatch(setPlayerInfo(information));
     console.log(information);
   }, [walletInfo, walletType]);
 
