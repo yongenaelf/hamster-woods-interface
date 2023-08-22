@@ -35,6 +35,7 @@ import { PortkeyIcon, AppleIcon, QrCodeIcon, PhoneIcon, EmailIcon, GoogleIcon } 
 import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
+import useGetState from 'redux/state/useGetState';
 
 const components = {
   phone: PhoneIcon,
@@ -102,6 +103,8 @@ export default function Login() {
     }
   }, [isLogin, router]);
 
+  const { isLock } = useGetState();
+
   const isInAndroid = isMobile().android.device;
 
   const isInIOS = isMobile().apple.device;
@@ -111,6 +114,9 @@ export default function Login() {
   const [isWalletExist, setIsWalletExist] = useState(false);
 
   useEffect(() => {
+    if (isLock) {
+      return;
+    }
     if (typeof window !== undefined) {
       if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
         loginEagerly();
@@ -120,7 +126,7 @@ export default function Login() {
         setIsWalletExist(true);
       }
     }
-  }, []);
+  }, [isLock, loginEagerly]);
 
   const handleEmail = () => {
     closeModal();
@@ -217,6 +223,7 @@ export default function Login() {
   };
 
   const unlock = useCallback(async () => {
+    //need some code
     setIsUnlockShow(true);
     let wallet;
     try {
@@ -336,7 +343,7 @@ export default function Login() {
 
   return (
     <div className={styles.loginContainer}>
-      {isWalletExist ? (
+      {isLock ? (
         <div onClick={unlock} className={styles.unlockBtn}>
           unLock
         </div>

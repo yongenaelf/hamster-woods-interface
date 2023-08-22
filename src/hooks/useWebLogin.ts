@@ -148,7 +148,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const contract = ContractRequest.get();
     const config = {
       chainId: ChainId,
-      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io',
+      rpcUrl: process.env.NEXT_PUBLIC_RPC_SERVER,
     };
     contract.setWallet(walletInfo, walletType);
     contract.setConfig(config);
@@ -319,5 +319,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     handleApple,
     handleFinish,
     initializeContract,
+    getDiscoverSignature,
+    getPortKeySignature,
   };
 }

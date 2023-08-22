@@ -8,6 +8,7 @@ const useGetState = () => {
   return {
     isMobile: infoState.isMobile,
     isLogin: infoState.loginStatus === LoginStatus.LOGGED,
+    isLock: infoState.loginStatus === LoginStatus.LOCK,
     walletType: infoState.walletType,
     walletInfo: infoState.walletInfo,
   };

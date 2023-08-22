@@ -16,7 +16,7 @@ import Board from './components/Board';
 import GoButton from './components/GoButton';
 import { ANIMATION_DURATION } from 'contract/animation';
 import useGetState from 'redux/state/useGetState';
-import { GetBeanPassStatus } from 'components/CommonModal/type';
+import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { CheckBeanPass } from 'contract/bingo';
 import { useAddress } from 'hooks/useAddress';
@@ -25,6 +25,8 @@ import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import { BeanPassResons } from 'types';
 import { message } from 'antd';
+import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
+import CountDownModal from 'components/CommonModal/CountDownModal';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -48,6 +50,11 @@ export default function Game() {
   const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
 
   const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
+
+  const [isShowNFT, setIsShowNFT] = useState(false);
+  const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
+
+  const [countDownModalOpen, setCountDownModalOpen] = useState(false);
 
   const animationRef = useRef<LottieRefCurrentProps>(null);
   const translateRef = useRef<{
@@ -299,6 +306,22 @@ export default function Game() {
         }}
         onConfirm={handleConfirm}
       />
+
+      <ShowNFTModal
+        open={isShowNFT}
+        onCancel={() => {
+          setIsShowNFT(false);
+        }}
+        type={nftModalType}
+      />
+      <CountDownModal
+        open={countDownModalOpen}
+        onCancel={() => {
+          setCountDownModalOpen(false);
+        }}
+        onConfirm={() => {
+          setCountDownModalOpen(false);
+        }}></CountDownModal>
     </div>
   );
 }

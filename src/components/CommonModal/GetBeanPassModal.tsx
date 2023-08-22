@@ -3,15 +3,11 @@ import CommonBtn from 'components/CommonBtn';
 import { BeanPassModalPropsType } from './type';
 import { GetBeanPassStatus } from './type';
 import { useMemo } from 'react';
+import styles from './style.module.css';
 
 export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsType) {
   const displayText = useMemo(() => {
     return {
-      [GetBeanPassStatus.Display]: {
-        title: '',
-        btnText: '',
-        contentArr: [],
-      },
       [GetBeanPassStatus.Recharge]: {
         title: 'Get a BeanPass',
         btnText: 'Go to wallet',
@@ -47,14 +43,14 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
     }[type];
   }, [type]);
   return (
-    <Modal open={props.open} title={displayText.title} onCancel={props.onCancel}>
-      <div className="mb-6">
+    <Modal open={props.open} title={displayText.title} onCancel={props.onCancel} className={styles.getBeanPassModal}>
+      <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px]">
         {displayText.contentArr.map((text) => {
           return <p key={text}>{text}</p>;
         })}
       </div>
       <div className="mx-2">
-        <CommonBtn title={displayText.btnText} onClick={props.onConfirm}></CommonBtn>
+        <CommonBtn title={displayText.btnText} onClick={props.onConfirm} className={styles.confirmBtn}></CommonBtn>
       </div>
     </Modal>
   );
