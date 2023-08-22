@@ -8,6 +8,7 @@ import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
 import { formatErrorMsg } from 'utils/formattError';
 import { sleep } from '@portkey/utils';
 import { getTxResult } from 'utils/getTxResult';
+import DetectProvider from 'utils/detectProvider';
 
 interface IContractConfig {
   chainId: ChainId;
@@ -37,9 +38,9 @@ export default class ContractRequest {
     if (wallet) {
       this.walletType = walletType;
       if (walletType === WalletType.discover) {
-        this.wallet.discoverInfo = wallet;
+        this.wallet.discoverInfo = wallet.discoverInfo;
       } else {
-        this.wallet.portkeyInfo = wallet;
+        this.wallet.portkeyInfo = wallet.portkeyInfo;
       }
     }
   }
@@ -56,10 +57,12 @@ export default class ContractRequest {
       case WalletType.discover: {
         const discoverInfo = this.wallet.discoverInfo!;
         try {
-          const chainProvider = await discoverInfo.provider!.getChain(this.chainId as ChainId);
+          const dp = await DetectProvider.get();
+          const chainProvider = await dp?.getChain(this.chainId as ChainId);
+          if (chainProvider) return;
           const contract = await getContractBasic({
             contractAddress: params.contractAddress,
-            chainProvider: chainProvider,
+            chainProvider: chainProvider!,
           });
           const accounts = discoverInfo.accounts;
           const accountsInChain = accounts[this.chainId as ChainId];

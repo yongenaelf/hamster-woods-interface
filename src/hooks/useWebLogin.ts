@@ -198,8 +198,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       address,
       accounts,
       nickName,
-      provider,
     };
+
     handleFinish(WalletType.discover, discoverInfo);
   }, []);
 
