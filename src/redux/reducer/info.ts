@@ -36,6 +36,9 @@ export const infoSlice = createSlice({
     setAccountInfoSync(state, action) {
       state.accountInfoSync = action.payload;
     },
+    setPlayerInfo(state, action) {
+      state.playerInfo = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -49,6 +52,7 @@ export const infoSlice = createSlice({
   },
 });
 
-export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync } = infoSlice.actions;
+export const { setIsMobile, setLoginStatus, setWalletInfo, setAccountInfoSync, setWalletType, setPlayerInfo } =
+  infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;

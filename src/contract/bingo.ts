@@ -23,7 +23,7 @@ const bingoContract = async <T, R>(methodName: string, params: T, type: Contract
   }
 };
 
-export const CheckBeanPass = async (address: string): Promise<boolean | Error> => {
+export const CheckBeanPass = async (address: string): Promise<{ value: boolean } | Error> => {
   return await bingoContract('CheckBeanPass', address, ContractMethodType.VIEW);
 };
 

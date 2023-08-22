@@ -1,11 +1,10 @@
 'use client';
-import React, { useEffect, Suspense, useRef, useState } from 'react';
+import React, { useEffect, Suspense, useRef, useState, useCallback, useMemo } from 'react';
 import { Layout as AntdLayout } from 'antd';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 import LoadingAnimation from 'components/Loading/LoadingAnimation';
-import Loading from 'components/Loading';
 // import WebLoginInstance from 'contract/webLogin';
 
 import AWS from 'aws-sdk';
@@ -19,6 +18,8 @@ import Leaderboard from 'components/Leaderboard';
 import { Store } from 'utils/store';
 import { ConfigProvider } from '@portkey/did-ui-react';
 import sourceMap from 'constants/resource';
+
+import { usePathname } from 'next/navigation';
 
 ConfigProvider.setGlobalConfig({
   storageMethod: new Store(),
@@ -38,7 +39,14 @@ const Layout = dynamic(async () => {
 
     const [hasLoadedSource, setHasLoadedSource] = useState(false);
 
+    const pathname = usePathname();
+
     const loadResourceList = () => {
+      if (!sourceMap.length) {
+        setTimeout(() => {
+          setHasLoadedSource(true);
+        }, 1000);
+      }
       const timeTask = new Promise(function (resolve) {
         setTimeout(resolve, 60000, false);
       });
@@ -80,6 +88,10 @@ const Layout = dynamic(async () => {
       });
     };
 
+    const showHeaderAndFooter = useMemo(() => {
+      return pathname !== '/login';
+    }, [pathname]);
+
     useEffect(() => {
       loadResourceList();
       initAwsConfig();
@@ -101,12 +113,16 @@ const Layout = dynamic(async () => {
     return hasLoadedSource ? (
       <>
         <AntdLayout className="xx-wrapper flex h-[100vh] w-[100vw] flex-col overflow-hidden">
-          <Header />
+          {showHeaderAndFooter && <Header />}
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
-            <Suspense fallback={<Loading />}>{children}</Suspense>
+            {children}
           </AntdLayout.Content>
-          <Footer />
-          <Leaderboard />
+          {showHeaderAndFooter && (
+            <>
+              <Footer />
+              <Leaderboard />
+            </>
+          )}
         </AntdLayout>
       </>
     ) : (

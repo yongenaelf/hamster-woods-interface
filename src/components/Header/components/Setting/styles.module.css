@@ -1,0 +1,16 @@
+.settingModal {
+  :global(.ant-modal-body) {
+    @apply !pb-[27px] md:!pb-[61.5px];
+  }
+  :global(.ant-modal-content) {
+    @apply md:!w-[580px] md:rounded-[20px];
+  }
+
+  :global(.modal__title) {
+    @apply md:!h-[118px] md:!text-[32px] md:!leading-6;
+  }
+}
+
+.setting {
+  @apply h-10 w-10;
+}

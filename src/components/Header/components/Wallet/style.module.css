@@ -1,0 +1,5 @@
+.assetModal {
+  :global(.ant-modal-footer) {
+    @apply hidden;
+  }
+}

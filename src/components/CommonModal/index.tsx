@@ -5,8 +5,8 @@ import styles from './style.module.css';
 
 export default function CommonModal({ children, title, onCancel, closable = true, className, ...params }: ModalProps) {
   return (
-    <Modal className={`${styles.CommonModal} ${className}`} {...params} closable={false}>
-      <Row className={styles.modal__title} justify="center" align="middle">
+    <Modal className={`${styles.commonModal} ${className}`} {...params} closable={false}>
+      <Row className={`${styles.modal__title} modal__title`} justify="center" align="middle">
         <span>{title}</span>
         {closable && <CloseIcon className={styles.modal__closeIcon} onClick={onCancel} />}
       </Row>

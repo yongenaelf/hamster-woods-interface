@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowDirection, CheckerboardNode, ICheckerboardItem, IJumpCallbackParams } from './checkerboard';
 import { CheckerboardList } from './checkerboard';
 import styles from './index.module.css';
@@ -16,6 +16,17 @@ import Board from './components/Board';
 import GoButton from './components/GoButton';
 import { ANIMATION_DURATION } from 'contract/animation';
 import useGetState from 'redux/state/useGetState';
+import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
+import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
+import { CheckBeanPass } from 'contract/bingo';
+import { useAddress } from 'hooks/useAddress';
+import { useRouter } from 'next/navigation';
+import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
+import useWebLogin from 'hooks/useWebLogin';
+import { BeanPassResons } from 'types';
+import { message } from 'antd';
+import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
+import CountDownModal from 'components/CommonModal/CountDownModal';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -31,10 +42,19 @@ export default function Game() {
 
   const [currentNode, setCurrentNode] = useState<CheckerboardNode>();
 
-  const { isMobile } = useGetState();
+  const { isMobile, isLogin } = useGetState();
 
   const [disabled, setDisabled] = useState<boolean>(false);
   const [showAdd, setShowAdd] = useState<boolean>(false);
+
+  const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
+
+  const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
+
+  const [isShowNFT, setIsShowNFT] = useState(false);
+  const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
+
+  const [countDownModalOpen, setCountDownModalOpen] = useState(false);
 
   const animationRef = useRef<LottieRefCurrentProps>(null);
   const translateRef = useRef<{
@@ -145,7 +165,67 @@ export default function Game() {
     jump(3);
   };
 
+  const address = useAddress();
+
+  const router = useRouter();
+
+  const initCheckBeanPass = useCallback(async () => {
+    const hasBeanPass = await CheckBeanPass(address);
+    console.log('hasBeanPass', hasBeanPass); //{value:true/false}
+    // if (hasBeanPass.value) {
+    //   setBeanPassModalType(GetBeanPassStatus.Display);
+    //   setBeanPassModalVisible(true);
+    //   return;
+    // }
+    // const BeanPassClaimClaimableRes = await getBeanPassClaimClaimable({
+    //   token: '',
+    //   caAddress: address,
+    //   CaHash: '',
+    // });
+    // console.log('BeanPassClaimClaimableRes', BeanPassClaimClaimableRes);
+    // const { claimable, reason } = BeanPassClaimClaimableRes;
+    // if (claimable) {
+    //   setBeanPassModalType(GetBeanPassStatus.Abled);
+    // } else {
+    //   if (reason === BeanPassResons.Claimed) {
+    //     setBeanPassModalType(GetBeanPassStatus.Noneleft);
+    //   } else if (reason === BeanPassResons.InsufficientElfAmount) {
+    //     setBeanPassModalType(GetBeanPassStatus.Recharge);
+    //   } else if (reason === BeanPassResons.DoubleClaim) {
+    //     setBeanPassModalType(GetBeanPassStatus.Notfound);
+    //   }
+    // }
+    // setBeanPassModalVisible(true);
+  }, [address]);
+
+  const handleConfirm = async () => {
+    if (beanPassModalType === GetBeanPassStatus.Abled) {
+      const getNFTRes = await receiveBeanPassNFT({
+        token: '',
+        caAddress: address,
+        CaHash: '',
+      });
+      const { claimable, reason } = getNFTRes;
+      if (!claimable) {
+        message.error(reason);
+      }
+    } else if (beanPassModalType === GetBeanPassStatus.Recharge) {
+      //open asset
+    }
+  };
+
+  const { initializeContract } = useWebLogin({});
+
   useEffect(() => {
+    if (!isLogin) {
+      router.push('/login');
+    } else {
+      initializeContract();
+    }
+  }, [isLogin, router]);
+
+  useEffect(() => {
+    initCheckBeanPass();
     initCheckerboard();
   }, [checkerboardData]);
 
@@ -218,6 +298,30 @@ export default function Game() {
       )}
 
       {isMobile && <GoButton disabled={disabled} go={go} />}
+      <GetBeanPassModal
+        type={beanPassModalType}
+        open={beanPassModalVisible}
+        onCancel={() => {
+          setBeanPassModalVisible(false);
+        }}
+        onConfirm={handleConfirm}
+      />
+
+      <ShowNFTModal
+        open={isShowNFT}
+        onCancel={() => {
+          setIsShowNFT(false);
+        }}
+        type={nftModalType}
+      />
+      <CountDownModal
+        open={countDownModalOpen}
+        onCancel={() => {
+          setCountDownModalOpen(false);
+        }}
+        onConfirm={() => {
+          setCountDownModalOpen(false);
+        }}></CountDownModal>
     </div>
   );
 }

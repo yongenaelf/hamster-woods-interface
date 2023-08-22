@@ -3,7 +3,14 @@ import { isMobileDevices } from 'utils/isMobile';
 import { ChainId, LOGIN_EARGLY_KEY, Network, portKeyExtensionUrl } from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
-import { selectInfo, setAccountInfoSync, setLoginStatus, setWalletInfo } from 'redux/reducer/info';
+import {
+  selectInfo,
+  setAccountInfoSync,
+  setLoginStatus,
+  setPlayerInfo,
+  setWalletInfo,
+  setWalletType,
+} from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
@@ -11,20 +18,28 @@ import { did, socialLoginAuth } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
+import ContractRequest from 'contract/contractRequest';
+import { CheckBeanPass, GetPlayerInformation } from 'contract/bingo';
+import { SignatureParams } from 'aelf-web-login';
+import useGetState from 'redux/state/useGetState';
 
 const KEY_NAME = 'BEANGOTOWN';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
-export default function useWebLogin({ signHandle }: { signHandle: any }) {
+export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loginStatus } = useSelector(selectInfo);
   const [wallet, setWallet] = useState<WalletInfoType | null>(null);
-  const [walletType, setWalletType] = useState<WalletType>(WalletType.unknown);
+  const [curWalletType, setCurWalletType] = useState<WalletType>(WalletType.unknown);
 
   const [discoverProvider, setDiscoverProvider] = useState<IPortkeyProvider>();
   const [discoverDetected, setDiscoverDetected] = useState<DiscoverDetectState>('unknown');
+
+  const [discoverInfo, setDiscoverInfo] = useState<IDiscoverInfo>();
+
+  const [didWalletInfo, setDidWalletInfo] = useState<PortkeyInfoType>();
 
   const detect = useCallback(async (): Promise<IPortkeyProvider> => {
     if (discoverProvider?.isConnected()) {
@@ -134,6 +149,37 @@ export default function useWebLogin({ signHandle }: { signHandle: any }) {
     return tokenRes;
   };
 
+  const { walletInfo, walletType } = useGetState();
+
+  const initializeContract = useCallback(async () => {
+    const contract = ContractRequest.get();
+    const config = {
+      chainId: ChainId,
+      rpcUrl: process.env.NEXT_PUBLIC_RPC_SERVER,
+    };
+    contract.setWallet(walletInfo, walletType);
+    contract.setConfig(config);
+
+    let address = '';
+
+    console.log(walletType);
+
+    if (walletType === WalletType.discover) {
+      address = walletInfo?.discoverInfo?.address || '';
+    } else if (walletType === WalletType.portkey) {
+      address = walletInfo?.portkeyInfo?.caInfo.caAddress || '';
+    } else {
+      console.log('unknown address');
+      return;
+    }
+
+    console.log('wallet.address', address);
+
+    const information = await GetPlayerInformation(address);
+    store.dispatch(setPlayerInfo(information));
+    console.log(information);
+  }, [walletInfo, walletType]);
+
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';
     const address = accounts[ChainId]?.[0].split('_')[1];
@@ -156,10 +202,13 @@ export default function useWebLogin({ signHandle }: { signHandle: any }) {
   const handleFinish = async (type: WalletType, walletInfo: PortkeyInfoType | IDiscoverInfo) => {
     console.log('wallet', type, walletInfo);
     store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+    store.dispatch(setWalletType(type));
+
     if (type === WalletType.discover) {
       localStorage.setItem(LOGIN_EARGLY_KEY, 'true');
+      setDiscoverInfo(walletInfo);
       setWallet({ discoverInfo: walletInfo as IDiscoverInfo });
-      setWalletType(type);
+      setCurWalletType(type);
       store.dispatch(
         setWalletInfo({
           discoverInfo: walletInfo,
@@ -170,11 +219,12 @@ export default function useWebLogin({ signHandle }: { signHandle: any }) {
       const accountInfoSync = await getAccountInfoSync(ChainId, walletInfo as PortkeyInfoType);
       console.log(accountInfoSync);
       store.dispatch(setAccountInfoSync(accountInfoSync));
+      setDidWalletInfo(walletInfo as PortkeyInfoType);
       setWallet({
         portkeyInfo: walletInfo as PortkeyInfoType,
         accountInfoSync: accountInfoSync,
       });
-      setWalletType(type);
+      setCurWalletType(type);
       store.dispatch(
         setWalletInfo({
           portkeyInfo: walletInfo,
@@ -213,6 +263,58 @@ export default function useWebLogin({ signHandle }: { signHandle: any }) {
     }
   }, [onAccountsSuccess]);
 
+  const getDiscoverSignature = useCallback(
+    async (params: SignatureParams) => {
+      // checkSignatureParams(params);
+      if (!discoverInfo) {
+        throw new Error('Discover not connected');
+      }
+      const provider = discoverProvider! as IPortkeyProvider;
+      const signInfo = params.signInfo;
+      const signedMsgObject = await provider.request({
+        method: 'wallet_getSignature',
+        payload: {
+          data: signInfo || params.hexToBeSign,
+        },
+      });
+      const signedMsgString = [
+        signedMsgObject.r.toString(16, 64),
+        signedMsgObject.s.toString(16, 64),
+        `0${signedMsgObject.recoveryParam!.toString()}`,
+      ].join('');
+      return {
+        error: 0,
+        errorMessage: '',
+        signature: signedMsgString,
+        from: 'discover',
+      };
+    },
+    [discoverInfo, discoverProvider],
+  );
+
+  const getPortKeySignature = useCallback(
+    async (params: SignatureParams) => {
+      // checkSignatureParams(params);
+      if (!didWalletInfo) {
+        throw new Error('Portkey not login');
+      }
+      let signInfo = '';
+      if (params.hexToBeSign) {
+        signInfo = params.hexToBeSign;
+      } else {
+        signInfo = params.signInfo;
+      }
+      const signature = did.sign(signInfo).toString('hex');
+      return {
+        error: 0,
+        errorMessage: '',
+        signature,
+        from: 'portkey',
+      };
+    },
+    [didWalletInfo],
+  );
+
   return {
     isLogin,
     loading,
@@ -224,5 +326,8 @@ export default function useWebLogin({ signHandle }: { signHandle: any }) {
     handleGoogle,
     handleApple,
     handleFinish,
+    initializeContract,
+    getDiscoverSignature,
+    getPortKeySignature,
   };
 }
