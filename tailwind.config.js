@@ -12,6 +12,12 @@ module.exports = {
         roboto: ['Roboto', 'sans-serif'],
         fonarto: ['Fonarto'],
       },
+      colors: {
+        'leaderboard-gold': '#DE7B3D',
+        'leaderboard-silver': '#6976CD',
+        'leaderboard-bronze': '#B5412C',
+        'leaderboard-blue': '#0538C9',
+      },
     },
   },
   plugins: [
@@ -24,6 +30,14 @@ module.exports = {
 
             return {
               '-webkit-text-stroke': `1px ${colorString}`,
+            };
+          },
+          'diagonal-bg': (value) => {
+            const { color } = parseColor(value);
+            const colorString = `rgb(${color[0]} ${color[1]} ${color[2]})`;
+
+            return {
+              background: `linear-gradient(to right bottom, rgba(255, 255, 255, 0.1) 50%, ${colorString} 50.3%)`,
             };
           },
         },

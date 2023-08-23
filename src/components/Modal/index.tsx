@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
 
 interface ModalProps extends React.PropsWithChildren {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   title?: string;
 }
@@ -12,7 +12,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={isOpen || false} as={Fragment}>
       <Dialog as="div" onClose={onClose} className="relative z-50">
         <Transition.Child
           as={Fragment}
@@ -34,20 +34,24 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95">
             <Dialog.Panel>
-              <div className="relative flex h-[80vh] w-[90vw] flex-col rounded-2xl border border-sky-900 bg-blue-500 px-2 shadow-inner">
+              <div
+                className={`relative flex flex-col overflow-auto border border-sky-900 bg-blue-500 p-2 shadow-inner ${
+                  isMobile
+                    ? 'h-[80vh] w-[90vw] rounded-2xl'
+                    : 'h-[60vh] max-h-[60rem] min-h-[50rem] w-[40vw] rounded-3xl'
+                }`}>
                 <div className="my-3 text-center">
                   <Dialog.Title>
                     <span
-                      className={[
-                        isMobile ? 'text-4xl' : 'text-[5rem]',
-                        'font-paytone font-normal leading-normal text-white text-stroke-black',
-                      ].join(' ')}>
+                      className={`font-paytone font-normal leading-normal text-white text-stroke-black ${
+                        isMobile ? 'text-4xl' : 'text-[3rem]'
+                      }`}>
                       {title}
                     </span>
                   </Dialog.Title>
                 </div>
                 <button className="absolute right-5 top-7" onClick={onClose}>
-                  <img className={isMobile ? 'h-8' : 'h-16'} src={require('./close.png').default.src} alt="close" />
+                  <img className="h-8" src={require('assets/images/close.png').default.src} alt="close" />
                 </button>
                 {children}
               </div>

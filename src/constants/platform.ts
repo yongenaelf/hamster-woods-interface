@@ -10,3 +10,5 @@ export const portkeyDidUIPrefix = '@portkey/did-ui-sdk:';
 export const LOGIN_EARGLY_KEY = 'discover.loginEargly';
 
 export const KEY_NAME = 'BEANGOTOWN';
+
+export const BEANGO_TOWN_GRAPHQL_URL = '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/graphql';

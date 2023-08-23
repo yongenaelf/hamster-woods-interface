@@ -13,6 +13,8 @@ export type InfoStateType = {
   accountInfoSync: IAccountInfoSync | null;
   loginStatus: LoginStatus;
   playerInfo?: IPlayerInformation;
+  showLeaderboard: boolean;
+  showGameRecord: boolean;
 };
 
 export enum LoginStatus {

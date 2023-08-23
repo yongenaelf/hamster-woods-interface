@@ -1,7 +1,7 @@
-interface IRankItem {
-  caAddress: string;
-  score: number;
+export interface IRankItem {
   rank: number;
+  score: number;
+  caAddress: string;
 }
 
 export interface IRankResult {

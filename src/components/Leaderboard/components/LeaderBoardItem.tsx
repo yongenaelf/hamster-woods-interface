@@ -1,5 +1,6 @@
 import { LeaderBoardRankItem } from './LeaderBoardRankItem';
 import { LeaderBoardNormalItem } from './LeaderBoardNormalItem';
+import { LeaderboardTextColors } from './LeaderBoardItemText';
 
 enum Rank {
   First = 1,
@@ -7,14 +8,24 @@ enum Rank {
   Third = 3,
 }
 
-export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; address: string; beans: number }) => {
+export const LeaderBoardItem = ({
+  rank,
+  address,
+  beans,
+  isCurrentUserRank,
+}: {
+  rank: number;
+  address: string;
+  beans: number;
+  isCurrentUserRank?: boolean;
+}) => {
   switch (rank) {
     case Rank.First:
       return (
         <LeaderBoardRankItem
-          src={require('../images/gold.png').default.src}
+          src={require('assets/images/gold.png').default.src}
           bgClassName="bg-[#F5BF49]"
-          textClassName="text-stroke-[#DE7B3D]"
+          textClassName={LeaderboardTextColors.Gold}
           shadowInsetColor="#DE7B3D"
           address={address}
           beans={beans}
@@ -23,9 +34,9 @@ export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; addres
     case Rank.Second:
       return (
         <LeaderBoardRankItem
-          src={require('../images/silver.png').default.src}
+          src={require('assets/images/silver.png').default.src}
           bgClassName="bg-[#CEDFF7]"
-          textClassName="text-stroke-[#6976CD]"
+          textClassName={LeaderboardTextColors.Silver}
           shadowInsetColor="#B8B8EB"
           address={address}
           beans={beans}
@@ -34,15 +45,17 @@ export const LeaderBoardItem = ({ rank, address, beans }: { rank: number; addres
     case Rank.Third:
       return (
         <LeaderBoardRankItem
-          src={require('../images/bronze.png').default.src}
+          src={require('assets/images/bronze.png').default.src}
           bgClassName="bg-[#E97D3C]"
-          textClassName="text-stroke-[#B5412C]"
+          textClassName={LeaderboardTextColors.Bronze}
           shadowInsetColor="#B5412C"
           address={address}
           beans={beans}
         />
       );
     default:
-      return <LeaderBoardNormalItem rank={rank} address={address} beans={beans} />;
+      return (
+        <LeaderBoardNormalItem rank={rank} address={address} beans={beans} isCurrentUserRank={isCurrentUserRank} />
+      );
   }
 };
