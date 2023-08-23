@@ -10,7 +10,7 @@ export default function LoadingAni() {
       autoplay: true,
     };
 
-    const { View } = useLottie(options, { margin: '0 auto' });
+    const { View } = useLottie(options, { margin: '0 auto', width: '100%' });
 
     return View;
   };

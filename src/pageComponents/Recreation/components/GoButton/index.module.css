@@ -1,5 +1,4 @@
-.button-mobile {
-  
+.button-mobile {  
   @apply mt-[-41px];
 
   .button__border {
@@ -18,8 +17,20 @@
   .button__icon {
     @apply relative z-50 w-[128px] h-[106px];
 
-    /* cursor: url('../../../../assets/images/recreation/bean.png'); */
+    .button__icon__loading {
+      @apply aspect-[1/1] relative;
 
+      .button__icon__loading__bounce1,
+      .button__icon__loading__bounce2 {
+        @apply w-full h-full rounded-full bg-[#fff] opacity-[0.6] absolute top-0 left-0;
+
+        animation: loading-bounce 2.0s infinite ease-in-out;
+      }
+
+      .button__icon__loading__bounce2 {
+        animation-delay: -1.0s;
+      }
+    }
     svg {
       @apply w-full h-auto;
     }
@@ -30,13 +41,16 @@
   @apply pb-[78px] mt-0 w-[398px] h-[142px];
   .button__icon {
     @apply relative z-50 w-[398px] h-[142px];
-
-    cursor: pointer;
-    cursor: url('../../../../assets/images/recreation/cursor.png'), auto;
-
-    /* cursor: url('../../../../assets/images/recreation/bean.png'), auto; */
     svg {
       @apply w-full h-auto;
     }
+  }
+}
+
+@keyframes loading-bounce {
+  0%, 100% { 
+    transform: scale(0.0);
+  } 50% { 
+    transform: scale(1.0);
   }
 }

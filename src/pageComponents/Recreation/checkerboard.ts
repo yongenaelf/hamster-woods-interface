@@ -1,4 +1,4 @@
-import { ANIMATION_DURATION } from 'contract/animation';
+import { ANIMATION_DURATION } from 'constants/animation';
 import { LottieRefCurrentProps } from 'lottie-react';
 
 export enum ArrowDirection {
@@ -8,11 +8,18 @@ export enum ArrowDirection {
   BOTTOM = 'bottom',
 }
 
+export enum CheckerboardType {
+  ORDINARY = 'ordinary',
+  TREASURE = 'treasure',
+  IMAGE = 'image',
+  EMPTY = 'empty',
+}
+
 export interface ICheckerboardItem {
   id: number;
+  type: CheckerboardType;
   arrow?: ArrowDirection;
   arrowColor?: string;
-  bean?: number;
   positionImage?: string;
   image?: string;
   width?: number;

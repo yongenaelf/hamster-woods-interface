@@ -1,4 +1,4 @@
-import { IBoutInformation, IPlayerInformation } from 'types';
+import { IBoutInformation, IContractError, IPlayerInformation } from 'types';
 import contractRequest from './contractRequest';
 
 export enum ContractMethodType {
@@ -23,7 +23,7 @@ const bingoContract = async <T, R>(methodName: string, params: T, type: Contract
   }
 };
 
-export const CheckBeanPass = async (address: string): Promise<boolean | Error> => {
+export const CheckBeanPass = async (address: string): Promise<{ value: boolean } | IContractError> => {
   return await bingoContract('CheckBeanPass', address, ContractMethodType.VIEW);
 };
 
@@ -41,7 +41,7 @@ export const GetBoutInformation = async (playId: string): Promise<IBoutInformati
   );
 };
 
-export const Play = async (resetStart?: boolean) => {
+export const Play = async (resetStart?: boolean): Promise<{ TransactionId: string }> => {
   return await bingoContract(
     'Play',
     {

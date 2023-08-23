@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         paytone: ['Paytone One', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
+        fonarto: ['Fonarto'],
       },
       colors: {
         'leaderboard-gold': '#DE7B3D',

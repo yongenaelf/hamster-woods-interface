@@ -38,6 +38,9 @@ export const infoSlice = createSlice({
     setAccountInfoSync(state, action) {
       state.accountInfoSync = action.payload;
     },
+    setPlayerInfo(state, action) {
+      state.playerInfo = action.payload;
+    },
     toggleShowLeaderboard(state) {
       state.showLeaderboard = !state.showLeaderboard;
     },
@@ -62,6 +65,8 @@ export const {
   setLoginStatus,
   setWalletInfo,
   setAccountInfoSync,
+  setWalletType,
+  setPlayerInfo,
   toggleShowLeaderboard,
   toggleShowGameRecord,
 } = infoSlice.actions;
