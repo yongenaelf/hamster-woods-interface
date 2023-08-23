@@ -29,6 +29,8 @@ export const useGameHis = (address: string) => {
       getGameHis(
         getGameHisDto: {
           caAddress: "${address}"
+          skipCount: 0
+          maxResultCount: 100
         }
       ) {
         gameList {
@@ -50,8 +52,6 @@ export const useGameHis = (address: string) => {
       }
     }
   `);
-
-    console.log(getGameHis);
 
     return getGameHis;
   });

@@ -52,7 +52,7 @@ const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
   <div
     {...props}
-    className="mb-2 w-full rounded-2xl bg-[#5197FF] p-4 font-roboto shadow-[0px_1px_2px_0px_#64A2FF_inset,0px_-1px_2px_0px_#3A80E8_inset]"
+    className="mb-2 w-full rounded-2xl bg-[#5197FF] p-4 shadow-[0px_1px_2px_0px_#64A2FF_inset,0px_-1px_2px_0px_#3A80E8_inset]"
   />
 );
 

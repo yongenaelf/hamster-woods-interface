@@ -10,6 +10,7 @@ export const LeaderBoardRankItem = ({
   shadowInsetColor,
   address = '-',
   beans = 0,
+  isCurrentUserRank,
 }: {
   src: string;
   bgClassName: string;
@@ -17,6 +18,7 @@ export const LeaderBoardRankItem = ({
   shadowInsetColor: string;
   address: string;
   beans: number;
+  isCurrentUserRank?: boolean;
 }) => {
   return (
     <div
@@ -26,6 +28,9 @@ export const LeaderBoardRankItem = ({
       }}>
       <img className="h-full" src={src} alt="rank" />
       <LeaderBoardItemAddress address={address} color={textClassName} />
+      {isCurrentUserRank ? (
+        <img src={require('assets/images/me.png').default.src} alt="me" className="ml-2 w-16" />
+      ) : null}
       <span className="flex-grow"></span>
       <LeaderBoardItemScore score={beans} color={textClassName} />
       <Bean />

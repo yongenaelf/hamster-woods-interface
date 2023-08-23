@@ -8,7 +8,11 @@ export const useWeeklyRank = (address: string) => {
       getWeekRank: IRankResult;
     }>(`
     query {
-      getWeekRank(getRankDto: { caAddress: "${address}" }) {
+      getWeekRank(getRankDto: { 
+        caAddress: "${address}"
+        skipCount: 0
+        maxResultCount: 100
+      }) {
         rankingList {
           rank
           score

@@ -8,7 +8,11 @@ export const useSeasonRank = (address: string) => {
       getSeasonRank: IRankResult;
     }>(`
     query {
-      getSeasonRank(getRankDto: { caAddress: "${address}" }) {
+      getSeasonRank(getRankDto: { 
+        caAddress: "${address}"
+        skipCount: 0
+        maxResultCount: 100
+      }) {
         rankingList {
           rank
           score

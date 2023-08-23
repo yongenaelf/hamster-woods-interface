@@ -14,14 +14,14 @@ enum Tabs {
 }
 
 const _tabClassName =
-  'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center text-stroke-black font-paytone font-bold';
+  'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center text-stroke-black font-fonarto font-bold p-2';
 
 export const Leaderboard = () => {
   const open = useSelector((state) => state.info.showLeaderboard);
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
 
-  const tabClassName = `${_tabClassName} ${isMobile ? 'text-md p-2' : 'text-2xl p-4'}`;
+  const tabClassName = `${_tabClassName} ${isMobile ? 'text-md' : 'text-xl'}`;
 
   return (
     <Fragment>

@@ -17,7 +17,7 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
         <span className={`mr-4 font-roboto font-bold text-white text-sm`}>{leftText}</span>
       </div>
       <span className="diagonal-bg-[#0538C9] w-8"></span>
-      <div className="ml-2 flex items-center justify-center font-roboto text-xl font-bold text-[#FFD200]">
+      <div className="ml-2 flex items-center justify-center text-xl font-bold text-[#FFD200]">
         <div>{value?.toLocaleString() ?? '-'}</div>
       </div>
     </div>

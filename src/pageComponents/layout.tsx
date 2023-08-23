@@ -20,6 +20,7 @@ import { ConfigProvider } from '@portkey/did-ui-react';
 import sourceMap from 'constants/resource';
 
 import { usePathname } from 'next/navigation';
+import GameRecord from 'components/GameRecord';
 
 ConfigProvider.setGlobalConfig({
   storageMethod: new Store(),
@@ -116,6 +117,8 @@ const Layout = dynamic(async () => {
           {showHeaderAndFooter && <Header />}
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             {children}
+            <Leaderboard />
+            <GameRecord />
           </AntdLayout.Content>
         </AntdLayout>
       </>

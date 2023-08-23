@@ -43,7 +43,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                 <div className="my-3 text-center">
                   <Dialog.Title>
                     <span
-                      className={`font-paytone font-normal leading-normal text-white text-stroke-black ${
+                      className={`font-fonarto font-normal leading-normal text-white text-stroke-black ${
                         isMobile ? 'text-4xl' : 'text-[3rem]'
                       }`}>
                       {title}

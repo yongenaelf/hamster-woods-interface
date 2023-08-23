@@ -6,7 +6,7 @@ import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
 import { KEY_NAME, LOGIN_EARGLY_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
-import { setLoginStatus } from 'redux/reducer/info';
+import { setLoginStatus, toggleShowGameRecord } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
@@ -20,7 +20,8 @@ export default function Setting() {
   };
 
   const handleRecord = () => {
-    //open record modal
+    dispatch(toggleShowGameRecord());
+    setSettingModalVisible(false);
   };
 
   const handleSetting = () => {
