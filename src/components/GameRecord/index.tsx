@@ -17,6 +17,7 @@ export const GameRecord = () => {
       <CommonModal
         open={open}
         title="Game Record"
+        childWrapperClassName=""
         onCancel={() => {
           dispatch(toggleShowGameRecord());
         }}>
