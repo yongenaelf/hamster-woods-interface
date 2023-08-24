@@ -57,7 +57,7 @@ export const PastRecordContent = () => {
             </option>
           ))}
         </select>
-        <div className={`font-normal leading-none text-white text-opacity-60 ${isMobile ? 'text-lg' : 'text-3xl'}`}>
+        <div className={`font-normal leading-none text-white text-opacity-60 ${isMobile ? 'text-md' : 'text-xl'}`}>
           {dateString}
         </div>
       </div>

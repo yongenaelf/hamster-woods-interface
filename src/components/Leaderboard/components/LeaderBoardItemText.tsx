@@ -1,3 +1,5 @@
+import { useIsMobile } from 'redux/selector/mobile';
+
 export enum LeaderboardTextColors {
   Gold = 'text-white text-stroke-leaderboard-gold',
   Silver = 'text-white text-stroke-leaderboard-silver',
@@ -11,6 +13,7 @@ export interface ILeaderBoardItemText extends React.PropsWithChildren {
 }
 
 export const LeaderBoardItemText = ({ children, color = LeaderboardTextColors.White }: ILeaderBoardItemText) => {
+  const isMobile = useIsMobile();
   const isRankedColor = [
     LeaderboardTextColors.Gold,
     LeaderboardTextColors.Silver,
@@ -18,7 +21,7 @@ export const LeaderBoardItemText = ({ children, color = LeaderboardTextColors.Wh
   ].includes(color);
 
   const fontFamily = isRankedColor ? 'font-fonarto' : '';
-  const textSize = isRankedColor ? 'text-xl' : 'text-lg';
+  const textSize = isMobile ? 'text-md' : 'text-2xl';
 
   return <div className={`font-bold ${fontFamily} ${color} ${textSize}`}>{children}</div>;
 };

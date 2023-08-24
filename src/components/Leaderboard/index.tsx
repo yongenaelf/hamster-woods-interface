@@ -14,7 +14,7 @@ enum Tabs {
 }
 
 const _tabClassName =
-  'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center text-stroke-black font-fonarto font-bold p-2';
+  'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center font-fonarto font-bold p-2';
 
 export const Leaderboard = () => {
   const open = useSelector((state) => state.info.showLeaderboard);
@@ -26,7 +26,7 @@ export const Leaderboard = () => {
   return (
     <Fragment>
       <Modal isOpen={open} title="Leader Board" onClose={() => dispatch(toggleShowLeaderboard())}>
-        <div className="mx-10 flex">
+        <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
           <button
             className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
             onClick={() => setTab(Tabs.Weekly)}>
