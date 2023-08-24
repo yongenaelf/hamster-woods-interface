@@ -9,7 +9,7 @@ import { toggleShowGameRecord } from 'redux/reducer/info';
 export const GameRecord = () => {
   const open = useSelector((state) => state.info.showGameRecord);
   const isMobile = useIsMobile();
-  const { data } = useGameHis('21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD');
+  const { data } = useGameHis();
 
   return (
     <Fragment>

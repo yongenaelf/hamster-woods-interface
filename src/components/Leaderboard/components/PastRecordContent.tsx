@@ -9,16 +9,13 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
 
   return (
     <div className="mb-4 flex rounded-[7px] border-[#00335C] bg-[#0538C9] shadow-[0px_0px_4px_rgba(0,0,0,0.25)_inset]">
-      <div
-        className={`flex items-center rounded-bl-[7px] rounded-tl-[7px] bg-white bg-opacity-10 ${
-          isMobile ? 'w-1/2' : 'w-1/2'
-        }`}>
+      <div className="flex items-center rounded-bl-[7px] rounded-tl-[7px] bg-white bg-opacity-10 w-1/2">
         {icon}
-        <span className={`mr-4 font-roboto font-bold text-white text-sm`}>{leftText}</span>
+        <span className={`mr-4 font-roboto font-bold text-white ${isMobile ? 'text-sm' : 'text-lg'}`}>{leftText}</span>
       </div>
       <span className="diagonal-bg-[#0538C9] w-8"></span>
       <div className="ml-2 flex items-center justify-center text-xl font-bold text-[#FFD200]">
-        <div>{value?.toLocaleString() ?? '-'}</div>
+        <div>{value === -1 ? '-' : value?.toLocaleString() ?? '-'}</div>
       </div>
     </div>
   );
@@ -29,7 +26,7 @@ const formatDate = (dateStr: string) => getDateFormat(dateStr, 'yyyy.M.d');
 export const PastRecordContent = () => {
   const { data } = useRankingSeasonList();
   const [selectedSeason, setSelectedSeason] = useState('');
-  const { data: his } = useRankingSeasonHis(selectedSeason, '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD');
+  const { data: his } = useRankingSeasonHis(selectedSeason);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -47,7 +44,7 @@ export const PastRecordContent = () => {
 
   return (
     <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
-      <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-4 shadow-inner">
+      <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-2 shadow-inner">
         <select
           className={`bg-[#0C40D4] font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
           onChange={(e) => setSelectedSeason(e.target.value)}>
@@ -96,7 +93,7 @@ export const PastRecordContent = () => {
                   <tr key={idx} className="border-b border-white border-opacity-40">
                     <td className="p-4">Week {idx + 1}</td>
                     <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
-                    <td className="p-4 text-right">{i.rank}</td>
+                    <td className="p-4 text-right">{i.rank === -1 ? '-' : i.rank}</td>
                   </tr>
                 ))}
               </tbody>
@@ -106,7 +103,7 @@ export const PastRecordContent = () => {
       ) : (
         <>
           <div className="h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 text-md shadow-inner">
-            <div className="flex gap-8 p-8">
+            <div className="flex gap-8 p-4">
               <div className="flex-1">
                 <img
                   src={require('assets/images/past-record-icon.png').default.src}
@@ -127,7 +124,7 @@ export const PastRecordContent = () => {
                 </div>
               </div>
               <div className="flex-1">
-                <table className="w-full text-white">
+                <table className="w-full text-white text-lg">
                   <thead className="bg-white bg-opacity-20 text-white text-opacity-70">
                     <tr>
                       <th className="w-1/2 p-4 text-left">Time</th>
@@ -140,7 +137,7 @@ export const PastRecordContent = () => {
                       <tr key={idx} className="border-b border-white border-opacity-40">
                         <td className="p-4">Week {idx + 1}</td>
                         <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
-                        <td className="p-4 text-right">{i.rank}</td>
+                        <td className="p-4 text-right">{i.rank === -1 ? '-' : i.rank}</td>
                       </tr>
                     ))}
                   </tbody>

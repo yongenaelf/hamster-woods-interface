@@ -8,7 +8,7 @@ export const Rank = ({ rank }: IRank) => {
   const isMobile = useIsMobile();
 
   const textClassName = `bg-white text-center font-fonarto font-bold ${
-    isMobile ? 'mx-1 py-1 px-3 rounded-full text-md' : 'text-lg'
+    isMobile ? 'mx-1 py-1 px-3 rounded-full text-md' : 'mx-3 py-2 px-4 rounded-full text-lg'
   }`;
 
   const wrapperClassName = useConditionalRank({

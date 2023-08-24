@@ -1,13 +1,10 @@
 import { graphQLRequest } from 'api/graphql';
 import useSWR from 'swr';
-import { IRankItem } from './rankResult';
+import { IRankingSeasonHistoryResult } from './types';
+import { useAddress } from 'hooks/useAddress';
 
-interface IRankingSeasonHistoryResult {
-  season: IRankItem;
-  weeks: IRankItem[];
-}
-
-export const useRankingSeasonHis = (seasonId: string, address: string) => {
+export const useRankingSeasonHis = (seasonId: string) => {
+  const address = useAddress();
   return useSWR<IRankingSeasonHistoryResult>([seasonId, address, 'getRankingSeasonHis'], async () => {
     const { getRankingHis } = await graphQLRequest<{
       getRankingHis: IRankingSeasonHistoryResult;
