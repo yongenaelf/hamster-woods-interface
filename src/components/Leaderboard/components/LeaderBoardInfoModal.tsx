@@ -3,6 +3,7 @@ import { dispatch, useSelector } from 'redux/store';
 import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
 import CommonModal from 'components/CommonModal';
+import LeaderBoardModal from './LeaderBoardModal';
 
 const AElfLogo = () => {
   const isMobile = useIsMobile();
@@ -26,7 +27,7 @@ const NormalItem = ({ leftText, reward }: INormalItem) => {
   return (
     <div
       className={`${
-        isMobile ? 'h-10' : 'h-20'
+        isMobile ? 'h-10' : 'h-16'
       } mb-2 flex w-full items-center rounded-3xl border border-[#003658] bg-[#81A2D7] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.12),0px_-3px_0px_0px_#6D8EC3_inset]`}>
       <div
         className={`${
@@ -58,7 +59,7 @@ const RankedItem = ({ bgClassName, shadowInsetColor, src, reward, textClassName 
       className={`relative mb-2 flex w-full items-center rounded-2xl border border-[#003658] p-1 shadow-inner before:absolute before:bg-white before:bg-opacity-30 ${
         isMobile
           ? 'h-12 before:h-6 before:left-1 before:right-1 before:top-0 before:rounded-full'
-          : 'h-24 before:h-10 before:left-2 before:right-2 before:top-2 before:rounded-2xl'
+          : 'h-20 before:h-8 before:left-1 before:right-1 before:top-1 before:rounded-2xl'
       } ${bgClassName}`}
       style={{
         boxShadow: `0px 2px 4px 0px rgba(0, 0, 0, 0.12), 0px -3px 0px 0px ${shadowInsetColor} inset`,
@@ -81,7 +82,7 @@ export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
   const open = useSelector((state) => state.info.showLeaderboardInfo);
 
   return (
-    <CommonModal
+    <LeaderBoardModal
       title="Leader Board"
       className="text-left"
       open={open}
@@ -114,7 +115,7 @@ export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
           <NormalItem leftText="Top 15-30" reward={10} />
         </div>
       </div>
-    </CommonModal>
+    </LeaderBoardModal>
   );
 };
 
