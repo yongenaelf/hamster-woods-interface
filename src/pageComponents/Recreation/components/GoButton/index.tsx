@@ -16,6 +16,7 @@ export enum Status {
 
 export interface IGoButton {
   status?: Status;
+  hasNft?: boolean;
   playableCount?: number;
   sumScore?: number;
   go?: () => void;

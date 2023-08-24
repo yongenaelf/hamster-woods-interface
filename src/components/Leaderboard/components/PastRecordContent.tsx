@@ -14,9 +14,9 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
           isMobile ? 'w-1/2' : 'w-1/2'
         }`}>
         {icon}
-        <span className={`mr-4 font-roboto font-bold text-white text-sm`}>{leftText}</span>
+        <span className={`font-roboto mr-4 text-sm font-bold text-white`}>{leftText}</span>
       </div>
-      <span className="diagonal-bg-[#0538C9] w-8"></span>
+      <span className="w-8 diagonal-bg-[#0538C9]"></span>
       <div className="ml-2 flex items-center justify-center text-xl font-bold text-[#FFD200]">
         <div>{value?.toLocaleString() ?? '-'}</div>
       </div>
@@ -49,7 +49,7 @@ export const PastRecordContent = () => {
     <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
       <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-4 shadow-inner">
         <select
-          className={`bg-[#0C40D4] font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
+          className={`font-roboto bg-[#0C40D4] text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
           onChange={(e) => setSelectedSeason(e.target.value)}>
           {data?.season.map((i) => (
             <option key={i.id} value={i.id}>
@@ -105,7 +105,7 @@ export const PastRecordContent = () => {
         </>
       ) : (
         <>
-          <div className="h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 text-md shadow-inner">
+          <div className="text-md h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner">
             <div className="flex gap-8 p-8">
               <div className="flex-1">
                 <img

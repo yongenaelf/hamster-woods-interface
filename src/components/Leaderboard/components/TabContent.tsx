@@ -13,7 +13,7 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
         className={`mt-2 rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner ${
           isMobile ? 'text-md' : 'text-xl'
         }`}>
-        <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white text-stroke-black font-bold">
+        <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto font-bold text-white text-stroke-black">
           i
         </span>
         <span className="text-white opacity-60">Next update: {refreshTime}</span>
@@ -24,9 +24,9 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
             <img
               src={require('assets/images/no-record.png').default.src}
               alt="No Record"
-              className={`mx-auto w-32 mb-8`}
+              className={`mx-auto mb-8 w-32`}
             />
-            <div className={`text-center font-roboto text-[#89A5F5] ${isMobile ? 'text-lg' : 'text-2xl'}`}>
+            <div className={`font-roboto text-center text-[#89A5F5] ${isMobile ? 'text-lg' : 'text-2xl'}`}>
               Leaderboards will be displayed at the end of the first week of rankings.
             </div>
           </div>
@@ -51,7 +51,7 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
                       .map((_i, j) => (
                         <div
                           key={j}
-                          className={`flex text-slate-500 text-lg items-center bg-blue-800 rounded-2xl mb-2 ${
+                          className={`mb-2 flex items-center rounded-2xl bg-blue-800 text-lg text-slate-500 ${
                             isMobile ? 'h-12' : 'h-24'
                           }`}>
                           <div className="px-10">&mdash;</div>
