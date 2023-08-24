@@ -8,6 +8,8 @@ import beanImage from 'assets/images/recreation/bean.png';
 
 import styles from './index.module.css';
 import Image from 'next/image';
+import { dispatch } from 'redux/store';
+import { toggleShowLeaderboard } from 'redux/reducer/info';
 
 function Board({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }: IGoButton) {
   const { isMobile } = useGetState();
@@ -27,7 +29,12 @@ function Board({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }: IG
             <Image src={beanImage} alt="bean" className="h-[64px] w-[64px]" />
             <span className={styles['board__bean__number']}>234,567</span>
           </div>
-          <Menu icon={<Ranking className="h-[auto] w-[76px]" />} className="mb-[24px]" title="Leader Board" />
+          <Menu
+            icon={<Ranking className="h-[auto] w-[76px]" />}
+            className="mb-[24px]"
+            title="Leader Board"
+            onClick={() => dispatch(toggleShowLeaderboard())}
+          />
           <Menu icon={<Nft className="h-[auto] w-[59px]" />} title="BeanPass NFT" />
         </div>
         <GoButton playableCount={playableCount} sumScore={sumScore} status={status} go={() => go && go()} />

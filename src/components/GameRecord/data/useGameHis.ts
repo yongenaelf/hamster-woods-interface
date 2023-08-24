@@ -1,4 +1,5 @@
 import { graphQLRequest } from 'api/graphql';
+import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
 import useSWR from 'swr';
 
 export interface ITransactionInfo {
@@ -29,6 +30,8 @@ export const useGameHis = (address: string) => {
       getGameHis(
         getGameHisDto: {
           caAddress: "${address}"
+          skipCount: 0
+          maxResultCount: ${MAX_GAME_RECORD_ITEMS}
         }
       ) {
         gameList {
@@ -50,8 +53,6 @@ export const useGameHis = (address: string) => {
       }
     }
   `);
-
-    console.log(getGameHis);
 
     return getGameHis;
   });

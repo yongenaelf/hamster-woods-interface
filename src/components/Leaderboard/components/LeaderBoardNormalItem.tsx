@@ -4,6 +4,7 @@ import { Rank } from './Rank';
 import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
 import { LeaderBoardItemScore } from './LeaderBoardItemScore';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
+import { Me } from './Me';
 
 export const LeaderBoardNormalItem = ({
   rank = 4,
@@ -27,13 +28,11 @@ export const LeaderBoardNormalItem = ({
   return (
     <div
       className={`mb-2 flex w-full items-center rounded-3xl border p-1 ${borderColor} ${bgColor} ${shadow} ${
-        isMobile ? 'h-20' : 'h-24'
+        isMobile ? 'h-12' : 'h-24'
       }`}>
       <Rank rank={rank} />
       <LeaderBoardItemAddress address={address} color={color} />
-      {isCurrentUserRank ? (
-        <img src={require('assets/images/me.png').default.src} alt="me" className="ml-2 w-16" />
-      ) : null}
+      {isCurrentUserRank ? <Me /> : null}
       <div className="flex-grow"></div>
       <LeaderBoardItemScore score={beans} color={color} />
       <Bean />

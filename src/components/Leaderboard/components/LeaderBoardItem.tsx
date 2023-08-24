@@ -29,6 +29,7 @@ export const LeaderBoardItem = ({
           shadowInsetColor="#DE7B3D"
           address={address}
           beans={beans}
+          isCurrentUserRank={isCurrentUserRank}
         />
       );
     case Rank.Second:
@@ -40,6 +41,7 @@ export const LeaderBoardItem = ({
           shadowInsetColor="#B8B8EB"
           address={address}
           beans={beans}
+          isCurrentUserRank={isCurrentUserRank}
         />
       );
     case Rank.Third:
@@ -51,6 +53,7 @@ export const LeaderBoardItem = ({
           shadowInsetColor="#B5412C"
           address={address}
           beans={beans}
+          isCurrentUserRank={isCurrentUserRank}
         />
       );
     default:

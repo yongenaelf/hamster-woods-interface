@@ -9,7 +9,6 @@ module.exports = {
     extend: {
       fontFamily: {
         paytone: ['Paytone One', 'sans-serif'],
-        roboto: ['Roboto', 'sans-serif'],
         fonarto: ['Fonarto'],
       },
       colors: {

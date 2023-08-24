@@ -22,7 +22,7 @@ export const GameRecord = () => {
                 alt="No Record"
                 className={`mx-auto ${isMobile ? 'mb-8 w-32' : 'mb-16 w-64'}`}
               />
-              <div className={`text-center font-roboto ${isMobile ? 'text-[2rem]' : 'text-[4rem]'} text-[#89A5F5]`}>
+              <div className={`text-center ${isMobile ? 'text-[2rem]' : 'text-[4rem]'} text-[#89A5F5]`}>
                 No record yet
               </div>
             </div>
