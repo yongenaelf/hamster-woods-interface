@@ -4,6 +4,8 @@ import { LeaderBoardItem } from './LeaderBoardItem';
 import { TabContentUser } from './TabContentUser';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 import { RefreshTime } from './RefreshTime';
+import { dispatch } from 'redux/store';
+import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 
 type IData = IWeeklyRankResult | ISeasonRankResult;
 interface ITabContent {
@@ -25,10 +27,16 @@ export const TabContent = ({ data, emptyText, infoText, endedText }: ITabContent
       ) : (
         <>
           <div
+            onClick={() => dispatch(toggleShowLeaderboardInfo())}
             className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner ${
               isMobile ? 'text-md' : 'text-xl'
             }`}>
-            {refreshTime ? <RefreshTime refreshTime={refreshTime} text={infoText} /> : endedText}
+            <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white text-stroke-black font-bold">
+              i
+            </span>
+            <span className="text-white opacity-60">
+              {refreshTime ? <RefreshTime refreshTime={refreshTime} text={infoText} /> : endedText}
+            </span>
           </div>
           {!data?.rankingList || data?.rankingList.length === 0 ? (
             <div className="flex flex-grow items-center justify-center bg-blue-700">

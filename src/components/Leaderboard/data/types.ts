@@ -27,7 +27,10 @@ export interface IRankingSeasonListResult {
   season: IRankingSeasonItem[];
 }
 
-export type ISeasonRankResult = IRankResult;
+export interface ISeasonRankResult extends IRankResult {
+  status?: number;
+  refreshTime?: string;
+}
 export interface IWeeklyRankResult extends IRankResult {
   status: number;
   refreshTime: string;
