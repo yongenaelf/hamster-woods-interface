@@ -2,7 +2,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import { LeaderBoardItem } from './LeaderBoardItem';
 import { TabContentUser } from './TabContentUser';
-import { MAX_LEADERBOARD_ITEMS, MAX_LEADERBOARD_PLACEHOLDER_ITEMS } from 'constants/platform';
+import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 
 type IData = IWeeklyRankResult | ISeasonRankResult;
 interface ITabContent extends React.PropsWithChildren {
