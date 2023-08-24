@@ -1,5 +1,6 @@
 import { graphQLRequest } from 'api/graphql';
 import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
+import { useAddress } from 'hooks/useAddress';
 import useSWR from 'swr';
 
 export interface ITransactionInfo {
@@ -21,7 +22,8 @@ interface IGameHistoryResult {
   gameList: IGameItem[];
 }
 
-export const useGameHis = (address: string) => {
+export const useGameHis = () => {
+  const address = useAddress();
   return useSWR<IGameHistoryResult>([address, 'getGameHis'], async () => {
     const { getGameHis } = await graphQLRequest<{
       getGameHis: IGameHistoryResult;

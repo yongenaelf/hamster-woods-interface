@@ -1,12 +1,14 @@
 import useSWR from 'swr';
-import { IRankResult } from './rankResult';
+import { IWeeklyRankResult } from './types';
 import { graphQLRequest } from 'api/graphql';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
+import { useAddress } from 'hooks/useAddress';
 
-export const useWeeklyRank = (address: string) => {
-  return useSWR<IRankResult>([address, 'getWeekRank'], async () => {
+export const useWeeklyRank = () => {
+  const address = useAddress();
+  return useSWR<IWeeklyRankResult>([address, 'getWeekRank'], async () => {
     const { getWeekRank } = await graphQLRequest<{
-      getWeekRank: IRankResult;
+      getWeekRank: IWeeklyRankResult;
     }>(`
     query {
       getWeekRank(getRankDto: { 
@@ -14,6 +16,8 @@ export const useWeeklyRank = (address: string) => {
         skipCount: 0
         maxResultCount: ${MAX_LEADERBOARD_ITEMS}
       }) {
+        status
+        refreshTime
         rankingList {
           rank
           score
