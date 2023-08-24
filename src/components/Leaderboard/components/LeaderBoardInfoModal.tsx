@@ -1,9 +1,8 @@
-import { Fragment } from 'react';
-import { Modal } from 'components/Modal';
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
+import CommonModal from 'components/CommonModal';
 
 const AElfLogo = () => {
   const isMobile = useIsMobile();
@@ -31,8 +30,8 @@ const NormalItem = ({ leftText, reward }: INormalItem) => {
       } mb-2 flex w-full items-center rounded-3xl border border-[#003658] bg-[#81A2D7] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.12),0px_-3px_0px_0px_#6D8EC3_inset]`}>
       <div
         className={`${
-          isMobile ? '' : 'text-lg'
-        } bg-[#4F6C9B] text-white text-bold font-fonarto rounded-full px-4 py-2 ml-2`}>
+          isMobile ? 'px-4' : 'text-lg px-4 py-2'
+        } bg-[#4F6C9B] text-white text-bold font-fonarto rounded-full ml-2`}>
         {leftText}
       </div>
       <div className="flex-grow"></div>
@@ -82,38 +81,40 @@ export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
   const open = useSelector((state) => state.info.showLeaderboardInfo);
 
   return (
-    <Fragment>
-      <Modal isOpen={open} title="Leader Board" onClose={() => dispatch(toggleShowLeaderboardInfo())}>
-        <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 pb-2 shadow-inner">
-          <div className="rounded-2xl bg-blue-700 p-4 shadow-inner h-full">
-            {children}
-            <RankedItem
-              bgClassName="bg-[#F5BF49]"
-              shadowInsetColor=""
-              src={require('assets/images/gold.png').default.src}
-              reward={100}
-              textClassName={LeaderboardTextColors.Gold}
-            />
-            <RankedItem
-              bgClassName="bg-[#CEDFF7]"
-              shadowInsetColor=""
-              src={require('assets/images/silver.png').default.src}
-              reward={80}
-              textClassName={LeaderboardTextColors.Silver}
-            />
-            <RankedItem
-              bgClassName="bg-[#E97D3C]"
-              shadowInsetColor=""
-              src={require('assets/images/bronze.png').default.src}
-              reward={50}
-              textClassName={LeaderboardTextColors.Bronze}
-            />
-            <NormalItem leftText="Top 4-15" reward={20} />
-            <NormalItem leftText="Top 15-30" reward={10} />
-          </div>
+    <CommonModal
+      title="Leader Board"
+      className="text-left"
+      open={open}
+      onCancel={() => dispatch(toggleShowLeaderboardInfo())}>
+      <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 shadow-inner">
+        <div className="rounded-2xl bg-blue-700 p-4 shadow-inner h-full">
+          {children}
+          <RankedItem
+            bgClassName="bg-[#F5BF49]"
+            shadowInsetColor="#DE7B3D"
+            src={require('assets/images/gold.png').default.src}
+            reward={100}
+            textClassName={LeaderboardTextColors.Gold}
+          />
+          <RankedItem
+            bgClassName="bg-[#CEDFF7]"
+            shadowInsetColor="#B8B8EB"
+            src={require('assets/images/silver.png').default.src}
+            reward={80}
+            textClassName={LeaderboardTextColors.Silver}
+          />
+          <RankedItem
+            bgClassName="bg-[#E97D3C]"
+            shadowInsetColor="#B5412C"
+            src={require('assets/images/bronze.png').default.src}
+            reward={50}
+            textClassName={LeaderboardTextColors.Bronze}
+          />
+          <NormalItem leftText="Top 4-15" reward={20} />
+          <NormalItem leftText="Top 15-30" reward={10} />
         </div>
-      </Modal>
-    </Fragment>
+      </div>
+    </CommonModal>
   );
 };
 

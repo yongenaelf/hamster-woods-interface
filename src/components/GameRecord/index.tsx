@@ -1,10 +1,11 @@
 import { Fragment } from 'react';
-import { Modal } from 'components/Modal';
 import { GameRecordItem } from './components/GameRecordItem';
 import { useGameHis } from './data/useGameHis';
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowGameRecord } from 'redux/reducer/info';
+import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
+import CommonModal from 'components/CommonModal';
 
 export const GameRecord = () => {
   const open = useSelector((state) => state.info.showGameRecord);
@@ -13,8 +14,13 @@ export const GameRecord = () => {
 
   return (
     <Fragment>
-      <Modal isOpen={open} title="Game Record" onClose={() => dispatch(toggleShowGameRecord())}>
-        {data?.gameList?.length ? (
+      <CommonModal
+        open={open}
+        title="Game Record"
+        onCancel={() => {
+          dispatch(toggleShowGameRecord());
+        }}>
+        {!data || data.gameList.length === 0 ? (
           <div className={`flex flex-grow items-center justify-center`}>
             <div>
               <img
@@ -33,13 +39,15 @@ export const GameRecord = () => {
               <GameRecordItem data={i} key={i.id} />
             ))}
             <div className="flex items-center py-8">
-              <div className="ml-32 h-px flex-grow bg-white bg-opacity-40"></div>
-              <span className="flex-shrink px-4 text-white text-opacity-40">Recent 150 records</span>
-              <div className="mr-32 h-px flex-grow bg-white bg-opacity-40"></div>
+              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <span className="flex-shrink px-4 text-white text-opacity-40">
+                Recent {MAX_GAME_RECORD_ITEMS} records
+              </span>
+              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
             </div>
           </div>
         )}
-      </Modal>
+      </CommonModal>
     </Fragment>
   );
 };

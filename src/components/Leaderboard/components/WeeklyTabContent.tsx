@@ -23,17 +23,17 @@ export const WeeklyTabContent = () => {
     return `on ${format(parseISO(refreshTime), "MMMM do 'at' HH:mm")} (UTC)`;
   }, [data?.refreshTime]);
 
-  const textClassName = `${isMobile ? 'text-md' : 'text-lg'} text-white mb-4`;
+  const textClassName = `${isMobile ? 'text-md' : 'text-lg'} text-white text-left mb-4`;
 
   return (
     <>
       <TabContent data={data} emptyText="Leaderboards will be displayed at the end of the first week of rankings.">
         <div
           onClick={() => dispatch(toggleShowLeaderboardInfo())}
-          className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner ${
+          className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner text-left ${
             isMobile ? 'text-md' : 'text-xl'
           }`}>
-          <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white text-stroke-black font-bold">
+          <span className="mr-2 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white font-bold">
             i
           </span>
           <span className="text-white opacity-60">

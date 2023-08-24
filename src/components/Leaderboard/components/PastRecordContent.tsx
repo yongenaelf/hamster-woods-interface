@@ -43,7 +43,7 @@ export const PastRecordContent = () => {
   }, [selectedSeason, data]);
 
   return (
-    <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
+    <div className="h-[24rem] mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
       <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-2 shadow-inner">
         <select
           className={`font-roboto bg-[#0C40D4] text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
