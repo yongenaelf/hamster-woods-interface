@@ -6,7 +6,7 @@ import { did } from '@portkey/did-ui-react';
 import { CallContractParams } from 'types';
 import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
 import { formatErrorMsg } from 'utils/formattError';
-import { sleep } from '@portkey/utils';
+import { aelf, sleep } from '@portkey/utils';
 import { getTxResult } from 'utils/getTxResult';
 import DetectProvider from 'utils/detectProvider';
 
@@ -59,10 +59,10 @@ export default class ContractRequest {
         try {
           const dp = await DetectProvider.get();
           const chainProvider = await dp?.getChain(this.chainId as ChainId);
-          if (chainProvider) return;
+          if (!chainProvider) return;
           const contract = await getContractBasic({
             contractAddress: params.contractAddress,
-            chainProvider: chainProvider!,
+            chainProvider: chainProvider,
           });
           const accounts = discoverInfo.accounts;
           const accountsInChain = accounts[this.chainId as ChainId];
@@ -84,9 +84,10 @@ export default class ContractRequest {
             throw new Error(`Chain is not running: ${this.chainId}`);
           }
           const didWalletInfo = this.wallet.portkeyInfo!;
+          const account = aelf.getWallet(didWalletInfo.walletInfo.privateKey);
           const caContract = await getContractBasic({
             contractAddress: chainInfo.caContractAddress,
-            account: didWalletInfo.walletInfo,
+            account,
             rpcUrl: chainInfo.endPoint,
           });
           result = await caContract.callSendMethod(
@@ -126,7 +127,12 @@ export default class ContractRequest {
     const viewWallet = getViewWallet();
 
     const contract = await aelfInstance.chain.contractAt(params.contractAddress, viewWallet);
-    const res = await contract[params.methodName].call(params.args);
+    let res;
+    if (!params.args) {
+      res = await contract[params.methodName].call();
+    } else {
+      res = await contract[params.methodName].call(params.args);
+    }
     return res;
   }
 }

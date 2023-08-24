@@ -62,6 +62,8 @@ export default function Login() {
   });
 
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+    setDrawerVisible(false);
+    setModalVisible(false);
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
@@ -185,7 +187,7 @@ export default function Login() {
     ];
     let filterMethods = [];
     if (isInApp) {
-      filterMethods = [allMethods[2]];
+      filterMethods = [allMethods[0]];
     } else if (isInIOS) {
       filterMethods = inModel ? [allMethods[1], ...allMethods.slice(3, 6)] : [allMethods[0], allMethods[2]];
     } else {
@@ -237,16 +239,6 @@ export default function Login() {
       setIsErrorTipShow(true);
       return;
     }
-    const updateWallet = {
-      caInfo: { ...wallet.didWallet.caInfo[ChainId] },
-      pin: '',
-      walletInfo: wallet.didWallet.managementAccount,
-    };
-    store.dispatch(
-      setWalletInfo({
-        portkeyInfo: updateWallet,
-      }),
-    );
     setIsUnlockShow(false);
     store.dispatch(setLoginStatus(LoginStatus.LOGGED));
     router.push('/');

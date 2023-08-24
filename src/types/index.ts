@@ -144,7 +144,10 @@ export interface IBeanPassClaimRes {
 }
 
 export interface IBeanPassClaimReq {
-  token: string;
   caAddress: string;
-  CaHash: string;
+}
+
+export interface IGameSetting {
+  dailyMaxPlayCount: number;
+  dailyPlayCountResetHours: number;
 }

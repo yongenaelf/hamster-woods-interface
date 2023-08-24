@@ -1,4 +1,4 @@
-import { IAccountInfoSync, IPlayerInformation, WalletInfoType, WalletType } from 'types';
+import { IAccountInfoSync, IGameSetting, IPlayerInformation, WalletInfoType, WalletType } from 'types';
 
 export type InfoStateType = {
   isMobile?: boolean;
@@ -15,6 +15,8 @@ export type InfoStateType = {
   playerInfo?: IPlayerInformation;
   showLeaderboard: boolean;
   showGameRecord: boolean;
+  assetVisible: boolean;
+  gameSetting?: IGameSetting;
 };
 
 export enum LoginStatus {

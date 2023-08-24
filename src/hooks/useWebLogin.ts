@@ -6,6 +6,7 @@ import detectProvider from '@portkey/detect-provider';
 import {
   selectInfo,
   setAccountInfoSync,
+  setGameSetting,
   setLoginStatus,
   setPlayerInfo,
   setWalletInfo,
@@ -19,7 +20,7 @@ import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
 import ContractRequest from 'contract/contractRequest';
-import { CheckBeanPass, GetPlayerInformation } from 'contract/bingo';
+import { CheckBeanPass, GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
 import { SignatureParams } from 'aelf-web-login';
 import useGetState from 'redux/state/useGetState';
 
@@ -180,7 +181,15 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       store.dispatch(setPlayerInfo(information));
       console.log(information);
     } catch (error) {
-      /* empty */
+      console.error('GetPlayerInformationErr:', error);
+    }
+
+    try {
+      const gameSetting = await GetGameLimitSettings();
+      store.dispatch(setGameSetting(gameSetting));
+      console.log('gameSetting', gameSetting);
+    } catch (err) {
+      console.error('GetGameLimitSettingsErr:', err);
     }
   }, [walletInfo, walletType]);
 

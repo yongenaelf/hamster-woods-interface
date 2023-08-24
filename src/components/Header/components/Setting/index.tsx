@@ -41,7 +41,6 @@ export default function Setting() {
     window.localStorage.removeItem(KEY_NAME);
     window.localStorage.removeItem(LOGIN_EARGLY_KEY);
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
-    //logout and goto /login
     router.push('/login');
   };
   return (
@@ -58,10 +57,12 @@ export default function Setting() {
             title="Game Record"
             onClick={handleRecord}
             className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px] md:!rounded-[38.75px] md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
-          <CommonBtn
-            title="Lock"
-            onClick={handleLock}
-            className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px]  md:!rounded-[38.75px]  md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
+          {walletType !== WalletType.discover && (
+            <CommonBtn
+              title="Lock"
+              onClick={handleLock}
+              className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px]  md:!rounded-[38.75px]  md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
+          )}
           <CommonBtn
             title="Exit Game"
             onClick={handleExit}
