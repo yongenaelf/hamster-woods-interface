@@ -1,5 +1,6 @@
 import { IBoutInformation, IContractError, IGameSetting, IPlayerInformation } from 'types';
 import contractRequest from './contractRequest';
+import { formatErrorMsg } from 'utils/formattError';
 
 export enum ContractMethodType {
   SEND,
@@ -19,7 +20,8 @@ const bingoContract = async <T, R>(methodName: string, params: T, type: Contract
 
     return res as R;
   } catch (error) {
-    return Promise.reject(error);
+    const resError = error as IContractError;
+    return Promise.reject(formatErrorMsg(resError));
   }
 };
 

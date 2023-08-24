@@ -6,7 +6,7 @@
   }
 
   .game__pc__blur {
-    @apply absolute top-0 left-0 w-full h-full bg-no-repeat bg-[auto_100%] bg-[url(https://forest-dev.s3.ap-northeast-1.amazonaws.com/1691662987705-bg.png)];
+    @apply absolute z-[20] top-0 left-0 w-full h-full bg-no-repeat bg-[auto_100%] bg-[url(https://forest-dev.s3.ap-northeast-1.amazonaws.com/1691662987705-bg.png)];
 
     filter: blur(10px);
   }

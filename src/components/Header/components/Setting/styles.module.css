@@ -14,3 +14,7 @@
 .setting {
   @apply h-10 w-10;
 }
+
+.setting-pc {
+  @apply h-20 w-20;
+}

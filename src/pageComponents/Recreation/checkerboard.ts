@@ -55,30 +55,14 @@ export class CheckerboardList {
   private baseWidth: number;
   private baseHeight: number;
   private animationDuration: number;
-  private translate: {
-    x: number;
-    y: number;
-  };
 
-  constructor(props?: {
-    baseWidth?: number;
-    baseHeight?: number;
-    animationDuration?: number;
-    translate?: {
-      x: number;
-      y: number;
-    };
-  }) {
+  constructor(props?: { baseWidth?: number; baseHeight?: number; animationDuration?: number }) {
     this.head = null;
     this.currentNode = null;
     this.step = 0;
     this.baseWidth = props?.baseWidth ?? 60;
     this.baseHeight = props?.baseHeight ?? 60;
     this.animationDuration = props?.animationDuration ?? ANIMATION_DURATION;
-    this.translate = {
-      x: props?.translate?.x ?? 0,
-      y: props?.translate?.y ?? 0,
-    };
   }
 
   private next({
@@ -89,20 +73,17 @@ export class CheckerboardList {
     callback: (props: IJumpCallbackParams) => void;
   }) {
     const current = this.currentNode || this.head;
-    if (current?.next) {
+    const firstNode = this.head;
+    if (current?.next && firstNode) {
       const nextNode = current.next;
-      const x = (nextNode.info.column - current.info.column) * this.baseWidth;
-      const y = (nextNode.info.row - current.info.row) * this.baseHeight;
+      const x = (nextNode.info.column - firstNode.info.column) * this.baseWidth;
+      const y = (nextNode.info.row - firstNode.info.row) * this.baseHeight;
       this.currentNode = nextNode;
       animation && animation.play();
-      this.translate = {
-        x: x + this.translate.x,
-        y: y + this.translate.y,
-      };
       this.step -= 1;
       callback({
-        x: this.translate.x,
-        y: this.translate.y,
+        x,
+        y,
         state: this.step > 0,
         currentNode: this.step > 0 ? undefined : this.currentNode,
       });
@@ -136,6 +117,11 @@ export class CheckerboardList {
       current.next = newNode;
       newNode.next = this.head;
     }
+  }
+
+  resize(baseWidth: number, baseHeight: number) {
+    this.baseWidth = baseWidth;
+    this.baseHeight = baseHeight;
   }
 
   jump(params: { step: number; animation?: LottieRefCurrentProps; baseWidth?: number; baseHeight?: number }) {

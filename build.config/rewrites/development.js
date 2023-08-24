@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'http://192.168.66.205:5008/:path*',
+    destination: 'http://192.168.66.205:5008/api/:path*',
   },
   {
     source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',

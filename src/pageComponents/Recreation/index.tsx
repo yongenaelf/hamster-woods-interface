@@ -11,7 +11,6 @@ import styles from './index.module.css';
 
 import Checkerboard from './components/Checkerboard';
 import SideBorder from './components/SideBorder';
-import { LottieRefCurrentProps } from 'lottie-react';
 import Role from './components/Role';
 
 import { checkerboardData } from './mockdata';
@@ -23,8 +22,8 @@ import GoButton, { Status } from './components/GoButton';
 import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
 import RecreationModal, { RecreationModalType } from './components/RecreationModal';
-import { useEffectOnce } from 'react-use';
-import { CheckBeanPass, GetBingoReward, GetPlayerInformation, Play } from 'contract/bingo';
+import { useDebounce, useDeepCompareEffect, useEffectOnce, useWindowSize } from 'react-use';
+import { CheckBeanPass, GetBingoReward, GetBoutInformation, GetPlayerInformation, Play } from 'contract/bingo';
 import { sleep } from '@portkey/utils';
 import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
@@ -32,8 +31,12 @@ import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
 import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
-import { BeanPassResons, WalletType } from 'types';
-import { message } from 'antd';
+import { getBlockHeight } from 'utils/getBlockHeight';
+import { ChainId } from 'constants/platform';
+import showMessage from 'utils/setGlobalComponentsInfo';
+import BoardLeft from './components/BoardLeft';
+import { setPlayerInfo } from 'redux/reducer/info';
+import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
@@ -47,15 +50,16 @@ export default function Game() {
     x: 0,
     y: 0,
   });
+  const { width, height } = useWindowSize();
   const address = useAddress();
   const router = useRouter();
-  const { initializeContract } = useWebLogin({});
+  const { initializeContract, updatePlayerInformation } = useWebLogin({});
 
   const firstNode = checkerboardData[5][4];
   const firstNodePosition: [number, number] = [5, 4];
   const linkedList = useRef<CheckerboardList>();
 
-  const [currentNode, setCurrentNode] = useState<CheckerboardNode>();
+  const currentNodeRef = useRef<CheckerboardNode>();
   const [score, setScore] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
@@ -67,7 +71,7 @@ export default function Game() {
   const [resetStart, setResetStart] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);
 
-  const { isMobile, isLogin, walletType } = useGetState();
+  const { isMobile, isLogin, playerInfo, walletType } = useGetState();
 
   const [goStatus, setGoStatus] = useState<Status>(Status.DISABLED);
   const [showAdd, setShowAdd] = useState<boolean>(false);
@@ -81,7 +85,6 @@ export default function Game() {
 
   const [countDownModalOpen, setCountDownModalOpen] = useState(false);
 
-  const animationRef = useRef<LottieRefCurrentProps>(null);
   const translateRef = useRef<{
     x: number;
     y: number;
@@ -98,12 +101,21 @@ export default function Game() {
     if (!state) {
       const timer = setTimeout(() => {
         setGoStatus(Status.NONE);
-        setShowAdd(true);
         clearTimeout(timer);
         if (currentNode) {
-          setCurrentNode(currentNode);
+          currentNodeRef.current = currentNode;
+          store.dispatch(
+            setPlayerInfo({
+              ...playerInfo,
+              playableCount:
+                playerInfo?.playableCount && playerInfo?.playableCount > 0 ? playerInfo.playableCount - 1 : 0,
+            }),
+          );
           if (currentNode.info.info.type === CheckerboardType.TREASURE) {
             setTreasureOpen(true);
+          } else {
+            updatePlayerInformation(address);
+            setShowAdd(true);
           }
         }
       }, ANIMATION_DURATION);
@@ -172,6 +184,7 @@ export default function Game() {
       x: 0,
       y: 0,
     });
+    setResetStart(true);
     // animationRef.current?.pause();
     translateRef.current = {
       x: document.getElementById('animationId')?.clientWidth || 0,
@@ -185,58 +198,81 @@ export default function Game() {
     getList(firstNode, firstNodePosition);
   };
 
+  const updateCheckerboard = () => {
+    translateRef.current = {
+      x: document.getElementById('animationId')?.clientWidth || 0,
+      y: document.getElementById('animationId')?.clientHeight || 0,
+    };
+    setTranslate({
+      x: ((currentNodeRef.current?.info.column ?? 4) - 4) * translateRef.current.x,
+      y: ((currentNodeRef.current?.info.row ?? 5) - 5) * translateRef.current.y,
+    });
+    linkedList.current?.resize(translateRef.current.x, translateRef.current.y);
+  };
+  useDebounce(updateCheckerboard, 500, [width, height]);
+
   const go = async () => {
-    if (goStatus !== Status.NONE) {
+    if (getGoStatus() !== Status.NONE) {
       if (!hasNft) {
-        console.log('no nft modal'); // TODO
+        setBeanPassModalType(GetBeanPassStatus.Abled);
+        setBeanPassModalVisible(true);
         return;
       }
       if (hasNft && playableCount === 0) {
-        console.log('countdown modal'); // TODO
+        setCountDownModalOpen(true);
         return;
       }
+      return;
     }
     try {
       setGoStatus(Status.LOADING);
+      showMessage.loading();
+      console.log('=====Play resetStart', resetStart);
       const res = await Play(resetStart);
-      setResetStart(false);
-
-      if (res.TransactionId) {
-        await sleep(4000);
-        const bingoRes = await GetBingoReward(res.TransactionId);
-        const step = bingoRes.gridNum;
-        setScore(bingoRes.score);
-        init();
-        setStep(step);
-        setOpen(true);
-        await sleep(1500);
-        setOpen(false);
-        setGoStatus(Status.DISABLED);
-        setShowAdd(false);
-        jump(step);
-      }
-    } catch (error) {
-      console.error('=====error', error);
-      setGoStatus(Status.NONE);
-    }
-  };
-
-  const init = async () => {
-    try {
-      const res = await GetPlayerInformation('2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y'); // TODO
-      console.log('=====GetPlayerInformation res', res);
-      setPlayableCount(res.playableCount);
-
-      if (res.playableCount === 0) {
-        setGoStatus(Status.DISABLED);
+      console.log('=====Play res', res);
+      if (res?.TransactionId) {
+        setResetStart(false);
+        const boutInformation = await GetBoutInformation(res?.TransactionId);
+        console.log('=====Play GetBoutInformation', boutInformation);
+        const blockRes = await getBlockHeight(
+          ChainId,
+          0,
+          process.env.NEXT_PUBLIC_RPC_SERVER!,
+          boutInformation.expectedBlockHeight,
+        );
+        if (blockRes) {
+          const bingoRes = await GetBingoReward(res.TransactionId);
+          console.log('=====Play GetBingoReward', bingoRes);
+          const step = bingoRes.gridNum;
+          setScore(bingoRes.score);
+          setStep(step);
+          setOpen(true);
+          await sleep(1500);
+          setOpen(false);
+          setGoStatus(Status.DISABLED);
+          setShowAdd(false);
+          jump(step);
+        }
       } else {
         setGoStatus(Status.NONE);
       }
     } catch (error) {
-      console.error('=====GetPlayerInformation error', error);
-      /* empty */
+      console.error('=====error', error);
+      const resError = error as IContractError;
+      showMessage.error(resError.errorMessage?.message);
+      setGoStatus(Status.NONE);
     }
+    showMessage.hideLoading();
   };
+
+  useDeepCompareEffect(() => {
+    setPlayableCount(playerInfo?.playableCount || 0);
+    if (playerInfo?.playableCount && playerInfo?.playableCount > 0) {
+      setGoStatus(Status.NONE);
+    } else {
+      setGoStatus(Status.DISABLED);
+    }
+  }, [playerInfo]);
 
   const checkBeanPassStatus = useCallback(async () => {
     let beanPassClaimClaimableRes;
@@ -250,6 +286,7 @@ export default function Game() {
       return;
     }
     const { claimable, reason } = beanPassClaimClaimableRes;
+
     if (claimable) {
       setBeanPassModalType(GetBeanPassStatus.Abled);
     } else {
@@ -264,22 +301,28 @@ export default function Game() {
     setBeanPassModalVisible(true);
   }, [address]);
 
-  const initCheckBeanPass = useCallback(async () => {
-    try {
-      const hasBeanPass = await CheckBeanPass(address);
-      console.log(hasBeanPass);
-      if (hasBeanPass && hasBeanPass.value) {
-        setHasNft(true);
-        setNFTModalType(ShowBeanPassType.Display);
-        setIsShowNFT(true);
-      } else {
-        setGoStatus(Status.DISABLED);
-        checkBeanPassStatus();
+  const initCheckBeanPass = useCallback(
+    async (modalStatus = true) => {
+      try {
+        console.log('=====CheckBeanPass address', address);
+        const hasBeanPass = await CheckBeanPass(address);
+        console.log(hasBeanPass);
+        if (hasBeanPass && hasBeanPass.value) {
+          setHasNft(true);
+          if (modalStatus) {
+            setNFTModalType(ShowBeanPassType.Display);
+            setIsShowNFT(true);
+          }
+        } else {
+          setGoStatus(Status.DISABLED);
+          checkBeanPassStatus();
+        }
+      } catch (error) {
+        console.error('=====CheckBeanPass error', error);
       }
-    } catch (error) {
-      console.error('=====CheckBeanPass error', error);
-    }
-  }, [address]);
+    },
+    [address],
+  );
 
   const handleConfirm = async () => {
     if (beanPassModalType === GetBeanPassStatus.Abled) {
@@ -288,7 +331,7 @@ export default function Game() {
       });
       const { claimable, reason } = getNFTRes;
       if (!claimable) {
-        message.error(reason);
+        showMessage.error(reason);
         return;
       }
       setBeanPassModalVisible(false);
@@ -304,7 +347,6 @@ export default function Game() {
 
   useEffect(() => {
     if (address) {
-      init();
       initCheckBeanPass();
     }
   }, [address]);
@@ -322,88 +364,127 @@ export default function Game() {
   }, [checkerboardData, hasNft]);
 
   useEffectOnce(() => {
+    showMessage.hideLoading();
     setResetStart(true);
-    window.addEventListener('resize', initCheckerboard);
-    return () => {
-      window.removeEventListener('resize', initCheckerboard);
-    };
   });
+
+  const getGoStatus = () => {
+    if (goStatus !== Status.DISABLED) {
+      if (!hasNft || !sumScore) {
+        return Status.DISABLED;
+      }
+    }
+    return goStatus;
+  };
+
+  const onShowNFTModalCancel = () => {
+    if (nftModalType === ShowBeanPassType.Success) {
+      updatePlayerInformation(address);
+      initCheckBeanPass(false);
+    }
+    setIsShowNFT(false);
+  };
+
+  const onNftClick = () => {
+    if (hasNft) {
+      setNFTModalType(ShowBeanPassType.Display);
+      setIsShowNFT(true);
+    } else {
+      setBeanPassModalType(GetBeanPassStatus.Abled);
+      setBeanPassModalVisible(true);
+    }
+  };
+
+  const recreationModalonClose = () => {
+    updatePlayerInformation(address);
+    setTreasureOpen(false);
+  };
 
   return (
     <div className={`${styles.game} relative ${isMobile && 'flex-col'}`}>
       {!isMobile && (
         <div className={styles['game__pc__side']}>
           <div className={styles['game__pc__blur']}></div>
+          <BoardLeft />
         </div>
       )}
       <div
-        className={`${styles['game__content']} flex overflow-y-auto ${
+        className={`${styles['game__content']} flex overflow-hidden ${
           isMobile ? 'w-full flex-1' : 'h-full w-[784px]'
         }`}>
+        {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
         <SideBorder side="left" />
-        <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pb-[72px] pt-[80px]'}`}>
-          <div className="relative z-[30]">
-            {isMobile && <Board />}
+        <div className="w-full overflow-y-auto overflow-x-hidden">
+          <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
+            <div className="relative z-[30]">
+              {hasNft && (
+                <Role
+                  id="animationId"
+                  width={`calc(100% / ${checkerboardData?.[0]?.length})`}
+                  translate={translate}
+                  bean={score}
+                  position={{
+                    x: currentNodeRef.current?.info.row,
+                    y: currentNodeRef.current?.info.column,
+                  }}
+                  animationDuration={ANIMATION_DURATION}
+                  showAdd={showAdd}
+                  hideAdd={hideAdd}>
+                  {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
+                  <RoleImg />
+                </Role>
+              )}
 
-            {hasNft && (
-              <Role
-                id="animationId"
-                width={`calc(100% / ${checkerboardData?.[0]?.length})`}
-                translate={translate}
-                bean={score}
-                position={{
-                  x: currentNode?.info.row,
-                  y: currentNode?.info.column,
-                }}
-                animationDuration={ANIMATION_DURATION}
-                showAdd={showAdd}
-                hideAdd={hideAdd}>
-                {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                <RoleImg />
-              </Role>
-            )}
-
-            {checkerboardData.map((row, index) => {
-              return (
-                <div key={index} className="flex">
-                  {row.map((column) => {
-                    return (
-                      <div
-                        key={column.id}
-                        style={{
-                          width: `calc(100% / ${row.length})`,
-                        }}>
-                        <Checkerboard value={column} />
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-          <div className="ml-[-16px] mt-[-50px] w-full">
-            <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+              {checkerboardData.map((row, index) => {
+                return (
+                  <div key={index} className="flex">
+                    {row.map((column) => {
+                      return (
+                        <div
+                          key={column.id}
+                          style={{
+                            width: `calc(100% / ${row.length})`,
+                          }}>
+                          <Checkerboard value={column} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="ml-[-16px] mt-[-50px] w-full">
+              <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+            </div>
           </div>
         </div>
+
         <SideBorder side="right" />
       </div>
       {!isMobile && (
         <div className={`${styles['game__pc__side']}`}>
           <div className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}></div>
-          <div className="z-10 h-full w-full">
-            <Board playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
+          <div className="z-30 h-full w-full">
+            <Board
+              hasNft={hasNft}
+              onNftClick={onNftClick}
+              playableCount={playableCount}
+              sumScore={hasNft ? sumScore : 0}
+              status={getGoStatus()}
+              go={go}
+            />
           </div>
         </div>
       )}
 
       {isMobile && (
-        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
+        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={getGoStatus()} go={go} />
       )}
 
       <RecreationModal open={open} type={RecreationModalType.DICE} step={step} />
       <RecreationModal
         open={treasureOpen}
-        onClose={() => setTreasureOpen(false)}
+        onClose={recreationModalonClose}
         type={RecreationModalType.TREASURE}
         step={step}
         bean={score}
@@ -411,27 +492,16 @@ export default function Game() {
       <GetBeanPassModal
         type={beanPassModalType}
         open={beanPassModalVisible}
-        onCancel={() => {
-          setBeanPassModalVisible(false);
-        }}
+        onCancel={() => setBeanPassModalVisible(false)}
         onConfirm={handleConfirm}
       />
 
-      <ShowNFTModal
-        open={isShowNFT}
-        onCancel={() => {
-          setIsShowNFT(false);
-        }}
-        type={nftModalType}
-      />
+      <ShowNFTModal open={isShowNFT} onCancel={onShowNFTModalCancel} type={nftModalType} />
       <CountDownModal
         open={countDownModalOpen}
-        onCancel={() => {
-          setCountDownModalOpen(false);
-        }}
-        onConfirm={() => {
-          setCountDownModalOpen(false);
-        }}></CountDownModal>
+        onCancel={() => setCountDownModalOpen(false)}
+        onConfirm={() => setCountDownModalOpen(false)}
+      />
     </div>
   );
 }
