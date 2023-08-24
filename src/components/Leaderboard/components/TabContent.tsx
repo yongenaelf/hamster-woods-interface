@@ -2,7 +2,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import { LeaderBoardItem } from './LeaderBoardItem';
 import { TabContentUser } from './TabContentUser';
-import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
+import { MAX_LEADERBOARD_ITEMS, MAX_LEADERBOARD_PLACEHOLDER_ITEMS } from 'constants/platform';
 
 type IData = IWeeklyRankResult | ISeasonRankResult;
 interface ITabContent extends React.PropsWithChildren {
@@ -47,21 +47,6 @@ export const TabContent = ({ data, emptyText, children }: ITabContent) => {
                         isCurrentUserRank={i.rank === data.selfRank.rank}
                       />
                     ))}
-                    {data?.rankingList.length < MAX_LEADERBOARD_ITEMS
-                      ? Array(MAX_LEADERBOARD_ITEMS - data.rankingList.length)
-                          .fill('')
-                          .map((_i, j) => (
-                            <div
-                              key={j}
-                              className={`flex text-slate-500 text-lg items-center bg-blue-800 rounded-2xl mb-2 ${
-                                isMobile ? 'h-12' : 'h-24'
-                              }`}>
-                              <div className="px-10">&mdash;</div>
-                              <div className="grow"></div>
-                              <div className="px-10">&mdash;</div>
-                            </div>
-                          ))
-                      : null}
                   </div>
                 </div>
               </div>
