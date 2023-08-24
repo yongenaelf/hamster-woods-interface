@@ -19,7 +19,7 @@ export const GameRecord = () => {
         dispatch(toggleShowGameRecord());
       }}>
       {!data || data.gameList.length === 0 ? (
-        <div className={`flex flex-grow items-center justify-center`}>
+        <div className={`h-full flex flex-grow items-center justify-center`}>
           <div>
             <img
               src={require('assets/images/no-record.png').default.src}
