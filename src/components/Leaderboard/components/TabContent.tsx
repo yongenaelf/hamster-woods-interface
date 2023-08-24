@@ -8,9 +8,12 @@ import { RefreshTime } from './RefreshTime';
 type IData = IWeeklyRankResult | ISeasonRankResult;
 interface ITabContent {
   data?: IData;
+  emptyText: string;
+  infoText: string;
+  endedText: string;
 }
 
-export const TabContent = ({ data }: ITabContent) => {
+export const TabContent = ({ data, emptyText, infoText, endedText }: ITabContent) => {
   const isMobile = useIsMobile();
 
   const refreshTime = (data as IWeeklyRankResult)?.refreshTime;
@@ -25,7 +28,7 @@ export const TabContent = ({ data }: ITabContent) => {
             className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner ${
               isMobile ? 'text-md' : 'text-xl'
             }`}>
-            {refreshTime ? <RefreshTime refreshTime={refreshTime} /> : null}
+            {refreshTime ? <RefreshTime refreshTime={refreshTime} text={infoText} /> : endedText}
           </div>
           {!data?.rankingList || data?.rankingList.length === 0 ? (
             <div className="flex flex-grow items-center justify-center bg-blue-700">
@@ -36,7 +39,7 @@ export const TabContent = ({ data }: ITabContent) => {
                   className={`mx-auto w-32 mb-8`}
                 />
                 <div className={`text-center font-roboto text-[#89A5F5] ${isMobile ? 'text-lg' : 'text-2xl'}`}>
-                  Leaderboards will be displayed at the end of the first week of rankings.
+                  {emptyText}
                 </div>
               </div>
             </div>

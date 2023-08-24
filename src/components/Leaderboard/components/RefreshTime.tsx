@@ -1,13 +1,17 @@
 import Countdown from 'react-countdown';
 
-export const RefreshTime = ({ refreshTime }: { refreshTime: string }) => {
+interface IRefreshTime {
+  refreshTime: string;
+  text: string;
+}
+export const RefreshTime = ({ refreshTime, text }: IRefreshTime) => {
   return (
     <>
       <span className="mr-4 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white text-stroke-black font-bold">
         i
       </span>
       <span className="text-white opacity-60">
-        Next update:{' '}
+        {text}
         <Countdown
           date={refreshTime}
           zeroPadDays={1}
