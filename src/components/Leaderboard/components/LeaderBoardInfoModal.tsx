@@ -2,7 +2,6 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
-import CommonModal from 'components/CommonModal';
 import LeaderBoardModal from './LeaderBoardModal';
 
 const AElfLogo = () => {
