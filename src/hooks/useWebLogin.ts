@@ -23,6 +23,7 @@ import ContractRequest from 'contract/contractRequest';
 import { CheckBeanPass, GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
 import { SignatureParams } from 'aelf-web-login';
 import useGetState from 'redux/state/useGetState';
+import DetectProvider from 'utils/detectProvider';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -152,6 +153,16 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const { walletInfo, walletType } = useGetState();
 
+  const updatePlayerInformation = useCallback(async (address: string) => {
+    try {
+      const information = await GetPlayerInformation(address);
+      console.log('=====GetPlayerInformation res', information);
+      store.dispatch(setPlayerInfo(information));
+    } catch (error) {
+      console.error('=====GetPlayerInformation error', error);
+    }
+  }, []);
+
   const initializeContract = useCallback(async () => {
     const contract = ContractRequest.get();
     const config = {
@@ -176,13 +187,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
     console.log('wallet.address', address);
 
-    try {
-      const information = await GetPlayerInformation(address);
-      store.dispatch(setPlayerInfo(information));
-      console.log(information);
-    } catch (error) {
-      console.error('GetPlayerInformationErr:', error);
-    }
+    updatePlayerInformation(address);
 
     try {
       const gameSetting = await GetGameLimitSettings();
@@ -279,9 +284,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const getDiscoverSignature = useCallback(
     async (params: SignatureParams) => {
       // checkSignatureParams(params);
+      const discoverInfo = walletInfo?.discoverInfo;
       if (!discoverInfo) {
         throw new Error('Discover not connected');
       }
+      const discoverProvider = await DetectProvider.get();
       const provider = discoverProvider! as IPortkeyProvider;
       const signInfo = params.signInfo;
       const signedMsgObject = await provider.request({
@@ -342,5 +349,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     initializeContract,
     getDiscoverSignature,
     getPortKeySignature,
+    updatePlayerInformation,
   };
 }

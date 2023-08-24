@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { message } from 'antd';
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import showMessage from 'utils/setGlobalComponentsInfo';
 
 interface ResponseType<T> {
   code: string;
@@ -45,7 +45,7 @@ class Request {
           case '50000':
             return null;
           default:
-            message.error(errorMessage);
+            showMessage.error(errorMessage);
             return res;
         }
       },
@@ -57,7 +57,7 @@ class Request {
             break;
 
           case 401:
-            message.error('The signature has expired. Please log in again.');
+            showMessage.error('The signature has expired. Please log in again.');
             setTimeout(() => {
               location.pathname = '/';
             }, 3000);
@@ -80,7 +80,7 @@ class Request {
             break;
         }
 
-        message.error(errMessage);
+        showMessage.error(errMessage);
         return Promise.reject(errMessage);
       },
     );

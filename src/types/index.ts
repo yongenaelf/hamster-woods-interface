@@ -134,8 +134,8 @@ export type WalletInfoType = {
 
 export enum BeanPassResons {
   Claimed = 'Claimed',
-  InsufficientElfAmount = 'insufficient elf amount',
-  DoubleClaim = 'double claim',
+  InsufficientElfAmount = 'InsufficientElfAmount',
+  DoubleClaim = 'DoubleClaim”',
 }
 
 export interface IBeanPassClaimRes {

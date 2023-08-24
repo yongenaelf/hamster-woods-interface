@@ -13,7 +13,7 @@ import { WalletType } from 'types/index';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
-  const { walletType } = useGetState();
+  const { walletType, isMobile } = useGetState();
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -48,7 +48,7 @@ export default function Setting() {
       <Image
         src={require('assets/images/header-setting.png')}
         alt=""
-        className={styles.setting}
+        className={isMobile ? styles.setting : styles['setting-pc']}
         onClick={handleSetting}
       />
       <CommonModal open={settingModalVisible} title="Setting" onCancel={handleCancel} className={styles.settingModal}>

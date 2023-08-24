@@ -1,25 +1,24 @@
 'use client';
-import React, { useEffect, Suspense, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Layout as AntdLayout } from 'antd';
 
 import Header from 'components/Header';
-import Footer from 'components/Footer';
 import LoadingAnimation from 'components/Loading/LoadingAnimation';
 // import WebLoginInstance from 'contract/webLogin';
 
 import AWS from 'aws-sdk';
 import dynamic from 'next/dynamic';
 
-import { store, dispatch } from 'redux/store';
-import { selectInfo, setIsMobile } from 'redux/reducer/info';
+import { store } from 'redux/store';
+import { setIsMobile } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
-import { SupportedELFChainId } from 'types';
 import Leaderboard from 'components/Leaderboard';
 import { Store } from 'utils/store';
 import { ConfigProvider } from '@portkey/did-ui-react';
 import sourceMap from 'constants/resource';
 
 import { usePathname } from 'next/navigation';
+import PageLoading from 'components/PageLoading';
 import GameRecord from 'components/GameRecord';
 import useGetState from 'redux/state/useGetState';
 
@@ -123,6 +122,7 @@ const Layout = dynamic(async () => {
             <Leaderboard />
             <GameRecord />
           </AntdLayout.Content>
+          <PageLoading />
         </AntdLayout>
       </>
     ) : (

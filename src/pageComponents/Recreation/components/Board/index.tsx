@@ -11,14 +11,27 @@ import Image from 'next/image';
 import { dispatch } from 'redux/store';
 import { toggleShowLeaderboard } from 'redux/reducer/info';
 
-function Board({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }: IGoButton) {
-  const { isMobile } = useGetState();
+interface IBoard extends IGoButton {
+  onNftClick?: () => void;
+}
+
+function Board({ hasNft, go, status = Status.NONE, playableCount = 0, sumScore = 5, onNftClick }: IBoard) {
+  const { isMobile, playerInfo } = useGetState();
 
   if (isMobile) {
     return (
-      <div className="absolute right-[-16px] top-[-26px] z-[40]">
-        <Menu icon={<Ranking className="h-[auto] w-[44px]" />} className="mb-[12px]" title="Leader Board" />
-        <Menu icon={<Nft className="h-[auto] w-[29.5px]" />} title="NFT Giveaway" />
+      <div className="absolute right-0 top-[15px] z-[40]">
+        <Menu
+          icon={<Ranking className="h-[auto] w-[44px]" />}
+          className="mb-[12px]"
+          title="Leader Board"
+          onClick={() => dispatch(toggleShowLeaderboard())}
+        />
+        <Menu
+          icon={<Nft className="h-[auto] w-[29.5px]" />}
+          title={hasNft ? 'BeanPass NFT' : 'NFT Giveaway'}
+          onClick={() => onNftClick && onNftClick()}
+        />
       </div>
     );
   } else {
@@ -27,7 +40,7 @@ function Board({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }: IG
         <div className="relative z-40 flex-1">
           <div className={styles['board__bean']}>
             <Image src={beanImage} alt="bean" className="h-[64px] w-[64px]" />
-            <span className={styles['board__bean__number']}>234,567</span>
+            <span className={styles['board__bean__number']}>{playerInfo?.sumScore || 0}</span>
           </div>
           <Menu
             icon={<Ranking className="h-[auto] w-[76px]" />}
@@ -35,7 +48,11 @@ function Board({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }: IG
             title="Leader Board"
             onClick={() => dispatch(toggleShowLeaderboard())}
           />
-          <Menu icon={<Nft className="h-[auto] w-[59px]" />} title="BeanPass NFT" />
+          <Menu
+            icon={<Nft className="h-[auto] w-[59px]" />}
+            title={hasNft ? 'BeanPass NFT' : 'NFT Giveaway'}
+            onClick={() => onNftClick && onNftClick()}
+          />
         </div>
         <GoButton playableCount={playableCount} sumScore={sumScore} status={status} go={() => go && go()} />
       </div>

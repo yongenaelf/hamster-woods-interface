@@ -72,6 +72,7 @@ export default class ContractRequest {
           const address = accountsInChain[0];
           result = await contract.callSendMethod(params.methodName, address, params.args, sendOptions);
         } catch (error) {
+          console.error('=====callSendMethod error', error);
           return Promise.reject(error);
         }
         break;

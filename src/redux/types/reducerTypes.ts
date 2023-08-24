@@ -20,6 +20,14 @@ export type InfoStateType = {
   gameSetting?: IGameSetting;
 };
 
+export type PageLoadingType = {
+  open: boolean;
+};
+
+export type GlobalComponentsInfoStateType = {
+  pageLoading: PageLoadingType;
+};
+
 export enum LoginStatus {
   UNLOGIN = 1,
   LOGGED = 2,

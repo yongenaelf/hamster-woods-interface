@@ -27,7 +27,7 @@ function Menu(props: IMenu) {
     );
   } else {
     return (
-      <div className={`${styles.menu} ${className}`} onClick={onClick}>
+      <div className={`${styles.menu} cursor-custom ${className}`} onClick={onClick}>
         {icon && (
           <div className="relative flex aspect-[1/1] h-full items-center justify-center rounded-full bg-[#305CD9] shadow-[0_-0.9px_0.9px_0_#3687FF4D] shadow-[0_0.9px_3.6px_0_#0048B6_inset]">
             <div className="position bottom-0 left-0 right-0 top-0 m-auto ">{icon}</div>

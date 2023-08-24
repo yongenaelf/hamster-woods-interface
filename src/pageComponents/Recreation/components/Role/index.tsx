@@ -48,7 +48,7 @@ function Role(props: IRole) {
   const { isMobile } = useGetState();
 
   const PopoverComponent = (
-    <div className={`flex h-full w-full items-center pb-[8px] pl-[6px] ${styles['role__info']}`}>
+    <div className={`flex h-full items-center pb-[8px] ${styles['role__info']}`}>
       <Image className={`${isMobile ? 'h-[32px] w-[32px]' : 'h-[64px] w-[64px]'}`} src={beanImage} alt="bean" />
       <span className={`ml-[4px] leading-[24px] text-[#FFFFFF] ${isMobile ? 'text-[20px]' : 'text-[40px]'}`}>
         +{bean}
@@ -59,13 +59,13 @@ function Role(props: IRole) {
   const Popover: Record<PlacementType, ReactElement> = {
     [PlacementType.TOP]: (
       <div
-        className={`relative h-full w-full bg-[url(/images/recreation/add-bean.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}>
+        className={`relative flex h-full w-full justify-center bg-[url(/images/recreation/add-bean.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}>
         {PopoverComponent}
       </div>
     ),
     [PlacementType.RIGHT]: (
       <div
-        className={`relative left-[90%] top-[100%] h-full w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation-right']}`}>
+        className={`relative left-[90%] top-[100%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat pl-[22px] pt-[4px] ${styles['appears-animation-right']}`}>
         {PopoverComponent}
       </div>
     ),
@@ -104,7 +104,7 @@ function Role(props: IRole) {
       }}>
       <div className="aspect-[56/60] w-full">
         <div className={styles.role}>
-          <div className="mb-[4px] aspect-[82/50] h-auto w-[150%]">{showAdd && bean && Popover[popoverPlacement]}</div>
+          <div className="mb-[4px] aspect-[86/50] h-auto w-[150%]">{showAdd && bean && Popover[popoverPlacement]}</div>
           {children}
         </div>
       </div>

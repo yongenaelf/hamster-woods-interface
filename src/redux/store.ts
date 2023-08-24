@@ -4,9 +4,11 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
+import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reducer/globalComponentsInfo';
 
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
+  [globalComponentsInfoSlice.name]: GlobalComponentsInfoReducer,
 });
 
 const makeStore = () => {

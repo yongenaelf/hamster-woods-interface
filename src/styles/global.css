@@ -62,6 +62,13 @@ code {
 		cursor: url('../assets/images/recreation/cursor.png'), auto;
 	}
 
+  .bean-show-message-error {
+    @apply bg-[#F65D5D] rounded-[20px] p-[15px];
+    .ant-notification-notice-message {
+      @apply ml-[32px] min-h-[24px] text-[#fff] text-[16px] leading-[24px];
+    }
+  }
+
 	/* 
         demo for antd
         .{app-prefix}-wrapper {

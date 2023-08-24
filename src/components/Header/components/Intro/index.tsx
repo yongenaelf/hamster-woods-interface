@@ -3,14 +3,17 @@ import styles from './style.module.css';
 import CommonBtn from 'components/CommonBtn';
 import CommonModal from 'components/CommonModal';
 import { useState } from 'react';
+import useGetState from 'redux/state/useGetState';
 export default function Intro() {
   const [rulesVisible, setRulesVisible] = useState(false);
+  const { isMobile } = useGetState();
+
   return (
     <>
       <Image
         src={require('assets/images/header-intro.png')}
         alt=""
-        className={styles.intro}
+        className={`${isMobile ? styles.intro : styles['intro-pc']}`}
         onClick={() => setRulesVisible(true)}
       />
       <CommonModal

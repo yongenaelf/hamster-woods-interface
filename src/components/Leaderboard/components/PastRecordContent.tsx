@@ -13,7 +13,7 @@ const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; l
         {icon}
         <span className={`mr-4 font-roboto font-bold text-white ${isMobile ? 'text-sm' : 'text-lg'}`}>{leftText}</span>
       </div>
-      <span className="diagonal-bg-[#0538C9] w-8"></span>
+      <span className="w-8 diagonal-bg-[#0538C9]"></span>
       <div className="ml-2 flex items-center justify-center text-xl font-bold text-[#FFD200]">
         <div>{value === -1 ? '-' : value?.toLocaleString() ?? '-'}</div>
       </div>
@@ -46,7 +46,7 @@ export const PastRecordContent = () => {
     <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
       <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-2 shadow-inner">
         <select
-          className={`bg-[#0C40D4] font-roboto text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
+          className={`font-roboto bg-[#0C40D4] text-white ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
           onChange={(e) => setSelectedSeason(e.target.value)}>
           {data?.season.map((i) => (
             <option key={i.id} value={i.id}>
