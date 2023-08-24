@@ -2,6 +2,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { IRankResult } from '../data/rankResult';
 import { LeaderBoardItem } from './LeaderBoardItem';
 import { TabContentUser } from './TabContentUser';
+import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 
 export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshTime: string }) => {
   const isMobile = useIsMobile();
@@ -44,8 +45,8 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
                     isCurrentUserRank={i.rank === data.selfRank.rank}
                   />
                 ))}
-                {data?.rankingList.length < 100
-                  ? Array(100 - data.rankingList.length)
+                {data?.rankingList.length < MAX_LEADERBOARD_ITEMS
+                  ? Array(MAX_LEADERBOARD_ITEMS - data.rankingList.length)
                       .fill('')
                       .map((_i, j) => (
                         <div
@@ -63,7 +64,7 @@ export const TabContent = ({ data, refreshTime }: { data?: IRankResult; refreshT
             </div>
           </div>
           <TabContentUser
-            showMeIcon={data?.selfRank.rank > 99}
+            showMeIcon={data?.selfRank.rank >= MAX_LEADERBOARD_ITEMS}
             rank={data?.selfRank.rank}
             score={data?.selfRank.score}
             address={data?.selfRank.caAddress}

@@ -1,4 +1,5 @@
 import { graphQLRequest } from 'api/graphql';
+import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
 import useSWR from 'swr';
 
 export interface ITransactionInfo {
@@ -30,7 +31,7 @@ export const useGameHis = (address: string) => {
         getGameHisDto: {
           caAddress: "${address}"
           skipCount: 0
-          maxResultCount: 100
+          maxResultCount: ${MAX_GAME_RECORD_ITEMS}
         }
       ) {
         gameList {
