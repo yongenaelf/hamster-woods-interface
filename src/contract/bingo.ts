@@ -1,4 +1,4 @@
-import { IBoutInformation, IContractError, IPlayerInformation } from 'types';
+import { IBoutInformation, IContractError, IGameSetting, IPlayerInformation } from 'types';
 import contractRequest from './contractRequest';
 
 export enum ContractMethodType {
@@ -29,6 +29,10 @@ export const CheckBeanPass = async (address: string): Promise<{ value: boolean }
 
 export const GetPlayerInformation = async (address: string): Promise<IPlayerInformation> => {
   return await bingoContract('GetPlayerInformation', address, ContractMethodType.VIEW);
+};
+
+export const GetGameLimitSettings = async (): Promise<IGameSetting> => {
+  return await bingoContract('GetGameLimitSettings', null, ContractMethodType.VIEW);
 };
 
 export const GetBoutInformation = async (playId: string): Promise<IBoutInformation> => {

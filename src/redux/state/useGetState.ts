@@ -11,6 +11,8 @@ const useGetState = () => {
     isLock: infoState.loginStatus === LoginStatus.LOCK,
     walletType: infoState.walletType,
     walletInfo: infoState.walletInfo,
+    assetVisible: infoState.assetVisible,
+    playerInfo: infoState.playerInfo,
   };
 };
 

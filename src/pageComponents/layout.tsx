@@ -21,6 +21,7 @@ import sourceMap from 'constants/resource';
 
 import { usePathname } from 'next/navigation';
 import GameRecord from 'components/GameRecord';
+import useGetState from 'redux/state/useGetState';
 
 ConfigProvider.setGlobalConfig({
   storageMethod: new Store(),
@@ -41,6 +42,8 @@ const Layout = dynamic(async () => {
     const [hasLoadedSource, setHasLoadedSource] = useState(false);
 
     const pathname = usePathname();
+
+    const { isMobile: isMobileStore } = useGetState();
 
     const loadResourceList = () => {
       if (!sourceMap.length) {
@@ -90,7 +93,7 @@ const Layout = dynamic(async () => {
     };
 
     const showHeaderAndFooter = useMemo(() => {
-      return pathname !== '/login';
+      return pathname === '/';
     }, [pathname]);
 
     useEffect(() => {
@@ -114,7 +117,7 @@ const Layout = dynamic(async () => {
     return hasLoadedSource ? (
       <>
         <AntdLayout className="xx-wrapper flex h-[100vh] w-[100vw] flex-col overflow-hidden">
-          {showHeaderAndFooter && <Header />}
+          {showHeaderAndFooter && isMobileStore && <Header />}
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             {children}
             <Leaderboard />

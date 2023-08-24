@@ -16,6 +16,7 @@ const initialState: InfoStateType = {
   loginStatus: LoginStatus.UNLOGIN,
   showLeaderboard: false,
   showGameRecord: false,
+  assetVisible: false,
 };
 
 // Actual Slice
@@ -47,6 +48,12 @@ export const infoSlice = createSlice({
     toggleShowGameRecord(state) {
       state.showGameRecord = !state.showGameRecord;
     },
+    setAssetVisible(state, action) {
+      state.assetVisible = action.payload;
+    },
+    setGameSetting(state, action) {
+      state.gameSetting = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -69,6 +76,8 @@ export const {
   setPlayerInfo,
   toggleShowLeaderboard,
   toggleShowGameRecord,
+  setAssetVisible,
+  setGameSetting,
 } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;

@@ -24,7 +24,7 @@ import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
 import RecreationModal, { RecreationModalType } from './components/RecreationModal';
 import { useEffectOnce } from 'react-use';
-import { CheckBeanPass, GetBingoReward, GetBoutInformation, GetPlayerInformation, Play } from 'contract/bingo';
+import { CheckBeanPass, GetBingoReward, GetPlayerInformation, Play } from 'contract/bingo';
 import { sleep } from '@portkey/utils';
 import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
@@ -32,10 +32,12 @@ import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
 import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
-import { BeanPassResons } from 'types';
+import { BeanPassResons, WalletType } from 'types';
 import { message } from 'antd';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
+import { store } from 'redux/store';
+import { setAssetVisible } from 'redux/reducer/info';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -65,7 +67,7 @@ export default function Game() {
   const [resetStart, setResetStart] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);
 
-  const { isMobile, isLogin } = useGetState();
+  const { isMobile, isLogin, walletType } = useGetState();
 
   const [goStatus, setGoStatus] = useState<Status>(Status.DISABLED);
   const [showAdd, setShowAdd] = useState<boolean>(false);
@@ -236,55 +238,67 @@ export default function Game() {
     }
   };
 
+  const checkBeanPassStatus = useCallback(async () => {
+    let beanPassClaimClaimableRes;
+    try {
+      beanPassClaimClaimableRes = await getBeanPassClaimClaimable({
+        caAddress: address,
+      });
+      console.log('BeanPassClaimClaimableRes', beanPassClaimClaimableRes);
+    } catch (err) {
+      console.log('checkBeanPassStatusError:', err);
+      return;
+    }
+    const { claimable, reason } = beanPassClaimClaimableRes;
+    if (claimable) {
+      setBeanPassModalType(GetBeanPassStatus.Abled);
+    } else {
+      if (reason === BeanPassResons.Claimed) {
+        setBeanPassModalType(GetBeanPassStatus.Noneleft);
+      } else if (reason === BeanPassResons.InsufficientElfAmount) {
+        setBeanPassModalType(GetBeanPassStatus.Recharge);
+      } else if (reason === BeanPassResons.DoubleClaim) {
+        setBeanPassModalType(GetBeanPassStatus.Notfound);
+      }
+    }
+    setBeanPassModalVisible(true);
+  }, [address]);
+
   const initCheckBeanPass = useCallback(async () => {
     try {
       const hasBeanPass = await CheckBeanPass(address);
-      setHasNft(hasBeanPass.value);
-      if (!hasBeanPass.value) setGoStatus(Status.DISABLED);
+      console.log(hasBeanPass);
+      if (hasBeanPass && hasBeanPass.value) {
+        setHasNft(true);
+        setNFTModalType(ShowBeanPassType.Display);
+        setIsShowNFT(true);
+      } else {
+        setGoStatus(Status.DISABLED);
+        checkBeanPassStatus();
+      }
     } catch (error) {
       console.error('=====CheckBeanPass error', error);
     }
-
-    // TODO
-    // if (hasBeanPass.value) {
-    //   setBeanPassModalType(GetBeanPassStatus.Display);
-    //   setBeanPassModalVisible(true);
-    //   return;
-    // }
-    // const BeanPassClaimClaimableRes = await getBeanPassClaimClaimable({
-    //   token: '',
-    //   caAddress: address,
-    //   CaHash: '',
-    // });
-    // console.log('BeanPassClaimClaimableRes', BeanPassClaimClaimableRes);
-    // const { claimable, reason } = BeanPassClaimClaimableRes;
-    // if (claimable) {
-    //   setBeanPassModalType(GetBeanPassStatus.Abled);
-    // } else {
-    //   if (reason === BeanPassResons.Claimed) {
-    //     setBeanPassModalType(GetBeanPassStatus.Noneleft);
-    //   } else if (reason === BeanPassResons.InsufficientElfAmount) {
-    //     setBeanPassModalType(GetBeanPassStatus.Recharge);
-    //   } else if (reason === BeanPassResons.DoubleClaim) {
-    //     setBeanPassModalType(GetBeanPassStatus.Notfound);
-    //   }
-    // }
-    // setBeanPassModalVisible(true);
   }, [address]);
 
   const handleConfirm = async () => {
     if (beanPassModalType === GetBeanPassStatus.Abled) {
       const getNFTRes = await receiveBeanPassNFT({
-        token: '',
         caAddress: address,
-        CaHash: '',
       });
       const { claimable, reason } = getNFTRes;
       if (!claimable) {
         message.error(reason);
+        return;
       }
+      setBeanPassModalVisible(false);
+      setNFTModalType(ShowBeanPassType.Success);
+      setIsShowNFT(true);
     } else if (beanPassModalType === GetBeanPassStatus.Recharge) {
-      //open asset
+      if (walletType === WalletType.discover || walletType === WalletType.unknown) {
+        return;
+      }
+      router.push('/asset');
     }
   };
 

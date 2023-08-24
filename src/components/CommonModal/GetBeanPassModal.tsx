@@ -49,9 +49,11 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
           return <p key={text}>{text}</p>;
         })}
       </div>
-      <div className="mx-2">
-        <CommonBtn title={displayText.btnText} onClick={props.onConfirm} className={styles.confirmBtn}></CommonBtn>
-      </div>
+      {displayText.btnText && (
+        <div className="mx-2">
+          <CommonBtn title={displayText.btnText} onClick={props.onConfirm} className={styles.confirmBtn}></CommonBtn>
+        </div>
+      )}
     </Modal>
   );
 }
