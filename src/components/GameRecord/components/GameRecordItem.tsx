@@ -5,6 +5,7 @@ import { middleEllipsis } from 'utils/middleEllipsis';
 import { useIsMobile } from 'redux/selector/mobile';
 import { getDateFormat } from 'utils/getDateFormat';
 import { formatElfValue } from 'utils/formatElfValue';
+import { EXPLORER_BASE_URL } from 'constants/platform';
 
 const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
   const isMobile = useIsMobile();
@@ -18,7 +19,11 @@ const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
           <tr>
             <th className="pb-4">Roll</th>
             <th className="pb-4 text-right">
-              <a href="#" className="text-white underline" target="_blank" rel="noopener noreferrer">
+              <a
+                href={`https://${EXPLORER_BASE_URL}/tx/${data.transactionId}`}
+                className="text-white underline"
+                target="_blank"
+                rel="noopener noreferrer">
                 View on Explore
               </a>
             </th>

@@ -22,6 +22,8 @@ interface IGameHistoryResult {
   gameList: IGameItem[];
 }
 
+// const caAddress = 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW'
+
 export const useGameHis = () => {
   const address = useAddressWithPrefixSuffix();
   return useSWR<IGameHistoryResult | undefined>([address, 'getGameHis'], async () => {

@@ -35,7 +35,7 @@ export const TabContent = ({ data, emptyText, children }: ITabContent) => {
             </div>
           ) : (
             <>
-              <div className="flex h-[16rem] w-full flex-col bg-blue-700 p-4 shadow-inner">
+              <div className="flex flex-grow w-full flex-col bg-blue-700 p-4 shadow-inner">
                 <div className="-mr-4 h-1 flex-grow overflow-y-scroll">
                   <div className="h-full overflow-y-auto">
                     {data?.rankingList.map((i) => (

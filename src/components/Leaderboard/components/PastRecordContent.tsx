@@ -107,7 +107,7 @@ export const PastRecordContent = () => {
               <div className="flex-1">
                 <img
                   src={require('assets/images/past-record-icon.png').default.src}
-                  className="mx-auto w-[22rem] px-4 pb-8"
+                  className="mx-auto h-1/3 px-4 pb-8"
                   alt="Past Record"
                 />
                 <div>
