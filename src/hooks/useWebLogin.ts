@@ -221,7 +221,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const contract = ContractRequest.get();
     const config = {
       chainId: ChainId,
-      rpcUrl: process.env.NEXT_PUBLIC_RPC_SERVER,
+      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io', // TODO
     };
     contract.setWallet(walletInfo, walletType);
     contract.setConfig(config);
