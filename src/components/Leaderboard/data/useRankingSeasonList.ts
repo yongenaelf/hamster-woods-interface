@@ -3,10 +3,11 @@ import useSWR from 'swr';
 import { IRankingSeasonListResult } from './types';
 
 export const useRankingSeasonList = () => {
-  return useSWR<IRankingSeasonListResult>('getRankingSeasonList', async () => {
-    const { getRankingSeasonList } = await graphQLRequest<{
-      getRankingSeasonList: IRankingSeasonListResult;
-    }>(`
+  return useSWR<IRankingSeasonListResult | undefined>('getRankingSeasonList', async () => {
+    const { getRankingSeasonList } =
+      (await graphQLRequest<{
+        getRankingSeasonList: IRankingSeasonListResult;
+      }>(`
     query {
       getRankingSeasonList {
         season {
@@ -19,7 +20,7 @@ export const useRankingSeasonList = () => {
         }
       }
     }
-  `);
+  `)) || {};
 
     return getRankingSeasonList;
   });

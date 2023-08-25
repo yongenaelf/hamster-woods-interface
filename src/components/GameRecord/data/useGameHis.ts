@@ -1,6 +1,6 @@
 import { graphQLRequest } from 'api/graphql';
 import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
-import { useAddress } from 'hooks/useAddress';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 import useSWR from 'swr';
 
 export interface ITransactionInfo {
@@ -22,12 +22,15 @@ interface IGameHistoryResult {
   gameList: IGameItem[];
 }
 
+// const caAddress = 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW'
+
 export const useGameHis = () => {
-  const address = useAddress();
-  return useSWR<IGameHistoryResult>([address, 'getGameHis'], async () => {
-    const { getGameHis } = await graphQLRequest<{
-      getGameHis: IGameHistoryResult;
-    }>(`
+  const address = useAddressWithPrefixSuffix();
+  return useSWR<IGameHistoryResult | undefined>([address, 'getGameHis'], async () => {
+    const { getGameHis } =
+      (await graphQLRequest<{
+        getGameHis: IGameHistoryResult;
+      }>(`
     query {
       getGameHis(
         getGameHisDto: {
@@ -54,7 +57,7 @@ export const useGameHis = () => {
         }
       }
     }
-  `);
+  `)) || {};
 
     return getGameHis;
   });

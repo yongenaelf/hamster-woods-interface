@@ -4,18 +4,26 @@ import { copyText } from 'utils/copyText';
 import { middleEllipsis } from 'utils/middleEllipsis';
 import { useIsMobile } from 'redux/selector/mobile';
 import { getDateFormat } from 'utils/getDateFormat';
+import { formatElfValue } from 'utils/formatElfValue';
+import { EXPLORER_BASE_URL } from 'constants/platform';
 
 const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
+  const isMobile = useIsMobile();
+
   if (!data) return null;
 
   return (
-    <div className="mb-2 w-full rounded-2xl bg-[#144CEA] p-4 text-white">
+    <div className={`mb-2 w-full rounded-2xl bg-[#144CEA] p-4 text-white ${isMobile ? 'text-xs' : ''}`}>
       <table className="w-full">
         <thead>
           <tr>
-            <th className="pb-4 text-left">Roll</th>
+            <th className="pb-4">Roll</th>
             <th className="pb-4 text-right">
-              <a href="#" className="text-white underline" target="_blank" rel="noopener noreferrer">
+              <a
+                href={`https://${EXPLORER_BASE_URL}/tx/${data.transactionId}`}
+                className="text-white underline"
+                target="_blank"
+                rel="noopener noreferrer">
                 View on Explore
               </a>
             </th>
@@ -32,7 +40,7 @@ const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
           </tr>
           <tr>
             <td className="text-white text-opacity-60">Transaction Fee</td>
-            <td className="text-right">{data.transactionFee} ELF</td>
+            <td className="text-right">{formatElfValue(data.transactionFee)} ELF</td>
           </tr>
           <tr>
             <td className="text-white text-opacity-60">Transaction ID</td>
@@ -63,7 +71,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
   return (
     <Disclosure as={Wrapper}>
       {({ open }) => (
-        <>
+        <div className="text-left">
           <div className="flex justify-between pb-4">
             <div
               className={`text-lg font-bold leading-normal text-white ${isMobile ? 'text-[1rem]' : 'text-[2.5rem]'}`}>
@@ -75,9 +83,9 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-white text-opacity-60 ${isMobile ? 'text-[1rem]' : 'text-md'}`}>
-                <th className="pb-2 text-left">Random step result</th>
-                <th className="text-left">Earn points</th>
+              <tr className={`text-white text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+                <th>Random step result</th>
+                <th>Earn points</th>
                 <th className="text-right">Transaction Fee</th>
               </tr>
             </thead>
@@ -85,7 +93,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
               <tr className="font-bold text-white">
                 <td>{gridNum}</td>
                 <td>{score}</td>
-                <td className="text-right">{transcationFee} ELF</td>
+                <td className="text-right">{formatElfValue(transcationFee)} ELF</td>
               </tr>
             </tbody>
           </table>
@@ -98,7 +106,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             ))}
             {open ? <Disclosure.Button className="py-2 text-[#003658]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   );
