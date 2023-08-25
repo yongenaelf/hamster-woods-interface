@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
 import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reducer/globalComponentsInfo';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [globalComponentsInfoSlice.name]: GlobalComponentsInfoReducer,
 });
