@@ -115,7 +115,7 @@ const Layout = dynamic(async () => {
 
     return hasLoadedSource ? (
       <>
-        <AntdLayout className="xx-wrapper flex h-[100vh] w-[100vw] flex-col overflow-hidden">
+        <AntdLayout className="xx-wrapper flex h-full w-[100vw] flex-col overflow-hidden">
           {showHeaderAndFooter && isMobileStore && <Header />}
           <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
             {children}

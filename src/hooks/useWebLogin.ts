@@ -148,12 +148,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
     const provider = await detect();
     if (!provider) {
-      console.log('unknow');
+      showMessage.error('unknow');
       return;
     }
     const network = await provider?.request({ method: 'network' });
     if (network !== Network) {
-      console.log('network error');
+      showMessage.error('network error');
       return;
     }
     let accounts = await provider?.request({ method: 'accounts' });
@@ -165,7 +165,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (accounts[ChainId] && accounts[ChainId].length > 0) {
       onAccountsSuccess(provider, accounts);
     } else {
-      console.log('account error');
+      showMessage.error('account error');
     }
   }, []);
 
