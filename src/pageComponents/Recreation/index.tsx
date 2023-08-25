@@ -23,7 +23,7 @@ import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
 import RecreationModal, { RecreationModalType } from './components/RecreationModal';
 import { useDebounce, useDeepCompareEffect, useEffectOnce, useWindowSize } from 'react-use';
-import { CheckBeanPass, GetBingoReward, GetBoutInformation, GetPlayerInformation, Play } from 'contract/bingo';
+import { CheckBeanPass, GetBingoReward, GetBoutInformation, Play } from 'contract/bingo';
 import { sleep } from '@portkey/utils';
 import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';

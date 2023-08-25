@@ -31,8 +31,6 @@ ConfigProvider.setGlobalConfig({
 });
 
 const Layout = dynamic(async () => {
-  const info = store.getState().info.baseInfo;
-
   return (props: React.PropsWithChildren<{}>) => {
     const { children } = props;
 

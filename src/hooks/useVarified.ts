@@ -105,6 +105,8 @@ const useVerifier = () => {
       } else {
         console.error('sendVerificationCode params error');
       }
+
+      return undefined;
     },
     [reCaptchaHandler],
   );

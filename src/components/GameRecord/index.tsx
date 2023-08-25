@@ -3,7 +3,6 @@ import { useGameHis } from './data/useGameHis';
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowGameRecord } from 'redux/reducer/info';
-import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
 import GameRecordModal from './components/GameRecordModal';
 
 export const GameRecord = () => {
