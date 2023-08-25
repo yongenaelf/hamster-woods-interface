@@ -4,6 +4,8 @@ import { toggleShowLeaderboard } from '../redux/reducer/info';
 import { useWeeklyRank } from '../components/Leaderboard/data/useWeeklyRank';
 import { useEffect } from 'react';
 import { storybookStore } from '../../.storybook/preview';
+import { useSeasonRank } from '../components/Leaderboard/data/useSeasonRank';
+import { add } from 'date-fns';
 
 const meta: Meta<typeof Leaderboard> = {
   title: 'BeangoTown/Leaderboard',
@@ -15,7 +17,7 @@ const meta: Meta<typeof Leaderboard> = {
   decorators: [
     (Story) => {
       useEffect(() => {
-        storybookStore.dispatch(toggleShowLeaderboard());
+        if (!storybookStore.getState().info.showLeaderboard) storybookStore.dispatch(toggleShowLeaderboard());
       }, []);
 
       return <Story />;
@@ -26,11 +28,12 @@ const meta: Meta<typeof Leaderboard> = {
 export default meta;
 type Story = StoryObj<typeof Leaderboard>;
 
-export const Weekly: Story = {
+export const WithData: Story = {
   args: {
     records: 1,
     rank: 1,
     unranked: false,
+    status: 0,
   },
   argTypes: {
     records: {
@@ -39,17 +42,31 @@ export const Weekly: Story = {
     rank: {
       control: { type: 'range', min: 1, max: 100, step: 1 },
     },
+    status: {
+      control: { type: 'range', min: 0, max: 2, step: 1 },
+    },
   },
   decorators: [
     (Story, context) => {
-      const { rank, records, unranked } = context.args as { rank: number; records: number; unranked: boolean };
-      const { mutate } = useWeeklyRank();
+      const { rank, records, unranked, status } = context.args as {
+        rank: number;
+        records: number;
+        unranked: boolean;
+        status: number;
+      };
+      const { mutate: weekly } = useWeeklyRank();
+      const { mutate: season } = useSeasonRank();
 
       useEffect(() => {
-        mutate(
+        weekly(
           {
-            status: 1,
-            refreshTime: '2023-08-29T01:00:00',
+            status,
+            refreshTime:
+              status === 1
+                ? add(new Date(), {
+                    weeks: 1,
+                  }).toISOString()
+                : null,
             rankingList: Array(records)
               .fill('')
               .map((_i, j) => ({
@@ -65,7 +82,24 @@ export const Weekly: Story = {
           },
           false,
         );
-      }, [records, rank]);
+        season(
+          {
+            rankingList: Array(records)
+              .fill('')
+              .map((_i, j) => ({
+                rank: j + 1,
+                score: 358,
+                caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
+              })),
+            selfRank: {
+              rank: unranked ? -1 : rank,
+              score: unranked ? 0 : 358,
+              caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
+            },
+          },
+          false,
+        );
+      }, [records, rank, unranked, status]);
 
       return <Story />;
     },
