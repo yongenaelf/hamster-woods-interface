@@ -1,6 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+'use client';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { isMobileDevices } from 'utils/isMobile';
-import { ChainId, LOGIN_EARGLY_KEY, Network, portKeyExtensionUrl } from 'constants/platform';
+import {
+  ChainId,
+  LOGIN_EARGLY_KEY,
+  Network,
+  PORTKEY_ORIGIN_CHAIN_ID_KEY,
+  portKeyExtensionUrl,
+} from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import {
@@ -23,7 +30,10 @@ import ContractRequest from 'contract/contractRequest';
 import { CheckBeanPass, GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
 import { SignatureParams } from 'aelf-web-login';
 import useGetState from 'redux/state/useGetState';
-import DetectProvider from 'utils/detectProvider';
+import DetectProvider from 'utils/InstanceProvider';
+import useIntervalAsync from './useInterValAsync';
+import InstanceProvider from 'utils/InstanceProvider';
+import showMessage from 'utils/setGlobalComponentsInfo';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -42,6 +52,49 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [discoverInfo, setDiscoverInfo] = useState<IDiscoverInfo>();
 
   const [didWalletInfo, setDidWalletInfo] = useState<PortkeyInfoType>();
+
+  const syncAddress = useRef<boolean>(false);
+
+  const { walletInfo, walletType } = useGetState();
+
+  useIntervalAsync(async () => {
+    if (walletType !== WalletType.portkey) {
+      return;
+    }
+    if (walletInfo) {
+      return;
+    }
+    if (syncAddress.current) {
+      return;
+    }
+    showMessage.loading();
+    const wallet = await InstanceProvider.getWalletInstance();
+
+    if (!wallet?.portkeyInfo) {
+      return;
+    }
+    const { holder, filteredHolders } = await getAccountInfoSync(ChainId, wallet?.portkeyInfo);
+
+    if (filteredHolders.length) {
+      console.log(filteredHolders);
+      store.dispatch(
+        setWalletInfo({
+          portkeyInfo: {
+            caInfo: {
+              caAddress: filteredHolders[0].address,
+              caHash: holder.caHash,
+            },
+            pin: wallet.portkeyInfo.pin,
+            chainId: ChainId,
+            walletInfo: wallet.portkeyInfo.walletInfo,
+            accountInfo: wallet.portkeyInfo.accountInfo,
+          },
+        }),
+      );
+
+      syncAddress.current = true;
+    }
+  }, 5000);
 
   const detect = useCallback(async (): Promise<IPortkeyProvider> => {
     if (discoverProvider?.isConnected()) {
@@ -151,8 +204,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     return tokenRes;
   };
 
-  const { walletInfo, walletType } = useGetState();
-
   const updatePlayerInformation = useCallback(async (address: string) => {
     try {
       const information = await GetPlayerInformation(address);
@@ -164,6 +215,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   }, []);
 
   const initializeContract = useCallback(async () => {
+    if (!walletInfo) {
+      return;
+    }
     const contract = ContractRequest.get();
     const config = {
       chainId: ChainId,
@@ -220,9 +274,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const handleFinish = async (type: WalletType, walletInfo: PortkeyInfoType | IDiscoverInfo) => {
     console.log('wallet', type, walletInfo);
     store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-    store.dispatch(setWalletType(type));
 
     if (type === WalletType.discover) {
+      store.dispatch(setWalletType(type));
       localStorage.setItem(LOGIN_EARGLY_KEY, 'true');
       setDiscoverInfo(walletInfo);
       setWallet({ discoverInfo: walletInfo as IDiscoverInfo });
@@ -232,23 +286,29 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           discoverInfo: walletInfo,
         }),
       );
+      InstanceProvider.setWalletInfoInstance({
+        discoverInfo: walletInfo,
+      });
     } else if (type === WalletType.portkey) {
+      localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, (walletInfo as PortkeyInfoType).chainId);
       did.save((walletInfo as PortkeyInfoType)?.pin, KEY_NAME);
-      const accountInfoSync = await getAccountInfoSync(ChainId, walletInfo as PortkeyInfoType);
-      console.log(accountInfoSync);
-      store.dispatch(setAccountInfoSync(accountInfoSync));
       setDidWalletInfo(walletInfo as PortkeyInfoType);
       setWallet({
         portkeyInfo: walletInfo as PortkeyInfoType,
-        accountInfoSync: accountInfoSync,
       });
       setCurWalletType(type);
-      store.dispatch(
-        setWalletInfo({
-          portkeyInfo: walletInfo,
-          accountInfoSync: accountInfoSync,
-        }),
-      );
+      store.dispatch(setWalletType(WalletType.portkey));
+      if ((walletInfo as PortkeyInfoType).chainId !== ChainId) {
+        InstanceProvider.setWalletInfoInstance({
+          portkeyInfo: walletInfo as PortkeyInfoType,
+        });
+      } else {
+        store.dispatch(
+          setWalletInfo({
+            portkeyInfo: walletInfo,
+          }),
+        );
+      }
     }
   };
 
@@ -288,7 +348,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       if (!discoverInfo) {
         throw new Error('Discover not connected');
       }
-      const discoverProvider = await DetectProvider.get();
+      const discoverProvider = await DetectProvider.getDetectProvider();
       const provider = discoverProvider! as IPortkeyProvider;
       const signInfo = params.signInfo;
       const signedMsgObject = await provider.request({

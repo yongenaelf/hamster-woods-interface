@@ -20,6 +20,7 @@ export default function MyAsset() {
     <PortkeyAssetProvider
       originChainId={walletInfo?.portkeyInfo?.chainId || ChainId}
       pin={walletInfo?.portkeyInfo?.pin}
+      caHash={walletInfo?.portkeyInfo?.caInfo.caHash}
       didStorageKeyName={KEY_NAME}>
       <Asset
         backIcon={<LeftOutlined />}

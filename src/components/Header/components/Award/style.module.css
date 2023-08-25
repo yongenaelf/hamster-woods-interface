@@ -7,5 +7,5 @@
   @apply h-8 w-8;
 }
 .award__amount {
-  @apply ml-2 font-paytone text-[20px] leading-6 text-white;
+  @apply ml-2 font-fonarto text-[20px] leading-6 text-white;
 }
