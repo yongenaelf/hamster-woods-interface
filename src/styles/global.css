@@ -15,6 +15,8 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -52,15 +54,22 @@ code {
 }
 
 @font-face {
-	font-family: 'Fonarto';
-	src: url('../assets/font/Fonarto-Regular.otf');
+  font-family: 'Fonarto';
+  src: url('../assets/font/Fonarto-Regular.otf');
+}
+
+.anticon[tabindex],
+a,
+button {
+  cursor: pointer;
+  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
 @layer components {
-	.cursor-custom{
-		cursor: pointer;
-		cursor: url('../assets/images/recreation/cursor.png'), auto;
-	}
+  .cursor-custom {
+    cursor: pointer;
+    cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
+  }
 
   .bean-show-message-error {
     @apply bg-[#F65D5D] rounded-[20px] p-[15px];
@@ -69,7 +78,7 @@ code {
     }
   }
 
-	/* 
+  /* 
         demo for antd
         .{app-prefix}-wrapper {
             .ant-layout {
@@ -77,4 +86,8 @@ code {
             }
         }
     */
+}
+
+.portkey-ui-wrapper {
+  @apply h-full;
 }

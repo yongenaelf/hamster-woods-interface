@@ -1,15 +1,18 @@
+'use client';
 import Image from 'next/image';
 import styles from './styles.module.css';
 import { useCallback, useState } from 'react';
 import CommonModal from 'components/CommonModal';
 import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
-import { KEY_NAME, LOGIN_EARGLY_KEY } from 'constants/platform';
+import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_ORIGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
-import { setLoginStatus, toggleShowGameRecord } from 'redux/reducer/info';
+import { setLoginStatus, setWalletInfo, setWalletType, toggleShowGameRecord } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
+import { did } from '@portkey/did-ui-react';
+import { ChainId } from '@portkey/provider-types';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -37,10 +40,23 @@ export default function Setting() {
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
   }, [walletType]);
 
-  const handleExit = () => {
-    window.localStorage.removeItem(KEY_NAME);
-    window.localStorage.removeItem(LOGIN_EARGLY_KEY);
+  const handleExit = async () => {
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
+    store.dispatch(setWalletInfo(null));
+    store.dispatch(setWalletType(WalletType.unknown));
+    if (walletType === WalletType.portkey) {
+      window.localStorage.removeItem(KEY_NAME);
+      const originChainId = localStorage.getItem(PORTKEY_ORIGIN_CHAIN_ID_KEY);
+      localStorage.removeItem(PORTKEY_ORIGIN_CHAIN_ID_KEY);
+      if (originChainId) {
+        await did.logout({
+          chainId: originChainId as ChainId,
+        });
+      }
+    } else if (walletType === WalletType.discover) {
+      window.localStorage.removeItem(LOGIN_EARGLY_KEY);
+    }
+
     router.push('/login');
   };
   return (

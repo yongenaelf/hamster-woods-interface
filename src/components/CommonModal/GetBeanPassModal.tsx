@@ -12,8 +12,8 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         title: 'Get a BeanPass',
         btnText: 'Go to wallet',
         contentArr: [
-          'You need to have a BeanPass NFT to start the game！',
-          'You need to deposit 5 ELF on the current sidechain to claim the BeanPass NFT.',
+          'You need to have a BeanPass NFT to start the game. ',
+          'To claim the free BeanPass, please make sure your MainChain and SideChain balances combined to be no less than 5 ELF.',
         ],
       },
       [GetBeanPassStatus.Abled]: {

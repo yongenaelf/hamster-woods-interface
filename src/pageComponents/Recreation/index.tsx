@@ -40,7 +40,6 @@ import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
-import { setAssetVisible } from 'redux/reducer/info';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -71,7 +70,7 @@ export default function Game() {
   const [resetStart, setResetStart] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);
 
-  const { isMobile, isLogin, playerInfo, walletType } = useGetState();
+  const { isMobile, isLogin, playerInfo, walletType, walletInfo } = useGetState();
 
   const [goStatus, setGoStatus] = useState<Status>(Status.DISABLED);
   const [showAdd, setShowAdd] = useState<boolean>(false);
@@ -301,28 +300,22 @@ export default function Game() {
     setBeanPassModalVisible(true);
   }, [address]);
 
-  const initCheckBeanPass = useCallback(
-    async (modalStatus = true) => {
-      try {
-        console.log('=====CheckBeanPass address', address);
-        const hasBeanPass = await CheckBeanPass(address);
-        console.log(hasBeanPass);
-        if (hasBeanPass && hasBeanPass.value) {
-          setHasNft(true);
-          if (modalStatus) {
-            setNFTModalType(ShowBeanPassType.Display);
-            setIsShowNFT(true);
-          }
-        } else {
-          setGoStatus(Status.DISABLED);
-          checkBeanPassStatus();
-        }
-      } catch (error) {
-        console.error('=====CheckBeanPass error', error);
+  const initCheckBeanPass = useCallback(async () => {
+    try {
+      console.log('=====CheckBeanPass address', address);
+      const hasBeanPass = await CheckBeanPass(address);
+      console.log(hasBeanPass);
+      if (hasBeanPass && hasBeanPass.value) {
+        setHasNft(true);
+      } else {
+        setGoStatus(Status.DISABLED);
+        checkBeanPassStatus();
       }
-    },
-    [address],
-  );
+      showMessage.hideLoading();
+    } catch (error) {
+      console.error('=====CheckBeanPass error', error);
+    }
+  }, [address]);
 
   const handleConfirm = async () => {
     if (beanPassModalType === GetBeanPassStatus.Abled) {
@@ -347,6 +340,7 @@ export default function Game() {
 
   useEffect(() => {
     if (address) {
+      showMessage.loading();
       initCheckBeanPass();
     }
   }, [address]);
@@ -355,9 +349,12 @@ export default function Game() {
     if (!isLogin) {
       router.push('/login');
     } else {
-      initializeContract();
+      if (walletType !== WalletType.unknown && walletInfo) {
+        showMessage.hideLoading();
+        initializeContract();
+      }
     }
-  }, [isLogin, router]);
+  }, [initializeContract, isLogin, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
@@ -380,7 +377,7 @@ export default function Game() {
   const onShowNFTModalCancel = () => {
     if (nftModalType === ShowBeanPassType.Success) {
       updatePlayerInformation(address);
-      initCheckBeanPass(false);
+      initCheckBeanPass();
     }
     setIsShowNFT(false);
   };
@@ -410,7 +407,7 @@ export default function Game() {
       )}
       <div
         className={`${styles['game__content']} flex overflow-hidden ${
-          isMobile ? 'w-full flex-1' : 'h-full w-[784px]'
+          isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500px] max-w-[784px]'
         }`}>
         {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
         <SideBorder side="left" />

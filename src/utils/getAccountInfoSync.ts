@@ -6,10 +6,11 @@ export default async function getAccountInfoSync(chainId: string, didWalletInfo?
   const holder = await did.didWallet.getHolderInfoByContract({
     chainId: currentChainId,
     caHash: didWalletInfo?.caInfo?.caHash,
-    // manager: did.didWallet.managementAccount!.address,
   });
   const filteredHolders = holder.managerInfos.filter(
     (manager) => manager?.address === didWalletInfo?.walletInfo?.address,
   );
-  return filteredHolders;
+  console.log({ holder, filteredHolders });
+
+  return { holder, filteredHolders };
 }

@@ -2,14 +2,16 @@ import useSWR from 'swr';
 import { ISeasonRankResult } from './types';
 import { graphQLRequest } from 'api/graphql';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
-import { useAddress } from 'hooks/useAddress';
+import { addPrefixSuffix } from 'utils/addressFormatting';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useSeasonRank = () => {
-  const address = useAddress();
-  return useSWR<ISeasonRankResult>([address, 'getSeasonRank'], async () => {
-    const { getSeasonRank } = await graphQLRequest<{
-      getSeasonRank: ISeasonRankResult;
-    }>(`
+  const address = useAddressWithPrefixSuffix();
+  return useSWR<ISeasonRankResult | undefined>([address, 'getSeasonRank'], async () => {
+    const { getSeasonRank } =
+      (await graphQLRequest<{
+        getSeasonRank: ISeasonRankResult;
+      }>(`
     query {
       getSeasonRank(getRankDto: { 
         caAddress: "${address}"
@@ -28,8 +30,19 @@ export const useSeasonRank = () => {
         }
       }
     }
-  `);
+  `)) || {};
 
-    return getSeasonRank;
+    if (getSeasonRank) {
+      const { rankingList } = getSeasonRank;
+
+      return {
+        ...getSeasonRank,
+        rankingList: rankingList.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })),
+        selfRank: {
+          ...getSeasonRank.selfRank,
+          caAddress: addPrefixSuffix(getSeasonRank.selfRank.caAddress),
+        },
+      };
+    } else return undefined;
   });
 };

@@ -15,3 +15,8 @@ export const BEANGO_TOWN_GRAPHQL_URL = '/AElfIndexer_BeangoTown/BeangoTownIndexe
 
 export const MAX_LEADERBOARD_ITEMS = 100;
 export const MAX_GAME_RECORD_ITEMS = 150;
+
+export const EXPLORER_BASE_URL = window.location.hostname.includes('beangotown.com')
+  ? 'tdvv-explorer.aelf.io'
+  : 'explorer-test-side02.aelf.io';
+export const PORTKEY_ORIGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';

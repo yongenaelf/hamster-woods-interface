@@ -27,11 +27,14 @@ export interface IRankingSeasonListResult {
   season: IRankingSeasonItem[];
 }
 
-export interface ISeasonRankResult extends IRankResult {
-  status?: number;
-  refreshTime?: string;
+export enum WeeklyChallengeStatus {
+  InProgress = 0,
+  Settlement = 1,
+  LastSettlement = 2,
 }
+
+export type ISeasonRankResult = IRankResult;
 export interface IWeeklyRankResult extends IRankResult {
-  status: number;
-  refreshTime: string;
+  status: WeeklyChallengeStatus;
+  refreshTime: string | null;
 }

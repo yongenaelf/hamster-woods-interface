@@ -2,14 +2,16 @@ import useSWR from 'swr';
 import { IWeeklyRankResult } from './types';
 import { graphQLRequest } from 'api/graphql';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
-import { useAddress } from 'hooks/useAddress';
+import { addPrefixSuffix } from 'utils/addressFormatting';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useWeeklyRank = () => {
-  const address = useAddress();
-  return useSWR<IWeeklyRankResult>([address, 'getWeekRank'], async () => {
-    const { getWeekRank } = await graphQLRequest<{
-      getWeekRank: IWeeklyRankResult;
-    }>(`
+  const address = useAddressWithPrefixSuffix();
+  return useSWR<IWeeklyRankResult | undefined>([address, 'getWeekRank'], async () => {
+    const { getWeekRank } =
+      (await graphQLRequest<{
+        getWeekRank: IWeeklyRankResult;
+      }>(`
     query {
       getWeekRank(getRankDto: { 
         caAddress: "${address}"
@@ -30,8 +32,19 @@ export const useWeeklyRank = () => {
         }
       }
     }
-  `);
+  `)) || {};
 
-    return getWeekRank;
+    if (getWeekRank) {
+      const { rankingList } = getWeekRank;
+
+      return {
+        ...getWeekRank,
+        rankingList: rankingList.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })),
+        selfRank: {
+          ...getWeekRank.selfRank,
+          caAddress: addPrefixSuffix(getWeekRank.selfRank.caAddress),
+        },
+      };
+    } else return undefined;
   });
 };
