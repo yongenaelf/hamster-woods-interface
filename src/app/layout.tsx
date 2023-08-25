@@ -10,8 +10,8 @@ import 'styles/theme.css';
 import Provider from 'provider/';
 
 export const metadata = {
-  title: 'Forest',
-  description: 'Forest',
+  title: 'BeanGoTown',
+  description: 'BeanGoTown',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

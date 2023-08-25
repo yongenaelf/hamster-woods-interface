@@ -40,7 +40,6 @@ import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
-import { setAssetVisible } from 'redux/reducer/info';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -320,6 +319,7 @@ export default function Game() {
       } catch (error) {
         console.error('=====CheckBeanPass error', error);
       }
+      showMessage.hideLoading();
     },
     [address],
   );
@@ -347,6 +347,7 @@ export default function Game() {
 
   useEffect(() => {
     if (address) {
+      showMessage.loading();
       initCheckBeanPass();
     }
   }, [address]);
@@ -410,7 +411,7 @@ export default function Game() {
       )}
       <div
         className={`${styles['game__content']} flex overflow-hidden ${
-          isMobile ? 'w-full flex-1' : 'h-full w-[784px]'
+          isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500px] max-w-[784px]'
         }`}>
         {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
         <SideBorder side="left" />
