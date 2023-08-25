@@ -26,14 +26,23 @@ const meta: Meta<typeof Leaderboard> = {
 export default meta;
 type Story = StoryObj<typeof Leaderboard>;
 
-export const Desktop: Story = {
+export const Weekly: Story = {
   args: {
     records: 1,
     rank: 1,
+    unranked: false,
+  },
+  argTypes: {
+    records: {
+      control: { type: 'range', min: 0, max: 99, step: 1 },
+    },
+    rank: {
+      control: { type: 'range', min: 1, max: 100, step: 1 },
+    },
   },
   decorators: [
     (Story, context) => {
-      const { rank, records } = context.args as { rank: number; records: number };
+      const { rank, records, unranked } = context.args as { rank: number; records: number; unranked: boolean };
       const { mutate } = useWeeklyRank();
 
       useEffect(() => {
@@ -49,8 +58,8 @@ export const Desktop: Story = {
                 caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
               })),
             selfRank: {
-              rank: rank,
-              score: 358,
+              rank: unranked ? -1 : rank,
+              score: unranked ? 0 : 358,
               caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
             },
           },

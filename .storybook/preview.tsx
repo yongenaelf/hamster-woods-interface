@@ -1,5 +1,9 @@
 import type { Preview } from '@storybook/react';
+
+import 'antd/dist/antd.css';
 import '../src/styles/global.css';
+import '../src/styles/theme.css';
+
 import React from 'react';
 
 import { Provider } from 'react-redux';
@@ -28,7 +32,6 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const { isMobile } = context.args;
-
       useEffect(() => {
         storybookStore.dispatch(setIsMobile(isMobile));
       }, [isMobile]);
