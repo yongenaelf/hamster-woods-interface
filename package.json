@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "NEXT_PUBLIC_APP_ENV=development next dev",
     "out": "SKIP_SSR=1 next build && next export",
-    "build": "next build",
+    "build": "NEXT_PUBLIC_APP_ENV=production next build",
+    "build-dev": "NEXT_PUBLIC_APP_ENV=development next build",
     "start": "next start",
     "lint": "next lint",
     "dev:analyze": "PORT=4000 ANALYZE=true next dev",

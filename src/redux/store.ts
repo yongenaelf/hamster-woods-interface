@@ -5,10 +5,12 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
 import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reducer/globalComponentsInfo';
+import ConfigInfoReducer, { configInfoSlice } from './reducer/configInfo';
 
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [globalComponentsInfoSlice.name]: GlobalComponentsInfoReducer,
+  [configInfoSlice.name]: ConfigInfoReducer,
 });
 
 const makeStore = () => {
@@ -25,7 +27,7 @@ const makeStore = () => {
       getDefaultMiddleware({
         serializableCheck: false,
       }),
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: process.env.NEXT_PUBLIC_APP_ENV !== 'production',
   });
 
   return {

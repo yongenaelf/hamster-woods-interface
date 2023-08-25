@@ -1,4 +1,4 @@
-FROM node:16.16.0
+FROM node:18.16.0
 
 ARG web=/opt/workspace/aelf-example
 
@@ -7,7 +7,7 @@ WORKDIR ${web}
 COPY . ${web}
 
 RUN yarn \
-    && yarn build
+    && yarn build-dev
 
 ENTRYPOINT yarn start
 

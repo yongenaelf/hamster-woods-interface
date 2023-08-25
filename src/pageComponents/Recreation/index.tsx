@@ -236,7 +236,7 @@ export default function Game() {
         const blockRes = await getBlockHeight(
           ChainId,
           0,
-          process.env.NEXT_PUBLIC_RPC_SERVER!,
+          'https://soho-test2-node-sidechain.aelf.io', // TODO
           boutInformation.expectedBlockHeight,
         );
         if (blockRes) {
