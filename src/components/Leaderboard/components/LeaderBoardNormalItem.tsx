@@ -28,7 +28,7 @@ export const LeaderBoardNormalItem = ({
   return (
     <div
       className={`mb-2 flex w-full items-center rounded-3xl border p-1 ${borderColor} ${bgColor} ${shadow} ${
-        isMobile ? 'h-12' : 'h-24'
+        isMobile ? 'h-12' : 'h-16'
       }`}>
       <Rank rank={rank} />
       <LeaderBoardItemAddress address={address} color={color} />

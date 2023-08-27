@@ -29,7 +29,7 @@ export const TabContentUser = ({ showMeIcon, rank, address, score }: ITabContent
   return (
     <div
       className={`${wrapperClassName} ${
-        isMobile ? 'h-16 p-2' : 'h-24 pb-4 pl-3 pr-4 pt-4'
+        isMobile ? 'h-16 p-2' : 'h-20 pl-2'
       } flex items-center rounded-bl-2xl rounded-br-2xl`}>
       <img
         className={`${isMobile ? 'w-8' : 'w-16'}`}

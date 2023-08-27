@@ -34,7 +34,7 @@ export const LeaderBoardRankItem = ({
       style={{
         boxShadow: `0px 2px 4px 0px rgba(0, 0, 0, 0.12), 0px -3px 0px 0px ${shadowInsetColor} inset`,
       }}>
-      <img className="h-full" src={src} alt="rank" />
+      <img className={`h-full ${isMobile ? '' : 'mx-2'}`} src={src} alt="rank" />
       <LeaderBoardItemAddress address={address} color={textClassName} />
       {isCurrentUserRank ? <Me /> : null}
       <span className="flex-grow"></span>
