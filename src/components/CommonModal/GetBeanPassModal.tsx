@@ -4,13 +4,16 @@ import { BeanPassModalPropsType } from './type';
 import { GetBeanPassStatus } from './type';
 import { useMemo } from 'react';
 import styles from './style.module.css';
+import useGetState from 'redux/state/useGetState';
+import { WalletType } from 'types';
 
 export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsType) {
+  const { walletType } = useGetState();
   const displayText = useMemo(() => {
     return {
       [GetBeanPassStatus.Recharge]: {
         title: 'Get a BeanPass',
-        btnText: 'Go to wallet',
+        btnText: walletType !== WalletType.discover ? 'Go to wallet' : '',
         contentArr: [
           'You need to have a BeanPass NFT to start the game. ',
           'To claim the free BeanPass, please make sure your MainChain and SideChain balances combined to be no less than 5 ELF.',
@@ -40,8 +43,13 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
           'You have already claimed the BeanPass NFT, but it is not in your address.',
         ],
       },
+      [GetBeanPassStatus.Need]: {
+        title: 'Notice',
+        btnText: 'Confirm',
+        contentArr: [`You'll need a BeanPass NFT to start the game.`],
+      },
     }[type];
-  }, [type]);
+  }, [type, walletType]);
   return (
     <Modal open={props.open} title={displayText.title} onCancel={props.onCancel} className={styles.getBeanPassModal}>
       <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px]">
