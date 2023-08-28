@@ -138,6 +138,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   }, [router]);
 
   const checkProviderConnected = useCallback(async () => {
+    if (walletType !== WalletType.discover) {
+      return;
+    }
     const detectInfo = await detect();
     if (!detectInfo) return;
 
@@ -146,11 +149,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       return;
     }
     detectInfo.on('disconnected', () => {
-      if (!detectInfo.isConnected()) {
-        logout();
-      }
+      logout();
     });
-  }, [detect, logout]);
+  }, [detect, logout, walletType]);
 
   useEffect(() => {
     checkProviderConnected();
