@@ -30,6 +30,26 @@ const meta: Meta<typeof Leaderboard> = {
 export default meta;
 type Story = StoryObj<typeof Leaderboard>;
 
+export const NoData: Story = {
+  decorators: [
+    (Story) => {
+      const { mutate: weekly } = useWeeklyRank();
+      const { mutate: season } = useSeasonRank();
+      const { mutate: list } = useRankingSeasonList();
+      const { mutate: his } = useRankingSeasonHis('11');
+
+      useEffect(() => {
+        weekly(undefined, { revalidate: false });
+        season(undefined, { revalidate: false });
+        list(undefined, { revalidate: false });
+        his(undefined, { revalidate: false });
+      }, []);
+
+      return <Story />;
+    },
+  ],
+};
+
 export const WithData: Story = {
   args: {
     records: 1,
