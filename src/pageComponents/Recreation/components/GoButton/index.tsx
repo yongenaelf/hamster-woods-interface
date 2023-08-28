@@ -42,7 +42,7 @@ function GoButton({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }:
       <>
         <span
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
-            isMobile ? 'text-[48px] leading-[48px]' : 'text-[72px]'
+            isMobile ? 'text-[48px] leading-[48px]' : 'text-[72px] leading-[72px]'
           }`}>
           Go
         </span>

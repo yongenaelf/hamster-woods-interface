@@ -10,9 +10,9 @@ export const receiveBeanPassNFT = async (body: IBeanPassClaimReq): Promise<IBean
 };
 
 export const fetchConfigItems = async (): Promise<IConfigResponse> => {
-  return cmsRequest.get<IConfigResponse>('items/config', { baseURL: '/cms' });
+  return cmsRequest.get<IConfigResponse>('items/config');
 };
 
 export const fetchChessboardData = async (): Promise<IConfigResponse> => {
-  return cmsRequest.get<IConfigResponse>('items/chessboard_data', { baseURL: '/cms' });
+  return cmsRequest.get<IConfigResponse>('items/chessboard_data');
 };
