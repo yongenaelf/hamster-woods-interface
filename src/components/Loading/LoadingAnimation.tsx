@@ -16,7 +16,7 @@ export default function LoadingAni() {
   };
 
   return (
-    <div className="h-[100vh] w-full bg-[#2D20E1] pt-[199px]">
+    <div className="h-full w-full overflow-hidden bg-[#2D20E1] pt-[199px]">
       <Image src={require('assets/images/loading-title.png')} alt="" className="mx-auto h-[129px] w-[270px]"></Image>
       <Image src={require('assets/images/game-coming.png')} alt="" className="mx-auto mt-[75px] w-[257px]"></Image>
       <Animation></Animation>

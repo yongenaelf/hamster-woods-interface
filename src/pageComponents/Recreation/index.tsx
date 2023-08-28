@@ -213,7 +213,7 @@ export default function Game() {
   const go = async () => {
     if (getGoStatus() !== Status.NONE) {
       if (!hasNft) {
-        setBeanPassModalType(GetBeanPassStatus.Abled);
+        setBeanPassModalType(GetBeanPassStatus.Need);
         setBeanPassModalVisible(true);
         return;
       }
@@ -335,6 +335,8 @@ export default function Game() {
         return;
       }
       router.push('/asset');
+    } else if (beanPassModalType === GetBeanPassStatus.Need) {
+      setBeanPassModalVisible(false);
     }
   };
 

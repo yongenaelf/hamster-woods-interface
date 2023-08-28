@@ -34,6 +34,7 @@ import DetectProvider from 'utils/InstanceProvider';
 import useIntervalAsync from './useInterValAsync';
 import InstanceProvider from 'utils/InstanceProvider';
 import showMessage from 'utils/setGlobalComponentsInfo';
+import { useRouter } from 'next/navigation';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -56,6 +57,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const syncAddress = useRef<boolean>(false);
 
   const { walletInfo, walletType } = useGetState();
+
+  const router = useRouter();
 
   useIntervalAsync(async () => {
     if (walletType !== WalletType.portkey) {
@@ -126,11 +129,32 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
   }, [discoverProvider]);
 
-  useEffect(() => {
-    detect().catch((error: any) => {
-      console.log(error.message);
+  const logout = useCallback(() => {
+    store.dispatch(setWalletInfo(null));
+    store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
+    store.dispatch(setWalletType(WalletType.unknown));
+    window.localStorage.removeItem(LOGIN_EARGLY_KEY);
+    router.push('/login');
+  }, [router]);
+
+  const checkProviderConnected = useCallback(async () => {
+    const detectInfo = await detect();
+    if (!detectInfo) return;
+
+    if (!detectInfo.isConnected()) {
+      logout();
+      return;
+    }
+    detectInfo.on('disconnected', () => {
+      if (!detectInfo.isConnected()) {
+        logout();
+      }
     });
-  }, []);
+  }, [detect, logout]);
+
+  useEffect(() => {
+    checkProviderConnected();
+  }, [checkProviderConnected, detect]);
 
   useEffect(() => {
     setIsLogin(loginStatus === LoginStatus.LOGGED);
