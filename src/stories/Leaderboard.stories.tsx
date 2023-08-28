@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import { storybookStore } from '../../.storybook/preview';
 import { useSeasonRank } from '../components/Leaderboard/data/useSeasonRank';
 import { add } from 'date-fns';
+import { useRankingSeasonList } from '../components/Leaderboard/data/useRankingSeasonList';
+import { useRankingSeasonHis } from '../components/Leaderboard/data/useRankingSeasonHis';
 
 const meta: Meta<typeof Leaderboard> = {
   title: 'BeangoTown/Leaderboard',
@@ -56,6 +58,8 @@ export const WithData: Story = {
       };
       const { mutate: weekly } = useWeeklyRank();
       const { mutate: season } = useSeasonRank();
+      const { mutate: list } = useRankingSeasonList();
+      const { mutate: his } = useRankingSeasonHis('11');
 
       useEffect(() => {
         weekly(
@@ -80,7 +84,7 @@ export const WithData: Story = {
               caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
             },
           },
-          false,
+          { revalidate: false },
         );
         season(
           {
@@ -97,7 +101,45 @@ export const WithData: Story = {
               caAddress: 'ELF_2wLEEDc7wcAP2YmZRJ4RK8uZB7GLDkSDK8jhF74iN46ufmGe6Y_tDVW',
             },
           },
-          false,
+          { revalidate: false },
+        );
+        list(
+          {
+            season: [
+              {
+                id: '11',
+                name: 'season-1',
+                rankBeginTime: '2023-08-10T01:00:00',
+                rankEndTime: '2023-08-30T01:00:00',
+                showBeginTime: '2023-09-01T01:00:00',
+                showEndTime: '2023-09-30T01:00:00',
+              },
+            ],
+          },
+          { revalidate: false },
+        );
+
+        his(
+          {
+            season: {
+              rank: 2,
+              score: 743,
+              caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
+            },
+            weeks: [
+              {
+                rank: 7,
+                score: 1,
+                caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
+              },
+              {
+                rank: 3,
+                score: 82,
+                caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
+              },
+            ],
+          },
+          { revalidate: false },
         );
       }, [records, rank, unranked, status]);
 
