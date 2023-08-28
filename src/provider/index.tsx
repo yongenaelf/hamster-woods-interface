@@ -9,13 +9,15 @@ import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
 import { store } from 'redux/store';
 
-import { fetchConfig } from 'api/request';
+import { fetchConfigItems } from 'api/request';
+import { setConfigInfo } from 'redux/reducer/configInfo';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const storeConfig = async () => {
-    // const { data } = await fetchConfig();
-    // u can update data to store
+    const { data } = await fetchConfigItems();
+    store.dispatch(setConfigInfo(data));
+
     setLoading(false);
   };
   useEffect(() => {

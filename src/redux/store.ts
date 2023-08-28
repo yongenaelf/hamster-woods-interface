@@ -6,11 +6,13 @@ import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
 import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reducer/globalComponentsInfo';
 import ConfigInfoReducer, { configInfoSlice } from './reducer/configInfo';
+import ChessboardDataReducer, { chessboardDataSlice } from './reducer/chessboardData';
 
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [globalComponentsInfoSlice.name]: GlobalComponentsInfoReducer,
   [configInfoSlice.name]: ConfigInfoReducer,
+  [chessboardDataSlice.name]: ChessboardDataReducer,
 });
 
 const makeStore = () => {

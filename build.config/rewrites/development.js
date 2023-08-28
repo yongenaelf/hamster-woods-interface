@@ -12,6 +12,10 @@ module.exports = [
     destination: 'http://192.168.66.205:5008/api/:path*',
   },
   {
+    source: '/cms/:path*',
+    destination: 'http://192.168.66.205:8100/:path*',
+  },
+  {
     source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
     destination: 'http://192.168.67.51:8083/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
   },
