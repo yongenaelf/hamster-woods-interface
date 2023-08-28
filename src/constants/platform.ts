@@ -14,7 +14,7 @@ export const KEY_NAME = 'BEANGOTOWN';
 
 export const BEANGO_TOWN_GRAPHQL_URL = '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/graphql';
 
-export const MAX_LEADERBOARD_ITEMS = 100;
+export const MAX_LEADERBOARD_ITEMS = 99;
 export const MAX_GAME_RECORD_ITEMS = 150;
 
 export const EXPLORER_BASE_URL =

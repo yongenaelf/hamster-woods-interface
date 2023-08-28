@@ -1,5 +1,6 @@
 import { useIsMobile } from 'redux/selector/mobile';
 import { useConditionalRank } from '../hooks/useConditionalRank';
+import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 
 interface IRank {
   rank?: number;
@@ -29,7 +30,7 @@ export const Rank = ({ rank }: IRank) => {
     second: <img src={require('assets/images/silver.png').default.src} alt="silver" className={imgClassName} />,
     third: <img src={require('assets/images/bronze.png').default.src} alt="bronze" className={imgClassName} />,
     ranked: rank,
-    unranked: '99+',
+    unranked: `${MAX_LEADERBOARD_ITEMS}+`,
     missing: <>&mdash;</>,
   });
 
