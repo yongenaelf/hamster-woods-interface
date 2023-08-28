@@ -4,6 +4,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowGameRecord } from 'redux/reducer/info';
 import GameRecordModal from './components/GameRecordModal';
+import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
 
 export const GameRecord = () => {
   const open = useSelector((state) => state.info.showGameRecord);
@@ -37,7 +38,7 @@ export const GameRecord = () => {
           ))}
           <div className="flex items-center py-8">
             <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
-            <span className="flex-shrink px-4 text-white text-opacity-40">Recent {data?.gameList.length} records</span>
+            <span className="flex-shrink px-4 text-white text-opacity-40">Recent {MAX_GAME_RECORD_ITEMS} records</span>
             <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
           </div>
         </div>
