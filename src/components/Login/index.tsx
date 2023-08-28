@@ -7,7 +7,6 @@ import {
   TStep2SignInLifeCycle,
   SignIn,
   did,
-  ConfigProvider,
   Unlock,
   TStep3LifeCycle,
   TStep2SignUpLifeCycle,
@@ -17,21 +16,18 @@ import {
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { setLoginStatus, setWalletInfo } from 'redux/reducer/info';
+import { setLoginStatus } from 'redux/reducer/info';
 import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import { ChainId, LOGIN_EARGLY_KEY } from 'constants/platform';
-import { Store } from 'utils/store';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
 import { sleep } from 'utils/common';
 import useVerifier from 'hooks/useVarified';
-import ContractRequest from 'contract/contractRequest';
 import { WalletType } from 'constants/index';
-import { GetPlayerInformation } from 'contract/bingo';
 import { PortkeyIcon, AppleIcon, QrCodeIcon, PhoneIcon, EmailIcon, GoogleIcon } from 'assets/images/index';
 import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
@@ -93,10 +89,9 @@ export default function Login() {
     onError: undefined,
   });
 
-  const { isLogin, loading, wallet, walletType, handlePortKey, handleFinish, handleApple, handleGoogle, loginEagerly } =
-    useWebLogin({
-      signHandle,
-    });
+  const { isLogin, handlePortKey, handleFinish, handleApple, handleGoogle, loginEagerly } = useWebLogin({
+    signHandle,
+  });
 
   const router = useRouter();
 
@@ -108,13 +103,11 @@ export default function Login() {
 
   const { isLock } = useGetState();
 
-  const isInAndroid = isMobile().android.device;
-
   const isInIOS = isMobile().apple.device;
 
   const isInApp = isPortkeyApp();
 
-  const [isWalletExist, setIsWalletExist] = useState(false);
+  const [_isWalletExist, setIsWalletExist] = useState(false);
 
   useEffect(() => {
     if (isLock) {
@@ -170,7 +163,7 @@ export default function Login() {
 
   const [passwordValue, setPasswordValue] = useState('');
 
-  const [isErrorTipShow, setIsErrorTipShow] = useState(false);
+  const [_isErrorTipShow, setIsErrorTipShow] = useState(false);
 
   const renderLoginMethods = (inModel: boolean) => {
     const allMethods = [
@@ -243,7 +236,7 @@ export default function Login() {
     router.push('/');
   }, [passwordValue, router]);
 
-  const { getRecommendationVerifier, verifySocialToken, sendVerifyCode } = useVerifier();
+  const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
   const onStep2OfSignUpFinish = useCallback((res: TSignUpVerifier, value?: IGuardianIdentifierInfo) => {
     const identifier = value;

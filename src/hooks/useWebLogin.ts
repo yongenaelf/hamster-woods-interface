@@ -27,7 +27,7 @@ import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
 import ContractRequest from 'contract/contractRequest';
-import { CheckBeanPass, GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
+import { GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
 import { SignatureParams } from 'aelf-web-login';
 import useGetState from 'redux/state/useGetState';
 import DetectProvider from 'utils/InstanceProvider';
@@ -45,7 +45,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [loading, setLoading] = useState(false);
   const { loginStatus } = useSelector(selectInfo);
   const [wallet, setWallet] = useState<WalletInfoType | null>(null);
-  const [curWalletType, setCurWalletType] = useState<WalletType>(WalletType.unknown);
+  const [_curWalletType, setCurWalletType] = useState<WalletType>(WalletType.unknown);
 
   const [discoverProvider, setDiscoverProvider] = useState<IPortkeyProvider>();
   const [discoverDetected, setDiscoverDetected] = useState<DiscoverDetectState>('unknown');

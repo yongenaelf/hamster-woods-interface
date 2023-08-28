@@ -1,5 +1,5 @@
 'use client';
-import { IStorageSuite } from '@portkey/types/dist/storage';
+import { IStorageSuite } from '@portkey/types';
 
 export class Store implements IStorageSuite {
   async getItem(key: string) {

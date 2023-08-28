@@ -1,6 +1,6 @@
 import { DIDWalletInfo, IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
-import { IPortkeyProvider, Accounts, ChainIds } from '@portkey/provider-types';
-import type { IHolderInfo, Manager } from '@portkey/services';
+import { Accounts } from '@portkey/provider-types';
+import type { Manager } from '@portkey/services';
 
 export type TokenInfo = {
   decimals: number;

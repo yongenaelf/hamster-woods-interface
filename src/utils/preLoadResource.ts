@@ -1,6 +1,6 @@
 const urlList: Array<string> = [];
 
-function preLoad() {
+export function preLoad() {
   let count = 0;
   for (let i = 0; i < urlList.length; i++) {
     const img = new Image();
