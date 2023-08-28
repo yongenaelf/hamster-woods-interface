@@ -78,13 +78,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
     const { holder, filteredHolders } = await getAccountInfoSync(ChainId, wallet?.portkeyInfo);
 
-    if (filteredHolders.length) {
-      console.log(filteredHolders);
+    if (holder?.caAddress) {
       store.dispatch(
         setWalletInfo({
           portkeyInfo: {
             caInfo: {
-              caAddress: filteredHolders[0].address,
+              caAddress: holder.caAddress,
               caHash: holder.caHash,
             },
             pin: wallet.portkeyInfo.pin,
