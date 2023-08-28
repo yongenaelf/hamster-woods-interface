@@ -8,7 +8,7 @@ import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reduce
 import ConfigInfoReducer, { configInfoSlice } from './reducer/configInfo';
 import ChessboardDataReducer, { chessboardDataSlice } from './reducer/chessboardData';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [globalComponentsInfoSlice.name]: GlobalComponentsInfoReducer,
   [configInfoSlice.name]: ConfigInfoReducer,

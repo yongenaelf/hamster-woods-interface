@@ -14,9 +14,9 @@ export const KEY_NAME = 'BEANGOTOWN';
 
 export const BEANGO_TOWN_GRAPHQL_URL = '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/graphql';
 
-export const MAX_LEADERBOARD_ITEMS = 100;
+export const MAX_LEADERBOARD_ITEMS = 99;
 export const MAX_GAME_RECORD_ITEMS = 150;
 
 export const EXPLORER_BASE_URL =
-  process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'tdvv-explorer.aelf.io' : 'explorer-test-side02.aelf.io';
+  process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'explorer-test-side02.aelf.io' : 'tdvv-explorer.aelf.io';
 export const PORTKEY_ORIGIN_CHAIN_ID_KEY = 'PortkeyOriginChainId';

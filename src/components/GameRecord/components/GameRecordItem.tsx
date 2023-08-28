@@ -7,7 +7,7 @@ import { getDateFormat } from 'utils/getDateFormat';
 import { formatElfValue } from 'utils/formatElfValue';
 import { EXPLORER_BASE_URL } from 'constants/platform';
 
-const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
+const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; title: string }) => {
   const isMobile = useIsMobile();
 
   if (!data) return null;
@@ -17,7 +17,7 @@ const GameRecordItemChild = ({ data }: { data: ITransactionInfo | null }) => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="pb-4">Roll</th>
+            <th className="pb-4">{title}</th>
             <th className="pb-4 text-right">
               <a
                 href={`https://${EXPLORER_BASE_URL}/tx/${data.transactionId}`}
@@ -101,9 +101,8 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <Disclosure.Button className="py-2 font-bold text-[#003658]">More &#x25BC;</Disclosure.Button>
           ) : null}
           <Disclosure.Panel>
-            {[playTransactionInfo, bingoTransactionInfo].map((i, key) => (
-              <GameRecordItemChild key={key} data={i} />
-            ))}
+            <GameRecordItemChild data={playTransactionInfo} title="Play" />
+            {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="Bingo" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#003658]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
         </div>
