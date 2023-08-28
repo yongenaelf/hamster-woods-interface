@@ -21,7 +21,7 @@ export const LeaderBoardItemText = ({ children, color = LeaderboardTextColors.Wh
   ].includes(color);
 
   const fontFamily = isRankedColor ? 'font-fonarto' : '';
-  const textSize = isMobile ? 'text-md' : 'text-2xl';
+  const textSize = isRankedColor ? (isMobile ? 'text-md' : 'text-xl') : isMobile ? 'text-xs' : 'text-sm';
 
   return <div className={`font-bold ${fontFamily} ${color} ${textSize}`}>{children}</div>;
 };

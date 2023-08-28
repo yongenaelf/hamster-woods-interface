@@ -23,6 +23,7 @@ export enum GetBeanPassStatus {
   Abled = 'abled',
   Noneleft = 'noneleft',
   Notfound = 'notfound',
+  Need = 'need',
 }
 
 export type CountDownModalPropsType = {

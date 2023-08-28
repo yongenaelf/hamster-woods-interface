@@ -151,3 +151,19 @@ export interface IGameSetting {
   dailyMaxPlayCount: number;
   dailyPlayCountResetHours: number;
 }
+
+export interface IConfigResponse {
+  data: IConfigItems;
+}
+
+export interface IConfigItems {
+  rpcUrl: string;
+  network: string;
+  curChain: string;
+  apiServer: string;
+  portkeyServer: string;
+  graphqlServer: string;
+  bingoGraphqlServer: string;
+  portKeyExtensionUrl: string;
+  bingoContractAddress: string;
+}

@@ -1,3 +1,4 @@
+'use client';
 import { IStorageSuite } from '@portkey/types';
 
 export class Store implements IStorageSuite {

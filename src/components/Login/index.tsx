@@ -1,3 +1,4 @@
+'use client';
 import {
   useSignHandler,
   DIDWalletInfo,
@@ -218,8 +219,6 @@ export default function Login() {
   };
 
   const unlock = useCallback(async () => {
-    //need some code
-    setIsUnlockShow(true);
     let wallet;
     try {
       wallet = await did.load(passwordValue, KEY_NAME);
@@ -329,7 +328,11 @@ export default function Login() {
   return (
     <div className={styles.loginContainer}>
       {isLock ? (
-        <div onClick={unlock} className={styles.unlockBtn}>
+        <div
+          onClick={() => {
+            setIsUnlockShow(true);
+          }}
+          className={styles.unlockBtn}>
           unLock
         </div>
       ) : (

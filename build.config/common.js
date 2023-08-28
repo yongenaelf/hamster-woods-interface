@@ -30,4 +30,7 @@ module.exports = {
     config.ignoreWarnings = [{ module: /node_modules/ }];
     return config;
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };

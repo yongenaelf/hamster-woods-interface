@@ -107,9 +107,10 @@ class Request {
   }
 }
 
+const cmsRequest = new Request({ baseURL: '/cms' });
 const tokenRequest = new Request({
   baseURL: '/connect',
 });
 
 export default new Request({});
-export { tokenRequest };
+export { tokenRequest, cmsRequest };
