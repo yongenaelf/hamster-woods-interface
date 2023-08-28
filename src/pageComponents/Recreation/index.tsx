@@ -78,6 +78,7 @@ export default function Game() {
   const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
 
   const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
+  const [currentModalType, setCurrentModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
 
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
@@ -291,10 +292,13 @@ export default function Game() {
     } else {
       if (reason === BeanPassResons.Claimed) {
         setBeanPassModalType(GetBeanPassStatus.Noneleft);
+        setCurrentModalType(GetBeanPassStatus.Noneleft);
       } else if (reason === BeanPassResons.InsufficientElfAmount) {
         setBeanPassModalType(GetBeanPassStatus.Recharge);
+        setCurrentModalType(GetBeanPassStatus.Recharge);
       } else if (reason === BeanPassResons.DoubleClaim) {
         setBeanPassModalType(GetBeanPassStatus.Notfound);
+        setCurrentModalType(GetBeanPassStatus.Notfound);
       }
     }
     setBeanPassModalVisible(true);
@@ -311,10 +315,10 @@ export default function Game() {
         setGoStatus(Status.DISABLED);
         checkBeanPassStatus();
       }
-      showMessage.hideLoading();
     } catch (error) {
       console.error('=====CheckBeanPass error', error);
     }
+    showMessage.hideLoading();
   }, [address]);
 
   const handleConfirm = async () => {
@@ -389,7 +393,7 @@ export default function Game() {
       setNFTModalType(ShowBeanPassType.Display);
       setIsShowNFT(true);
     } else {
-      setBeanPassModalType(GetBeanPassStatus.Abled);
+      setBeanPassModalType(currentModalType);
       setBeanPassModalVisible(true);
     }
   };

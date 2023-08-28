@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'http://192.168.66.205:5008/api/:path*',
+    destination: 'https://soho-test2.beangotown.com/api/:path*',
   },
   {
     source: '/cms/:path*',
