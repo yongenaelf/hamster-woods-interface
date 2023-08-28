@@ -110,6 +110,7 @@ const Layout = dynamic(async () => {
       window.addEventListener('resize', resize);
       return () => {
         window.removeEventListener('resize', resize);
+        localStorage.removeItem('persist:nextjs');
       };
     }, []);
 

@@ -213,7 +213,7 @@ export default function Game() {
   const go = async () => {
     if (getGoStatus() !== Status.NONE) {
       if (!hasNft) {
-        setBeanPassModalType(GetBeanPassStatus.Abled);
+        setBeanPassModalType(GetBeanPassStatus.Need);
         setBeanPassModalVisible(true);
         return;
       }
@@ -236,7 +236,7 @@ export default function Game() {
         const blockRes = await getBlockHeight(
           ChainId,
           0,
-          process.env.NEXT_PUBLIC_RPC_SERVER!,
+          'https://soho-test2-node-sidechain.aelf.io', // TODO
           boutInformation.expectedBlockHeight,
         );
         if (blockRes) {
@@ -335,6 +335,8 @@ export default function Game() {
         return;
       }
       router.push('/asset');
+    } else if (beanPassModalType === GetBeanPassStatus.Need) {
+      setBeanPassModalVisible(false);
     }
   };
 

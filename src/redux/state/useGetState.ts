@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
 import { selectInfo } from '../reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
+import { getConfigInfo } from 'redux/reducer/configInfo';
 
 const useGetState = () => {
   const infoState = useSelector(selectInfo);
+  const configInfo = useSelector(getConfigInfo);
 
   return {
     isMobile: infoState.isMobile,
@@ -13,6 +15,7 @@ const useGetState = () => {
     walletInfo: infoState.walletInfo,
     assetVisible: infoState.assetVisible,
     playerInfo: infoState.playerInfo,
+    configInfo,
   };
 };
 
