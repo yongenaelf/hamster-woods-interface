@@ -1,8 +1,11 @@
 import { useLottie } from 'lottie-react';
 import LoadingAnimation from 'assets/images/loading-animation.json';
 import Image from 'next/image';
+import useGetState from 'redux/state/useGetState';
 
 export default function LoadingAni() {
+  const { isMobile } = useGetState();
+
   const Animation = () => {
     const options = {
       animationData: LoadingAnimation,
@@ -10,7 +13,7 @@ export default function LoadingAni() {
       autoplay: true,
     };
 
-    const { View } = useLottie(options, { margin: '0 auto', width: '100%' });
+    const { View } = useLottie(options, { margin: '0 auto', width: isMobile ? '100%' : '30%' });
 
     return View;
   };
