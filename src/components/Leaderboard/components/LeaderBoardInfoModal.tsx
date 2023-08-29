@@ -79,6 +79,7 @@ type ILeaderBoardInfoModal = React.PropsWithChildren;
 
 export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
   const open = useSelector((state) => state.info.showLeaderboardInfo);
+  const isMobile = useIsMobile();
 
   return (
     <LeaderBoardModal
@@ -88,7 +89,7 @@ export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
       onCancel={() => dispatch(toggleShowLeaderboardInfo())}>
       <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 shadow-inner">
         <div className="rounded-2xl bg-blue-700 p-4 shadow-inner h-full">
-          {children}
+          <div className={`${isMobile ? 'text-md' : 'text-lg'} text-white text-left mb-4`}>{children}</div>
           <RankedItem
             bgClassName="bg-[#F5BF49]"
             shadowInsetColor="#DE7B3D"
