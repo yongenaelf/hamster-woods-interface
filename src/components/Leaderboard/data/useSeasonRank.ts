@@ -18,6 +18,9 @@ export const useSeasonRank = () => {
         skipCount: 0
         maxResultCount: ${MAX_LEADERBOARD_ITEMS}
       }) {
+        status
+        refreshTime
+        seasonName
         rankingList {
           rank
           score

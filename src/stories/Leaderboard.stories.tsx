@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Leaderboard } from '../components/Leaderboard';
-import { toggleShowLeaderboard } from '../redux/reducer/info';
+import { toggleShowLeaderboard, toggleShowLeaderboardInfo } from '../redux/reducer/info';
 import { useWeeklyRank } from '../components/Leaderboard/data/useWeeklyRank';
 import { useEffect } from 'react';
 import { storybookStore } from '../../.storybook/preview';
@@ -56,6 +56,7 @@ export const WithData: Story = {
     rank: 1,
     unranked: false,
     status: 0,
+    showInfoModal: false,
   },
   argTypes: {
     records: {
@@ -70,27 +71,30 @@ export const WithData: Story = {
   },
   decorators: [
     (Story, context) => {
-      const { rank, records, unranked, status } = context.args as {
+      const { rank, records, unranked, status, showInfoModal } = context.args as {
         rank: number;
         records: number;
         unranked: boolean;
         status: number;
+        showInfoModal: boolean;
       };
       const { mutate: weekly } = useWeeklyRank();
       const { mutate: season } = useSeasonRank();
       const { mutate: list } = useRankingSeasonList();
       const { mutate: his } = useRankingSeasonHis('11');
 
+      const refreshTime =
+        status === 2
+          ? null
+          : add(new Date(), {
+              weeks: 1,
+            }).toISOString();
+
       useEffect(() => {
         weekly(
           {
             status,
-            refreshTime:
-              status === 1
-                ? add(new Date(), {
-                    weeks: 1,
-                  }).toISOString()
-                : null,
+            refreshTime,
             rankingList: Array(records)
               .fill('')
               .map((_i, j) => ({
@@ -108,6 +112,9 @@ export const WithData: Story = {
         );
         season(
           {
+            status,
+            refreshTime,
+            seasonName: 'Season 1',
             rankingList: Array(records)
               .fill('')
               .map((_i, j) => ({
@@ -148,11 +155,13 @@ export const WithData: Story = {
             },
             weeks: [
               {
+                week: 'week 1',
                 rank: 7,
                 score: 1,
                 caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
               },
               {
+                week: 'week 2',
                 rank: 3,
                 score: 82,
                 caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
@@ -162,6 +171,11 @@ export const WithData: Story = {
           { revalidate: false },
         );
       }, [records, rank, unranked, status]);
+
+      useEffect(() => {
+        if (storybookStore.getState().info.showLeaderboardInfo !== showInfoModal)
+          storybookStore.dispatch(toggleShowLeaderboardInfo());
+      }, [showInfoModal]);
 
       return <Story />;
     },

@@ -9,9 +9,13 @@ interface IRankResult {
   selfRank: IRankItem;
 }
 
+interface IWeekItem extends IRankItem {
+  week: string;
+}
+
 export interface IRankingSeasonHistoryResult {
   season: IRankItem;
-  weeks: IRankItem[];
+  weeks: IWeekItem[];
 }
 
 interface IRankingSeasonItem {
@@ -27,14 +31,17 @@ export interface IRankingSeasonListResult {
   season: IRankingSeasonItem[];
 }
 
-export enum WeeklyChallengeStatus {
+export enum ChallengeStatus {
   InProgress = 0,
   Settlement = 1,
   LastSettlement = 2,
 }
 
-export type ISeasonRankResult = IRankResult;
 export interface IWeeklyRankResult extends IRankResult {
-  status: WeeklyChallengeStatus;
+  status: ChallengeStatus;
   refreshTime: string | null;
+}
+
+export interface ISeasonRankResult extends IWeeklyRankResult {
+  seasonName: string;
 }
