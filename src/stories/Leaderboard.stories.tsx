@@ -155,11 +155,13 @@ export const WithData: Story = {
             },
             weeks: [
               {
+                week: 'week 1',
                 rank: 7,
                 score: 1,
                 caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',
               },
               {
+                week: 'week 2',
                 rank: 3,
                 score: 82,
                 caAddress: '21mEqQqL1L79QDcryCCbFPv9nYjj7SCefsBrXMMkajE7iFmgkD',

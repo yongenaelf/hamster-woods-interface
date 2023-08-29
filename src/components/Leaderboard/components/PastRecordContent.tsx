@@ -109,7 +109,7 @@ const Table = ({ his }: IData) => {
       <tbody>
         {his?.weeks.map((i, idx) => (
           <tr key={idx} className="border-b border-white border-opacity-40">
-            <td className="p-4">Week {idx + 1}</td>
+            <td className="p-4">{i.week}</td>
             <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
             <td className="p-4 text-right">{i.rank === -1 ? '-' : i.rank}</td>
           </tr>

@@ -9,9 +9,13 @@ interface IRankResult {
   selfRank: IRankItem;
 }
 
+interface IWeekItem extends IRankItem {
+  week: string;
+}
+
 export interface IRankingSeasonHistoryResult {
   season: IRankItem;
-  weeks: IRankItem[];
+  weeks: IWeekItem[];
 }
 
 interface IRankingSeasonItem {
