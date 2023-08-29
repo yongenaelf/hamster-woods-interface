@@ -21,7 +21,7 @@ import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { ChainId, LOGIN_EARGLY_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -45,6 +45,11 @@ const components = {
 
 type IconType = 'apple' | 'google' | 'portkey' | 'email' | 'phone' | 'qrcode';
 
+interface IAuthenticationInfo {
+  googleAccessToken?: string;
+  appleIdToken?: string;
+}
+
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
 
@@ -52,13 +57,24 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
+  const {
+    configInfo: {
+      configInfo: { curChain },
+    },
+  } = store.getState();
+
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
-  >({
-    LoginByScan: undefined,
-  });
+  >({});
 
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+    const authInfo: IAuthenticationInfo = {};
+    if (value.accountType === SocialLoginType.GOOGLE) {
+      authInfo.googleAccessToken = value.authenticationInfo?.googleAccessToken;
+    } else if (value.accountType === SocialLoginType.APPLE) {
+      authInfo.appleIdToken = value.authenticationInfo?.appleIdToken;
+    }
+
     setDrawerVisible(false);
     setModalVisible(false);
     if (!value.isLoginGuardian) {
@@ -71,6 +87,7 @@ export default function Login() {
             isLoginGuardian: value.isLoginGuardian,
             identifier: value.identifier,
             accountType: value.accountType,
+            authenticationInfo: authInfo,
           },
         },
       });
@@ -82,7 +99,7 @@ export default function Login() {
 
   const signHandle = useSignHandler({
     onSuccess: handleSocialStep1Success,
-    defaultChainId: ChainId,
+    defaultChainId: curChain,
     customValidateEmail: undefined,
     customValidatePhone: undefined,
     onChainIdChange: undefined,
@@ -93,15 +110,15 @@ export default function Login() {
     signHandle,
   });
 
+  const { isLock, isLogin: isLoginState } = useGetState();
+
   const router = useRouter();
 
   useEffect(() => {
-    if (isLogin) {
+    if (isLoginState) {
       router.push('/');
     }
-  }, [isLogin, router]);
-
-  const { isLock } = useGetState();
+  }, [isLoginState, router]);
 
   const isInIOS = isMobile().apple.device;
 
@@ -119,6 +136,8 @@ export default function Login() {
         return;
       }
       if (window.localStorage.getItem(KEY_NAME)) {
+        setLoginStatus(LoginStatus.LOCK);
+        did.reset();
         setIsWalletExist(true);
       }
     }
@@ -128,8 +147,10 @@ export default function Login() {
     closeModal();
     setStyle(styles.inputForm);
     setDesign('Web2Design');
-    setCurrentLifeCircle({ LoginByScan: undefined });
-    signInRef.current?.setOpen(true);
+    setCurrentLifeCircle({});
+    setTimeout(() => {
+      signInRef.current?.setOpen(true);
+    }, 500);
     setTimeout(() => {
       (document.getElementsByClassName('portkey-ant-segmented-item')?.[1] as HTMLElement)?.click();
     }, 1000);
@@ -144,8 +165,10 @@ export default function Login() {
     closeModal();
     setStyle(styles.inputForm);
     setDesign('Web2Design');
-    setCurrentLifeCircle({ LoginByScan: undefined });
-    signInRef.current?.setOpen(true);
+    setCurrentLifeCircle({});
+    setTimeout(() => {
+      signInRef.current?.setOpen(true);
+    }, 500);
   };
 
   const handleQrcode = () => {
@@ -153,7 +176,9 @@ export default function Login() {
     setStyle(styles.qrcodeBox);
     setDesign('SocialDesign');
     setCurrentLifeCircle({ LoginByScan: undefined });
-    signInRef.current?.setOpen(true);
+    setTimeout(() => {
+      signInRef.current?.setOpen(true);
+    }, 500);
   };
 
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -163,7 +188,7 @@ export default function Login() {
 
   const [passwordValue, setPasswordValue] = useState('');
 
-  const [_isErrorTipShow, setIsErrorTipShow] = useState(false);
+  const [isErrorTipShow, setIsErrorTipShow] = useState(false);
 
   const renderLoginMethods = (inModel: boolean) => {
     const allMethods = [
@@ -250,7 +275,6 @@ export default function Login() {
         signature: res.signature,
       },
     ];
-    console.log(list);
     setCurrentLifeCircle({
       SetPinAndAddManager: {
         guardianIdentifierInfo: identifier,
@@ -267,7 +291,7 @@ export default function Login() {
       try {
         setLoading(true, 'Assigning a verifier on-chain…');
         await sleep(2000);
-        const verifier = await getRecommendationVerifier(ChainId);
+        const verifier = await getRecommendationVerifier(curChain);
         setLoading(false);
         const { accountType, authenticationInfo, identifier } = value;
         if (accountType === SocialLoginType.APPLE || accountType === SocialLoginType.GOOGLE) {
@@ -278,7 +302,7 @@ export default function Login() {
             token: authenticationInfo?.appleIdToken || authenticationInfo?.googleAccessToken,
             guardianIdentifier: identifier,
             verifier,
-            chainId: ChainId,
+            chainId: curChain,
             operationType: OperationTypeEnum.register,
           });
           setLoading(false);
@@ -377,7 +401,7 @@ export default function Login() {
         className={style}
         onFinish={handlePortKeyLoginFinish}
         isShowScan={true}
-        defaultChainId={ChainId}
+        defaultChainId={curChain}
       />
 
       <Unlock
@@ -391,7 +415,7 @@ export default function Login() {
           setIsErrorTipShow(false);
           setPasswordValue(v);
         }}
-        isWrongPassword={true}
+        isWrongPassword={isErrorTipShow}
       />
     </div>
   );

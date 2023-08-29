@@ -1,6 +1,7 @@
-import { BEANGO_TOWN_GRAPHQL_URL } from 'constants/platform';
 import { request, RequestDocument } from 'graphql-request';
 import { displayMessageOnce } from 'utils/displayMessageOnce';
+
+import { store } from 'redux/store';
 
 interface ErrorItem {
   message: string;
@@ -17,7 +18,7 @@ function isError(err: unknown): err is Error {
 
 export const graphQLRequest = async <T>(document: RequestDocument) => {
   try {
-    return await request<T>(BEANGO_TOWN_GRAPHQL_URL, document);
+    return await request<T>(store.getState().configInfo.configInfo!.bingoGraphqlServer, document);
   } catch (err) {
     const response = (err as { response: unknown }).response;
 
