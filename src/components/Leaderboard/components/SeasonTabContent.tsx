@@ -21,9 +21,7 @@ export const SeasonTabContent = () => {
   const topText =
     data?.status === ChallengeStatus.InProgress
       ? 'Next leaderboard updates on '
-      : data?.status === ChallengeStatus.Settlement
-      ? `${seasonName} has ended and rewards will be distributed shortly.`
-      : '';
+      : `${seasonName} has ended and rewards will be distributed shortly.`;
 
   return (
     <>
@@ -41,13 +39,12 @@ export const SeasonTabContent = () => {
             the top 10 players shortly. Players with the same score will be ranked in the order they achieve the score,
             giving higher ranking to early achievers.
           </>
-        ) : null}
-        {data?.status === ChallengeStatus.Settlement ? (
+        ) : (
           <>
             The ranking for {seasonName} has been finalized and the rewards will be distributed to the top 10 players
             soon.
           </>
-        ) : null}
+        )}
       </LeaderBoardInfoModal>
     </>
   );

@@ -19,9 +19,7 @@ export const WeeklyTabContent = () => {
   const topText =
     data?.status === ChallengeStatus.InProgress
       ? 'This weekly challenge ends in: '
-      : data?.status === ChallengeStatus.Settlement
-      ? 'This weekly challenge has ended and rewards will be distributed shortly.'
-      : '';
+      : 'This weekly challenge has ended and rewards will be distributed shortly.';
 
   return (
     <>
@@ -44,6 +42,12 @@ export const WeeklyTabContent = () => {
           <>
             Your weekly score (number of Beans earned) has been finalized. The rewards will be distributed to the top 30
             players soon. The next weekly challenge will start {confirmedDate}.
+          </>
+        ) : null}
+        {data?.status === ChallengeStatus.LastSettlement ? (
+          <>
+            Your weekly score (number of Beans earned) has been finalized. The rewards will be distributed to the top 30
+            players soon.
           </>
         ) : null}
       </LeaderBoardInfoModal>
