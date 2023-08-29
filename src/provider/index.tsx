@@ -7,17 +7,10 @@ import enUS from 'antd/lib/locale/en_US';
 
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
-import { store } from 'redux/store';
-
-import { fetchConfigItems } from 'api/request';
-import { setConfigInfo } from 'redux/reducer/configInfo';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [_loading, setLoading] = useState(true);
   const storeConfig = async () => {
-    const { data } = await fetchConfigItems();
-    store.dispatch(setConfigInfo(data));
-
     setLoading(false);
   };
   useEffect(() => {

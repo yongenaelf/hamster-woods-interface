@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Modal from './index';
 import { CountDownModalPropsType } from './type';
 import styles from './style.module.css';
@@ -23,7 +24,7 @@ export default function CountDownModal({ onCancel, open, onConfirm }: CountDownM
   return (
     <Modal className={styles.showBeanPassModal} open={open} title="Notice" onCancel={onCancel} destroyOnClose>
       <p className="text-base leading-[24px]">
-        Your game count for today has been used up.The game count will be remade after:
+        You've used up all your GOs to play today. New GOs will be available in
       </p>
       <p className="mt-[21px] text-2xl text-[24px] font-black leading-6 leading-6">
         {countTime.hours}h : {countTime.minutes}m : {countTime.seconds}s

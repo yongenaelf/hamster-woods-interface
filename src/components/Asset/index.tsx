@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import { LeftOutlined } from '@ant-design/icons';
+import styles from './style.module.css';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -17,18 +18,20 @@ export default function MyAsset() {
     }
   }, [isLogin, router, walletType]);
   return (
-    <PortkeyAssetProvider
-      originChainId={walletInfo?.portkeyInfo?.chainId || ChainId}
-      pin={walletInfo?.portkeyInfo?.pin}
-      caHash={walletInfo?.portkeyInfo?.caInfo.caHash}
-      didStorageKeyName={KEY_NAME}>
-      <Asset
-        backIcon={<LeftOutlined />}
-        onOverviewBack={() => router.back()}
-        onLifeCycleChange={(lifeCycle) => {
-          console.log(lifeCycle, 'onLifeCycleChange');
-        }}
-      />
-    </PortkeyAssetProvider>
+    <div className={styles.asset}>
+      <PortkeyAssetProvider
+        originChainId={walletInfo?.portkeyInfo?.chainId || ChainId}
+        pin={walletInfo?.portkeyInfo?.pin}
+        caHash={walletInfo?.portkeyInfo?.caInfo.caHash}
+        didStorageKeyName={KEY_NAME}>
+        <Asset
+          backIcon={<LeftOutlined />}
+          onOverviewBack={() => router.back()}
+          onLifeCycleChange={(lifeCycle) => {
+            console.log(lifeCycle, 'onLifeCycleChange');
+          }}
+        />
+      </PortkeyAssetProvider>
+    </div>
   );
 }
