@@ -32,7 +32,6 @@ import { useRouter } from 'next/navigation';
 import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import { getBlockHeight } from 'utils/getBlockHeight';
-import { ChainId } from 'constants/platform';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
 import { setPlayerInfo } from 'redux/reducer/info';
@@ -40,6 +39,7 @@ import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
+import { ChainId } from '@portkey/types';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -83,6 +83,8 @@ export default function Game() {
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
 
   const [countDownModalOpen, setCountDownModalOpen] = useState(false);
+
+  const { configInfo } = store.getState();
 
   const translateRef = useRef<{
     x: number;
@@ -237,9 +239,9 @@ export default function Game() {
         const boutInformation = await GetBoutInformation(res?.TransactionId);
         console.log('=====Play GetBoutInformation', boutInformation);
         const blockRes = await getBlockHeight(
-          ChainId,
+          configInfo.configInfo!.curChain as ChainId,
           0,
-          'https://soho-test2-node-sidechain.aelf.io', // TODO
+          configInfo!.configInfo!.rpcUrl, // TODO
           boutInformation.expectedBlockHeight,
         );
         if (blockRes) {
@@ -288,6 +290,7 @@ export default function Game() {
       console.log('checkBeanPassStatusError:', err);
       return;
     }
+    if (!beanPassClaimClaimableRes) return;
     const { claimable, reason } = beanPassClaimClaimableRes;
 
     if (claimable) {
@@ -340,7 +343,7 @@ export default function Game() {
         return;
       }
       router.push('/asset');
-    } else if (beanPassModalType === GetBeanPassStatus.Need) {
+    } else {
       setBeanPassModalVisible(false);
     }
   };

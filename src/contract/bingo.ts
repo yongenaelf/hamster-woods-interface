@@ -1,6 +1,8 @@
 import { IBoutInformation, IContractError, IGameSetting, IPlayerInformation } from 'types';
 import contractRequest from './contractRequest';
 import { formatErrorMsg } from 'utils/formattError';
+import { store } from 'redux/store';
+const { configInfo } = store.getState();
 
 export enum ContractMethodType {
   SEND,
@@ -9,7 +11,7 @@ export enum ContractMethodType {
 
 const bingoContract = async <T, R>(methodName: string, params: T, type: ContractMethodType) => {
   const contract = contractRequest.get();
-  const contractAddress = 'JZdkBE8WTm88TWpUkXk9ep7AHmHnkPFDeLExwfffc2RZnawGt';
+  const contractAddress = configInfo.configInfo!.bingoContractAddress;
   const method = type === ContractMethodType.SEND ? 'callSendMethod' : 'callViewMethod';
   try {
     const res = await contract[method]({

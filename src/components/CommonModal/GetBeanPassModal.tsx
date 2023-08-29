@@ -31,16 +31,16 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         title: 'Get a BeanPass',
         btnText: 'I know',
         contentArr: [
-          'You need to have a BeanPass NFT to start the game！',
-          'Today’s BeanPass NFT has been claimed, please come back tommrow!',
+          'You need to have a BeanPass NFT to start the game! ',
+          `Today's BeanPass NFTs have all been claimed. Please come back tomorrow after HH:MM for another try.`,
         ],
       },
       [GetBeanPassStatus.Notfound]: {
         title: 'Get a BeanPass',
         btnText: 'I know',
         contentArr: [
-          'You need to have a BeanPass NFT to start the game！',
-          'You have already claimed the BeanPass NFT, but it is not in your address.',
+          'You need to have a BeanPass NFT to start the game!',
+          `Since you have already claimed a BeanPass but it's not in your current wallet address now, please transfer it back or obtain a new one from other addresses.`,
         ],
       },
       [GetBeanPassStatus.Need]: {

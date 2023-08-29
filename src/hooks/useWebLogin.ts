@@ -1,13 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isMobileDevices } from 'utils/isMobile';
-import {
-  ChainId,
-  LOGIN_EARGLY_KEY,
-  Network,
-  PORTKEY_ORIGIN_CHAIN_ID_KEY,
-  portKeyExtensionUrl,
-} from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_ORIGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import {
@@ -35,6 +29,7 @@ import useIntervalAsync from './useInterValAsync';
 import InstanceProvider from 'utils/InstanceProvider';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import { useRouter } from 'next/navigation';
+import { ChainId } from '@portkey/provider-types';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -58,7 +53,15 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const { walletInfo, walletType } = useGetState();
 
+  const { configInfo } = store.getState();
+
   const router = useRouter();
+
+  const Network = configInfo.configInfo!.network;
+
+  const curChain = configInfo.configInfo!.curChain as ChainId;
+
+  const portKeyExtensionUrl = configInfo.configInfo!.portKeyExtensionUrl;
 
   useIntervalAsync(async () => {
     if (walletType !== WalletType.portkey) {
@@ -76,7 +79,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (!wallet?.portkeyInfo) {
       return;
     }
-    const { holder, filteredHolders } = await getAccountInfoSync(ChainId, wallet?.portkeyInfo);
+    const { holder, filteredHolders } = await getAccountInfoSync(curChain, wallet?.portkeyInfo);
 
     if (holder?.caAddress) {
       store.dispatch(
@@ -87,7 +90,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
               caHash: holder.caHash,
             },
             pin: wallet.portkeyInfo.pin,
-            chainId: ChainId,
+            chainId: curChain,
             walletInfo: wallet.portkeyInfo.walletInfo,
             accountInfo: wallet.portkeyInfo.accountInfo,
           },
@@ -132,6 +135,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     store.dispatch(setWalletInfo(null));
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletType(WalletType.unknown));
+    store.dispatch(setPlayerInfo(null));
     window.localStorage.removeItem(LOGIN_EARGLY_KEY);
     router.push('/login');
   }, [router]);
@@ -143,10 +147,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const detectInfo = await detect();
     if (!detectInfo) return;
 
-    if (!detectInfo.isConnected()) {
-      logout();
-      return;
-    }
     detectInfo.on('disconnected', () => {
       logout();
     });
@@ -177,16 +177,17 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
     const network = await provider?.request({ method: 'network' });
     if (network !== Network) {
+      console.log(configInfo);
       showMessage.error('network error');
       return;
     }
-    let accounts = await provider?.request({ method: 'accounts' });
-    if (accounts[ChainId] && accounts[ChainId].length > 0) {
+    let accounts: any = await provider?.request({ method: 'accounts' });
+    if (accounts[curChain] && accounts[curChain].length > 0) {
       onAccountsSuccess(provider, accounts);
       return;
     }
     accounts = await provider?.request({ method: 'requestAccounts' });
-    if (accounts[ChainId] && accounts[ChainId].length > 0) {
+    if (accounts[curChain] && accounts[curChain].length > 0) {
       onAccountsSuccess(provider, accounts);
     } else {
       showMessage.error('account error');
@@ -211,19 +212,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     });
   };
 
-  const getSocialToken = async ({
-    type,
-    clientId = '',
-    redirectURI = '',
-  }: {
-    type: SocialLoginType;
-    clientId?: string;
-    redirectURI?: string;
-  }) => {
+  const getSocialToken = async ({ type }: { type: SocialLoginType; clientId?: string; redirectURI?: string }) => {
     const tokenRes = await socialLoginAuth({
       type,
-      clientId,
-      redirectURI,
     });
     return tokenRes;
   };
@@ -244,8 +235,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
     const contract = ContractRequest.get();
     const config = {
-      chainId: ChainId,
-      rpcUrl: 'https://soho-test2-node-sidechain.aelf.io', // TODO
+      chainId: curChain,
+      rpcUrl: configInfo.configInfo?.rpcUrl,
     };
     contract.setWallet(walletInfo, walletType);
     contract.setConfig(config);
@@ -278,7 +269,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';
-    const address = accounts[ChainId]?.[0].split('_')[1];
+    const address = accounts[curChain]?.[0].split('_')[1];
     console.log('address', address);
 
     try {
@@ -297,7 +288,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const handleFinish = async (type: WalletType, walletInfo: PortkeyInfoType | IDiscoverInfo) => {
     console.log('wallet', type, walletInfo);
-    store.dispatch(setLoginStatus(LoginStatus.LOGGED));
 
     if (type === WalletType.discover) {
       store.dispatch(setWalletType(type));
@@ -313,6 +303,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       InstanceProvider.setWalletInfoInstance({
         discoverInfo: walletInfo,
       });
+      store.dispatch(setLoginStatus(LoginStatus.LOGGED));
     } else if (type === WalletType.portkey) {
       localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, (walletInfo as PortkeyInfoType).chainId);
       did.save((walletInfo as PortkeyInfoType)?.pin, KEY_NAME);
@@ -322,7 +313,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       });
       setCurWalletType(type);
       store.dispatch(setWalletType(WalletType.portkey));
-      if ((walletInfo as PortkeyInfoType).chainId !== ChainId) {
+      if ((walletInfo as PortkeyInfoType).chainId !== curChain) {
         InstanceProvider.setWalletInfoInstance({
           portkeyInfo: walletInfo as PortkeyInfoType,
         });
@@ -333,6 +324,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           }),
         );
       }
+      store.dispatch(setLoginStatus(LoginStatus.LOGGED));
     }
   };
 
@@ -348,7 +340,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       }
       const accounts = await provider.request({ method: 'accounts' });
       console.log(accounts);
-      if (accounts[ChainId] && accounts[ChainId]!.length > 0) {
+      if (accounts[curChain] && accounts[curChain]!.length > 0) {
         onAccountsSuccess(provider, accounts);
         setLoading(false);
       } else {

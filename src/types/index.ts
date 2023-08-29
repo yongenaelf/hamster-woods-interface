@@ -135,7 +135,7 @@ export type WalletInfoType = {
 export enum BeanPassResons {
   Claimed = 'Claimed',
   InsufficientElfAmount = 'InsufficientElfAmount',
-  DoubleClaim = 'DoubleClaim”',
+  DoubleClaim = 'DoubleClaim',
 }
 
 export interface IBeanPassClaimRes {
@@ -166,4 +166,5 @@ export interface IConfigItems {
   bingoGraphqlServer: string;
   portKeyExtensionUrl: string;
   bingoContractAddress: string;
+  explorBaseUrl: string;
 }

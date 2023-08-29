@@ -10,24 +10,29 @@ import AWS from 'aws-sdk';
 import dynamic from 'next/dynamic';
 
 import { store } from 'redux/store';
-import { setIsMobile } from 'redux/reducer/info';
+import { setIsMobile, setLoginStatus } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import Leaderboard from 'components/Leaderboard';
 import { Store } from 'utils/store';
-import { ConfigProvider } from '@portkey/did-ui-react';
-import sourceMap from 'constants/resource';
+import { ConfigProvider, did } from '@portkey/did-ui-react';
 
 import { usePathname } from 'next/navigation';
 import PageLoading from 'components/PageLoading';
 import GameRecord from 'components/GameRecord';
 import useGetState from 'redux/state/useGetState';
+import { KEY_NAME } from 'constants/platform';
+import { LoginStatus } from 'redux/types/reducerTypes';
+import { fetchChessboardData, fetchConfigItems } from 'api/request';
+import { setConfigInfo } from 'redux/reducer/configInfo';
+import { setChessboardData } from 'redux/reducer/chessboardData';
+const { configInfo } = store.getState();
 
 ConfigProvider.setGlobalConfig({
   storageMethod: new Store(),
   requestDefaults: {
     baseURL: '/portkey',
   },
-  graphQLUrl: '/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql',
+  graphQLUrl: configInfo.configInfo?.graphqlServer,
 });
 
 const Layout = dynamic(async () => {
@@ -40,14 +45,22 @@ const Layout = dynamic(async () => {
 
     const pathname = usePathname();
 
-    const { isMobile: isMobileStore } = useGetState();
+    const { isMobile: isMobileStore, chessBoardInfo } = useGetState();
+
+    const [resurceList, setResurceList] = useState<Array<string>>([]);
+
+    const [chessMap, setChessMap] = useState<Array<string>>([]);
+
+    const [sourceLoded, setSourceLoded] = useState(false);
 
     const loadResourceList = () => {
-      if (!sourceMap.length) {
+      if (!chessMap.length && !resurceList.length) {
         setTimeout(() => {
           setHasLoadedSource(true);
         }, 1000);
       }
+      const sourceMap = [...chessMap, ...resurceList];
+
       const timeTask = new Promise(function (resolve) {
         setTimeout(resolve, 60000, false);
       });
@@ -76,6 +89,7 @@ const Layout = dynamic(async () => {
       });
 
       Promise.race([timeTask, scheduleTask]).then(() => {
+        console.log('over');
         setHasLoadedSource(true);
       });
     };
@@ -94,7 +108,46 @@ const Layout = dynamic(async () => {
     }, [pathname]);
 
     useEffect(() => {
-      loadResourceList();
+      if (typeof window !== undefined) {
+        if (window.localStorage.getItem(KEY_NAME)) {
+          did.reset();
+          store.dispatch(setLoginStatus(LoginStatus.LOCK));
+        }
+      }
+    }, []);
+
+    const initConfigAndResurce = async () => {
+      const [chessBoardRes, configRes] = await Promise.all([fetchChessboardData(), fetchConfigItems()]);
+      configRes && store.dispatch(setConfigInfo(configRes.data));
+      console.log('config', configRes.data);
+
+      chessBoardRes && store.dispatch(setChessboardData(chessBoardRes.data));
+    };
+
+    useEffect(() => {
+      sourceLoded && loadResourceList();
+    }, [sourceLoded]);
+
+    useEffect(() => {
+      console.log('chessBoardInfo', chessBoardInfo);
+      if (!chessBoardInfo) return;
+      const { imageResources, data } = chessBoardInfo as any;
+      const imageResourcesArray = Object.values(imageResources);
+      setResurceList(imageResourcesArray);
+      const chessMap = [];
+      if (data.length) {
+        data.forEach((item, index) => {
+          item.forEach((_, index1) => {
+            chessMap.push(data[index][index1].image);
+          });
+        });
+      }
+      setChessMap(chessMap);
+      setSourceLoded(true);
+    }, [chessBoardInfo]);
+
+    useEffect(() => {
+      initConfigAndResurce();
       initAwsConfig();
 
       const resize = () => {
@@ -108,7 +161,6 @@ const Layout = dynamic(async () => {
       window.addEventListener('resize', resize);
       return () => {
         window.removeEventListener('resize', resize);
-        localStorage.removeItem('persist:nextjs');
       };
     }, []);
 

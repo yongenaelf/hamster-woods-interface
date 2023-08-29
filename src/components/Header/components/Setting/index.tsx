@@ -7,7 +7,7 @@ import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
 import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_ORIGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
-import { setLoginStatus, setWalletInfo, setWalletType, toggleShowGameRecord } from 'redux/reducer/info';
+import { setLoginStatus, setPlayerInfo, setWalletInfo, setWalletType, toggleShowGameRecord } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
@@ -37,6 +37,7 @@ export default function Setting() {
     if (walletType === WalletType.discover) {
       return;
     }
+    did.reset();
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
   }, [walletType]);
 
@@ -44,6 +45,7 @@ export default function Setting() {
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletInfo(null));
     store.dispatch(setWalletType(WalletType.unknown));
+    store.dispatch(setPlayerInfo(null));
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_ORIGIN_CHAIN_ID_KEY);
@@ -73,7 +75,7 @@ export default function Setting() {
             title="Game Record"
             onClick={handleRecord}
             className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px] md:!rounded-[38.75px] md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
-          {walletType !== WalletType.discover && (
+          {walletType === WalletType.portkey && (
             <CommonBtn
               title="Lock"
               onClick={handleLock}

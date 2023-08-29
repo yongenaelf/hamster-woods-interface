@@ -43,6 +43,7 @@ class Request {
           case '20001':
             return {};
           case '50000':
+            showMessage.error(errorMessage);
             return null;
           default:
             showMessage.error(errorMessage);

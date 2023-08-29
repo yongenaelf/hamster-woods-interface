@@ -2,9 +2,9 @@
 
 import '@portkey/did-ui-react/dist/assets/index.css';
 import 'aelf-web-login/dist/assets/index.css';
-import { PortkeyProvider } from '@portkey/did-ui-react';
-import { Network } from 'constants/platform';
+import { NetworkType, PortkeyProvider } from '@portkey/did-ui-react';
+import { store } from 'redux/store';
 
 export default ({ children }: { children: React.ReactNode }) => {
-  return <PortkeyProvider networkType={Network}>{children}</PortkeyProvider>;
+  return <PortkeyProvider networkType={'MAIN'}>{children}</PortkeyProvider>;
 };
