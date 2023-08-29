@@ -78,7 +78,6 @@ export default function Game() {
   const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
 
   const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
-  const [currentModalType, setCurrentModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
 
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
@@ -93,6 +92,16 @@ export default function Game() {
     y: 0,
   });
 
+  const updateStep = () => {
+    store.dispatch(
+      setPlayerInfo({
+        ...playerInfo,
+        playableCount: playerInfo?.playableCount && playerInfo?.playableCount > 0 ? playerInfo.playableCount - 1 : 0,
+      }),
+    );
+    updatePlayerInformation(address);
+  };
+
   const updatePosition = ({ x, y, state, currentNode }: IJumpCallbackParams) => {
     setTranslate({
       x: x,
@@ -104,17 +113,9 @@ export default function Game() {
         clearTimeout(timer);
         if (currentNode) {
           currentNodeRef.current = currentNode;
-          store.dispatch(
-            setPlayerInfo({
-              ...playerInfo,
-              playableCount:
-                playerInfo?.playableCount && playerInfo?.playableCount > 0 ? playerInfo.playableCount - 1 : 0,
-            }),
-          );
           if (currentNode.info.info.type === CheckerboardType.TREASURE) {
             setTreasureOpen(true);
           } else {
-            updatePlayerInformation(address);
             setShowAdd(true);
           }
         }
@@ -231,6 +232,7 @@ export default function Game() {
       const res = await Play(resetStart);
       console.log('=====Play res', res);
       if (res?.TransactionId) {
+        updateStep();
         setResetStart(false);
         const boutInformation = await GetBoutInformation(res?.TransactionId);
         console.log('=====Play GetBoutInformation', boutInformation);
@@ -282,6 +284,7 @@ export default function Game() {
       });
       console.log('BeanPassClaimClaimableRes', beanPassClaimClaimableRes);
     } catch (err) {
+      showMessage.hideLoading();
       console.log('checkBeanPassStatusError:', err);
       return;
     }
@@ -292,16 +295,14 @@ export default function Game() {
     } else {
       if (reason === BeanPassResons.Claimed) {
         setBeanPassModalType(GetBeanPassStatus.Noneleft);
-        setCurrentModalType(GetBeanPassStatus.Noneleft);
       } else if (reason === BeanPassResons.InsufficientElfAmount) {
         setBeanPassModalType(GetBeanPassStatus.Recharge);
-        setCurrentModalType(GetBeanPassStatus.Recharge);
       } else if (reason === BeanPassResons.DoubleClaim) {
         setBeanPassModalType(GetBeanPassStatus.Notfound);
-        setCurrentModalType(GetBeanPassStatus.Notfound);
       }
     }
     setBeanPassModalVisible(true);
+    showMessage.hideLoading();
   }, [address]);
 
   const initCheckBeanPass = useCallback(async () => {
@@ -393,8 +394,8 @@ export default function Game() {
       setNFTModalType(ShowBeanPassType.Display);
       setIsShowNFT(true);
     } else {
-      setBeanPassModalType(currentModalType);
-      setBeanPassModalVisible(true);
+      showMessage.loading();
+      checkBeanPassStatus();
     }
   };
 

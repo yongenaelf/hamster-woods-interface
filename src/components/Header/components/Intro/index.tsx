@@ -19,6 +19,7 @@ export default function Intro() {
       <CommonModal
         open={rulesVisible}
         title="Game Rules"
+        width={850}
         onCancel={() => {
           setRulesVisible(false);
         }}

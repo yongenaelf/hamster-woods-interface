@@ -21,7 +21,7 @@ function hidePageLoading() {
   );
 }
 
-function error(content: ReactNode, duration = 2, params?: ArgsProps) {
+function error(content: ReactNode, duration = 10, params?: ArgsProps) {
   notification.error({
     prefixCls: 'ant-notification',
     message: content,
@@ -29,6 +29,7 @@ function error(content: ReactNode, duration = 2, params?: ArgsProps) {
     closeIcon: <></>,
     icon: <Info className="mt-[2px] h-[20px] w-[20px]" />,
     duration,
+    maxCount: 1,
     className: 'bean-show-message-error',
     ...params,
   });

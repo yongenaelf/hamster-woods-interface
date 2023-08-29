@@ -1,6 +1,6 @@
 /* stylelint-disable number-max-precision */
 .commonModal {
-  @apply !w-[358px] rounded-[20px] text-center text-white;
+  @apply rounded-[20px] text-center text-white;
   :global {
     .ant-modal-header,
     .ant-modal-footer {

@@ -29,6 +29,7 @@ interface IRole {
 enum PlacementType {
   TOP = 'TOP',
   RIGHT = 'RIGHT',
+  LEFT = 'LEFT',
 }
 
 function Role(props: IRole) {
@@ -65,7 +66,17 @@ function Role(props: IRole) {
     ),
     [PlacementType.RIGHT]: (
       <div
-        className={`relative left-[90%] top-[100%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat pl-[22px] pt-[4px] ${styles['appears-animation-right']}`}>
+        className={`relative left-[90%] top-[120%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat ${
+          isMobile ? 'pl-[8px]' : 'pl-[18px]'
+        } pt-[4px] ${styles['appears-animation-right']}`}>
+        {PopoverComponent}
+      </div>
+    ),
+    [PlacementType.LEFT]: (
+      <div
+        className={`relative right-[90%] top-[120%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-left.svg)] bg-[100%_100%] bg-no-repeat ${
+          isMobile ? 'pl-[4px]' : 'pl-[6px]'
+        } pt-[4px] ${styles['appears-animation-left']}`}>
         {PopoverComponent}
       </div>
     ),
@@ -84,7 +95,25 @@ function Role(props: IRole) {
     if (position) {
       switch (position.x) {
         case 0:
+          if (position.y === 2 && isMobile) {
+            setPopoverPlacement(PlacementType.LEFT);
+            return;
+          }
           setPopoverPlacement(PlacementType.RIGHT);
+          return;
+        case 1:
+          if (position.y === 3 && isMobile) {
+            setPopoverPlacement(PlacementType.LEFT);
+            return;
+          }
+          setPopoverPlacement(PlacementType.TOP);
+          return;
+        case 2:
+          if (position.y === 4 && isMobile) {
+            setPopoverPlacement(PlacementType.LEFT);
+            return;
+          }
+          setPopoverPlacement(PlacementType.TOP);
           return;
         default:
           setPopoverPlacement(PlacementType.TOP);
