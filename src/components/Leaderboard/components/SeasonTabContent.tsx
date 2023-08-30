@@ -45,9 +45,11 @@ export const SeasonTabContent = () => {
         {data?.status === ChallengeStatus.InProgress ? (
           <>
             The seasonal leaderboard ranks players based on their highest weekly score (number of Beans earned) during
-            the season. Ranking of this season will be confirmed {confirmedDate} and the rewards will be distributed to
-            the top {top} players shortly. Players with the same score will be ranked in the order they achieve the
-            score, giving higher ranking to early achievers.
+            the season.
+            <br />
+            Ranking of this season will be confirmed {confirmedDate} and the rewards will be distributed to the top{' '}
+            {top} players shortly. Players with the same score will be ranked in the order they achieve the score,
+            giving higher ranking to early achievers.
           </>
         ) : (
           <>
