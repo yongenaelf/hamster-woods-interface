@@ -57,14 +57,8 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
-  const {
-    configInfo: {
-      configInfo: { curChain },
-    },
-  } = store.getState();
-
-  const { chessBoardInfo } = useGetState();
-  const { imageResources } = chessBoardInfo!;
+  const { configInfo, imageResources } = useGetState();
+  const { curChain } = configInfo!;
 
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
@@ -354,9 +348,9 @@ export default function Login() {
 
   return (
     <div
-      className={styles.loginContainer}
+      className={`cursor-custom ${styles.loginContainer}`}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources.loginBgMobile : imageResources.loginBgPc})`,
+        backgroundImage: `url(${isMobileStore ? imageResources!.loginBgMobile : imageResources!.loginBgPc})`,
       }}>
       {isLock ? (
         <div

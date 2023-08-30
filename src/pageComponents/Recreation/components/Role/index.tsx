@@ -46,7 +46,7 @@ function Role(props: IRole) {
   } = props;
 
   const [popoverPlacement, setPopoverPlacement] = useState<PlacementType>(PlacementType.TOP);
-  const { isMobile } = useGetState();
+  const { isMobile, imageResources } = useGetState();
 
   const PopoverComponent = (
     <div className={`flex h-full items-center pb-[8px] ${styles['role__info']}`}>
@@ -60,23 +60,32 @@ function Role(props: IRole) {
   const Popover: Record<PlacementType, ReactElement> = {
     [PlacementType.TOP]: (
       <div
-        className={`relative flex h-full w-full justify-center bg-[url(/images/recreation/add-bean.svg)] bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}>
+        className={`relative flex h-full w-full justify-center bg-[100%_100%] bg-cover bg-no-repeat ${styles['appears-animation']}`}
+        style={{
+          backgroundImage: `url(${imageResources?.beanTop})`,
+        }}>
         {PopoverComponent}
       </div>
     ),
     [PlacementType.RIGHT]: (
       <div
-        className={`relative left-[90%] top-[120%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-right.svg)] bg-[100%_100%] bg-no-repeat ${
+        className={`relative left-[90%] top-[120%] aspect-[89/44] w-full bg-[100%_100%] bg-cover bg-no-repeat ${
           isMobile ? 'pl-[8px]' : 'pl-[18px]'
-        } pt-[4px] ${styles['appears-animation-right']}`}>
+        } pt-[4px] ${styles['appears-animation-right']}`}
+        style={{
+          backgroundImage: `url(${imageResources?.beanRight})`,
+        }}>
         {PopoverComponent}
       </div>
     ),
     [PlacementType.LEFT]: (
       <div
-        className={`relative right-[90%] top-[120%] aspect-[89/44] w-full bg-[url(/images/recreation/add-bean-left.svg)] bg-[100%_100%] bg-no-repeat ${
+        className={`relative right-[90%] top-[120%] aspect-[89/44] w-full bg-[100%_100%] bg-cover bg-no-repeat ${
           isMobile ? 'pl-[4px]' : 'pl-[6px]'
-        } pt-[4px] ${styles['appears-animation-left']}`}>
+        } pt-[4px] ${styles['appears-animation-left']}`}
+        style={{
+          backgroundImage: `url(${imageResources?.beanLeft})`,
+        }}>
         {PopoverComponent}
       </div>
     ),

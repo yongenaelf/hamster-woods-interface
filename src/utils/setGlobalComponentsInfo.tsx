@@ -21,8 +21,9 @@ function hidePageLoading() {
   );
 }
 
-function error(content: ReactNode, duration = 10, params?: ArgsProps) {
+function error(content: ReactNode, duration = 2, params?: ArgsProps) {
   notification.error({
+    key: 'error',
     prefixCls: 'ant-notification',
     message: content,
     placement: 'top',
@@ -31,7 +32,6 @@ function error(content: ReactNode, duration = 10, params?: ArgsProps) {
     duration,
     maxCount: 1,
     className: 'bean-show-message-error',
-    key: 'error',
     ...params,
   });
 }

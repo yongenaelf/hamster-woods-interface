@@ -45,7 +45,7 @@ const Layout = dynamic(async () => {
 
     const pathname = usePathname();
 
-    const { isMobile: isMobileStore, chessBoardInfo } = useGetState();
+    const { isMobile: isMobileStore, chessBoardInfo, imageResources } = useGetState();
 
     const [resurceList, setResurceList] = useState<Array<string>>([]);
 
@@ -131,15 +131,15 @@ const Layout = dynamic(async () => {
 
     useEffect(() => {
       console.log('chessBoardInfo', chessBoardInfo);
-      if (!chessBoardInfo) return;
-      const { imageResources, data } = chessBoardInfo as any;
-      const imageResourcesArray = Object.values(imageResources);
+      if (!chessBoardInfo || !imageResources) return;
+      // const { imageResources, data } = chessBoardInfo as any;
+      const imageResourcesArray: string[] = Object.values(imageResources);
       setResurceList(imageResourcesArray);
-      const chessMap = [];
-      if (data.length) {
-        data.forEach((item, index) => {
+      const chessMap: string[] = [];
+      if (chessBoardInfo.length) {
+        chessBoardInfo.forEach((item, index) => {
           item.forEach((_, index1) => {
-            chessMap.push(data[index][index1].image);
+            chessMap.push(chessBoardInfo[index][index1].image!);
           });
         });
       }

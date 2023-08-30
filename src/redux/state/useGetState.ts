@@ -2,12 +2,13 @@ import { useSelector } from 'react-redux';
 import { selectInfo } from '../reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { getConfigInfo } from 'redux/reducer/configInfo';
-import { getChessboardData } from 'redux/reducer/chessboardData';
+import { getChessboardData, getImageResources } from 'redux/reducer/chessboardData';
 
 const useGetState = () => {
   const infoState = useSelector(selectInfo);
   const configInfo = useSelector(getConfigInfo);
   const chessBoardInfo = useSelector(getChessboardData);
+  const imageResources = useSelector(getImageResources);
 
   return {
     isMobile: infoState.isMobile,
@@ -19,6 +20,7 @@ const useGetState = () => {
     playerInfo: infoState.playerInfo,
     configInfo,
     chessBoardInfo,
+    imageResources,
   };
 };
 

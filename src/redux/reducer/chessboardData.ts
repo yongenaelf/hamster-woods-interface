@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
-import { IConfigItems } from 'types';
+import { IChessboardData } from 'types';
 
 const initialState: {
-  chessboardData: IConfigItems | undefined;
+  chessboardData: IChessboardData | undefined;
 } = {
   chessboardData: undefined,
 };
@@ -31,5 +31,6 @@ export const chessboardDataSlice = createSlice({
 });
 
 export const { setChessboardData } = chessboardDataSlice.actions;
-export const getChessboardData = (state: AppState) => state.chessboardData.chessboardData;
+export const getChessboardData = (state: AppState) => state.chessboardData.chessboardData?.data;
+export const getImageResources = (state: AppState) => state.chessboardData.chessboardData?.imageResources;
 export default chessboardDataSlice.reducer;

@@ -26,15 +26,15 @@ function GoButton({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }:
   const { isMobile } = useGetState();
 
   const GoButtonBg: Record<Status, ReactElement> = {
-    [Status.NONE]: <GoButtonSvg />,
-    [Status.LOADING]: <GoButtonSvg />,
-    [Status.DISABLED]: <GoButtonDisabledSvg />,
+    [Status.NONE]: <GoButtonSvg className="w-full h-full" />,
+    [Status.LOADING]: <GoButtonSvg className="w-full h-full" />,
+    [Status.DISABLED]: <GoButtonDisabledSvg className="w-full h-full" />,
   };
 
   const GoButtonPcBg: Record<Status, ReactElement> = {
-    [Status.NONE]: <GoButtonPcSvg />,
-    [Status.LOADING]: <GoButtonPcSvg />,
-    [Status.DISABLED]: <GoButtonDisabledPcSvg />,
+    [Status.NONE]: <GoButtonPcSvg className="w-full h-full" />,
+    [Status.LOADING]: <GoButtonPcSvg className="w-full h-full" />,
+    [Status.DISABLED]: <GoButtonDisabledPcSvg className="w-full h-full" />,
   };
 
   const statusCom: Record<Status, ReactElement> = {
@@ -64,7 +64,7 @@ function GoButton({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }:
       <>
         <span
           className={`font-fonarto font-[500] text-[#fff] text-stroke-[#8E8E8E] ${
-            isMobile ? 'text-[48px] leading-[48px]' : 'text-[72px] leading-[72px]'
+            isMobile ? 'text-[48px] leading-[56px]' : 'text-[72px] leading-[72px]'
           }`}>
           Go
         </span>

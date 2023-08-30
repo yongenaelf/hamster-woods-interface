@@ -1,6 +1,7 @@
 import { DIDWalletInfo, IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
 import { Accounts } from '@portkey/provider-types';
 import type { Manager } from '@portkey/services';
+import { ICheckerboardItem } from 'pageComponents/Recreation/checkerboard';
 
 export type TokenInfo = {
   decimals: number;
@@ -164,7 +165,7 @@ export interface IReward {
 export interface IConfigItems {
   rpcUrl: string;
   network: string;
-  curChain: string;
+  curChain: Chain;
   graphqlServer: string;
   portkeyServer: string;
   explorerBaseUrl: string;
@@ -173,4 +174,14 @@ export interface IConfigItems {
   bingoContractAddress: string;
   leaderboardWeekAward: IReward[];
   leaderboardSeasonAward: IReward[];
+  gameRules: string[];
+}
+
+export interface IChessboardData {
+  data: ICheckerboardItem[][];
+  imageResources: Record<string, string>;
+}
+
+export interface IChessboardDataResponse {
+  data: IChessboardData;
 }
