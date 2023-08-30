@@ -23,6 +23,7 @@ export const useRankingSeasonHis = (seasonId: string) => {
           caAddress
         }
         weeks {
+          week
           rank
           score
           caAddress

@@ -42,7 +42,7 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
         ) : null}
       </div>
       {!data?.rankingList || data?.rankingList.length === 0 ? (
-        <div className="flex flex-grow items-center justify-center bg-blue-700">
+        <div className="flex flex-grow items-center justify-center bg-blue-700 rounded-bl-xl rounded-br-xl">
           <div className={`${isMobile ? 'px-8' : 'px-32'}`}>
             <img
               src={require('assets/images/no-record.png').default.src}
