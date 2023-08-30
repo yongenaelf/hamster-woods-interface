@@ -42,11 +42,6 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    setSettingModalVisible(false);
-    store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
-    store.dispatch(setWalletInfo(null));
-    store.dispatch(setWalletType(WalletType.unknown));
-    store.dispatch(setPlayerInfo(null));
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_ORIGIN_CHAIN_ID_KEY);
@@ -59,6 +54,12 @@ export default function Setting() {
     } else if (walletType === WalletType.discover) {
       window.localStorage.removeItem(LOGIN_EARGLY_KEY);
     }
+
+    setSettingModalVisible(false);
+    store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
+    store.dispatch(setWalletInfo(null));
+    store.dispatch(setWalletType(WalletType.unknown));
+    store.dispatch(setPlayerInfo(null));
 
     router.push('/login');
   };

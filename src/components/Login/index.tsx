@@ -33,6 +33,7 @@ import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
 import useGetState from 'redux/state/useGetState';
+import { ChainId } from '@portkey/types';
 
 const components = {
   phone: PhoneIcon,
@@ -248,15 +249,31 @@ export default function Login() {
       console.log(err);
       return;
     }
-    console.log('wallet', wallet);
+
     if (!wallet.didWallet.accountInfo.loginAccount) {
       setIsErrorTipShow(true);
       return;
     }
     setIsUnlockShow(false);
-    store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-    router.push('/');
-  }, [passwordValue, router]);
+
+    let caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
+    let caHash = caInfo?.caHash;
+    if (!caInfo) {
+      const key = Object.keys(wallet.didWallet.caInfo)[0];
+      caHash = wallet.didWallet.caInfo[key].caHash;
+      caInfo = await did.didWallet.getHolderInfoByContract({
+        caHash: caHash,
+        chainId: configInfo!.curChain as ChainId,
+      });
+    }
+    const walletInfo = {
+      caInfo,
+      pin: passwordValue,
+      chainId: configInfo!.curChain,
+      walletInfo: wallet.didWallet.managementAccount,
+    };
+    handleFinish(WalletType.portkey, walletInfo);
+  }, [configInfo, handleFinish, passwordValue]);
 
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
