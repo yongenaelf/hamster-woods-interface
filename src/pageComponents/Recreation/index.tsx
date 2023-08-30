@@ -127,6 +127,7 @@ export default function Game() {
           if (currentNode.info.info.type === CheckerboardType.TREASURE) {
             setTreasureOpen(true);
           } else {
+            updatePlayerInformation(address);
             setShowAdd(true);
           }
         }
