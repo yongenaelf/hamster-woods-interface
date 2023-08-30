@@ -42,6 +42,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
+    setSettingModalVisible(false);
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletInfo(null));
     store.dispatch(setWalletType(WalletType.unknown));
@@ -75,7 +76,7 @@ export default function Setting() {
             title="Game Record"
             onClick={handleRecord}
             className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px] md:!rounded-[38.75px] md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
-          {walletType === WalletType.portkey && (
+          {walletType !== WalletType.discover && (
             <CommonBtn
               title="Lock"
               onClick={handleLock}

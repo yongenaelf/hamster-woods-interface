@@ -285,6 +285,7 @@ export default function Game() {
         caAddress: address,
       });
       console.log('BeanPassClaimClaimableRes', beanPassClaimClaimableRes);
+      showMessage.hideLoading();
     } catch (err) {
       showMessage.hideLoading();
       console.log('checkBeanPassStatusError:', err);
