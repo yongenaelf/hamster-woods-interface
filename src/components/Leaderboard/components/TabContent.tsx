@@ -13,9 +13,10 @@ interface ITabContent {
   emptyText: string;
   topText: string | null;
   showCountdown?: boolean;
+  notAvailable?: boolean;
 }
 
-export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabContent) => {
+export const TabContent = ({ data, emptyText, topText, showCountdown, notAvailable }: ITabContent) => {
   const isMobile = useIsMobile();
 
   const refreshTime = data?.refreshTime;
@@ -26,7 +27,7 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
         className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner text-left ${
           isMobile ? 'text-md' : 'text-xl'
         }`}>
-        {topText ? (
+        {topText && !notAvailable ? (
           <div onClick={() => dispatch(toggleShowLeaderboardInfo())}>
             <span className="mr-2 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white font-bold">
               i
@@ -41,7 +42,7 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
           </div>
         ) : null}
       </div>
-      {!data?.rankingList || data?.rankingList.length === 0 ? (
+      {!data?.rankingList || data?.rankingList.length === 0 || notAvailable ? (
         <div className="flex flex-grow items-center justify-center bg-blue-700 rounded-bl-xl rounded-br-xl">
           <div className={`${isMobile ? 'px-8' : 'px-32'}`}>
             <img
@@ -50,7 +51,7 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
               className={`mx-auto w-32 mb-8`}
             />
             <div className={`text-center font-roboto text-[#89A5F5] ${isMobile ? 'text-lg' : 'text-2xl'}`}>
-              {emptyText}
+              {notAvailable ? 'Leaderboard not available now. Please stay tuned for upcoming challenges.' : emptyText}
             </div>
           </div>
         </div>

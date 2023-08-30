@@ -33,13 +33,16 @@ export const SeasonTabContent = () => {
       ? 'Next leaderboard updates on '
       : `${seasonName ?? 'Season'} has ended and rewards will be distributed shortly.`;
 
+  const notAvailable = data?.status === 0 && data.refreshTime === null;
+
   return (
     <>
       <TabContent
         data={data}
         emptyText="The seasonal leaderboard will be displayed after the first weekly challenge ends and its data will be updated on a weekly basis. "
-        topText={data?.status === 0 && data.refreshTime === null ? null : topText}
+        topText={topText}
         showCountdown={data?.status === ChallengeStatus.InProgress}
+        notAvailable={data?.status === 0 && data.refreshTime === null}
       />
       <LeaderBoardInfoModal data={rewards}>
         {data?.status === ChallengeStatus.InProgress ? (
