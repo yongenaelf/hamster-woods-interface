@@ -1,7 +1,7 @@
 import { request, RequestDocument } from 'graphql-request';
-import { displayMessageOnce } from 'utils/displayMessageOnce';
 
 import { store } from 'redux/store';
+import showMessage from 'utils/setGlobalComponentsInfo';
 
 interface ErrorItem {
   message: string;
@@ -26,12 +26,12 @@ export const graphQLRequest = async <T>(document: RequestDocument) => {
       // handle errors here
       switch (response.status) {
         case 400:
-          displayMessageOnce('An error has occurred. Please try again later.', 'error');
+          showMessage.error('An error has occurred. Please try again later.');
           return;
         case 401:
           return;
         case 404:
-          displayMessageOnce('Not found.', 'error');
+          showMessage.error('Not found.');
           return;
         default:
           return;
