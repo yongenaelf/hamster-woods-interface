@@ -76,7 +76,7 @@ export const TabContent = ({ data, emptyText, topText, showCountdown, notAvailab
                         <div
                           key={j}
                           className={`flex text-slate-500 text-lg items-center bg-blue-800 rounded-2xl mb-2 ${
-                            isMobile ? 'h-12' : 'h-24'
+                            isMobile ? 'h-12' : 'h-16'
                           }`}>
                           <div className="px-10">&mdash;</div>
                           <div className="grow"></div>
