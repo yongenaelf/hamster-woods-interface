@@ -160,11 +160,10 @@ export interface IConfigItems {
   rpcUrl: string;
   network: string;
   curChain: string;
-  apiServer: string;
-  portkeyServer: string;
   graphqlServer: string;
+  portkeyServer: string;
+  explorerBaseUrl: string;
   bingoGraphqlServer: string;
   portKeyExtensionUrl: string;
   bingoContractAddress: string;
-  explorBaseUrl: string;
 }
