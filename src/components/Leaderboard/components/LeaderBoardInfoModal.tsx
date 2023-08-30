@@ -3,6 +3,7 @@ import { dispatch, useSelector } from 'redux/store';
 import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
 import LeaderBoardModal from './LeaderBoardModal';
+import { IReward } from 'types';
 
 const AElfLogo = () => {
   const isMobile = useIsMobile();
@@ -75,11 +76,20 @@ const RankedItem = ({ bgClassName, shadowInsetColor, src, reward, textClassName 
   );
 };
 
-type ILeaderBoardInfoModal = React.PropsWithChildren;
+interface ILeaderBoardInfoModal extends React.PropsWithChildren {
+  data?: IReward[];
+}
 
-export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
+export const LeaderBoardInfoModal = ({ children, data }: ILeaderBoardInfoModal) => {
   const open = useSelector((state) => state.info.showLeaderboardInfo);
   const isMobile = useIsMobile();
+
+  if (!data) return null;
+
+  const firstItem = data.find((i) => i.text === '1');
+  const secondItem = data.find((i) => i.text === '2');
+  const thirdItem = data.find((i) => i.text === '3');
+  const unrankedItems = data.filter((i) => !['1', '2', '3'].includes(i.text));
 
   return (
     <LeaderBoardModal
@@ -90,29 +100,36 @@ export const LeaderBoardInfoModal = ({ children }: ILeaderBoardInfoModal) => {
       <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 shadow-inner">
         <div className="rounded-2xl bg-blue-700 p-4 shadow-inner h-full">
           <div className={`${isMobile ? 'text-md' : 'text-lg'} text-white text-left mb-4`}>{children}</div>
-          <RankedItem
-            bgClassName="bg-[#F5BF49]"
-            shadowInsetColor="#DE7B3D"
-            src={require('assets/images/gold.png').default.src}
-            reward={100}
-            textClassName={LeaderboardTextColors.Gold}
-          />
-          <RankedItem
-            bgClassName="bg-[#CEDFF7]"
-            shadowInsetColor="#B8B8EB"
-            src={require('assets/images/silver.png').default.src}
-            reward={80}
-            textClassName={LeaderboardTextColors.Silver}
-          />
-          <RankedItem
-            bgClassName="bg-[#E97D3C]"
-            shadowInsetColor="#B5412C"
-            src={require('assets/images/bronze.png').default.src}
-            reward={50}
-            textClassName={LeaderboardTextColors.Bronze}
-          />
-          <NormalItem leftText="Top 4-15" reward={20} />
-          <NormalItem leftText="Top 15-30" reward={10} />
+          {firstItem ? (
+            <RankedItem
+              bgClassName="bg-[#F5BF49]"
+              shadowInsetColor="#DE7B3D"
+              src={require('assets/images/gold.png').default.src}
+              reward={firstItem.reward}
+              textClassName={LeaderboardTextColors.Gold}
+            />
+          ) : null}
+          {secondItem ? (
+            <RankedItem
+              bgClassName="bg-[#CEDFF7]"
+              shadowInsetColor="#B8B8EB"
+              src={require('assets/images/silver.png').default.src}
+              reward={secondItem.reward}
+              textClassName={LeaderboardTextColors.Silver}
+            />
+          ) : null}
+          {thirdItem ? (
+            <RankedItem
+              bgClassName="bg-[#E97D3C]"
+              shadowInsetColor="#B5412C"
+              src={require('assets/images/bronze.png').default.src}
+              reward={thirdItem.reward}
+              textClassName={LeaderboardTextColors.Bronze}
+            />
+          ) : null}
+          {unrankedItems.map((i) => (
+            <NormalItem key={i.text} leftText={`Top ${i.text}`} reward={i.reward} />
+          ))}
         </div>
       </div>
     </LeaderBoardModal>
