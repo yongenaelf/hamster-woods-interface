@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+'use client';
 import Modal from './index';
 import { CountDownModalPropsType } from './type';
 import styles from './style.module.css';
@@ -12,13 +13,13 @@ export default function CountDownModal({ onCancel, open, onConfirm }: CountDownM
     minutes: 0,
     seconds: 0,
   });
-  const interval = useRef<any>(null);
+  const interval = useRef<number | null>(null);
   useEffect(() => {
-    interval.current = setInterval(() => {
+    interval.current = window.setInterval(() => {
       setCountTime(getCountdown());
     }, 1000);
     return () => {
-      clearInterval(interval.current);
+      interval.current && window.clearInterval(interval.current);
     };
   }, []);
   return (

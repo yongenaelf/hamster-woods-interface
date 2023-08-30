@@ -31,6 +31,7 @@ function error(content: ReactNode, duration = 10, params?: ArgsProps) {
     duration,
     maxCount: 1,
     className: 'bean-show-message-error',
+    key: 'error',
     ...params,
   });
 }

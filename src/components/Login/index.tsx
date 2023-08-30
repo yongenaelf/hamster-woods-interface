@@ -63,6 +63,9 @@ export default function Login() {
     },
   } = store.getState();
 
+  const { chessBoardInfo } = useGetState();
+  const { imageResources } = chessBoardInfo!;
+
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
   >({});
@@ -110,7 +113,7 @@ export default function Login() {
     signHandle,
   });
 
-  const { isLock, isLogin: isLoginState } = useGetState();
+  const { isLock, isLogin: isLoginState, isMobile: isMobileStore } = useGetState();
 
   const router = useRouter();
 
@@ -350,7 +353,11 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <div
+      className={styles.loginContainer}
+      style={{
+        backgroundImage: `url(${isMobileStore ? imageResources.loginBgMobile : imageResources.loginBgPc})`,
+      }}>
       {isLock ? (
         <div
           onClick={() => {

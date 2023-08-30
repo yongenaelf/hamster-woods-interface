@@ -17,7 +17,7 @@
 }
 
 .loginContainer {
-  @apply flex h-full w-full flex-col items-center justify-end bg-[url('../../assets//images//login-bg-m.png')] !bg-cover bg-center bg-no-repeat px-10 text-base text-white sm:bg-[url('../../assets//images//login-bg-pc.png')] md:justify-start md:pt-[46.7vh];
+  @apply flex h-full w-full flex-col items-center justify-end  !bg-cover bg-center bg-no-repeat px-10 text-base text-white  md:justify-start md:pt-[46.7vh];
   .more {
     @apply z-20 pb-4 font-fonarto underline md:pb-0 md:text-2xl;
   }

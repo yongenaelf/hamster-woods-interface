@@ -70,9 +70,10 @@ const Layout = dynamic(async () => {
         const schedule = (src: string) => {
           const img = document.createElement('img');
           img.src = src;
+          const len = sourceMap.filter((i) => i).length;
           img.onload = () => {
             unLoadSourceRef.current = unLoadSourceRef.current + 1;
-            if (unLoadSourceRef.current >= sourceMap.length) {
+            if (unLoadSourceRef.current >= len) {
               if (Date.now() - start > 3000) {
                 resolve(true);
               } else {
