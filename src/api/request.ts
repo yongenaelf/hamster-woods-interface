@@ -1,4 +1,4 @@
-import { IBeanPassClaimRes, IBeanPassClaimReq, IConfigResponse } from 'types';
+import { IBeanPassClaimRes, IBeanPassClaimReq, IConfigResponse, IChessboardDataResponse } from 'types';
 import request, { cmsRequest } from './axios';
 
 export const getBeanPassClaimClaimable = async (query: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
@@ -13,6 +13,6 @@ export const fetchConfigItems = async (): Promise<IConfigResponse> => {
   return cmsRequest.get<IConfigResponse>('items/config');
 };
 
-export const fetchChessboardData = async (): Promise<IConfigResponse> => {
-  return cmsRequest.get<IConfigResponse>('items/chessboard_data');
+export const fetchChessboardData = async (): Promise<IChessboardDataResponse> => {
+  return cmsRequest.get<IChessboardDataResponse>('items/chessboard_data');
 };

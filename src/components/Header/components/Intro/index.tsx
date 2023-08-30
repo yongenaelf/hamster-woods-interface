@@ -6,7 +6,7 @@ import { useState } from 'react';
 import useGetState from 'redux/state/useGetState';
 export default function Intro() {
   const [rulesVisible, setRulesVisible] = useState(false);
-  const { isMobile } = useGetState();
+  const { isMobile, configInfo } = useGetState();
 
   return (
     <>
@@ -25,13 +25,9 @@ export default function Intro() {
         }}
         className={styles.rulesModal}>
         <div className="h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px]">
-          <p>1.Game Start: Each player initially has 1,500 yuan as an asset or 15,000 yuan as an asset.</p>
-          <p>
-            2.Roll Dice: Roll two dice at the same time each time. if the two dice have the same number of points, you
-            can roll one more time. If you are imprisoned in this turn, the extra turn will be cancelled. Directly
-            imprisoned for three consecutive identical points.
-          </p>
-          <p> 3.Game Start: Each player initially has 1,500 yuan as an asset or 15,000 yuan as an asset.</p>
+          {configInfo?.gameRules.map((item, index) => {
+            return <p key={index}>{item}</p>;
+          })}
         </div>
         <CommonBtn
           title="I know"

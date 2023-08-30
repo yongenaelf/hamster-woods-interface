@@ -15,8 +15,6 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: pointer;
-  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -61,6 +59,11 @@ code {
 .anticon[tabindex],
 a,
 button {
+  cursor: pointer;
+  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
+}
+
+.ant-modal-root {
   cursor: pointer;
   cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }

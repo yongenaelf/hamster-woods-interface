@@ -13,8 +13,6 @@ import Checkerboard from './components/Checkerboard';
 import SideBorder from './components/SideBorder';
 import Role from './components/Role';
 
-import { checkerboardData } from './mockdata';
-
 import Bus from 'assets/images/recreation/bus.svg';
 import RoleImg from 'assets/images/recreation/role.svg';
 import Board from './components/Board';
@@ -54,7 +52,17 @@ export default function Game() {
   const router = useRouter();
   const { initializeContract, updatePlayerInformation } = useWebLogin({});
 
-  const firstNode = checkerboardData[5][4];
+  const {
+    isMobile,
+    isLogin,
+    playerInfo,
+    walletType,
+    walletInfo,
+    imageResources,
+    chessBoardInfo: checkerboardData,
+  } = useGetState();
+
+  const firstNode = checkerboardData![5][4];
   const firstNodePosition: [number, number] = [5, 4];
   const linkedList = useRef<CheckerboardList>();
 
@@ -70,8 +78,8 @@ export default function Game() {
   const [resetStart, setResetStart] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);
 
-  const { isMobile, isLogin, playerInfo, walletType, walletInfo } = useGetState();
-
+  const [goLoading, setGoLoading] = useState<boolean>(false);
+  const [moving, setMoving] = useState<boolean>(false);
   const [goStatus, setGoStatus] = useState<Status>(Status.DISABLED);
   const [showAdd, setShowAdd] = useState<boolean>(false);
 
@@ -111,7 +119,8 @@ export default function Game() {
     });
     if (!state) {
       const timer = setTimeout(() => {
-        setGoStatus(Status.NONE);
+        setGoLoading(false);
+        setMoving(false);
         clearTimeout(timer);
         if (currentNode) {
           currentNodeRef.current = currentNode;
@@ -154,7 +163,7 @@ export default function Game() {
       if (nextPosition[0] === firstNodePosition[0] && nextPosition[1] === firstNodePosition[1]) {
         return;
       } else {
-        getList(checkerboardData[nextPosition[0]][nextPosition[1]], nextPosition);
+        getList(checkerboardData![nextPosition[0]][nextPosition[1]], nextPosition);
       }
     }
   };
@@ -215,7 +224,7 @@ export default function Game() {
   useDebounce(updateCheckerboard, 500, [width, height]);
 
   const go = async () => {
-    if (getGoStatus() !== Status.NONE) {
+    if (goStatus !== Status.NONE) {
       if (!hasNft) {
         setBeanPassModalType(GetBeanPassStatus.Need);
         setBeanPassModalVisible(true);
@@ -228,7 +237,7 @@ export default function Game() {
       return;
     }
     try {
-      setGoStatus(Status.LOADING);
+      setGoLoading(true);
       showMessage.loading();
       console.log('=====Play resetStart', resetStart);
       const res = await Play(resetStart);
@@ -253,30 +262,23 @@ export default function Game() {
           setOpen(true);
           await sleep(1500);
           setOpen(false);
-          setGoStatus(Status.DISABLED);
+          setMoving(true);
           setShowAdd(false);
           jump(step);
         }
       } else {
-        setGoStatus(Status.NONE);
+        setMoving(false);
+        setGoLoading(false);
       }
     } catch (error) {
       console.error('=====error', error);
       const resError = error as IContractError;
       showMessage.error(resError.errorMessage?.message);
-      setGoStatus(Status.NONE);
+      setMoving(false);
+      setGoLoading(false);
     }
     showMessage.hideLoading();
   };
-
-  useDeepCompareEffect(() => {
-    setPlayableCount(playerInfo?.playableCount || 0);
-    if (playerInfo?.playableCount && playerInfo?.playableCount > 0) {
-      setGoStatus(Status.NONE);
-    } else {
-      setGoStatus(Status.DISABLED);
-    }
-  }, [playerInfo]);
 
   const checkBeanPassStatus = useCallback(async () => {
     let beanPassClaimClaimableRes;
@@ -317,7 +319,7 @@ export default function Game() {
       if (hasBeanPass && hasBeanPass.value) {
         setHasNft(true);
       } else {
-        setGoStatus(Status.DISABLED);
+        setHasNft(false);
         checkBeanPassStatus();
       }
     } catch (error) {
@@ -376,14 +378,21 @@ export default function Game() {
     setResetStart(true);
   });
 
-  const getGoStatus = () => {
-    if (goStatus !== Status.DISABLED) {
-      if (!hasNft || !sumScore) {
-        return Status.DISABLED;
-      }
+  useDeepCompareEffect(() => {
+    setPlayableCount(playerInfo?.playableCount || 0);
+    if (!hasNft || !sumScore || moving) {
+      return setGoStatus(Status.DISABLED);
     }
-    return goStatus;
-  };
+    if (goLoading) {
+      setGoStatus(Status.LOADING);
+      return;
+    }
+    if (playerInfo?.playableCount && playerInfo?.playableCount > 0) {
+      setGoStatus(Status.NONE);
+    } else {
+      setGoStatus(Status.DISABLED);
+    }
+  }, [hasNft, moving, goLoading, playerInfo]);
 
   const onShowNFTModalCancel = () => {
     if (nftModalType === ShowBeanPassType.Success) {
@@ -409,10 +418,14 @@ export default function Game() {
   };
 
   return (
-    <div className={`${styles.game} relative ${isMobile && 'flex-col'}`}>
+    <div className={`${styles.game} cursor-custom relative ${isMobile && 'flex-col'}`}>
       {!isMobile && (
         <div className={styles['game__pc__side']}>
-          <div className={styles['game__pc__blur']}></div>
+          <div
+            className={`${styles['game__pc__blur']}`}
+            style={{
+              backgroundImage: `url(${imageResources?.loginBgPc})`,
+            }}></div>
           <BoardLeft />
         </div>
       )}
@@ -443,7 +456,7 @@ export default function Game() {
                 </Role>
               )}
 
-              {checkerboardData.map((row, index) => {
+              {checkerboardData?.map((row, index) => {
                 return (
                   <div key={index} className="flex">
                     {row.map((column) => {
@@ -471,14 +484,18 @@ export default function Game() {
       </div>
       {!isMobile && (
         <div className={`${styles['game__pc__side']}`}>
-          <div className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}></div>
+          <div
+            className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}
+            style={{
+              backgroundImage: `url(${imageResources?.loginBgPc})`,
+            }}></div>
           <div className="z-30 h-full w-full">
             <Board
               hasNft={hasNft}
               onNftClick={onNftClick}
               playableCount={playableCount}
               sumScore={hasNft ? sumScore : 0}
-              status={getGoStatus()}
+              status={goStatus}
               go={go}
             />
           </div>
@@ -486,7 +503,7 @@ export default function Game() {
       )}
 
       {isMobile && (
-        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={getGoStatus()} go={go} />
+        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
       )}
 
       <RecreationModal open={open} type={RecreationModalType.DICE} step={step} />

@@ -1,19 +1,9 @@
 import { Modal } from 'antd';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import dice1 from 'assets/images/recreation/dice1.gif';
-import dice2 from 'assets/images/recreation/dice2.gif';
-import dice3 from 'assets/images/recreation/dice3.gif';
-import dice4 from 'assets/images/recreation/dice4.gif';
-import dice5 from 'assets/images/recreation/dice5.gif';
-import dice6 from 'assets/images/recreation/dice6.gif';
-import Treasure from 'assets/images/recreation/treasure-box.svg';
-import opentTreasure from 'assets/images/recreation/treasure-box-opening.gif';
-import OpenedTreasure from 'assets/images/recreation/treasure-box-opened.svg';
 import LightTreasure from 'assets/images/recreation/treasure-box-light.svg';
 
 import styles from './index.module.css';
-import Image, { StaticImageData } from 'next/image';
 import useGetState from 'redux/state/useGetState';
 
 export enum RecreationModalType {
@@ -38,17 +28,17 @@ interface IRecreationModal {
 function RecreationModal(props: IRecreationModal) {
   const { open, step, bean, type, onClose } = props;
 
-  const { isMobile } = useGetState();
+  const { isMobile, imageResources } = useGetState();
   const [treasureStatus, setTreasureStatus] = useState<TreasureStatus>(TreasureStatus.OPENED);
   const [openable, setOpenable] = useState<boolean>(true);
 
-  const dice: Record<string, StaticImageData> = {
-    1: dice1,
-    2: dice2,
-    3: dice3,
-    4: dice4,
-    5: dice5,
-    6: dice6,
+  const dice: Record<string, string> = {
+    1: imageResources!.dice1,
+    2: imageResources!.dice2,
+    3: imageResources!.dice3,
+    4: imageResources!.dice4,
+    5: imageResources!.dice5,
+    6: imageResources!.dice6,
   };
 
   const openTreasure = () => {
@@ -71,11 +61,15 @@ function RecreationModal(props: IRecreationModal) {
 
   const TreasureCom: Record<TreasureStatus, ReactElement> = {
     [TreasureStatus.CLOSE]: (
-      <Treasure className={`${isMobile ? 'mb-[40px] h-auto w-[67%]' : 'mb-[53px] h-auto w-[377px]'}`} />
+      <img
+        src={imageResources!.treasureBox}
+        className={`${isMobile ? 'mb-[40px] h-auto w-[67%]' : 'mb-[53px] h-auto w-[377px]'}`}
+        alt="treasureBox"
+      />
     ),
     [TreasureStatus.OPENING]: (
-      <Image
-        src={opentTreasure}
+      <img
+        src={imageResources!.treasureBoxOpening}
         className={`${isMobile ? 'mt-[-70px] h-auto w-[80%]' : 'mt-[-100px] h-auto w-[520px]'}`}
         alt="treasure"
       />
@@ -94,24 +88,26 @@ function RecreationModal(props: IRecreationModal) {
             +{bean}
           </span>
         </div>
-        <OpenedTreasure
+        <img
+          src={imageResources?.treasureBoxOpened}
           className={`relative z-[50] ${isMobile ? 'mb-[10px] h-auto w-[67%]' : 'mb-[53px] h-auto w-[377px]'}`}
+          alt=""
         />
       </div>
     ),
   };
 
-  const modalContent: Record<RecreationModalType, ReactElement> = {
-    [RecreationModalType.DICE]: dice[`${step}`] && (
+  const modalContent: Record<RecreationModalType, ReactElement | null> = {
+    [RecreationModalType.DICE]: dice[`${step}`] ? (
       <div className="flex items-center justify-center">
-        <Image src={dice[`${step}`]} className={`${isMobile ? 'h-auto w-full' : 'h-auto w-[100%]'}`} alt="dice1" />
+        <img src={dice[`${step}`]} className={`${isMobile ? 'h-auto w-full' : 'h-auto w-[100%]'}`} alt="dice1" />
       </div>
-    ),
+    ) : null,
     [RecreationModalType.TREASURE]: (
       <div className="relative z-[80] flex h-auto w-full flex-col items-center justify-center">
         {TreasureCom[treasureStatus]}
         <span
-          className={`${styles['treasure-btn']} ${
+          className={`font-fonarto ${styles['treasure-btn']} ${
             isMobile ? styles['treasure-btn-mobile'] : styles['treasure-btn-pc']
           }`}
           onClick={treasureStatus === TreasureStatus.OPENED ? onClose : openTreasure}>

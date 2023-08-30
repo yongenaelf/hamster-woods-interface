@@ -1,13 +1,12 @@
 import Script from 'next/script';
 
-import Layout from 'pageComponents/layout';
-
 import 'antd/dist/antd.css';
+import Provider from 'provider';
+
+import Layout from 'pageComponents/layout';
 
 import 'styles/global.css';
 import 'styles/theme.css';
-
-import Provider from 'provider/';
 
 export const metadata = {
   title: 'BeanGoTown',
