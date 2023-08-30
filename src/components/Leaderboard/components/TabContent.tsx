@@ -11,7 +11,7 @@ type IData = IWeeklyRankResult | ISeasonRankResult;
 interface ITabContent {
   data?: IData;
   emptyText: string;
-  topText: string;
+  topText: string | null;
   showCountdown?: boolean;
 }
 
@@ -26,18 +26,20 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
         className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner text-left ${
           isMobile ? 'text-md' : 'text-xl'
         }`}>
-        {refreshTime ? (
+        {topText ? (
           <div onClick={() => dispatch(toggleShowLeaderboardInfo())}>
             <span className="mr-2 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white font-bold">
               i
             </span>
             <span className="text-white opacity-60">
-              {showCountdown ? <RefreshTime refreshTime={refreshTime} text={topText} /> : topText}
+              {showCountdown && refreshTime ? (
+                <RefreshTime refreshTime={refreshTime} text={topText as string} />
+              ) : (
+                topText
+              )}
             </span>
           </div>
-        ) : (
-          topText
-        )}
+        ) : null}
       </div>
       {!data?.rankingList || data?.rankingList.length === 0 ? (
         <div className="flex flex-grow items-center justify-center bg-blue-700">

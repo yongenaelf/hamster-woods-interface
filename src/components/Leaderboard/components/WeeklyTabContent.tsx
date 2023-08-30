@@ -26,7 +26,7 @@ export const WeeklyTabContent = () => {
       <TabContent
         data={data}
         emptyText="Leaderboards will be displayed at the end of the first week of rankings."
-        topText={topText}
+        topText={data?.status === 0 && data.refreshTime === null ? null : topText}
         showCountdown={data?.status === ChallengeStatus.InProgress}
       />
       <LeaderBoardInfoModal>

@@ -56,6 +56,7 @@ export const WithData: Story = {
     rank: 1,
     unranked: false,
     status: 0,
+    dateNull: false,
     showInfoModal: false,
   },
   argTypes: {
@@ -68,27 +69,29 @@ export const WithData: Story = {
     status: {
       control: { type: 'range', min: 0, max: 2, step: 1 },
     },
+    dateNull: {
+      control: { type: 'boolean' },
+      if: { arg: 'status', eq: 0 },
+    },
   },
   decorators: [
     (Story, context) => {
-      const { rank, records, unranked, status, showInfoModal } = context.args as {
+      const { rank, records, unranked, status, showInfoModal, dateNull } = context.args as {
         rank: number;
         records: number;
         unranked: boolean;
         status: number;
         showInfoModal: boolean;
+        dateNull: boolean;
       };
       const { mutate: weekly } = useWeeklyRank();
       const { mutate: season } = useSeasonRank();
       const { mutate: list } = useRankingSeasonList();
       const { mutate: his } = useRankingSeasonHis('11');
 
-      const refreshTime =
-        status === 2
-          ? null
-          : add(new Date(), {
-              weeks: 1,
-            }).toISOString();
+      const mockDate = new Date().toISOString().slice(0, 10) + `T09:30:00`;
+
+      const refreshTime = status === 0 ? (dateNull ? null : mockDate) : status === 1 ? mockDate : null;
 
       useEffect(() => {
         weekly(
@@ -170,7 +173,7 @@ export const WithData: Story = {
           },
           { revalidate: false },
         );
-      }, [records, rank, unranked, status]);
+      }, [records, rank, unranked, status, dateNull]);
 
       useEffect(() => {
         if (storybookStore.getState().info.showLeaderboardInfo !== showInfoModal)
