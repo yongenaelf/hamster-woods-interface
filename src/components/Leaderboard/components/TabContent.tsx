@@ -2,7 +2,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import { LeaderBoardItem } from './LeaderBoardItem';
 import { TabContentUser } from './TabContentUser';
-import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
+import { MAX_LEADERBOARD_EMPTY, MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 import { dispatch } from 'redux/store';
 import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { RefreshTime } from './RefreshTime';
@@ -68,6 +68,21 @@ export const TabContent = ({ data, emptyText, topText, showCountdown }: ITabCont
                     isCurrentUserRank={i.rank === data.selfRank.rank}
                   />
                 ))}
+                {data?.rankingList.length < MAX_LEADERBOARD_EMPTY
+                  ? Array(MAX_LEADERBOARD_EMPTY - data.rankingList.length)
+                      .fill('')
+                      .map((_i, j) => (
+                        <div
+                          key={j}
+                          className={`flex text-slate-500 text-lg items-center bg-blue-800 rounded-2xl mb-2 ${
+                            isMobile ? 'h-12' : 'h-24'
+                          }`}>
+                          <div className="px-10">&mdash;</div>
+                          <div className="grow"></div>
+                          <div className="px-10">&mdash;</div>
+                        </div>
+                      ))
+                  : null}
               </div>
             </div>
           </div>
