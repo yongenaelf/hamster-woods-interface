@@ -11,7 +11,7 @@ export const useRankingSeasonHis = (seasonId: string) => {
         getRankingHis: IRankingSeasonHistoryResult;
       }>(`
     query {
-      getRankingHis(
+      getRankingHistory(
         getRankingHisDto: {
           seasonId: "${seasonId}"
           caAddress: "${address}"

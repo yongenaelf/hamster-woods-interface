@@ -32,7 +32,7 @@ export const useGameHis = () => {
         getGameHis: IGameHistoryResult;
       }>(`
     query {
-      getGameHis(
+      getGameHistory(
         getGameHisDto: {
           caAddress: "${address}"
           skipCount: 0
