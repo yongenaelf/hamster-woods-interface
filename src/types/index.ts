@@ -156,6 +156,11 @@ export interface IConfigResponse {
   data: IConfigItems;
 }
 
+export interface IReward {
+  text: string;
+  reward: number;
+}
+
 export interface IConfigItems {
   rpcUrl: string;
   network: string;
@@ -166,4 +171,6 @@ export interface IConfigItems {
   bingoGraphqlServer: string;
   portKeyExtensionUrl: string;
   bingoContractAddress: string;
+  leaderboardWeekAward: IReward[];
+  leaderboardSeasonAward: IReward[];
 }
