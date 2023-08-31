@@ -6,6 +6,8 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowLeaderboard } from 'redux/reducer/info';
 import LeaderBoardModal from './components/LeaderBoardModal';
+import { useLeaderboardStarted } from './hooks/useLeaderboardStarted';
+import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal';
 
 enum Tabs {
   Weekly = 'Weekly',
@@ -18,13 +20,18 @@ const _tabClassName =
 
 export const Leaderboard = () => {
   const open = useSelector((state) => state.info.showLeaderboard);
+  const started = useLeaderboardStarted();
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
 
   const tabClassName = `${_tabClassName} ${isMobile ? 'text-md' : 'text-xl'}`;
 
+  const onCancel = () => dispatch(toggleShowLeaderboard());
+
+  if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
+
   return (
-    <LeaderBoardModal open={open} title="Leader Board" onCancel={() => dispatch(toggleShowLeaderboard())}>
+    <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel}>
       <div className="flex flex-col h-full">
         <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
           <button
