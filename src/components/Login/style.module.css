@@ -24,7 +24,7 @@
   .loginBtn,
   .unlockBtn,
   .loginBtnYellow {
-    @apply relative z-20 mb-6 flex h-14 w-full items-center justify-center rounded-[30px]  border-2 bg-[var(--bg-blue-btn)] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:!border-white md:px-8 md:text-[32px] md:leading-6;
+    @apply relative flex items-center z-20 mb-6 flex h-14 w-full items-center justify-center rounded-[30px]  border-2 bg-[var(--bg-blue-btn)] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:!border-white md:px-8 md:text-[32px] md:leading-6;
 
     border-color: rgb(0 0 0 / 10%);
     box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%);
@@ -39,7 +39,7 @@
 
 .loginBtnIcon,
 .loginBtnBlueIcon {
-  @apply absolute left-5 top-[50%] -translate-y-[50%] text-2xl md:left-8 md:text-[44px];
+  @apply absolute left-5 top-[50%] -translate-y-[50%] text-2xl md:left-8 md:text-[44px] flex items-center;
   path {
     @apply fill-white;
   }
@@ -111,5 +111,8 @@
   }
   .drawer__close {
     @apply absolute right-6 top-6;
+    svg {
+      @apply w-6 h-6;
+    }
   }
 }

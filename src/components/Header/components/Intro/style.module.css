@@ -18,3 +18,12 @@
 .intro-pc {
   @apply h-20 w-20;
 }
+
+.content {
+  &::-webkit-scrollbar {
+    @apply w-4;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply !rounded-lg;
+  }
+}
