@@ -135,7 +135,6 @@ export default function Login() {
       }
       if (window.localStorage.getItem(KEY_NAME)) {
         setLoginStatus(LoginStatus.LOCK);
-        did.reset();
         setIsWalletExist(true);
       }
     }
@@ -367,7 +366,7 @@ export default function Login() {
     <div
       className={`cursor-custom ${styles.loginContainer}`}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources!.loginBgMobile : imageResources!.loginBgPc})`,
+        backgroundImage: `url(${isMobileStore ? imageResources!.aloginBgMobile : imageResources!.aloginBgPc})`,
       }}>
       {isLock ? (
         <div

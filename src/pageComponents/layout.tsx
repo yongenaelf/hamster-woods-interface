@@ -15,7 +15,7 @@ import Leaderboard from 'components/Leaderboard';
 import { Store } from 'utils/store';
 import { ConfigProvider, did } from '@portkey/did-ui-react';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import PageLoading from 'components/PageLoading';
 import GameRecord from 'components/GameRecord';
 import useGetState from 'redux/state/useGetState';
@@ -44,7 +44,9 @@ const Layout = dynamic(async () => {
 
     const pathname = usePathname();
 
-    const { isMobile: isMobileStore, chessBoardInfo, imageResources } = useGetState();
+    const { isMobile: isMobileStore, chessBoardInfo, imageResources, isLogin } = useGetState();
+
+    const router = useRouter();
 
     const [resurceList, setResurceList] = useState<Array<string>>([]);
 
@@ -52,16 +54,18 @@ const Layout = dynamic(async () => {
 
     const [sourceLoded, setSourceLoded] = useState(false);
 
+    const [bgImage, setBgImage] = useState('');
+
     const loadResourceList = () => {
       if (!chessMap.length && !resurceList.length) {
         setTimeout(() => {
           setHasLoadedSource(true);
         }, 1000);
       }
-      const sourceMap = [...chessMap, ...resurceList];
+      const sourceMap = [...resurceList, ...chessMap];
 
       const timeTask = new Promise(function (resolve) {
-        setTimeout(resolve, 60000, false);
+        setTimeout(resolve, 30000, false);
       });
 
       const scheduleTask = new Promise(function (resolve) {
@@ -70,7 +74,7 @@ const Layout = dynamic(async () => {
           const img = document.createElement('img');
           img.src = src;
           const len = sourceMap.filter((i) => i).length;
-          img.onload = () => {
+          img.onload = img.onerror = () => {
             unLoadSourceRef.current = unLoadSourceRef.current + 1;
             if (unLoadSourceRef.current >= len) {
               if (Date.now() - start > 3000) {
@@ -99,6 +103,9 @@ const Layout = dynamic(async () => {
     }, [pathname]);
 
     useEffect(() => {
+      if (!isLogin) {
+        router.push('/login');
+      }
       if (typeof window !== undefined) {
         if (window.localStorage.getItem(KEY_NAME)) {
           did.reset();
@@ -110,8 +117,6 @@ const Layout = dynamic(async () => {
     const initConfigAndResurce = async () => {
       const [chessBoardRes, configRes] = await Promise.all([fetchChessboardData(), fetchConfigItems()]);
       configRes && store.dispatch(setConfigInfo(configRes.data));
-      console.log('config', configRes.data);
-
       chessBoardRes && store.dispatch(setChessboardData(chessBoardRes.data));
     };
 
@@ -120,10 +125,20 @@ const Layout = dynamic(async () => {
     }, [sourceLoded]);
 
     useEffect(() => {
-      console.log('chessBoardInfo', chessBoardInfo);
       if (!chessBoardInfo || !imageResources) return;
-      // const { imageResources, data } = chessBoardInfo as any;
-      const imageResourcesArray: string[] = Object.values(imageResources);
+
+      const bgPc = imageResources['aloginBgPc'];
+      const bgM = imageResources['aloginBgMobile'];
+      setBgImage(isMobileStore ? bgM : bgPc);
+
+      let imageResourcesArray: Array<string> = [];
+      for (const picName in imageResources) {
+        if (picName !== 'aloginBgPc' && picName !== 'aloginBgMobile') {
+          imageResourcesArray.push(imageResources[picName]);
+        }
+      }
+      imageResourcesArray = [isMobileStore ? bgM : bgPc, ...imageResourcesArray];
+
       setResurceList(imageResourcesArray);
       const chessMap: string[] = [];
       if (chessBoardInfo.length) {
@@ -167,7 +182,14 @@ const Layout = dynamic(async () => {
         </AntdLayout>
       </>
     ) : (
-      <LoadingAnimation />
+      <>
+        <LoadingAnimation />
+        <img
+          src={bgImage}
+          alt=""
+          className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat z-[-1000]"
+        />
+      </>
     );
   };
 });
