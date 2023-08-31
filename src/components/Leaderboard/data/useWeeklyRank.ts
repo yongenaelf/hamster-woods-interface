@@ -7,7 +7,7 @@ import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useWeeklyRank = () => {
   const address = useAddressWithPrefixSuffix();
-  return useSWR<IWeeklyRankResult | undefined>([address, 'getWeekRank'], async () => {
+  return useSWR([address, 'getWeekRank'], async () => {
     const { getWeekRank } =
       (await graphQLRequest<{
         getWeekRank: IWeeklyRankResult;
@@ -39,7 +39,7 @@ export const useWeeklyRank = () => {
 
       return {
         ...getWeekRank,
-        rankingList: rankingList.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })),
+        rankingList: rankingList?.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })) ?? [],
         selfRank: {
           ...getWeekRank.selfRank,
           caAddress: addPrefixSuffix(getWeekRank.selfRank.caAddress),
