@@ -1,10 +1,19 @@
 import { Modal } from 'antd';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 
 import LightTreasure from 'assets/images/recreation/treasure-box-light.svg';
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+
+import dataAnimation from 'assets/images/animation/treasureBox.json';
+import dice1 from 'assets/images/animation/dice1.json';
+import dice2 from 'assets/images/animation/dice2.json';
+import dice3 from 'assets/images/animation/dice3.json';
+import dice4 from 'assets/images/animation/dice4.json';
+import dice5 from 'assets/images/animation/dice5.json';
+import dice6 from 'assets/images/animation/dice6.json';
 
 export enum RecreationModalType {
   DICE = 'dice',
@@ -28,27 +37,25 @@ interface IRecreationModal {
 function RecreationModal(props: IRecreationModal) {
   const { open, step, bean, type, onClose } = props;
 
-  const { isMobile, imageResources } = useGetState();
+  const { isMobile } = useGetState();
   const [treasureStatus, setTreasureStatus] = useState<TreasureStatus>(TreasureStatus.OPENED);
   const [openable, setOpenable] = useState<boolean>(true);
 
-  const dice: Record<string, string> = {
-    1: imageResources!.dice1,
-    2: imageResources!.dice2,
-    3: imageResources!.dice3,
-    4: imageResources!.dice4,
-    5: imageResources!.dice5,
-    6: imageResources!.dice6,
+  const treasureAnimationRef = useRef<LottieRefCurrentProps | null>(null);
+  const diceAnimationRef = useRef<LottieRefCurrentProps | null>(null);
+
+  const dice: Record<string, Record<string, any>> = {
+    1: dice1,
+    2: dice2,
+    3: dice3,
+    4: dice4,
+    5: dice5,
+    6: dice6,
   };
 
   const openTreasure = () => {
     if (openable) {
-      setTreasureStatus(TreasureStatus.OPENING);
-      setOpenable(false);
-      const timerOpen = setTimeout(() => {
-        setTreasureStatus(TreasureStatus.OPENED);
-        clearTimeout(timerOpen);
-      }, 1600);
+      treasureAnimationRef.current?.play();
     }
   };
 
@@ -59,60 +66,57 @@ function RecreationModal(props: IRecreationModal) {
     }
   }, [open]);
 
-  const TreasureCom: Record<TreasureStatus, ReactElement> = {
-    [TreasureStatus.CLOSE]: (
-      <img
-        src={imageResources!.treasureBox}
-        className={`${isMobile ? 'mb-[40px] h-auto w-[67%]' : 'mb-[53px] h-auto w-[377px]'}`}
-        alt="treasureBox"
-      />
-    ),
-    [TreasureStatus.OPENING]: (
-      <img
-        src={imageResources!.treasureBoxOpening}
-        className={`${isMobile ? 'mt-[-70px] h-auto w-[80%]' : 'mt-[-100px] h-auto w-[520px]'}`}
-        alt="treasure"
-      />
-    ),
-    [TreasureStatus.OPENED]: (
-      <div className="relative flex items-center justify-center">
-        <div
-          className={`absolute left-0 right-0 top-[-60%] z-[40] m-auto ${
-            isMobile ? 'h-auto w-[67%]' : 'h-auto w-[377px]'
-          }`}>
-          <LightTreasure className="relative z-[20] h-full w-full" />
-          <span
-            className={`absolute bottom-0 left-0 right-0 top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
-              isMobile ? 'text-[64px]' : 'text-[96px]'
-            }`}>
-            +{bean}
-          </span>
-        </div>
-        <img
-          src={imageResources?.treasureBoxOpened}
-          className={`relative z-[50] ${isMobile ? 'mb-[10px] h-auto w-[67%]' : 'mb-[53px] h-auto w-[377px]'}`}
-          alt=""
+  const modalContent: Record<RecreationModalType, ReactElement | null> = {
+    [RecreationModalType.DICE]: (
+      <div className="w-full h-full flex items-center justify-center">
+        <Lottie
+          lottieRef={diceAnimationRef}
+          loop={false}
+          autoplay={true}
+          animationData={dice[`${step}`]}
+          onComplete={() => {
+            onClose && onClose();
+          }}
+          className={`${isMobile ? 'h-auto w-[90%]' : 'h-auto w-[80%]'}`}
         />
       </div>
     ),
-  };
-
-  const modalContent: Record<RecreationModalType, ReactElement | null> = {
-    [RecreationModalType.DICE]: dice[`${step}`] ? (
-      <div className="flex items-center justify-center">
-        <img src={dice[`${step}`]} className={`${isMobile ? 'h-auto w-full' : 'h-auto w-[100%]'}`} alt="dice1" />
-      </div>
-    ) : null,
     [RecreationModalType.TREASURE]: (
       <div className="relative z-[80] flex h-auto w-full flex-col items-center justify-center">
-        {TreasureCom[treasureStatus]}
-        <span
+        <div className={`relative flex items-center justify-center mt-[100px]`}>
+          {treasureStatus === TreasureStatus.OPENED ? (
+            <div
+              className={`absolute left-0 right-0 z-[40] m-auto ${
+                isMobile ? 'h-auto w-[67%] top-[-105%]' : 'h-auto w-[377px] top-[-60%]'
+              }`}>
+              <LightTreasure className="relative z-[20] h-full w-full" />
+              <span
+                className={`absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
+                  isMobile ? 'text-[64px]' : 'text-[96px]'
+                }`}>
+                +{bean}
+              </span>
+            </div>
+          ) : null}
+          <Lottie
+            lottieRef={treasureAnimationRef}
+            loop={false}
+            autoplay={false}
+            animationData={dataAnimation}
+            onComplete={() => {
+              setTreasureStatus(TreasureStatus.OPENED);
+            }}
+            className={`z-[50] ${isMobile ? 'mt-[-70px] h-auto w-[70%]' : 'mt-[-100px] h-auto w-[520px]'}`}
+          />
+        </div>
+        <button
           className={`font-fonarto ${styles['treasure-btn']} ${
             isMobile ? styles['treasure-btn-mobile'] : styles['treasure-btn-pc']
           }`}
           onClick={treasureStatus === TreasureStatus.OPENED ? onClose : openTreasure}>
           {treasureStatus === TreasureStatus.OPENED ? 'Confirm' : 'OPEN'}
-        </span>
+        </button>
+        <button onClick={() => onClose && onClose()}>close</button>
       </div>
     ),
   };
