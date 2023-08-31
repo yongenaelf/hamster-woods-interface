@@ -14,8 +14,15 @@ interface ITabContent {
   topText: string | null;
   showCountdown?: boolean;
   notAvailable?: boolean;
+  emptyText?: string;
 }
-export const TabContent = ({ data, topText, showCountdown, notAvailable }: ITabContent) => {
+export const TabContent = ({
+  data,
+  topText,
+  showCountdown,
+  notAvailable,
+  emptyText = 'Leaderboard not available now. Please stay tuned for upcoming challenges.',
+}: ITabContent) => {
   const refreshTime = data?.refreshTime;
 
   return (
@@ -33,9 +40,7 @@ export const TabContent = ({ data, topText, showCountdown, notAvailable }: ITabC
         ) : null}
       </LeaderBoardTopSection>
       {!data?.rankingList || notAvailable ? (
-        <LeaderBoardNoRecord>
-          Leaderboard not available now. Please stay tuned for upcoming challenges.
-        </LeaderBoardNoRecord>
+        <LeaderBoardNoRecord>{emptyText}</LeaderBoardNoRecord>
       ) : (
         <>
           <LeaderBoardItemList data={data} />
