@@ -1,12 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { ANIMATION_DURATION } from 'constants/animation';
 
-import beanImage from 'assets/images/recreation/bean.png';
-
 import styles from './index.module.css';
-import Image from 'next/image';
 import { useDeepCompareEffect } from 'react-use';
 import useGetState from 'redux/state/useGetState';
+import beanTop from 'assets/base64/beanTop';
+import beanRight from 'assets/base64/beanRight';
+import beanLeft from 'assets/base64/beanLeft';
+import beanImage from 'assets/base64/bean';
 
 interface IRole {
   id?: string;
@@ -50,7 +51,11 @@ function Role(props: IRole) {
 
   const PopoverComponent = (
     <div className={`flex h-full items-center pb-[8px] ${styles['role__info']}`}>
-      <Image className={`${isMobile ? 'h-[32px] w-[32px]' : 'h-[64px] w-[64px]'}`} src={beanImage} alt="bean" />
+      <img
+        className={`${isMobile ? 'h-[32px] w-[32px]' : 'h-[64px] w-[64px] max-h-[64Px] max-w-[64Px]'}`}
+        src={beanImage}
+        alt="bean"
+      />
       <span className={`ml-[4px] leading-[24px] text-[#FFFFFF] ${isMobile ? 'text-[20px]' : 'text-[40px]'}`}>
         +{bean}
       </span>
@@ -62,7 +67,7 @@ function Role(props: IRole) {
       <div
         className={`relative flex h-full w-full justify-center bg-[100%_100%] bg-cover bg-no-repeat ${styles['appears-animation']}`}
         style={{
-          backgroundImage: `url(${imageResources?.beanTop})`,
+          backgroundImage: `url(${beanTop})`,
         }}>
         {PopoverComponent}
       </div>
@@ -73,7 +78,7 @@ function Role(props: IRole) {
           isMobile ? 'pl-[8px]' : 'pl-[18px]'
         } pt-[4px] ${styles['appears-animation-right']}`}
         style={{
-          backgroundImage: `url(${imageResources?.beanRight})`,
+          backgroundImage: `url(${beanRight})`,
         }}>
         {PopoverComponent}
       </div>
@@ -84,7 +89,7 @@ function Role(props: IRole) {
           isMobile ? 'pl-[4px]' : 'pl-[6px]'
         } pt-[4px] ${styles['appears-animation-left']}`}
         style={{
-          backgroundImage: `url(${imageResources?.beanLeft})`,
+          backgroundImage: `url(${beanLeft})`,
         }}>
         {PopoverComponent}
       </div>
