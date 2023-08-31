@@ -425,7 +425,7 @@ export default function Game() {
           <div
             className={`${styles['game__pc__blur']}`}
             style={{
-              backgroundImage: `url(${imageResources?.loginBgPc})`,
+              backgroundImage: `url(${imageResources?.aloginBgPc})`,
             }}></div>
           <BoardLeft />
         </div>
@@ -488,7 +488,7 @@ export default function Game() {
           <div
             className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}
             style={{
-              backgroundImage: `url(${imageResources?.loginBgPc})`,
+              backgroundImage: `url(${imageResources?.aloginBgPc})`,
             }}></div>
           <div className="z-30 h-full w-full">
             <Board
