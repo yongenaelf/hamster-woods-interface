@@ -28,7 +28,7 @@ function error(content: ReactNode, duration = 2, params?: ArgsProps) {
     message: content,
     placement: 'top',
     closeIcon: <></>,
-    icon: <Info className="mt-[2px] h-[20px] w-[20px]" />,
+    icon: <Info className="mt-[2px] h-[20Px] w-[20Px]" />,
     duration,
     maxCount: 1,
     className: 'bean-show-message-error',
