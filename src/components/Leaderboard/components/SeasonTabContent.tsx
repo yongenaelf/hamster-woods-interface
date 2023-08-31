@@ -30,11 +30,8 @@ export const SeasonTabContent = () => {
 
   const FIRST_WEEK =
     data?.status === ChallengeStatus.InProgress && data.rankingList.length === 0 && data.refreshTime !== null;
-  const AFTER_FIRST_WEEK = data?.status === ChallengeStatus.InProgress && data.rankingList.length > 0;
 
-  const topText = FIRST_WEEK
-    ? null
-    : data?.status === ChallengeStatus.InProgress
+  const topText = data?.refreshTime
     ? 'Next leaderboard updates on '
     : `${seasonName ?? 'Season'} has ended and rewards will be distributed shortly.`;
 
@@ -43,16 +40,16 @@ export const SeasonTabContent = () => {
       <TabContent
         data={data}
         topText={topText}
-        showCountdown={data?.status === ChallengeStatus.InProgress}
-        notAvailable={(data?.status === 0 && data.refreshTime === null) || FIRST_WEEK}
-        emptyText={
-          FIRST_WEEK
-            ? 'The seasonal leaderboard will be displayed after the first weekly challenge ends and its data will be updated on a weekly basis.'
-            : undefined
-        }
+        emptyText="The seasonal leaderboard will be displayed after the first weekly challenge ends and its data will be updated on a weekly basis."
+        showEmptyText={FIRST_WEEK}
       />
       <LeaderBoardInfoModal data={rewards}>
-        {AFTER_FIRST_WEEK ? (
+        {data?.status === ChallengeStatus.Settlement ? (
+          <>
+            The ranking for {seasonName} has been finalized and the rewards will be distributed to the top {top} players
+            soon.
+          </>
+        ) : (
           <>
             The seasonal leaderboard ranks players based on their highest weekly score (number of Beans earned) during
             the season.
@@ -61,14 +58,7 @@ export const SeasonTabContent = () => {
             {top} players shortly. Players with the same score will be ranked in the order they achieve the score,
             giving higher ranking to early achievers.
           </>
-        ) : null}
-
-        {data?.status === ChallengeStatus.Settlement ? (
-          <>
-            The ranking for {seasonName} has been finalized and the rewards will be distributed to the top {top} players
-            soon.
-          </>
-        ) : null}
+        )}
       </LeaderBoardInfoModal>
     </>
   );
