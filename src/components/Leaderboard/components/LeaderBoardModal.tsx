@@ -18,7 +18,9 @@ export default function LeaderBoardModal({
     <Modal className={styles.leaderboardModal} {...params} closable={false} centered>
       <Row className={`${styles.modal__title} modal__title`} justify="center" align="middle">
         <span>{title}</span>
-        {closable && <CloseIcon className={styles.modal__closeIcon} onClick={onCancel} />}
+        {closable && (
+          <CloseIcon className={isMobile ? styles.modal__closeIcon_m : styles.modal__closeIcon} onClick={onCancel} />
+        )}
       </Row>
       <div className={`${isMobile ? 'h-[60vh]' : 'h-[50vh]'} overflow-auto`}>{children}</div>
     </Modal>

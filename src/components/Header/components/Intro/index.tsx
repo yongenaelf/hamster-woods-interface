@@ -24,7 +24,10 @@ export default function Intro() {
           setRulesVisible(false);
         }}
         className={styles.rulesModal}>
-        <div className="h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px]">
+        <div
+          className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] ${
+            isMobile ? '' : styles.content
+          }`}>
           {configInfo?.gameRules.map((item, index) => {
             return <p key={index}>{item}</p>;
           })}

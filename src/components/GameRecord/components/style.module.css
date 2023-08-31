@@ -25,7 +25,15 @@
 
     text-shadow: 0 0 1px rgb(0 0 0 / 25%);
   }
-  .modal__closeIcon {
+  .modal__closeIcon,
+  .modal__closeIcon_m {
+    @apply absolute right-0 top-[50%] -translate-y-[50%] !text-white;
+  }
+
+  .modal__closeIcon_m {
     @apply absolute right-0 top-[50%] -translate-y-[50%];
+    svg {
+      @apply !w-[30px] !h-[30px] fill-white;
+    }
   }
 }
