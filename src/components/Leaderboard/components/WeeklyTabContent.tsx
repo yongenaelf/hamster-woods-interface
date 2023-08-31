@@ -26,19 +26,13 @@ export const WeeklyTabContent = () => {
     return `on ${format(parseISO(refreshTime), "MMMM do 'at' HH:mm")} (UTC)`;
   }, [data?.refreshTime]);
 
-  const topText =
-    data?.status === ChallengeStatus.InProgress
-      ? 'This weekly challenge ends in: '
-      : 'This weekly challenge has ended and rewards will be distributed shortly.';
+  const topText = data?.refreshTime
+    ? 'This weekly challenge ends in: '
+    : 'This weekly challenge has ended and rewards will be distributed shortly.';
 
   return (
     <>
-      <TabContent
-        data={data}
-        topText={topText}
-        showCountdown={data?.status === ChallengeStatus.InProgress}
-        notAvailable={data?.status === 0 && data.refreshTime === null}
-      />
+      <TabContent data={data} topText={topText} />
       <LeaderBoardInfoModal data={rewards}>
         {data?.status === ChallengeStatus.InProgress ? (
           <>
