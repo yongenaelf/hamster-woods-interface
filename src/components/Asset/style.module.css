@@ -4,4 +4,8 @@
   :global(.portkey-ui-asset-wrapper) {
     @apply w-full h-full overflow-auto;
   }
+
+  :global(.portkey-ui-ramp-frame .portkey-ui-ramp-content .portkey-ui-ramp-input .portkey-ant-input-affix-wrapper) {
+    @apply !py-0;
+  }
 }

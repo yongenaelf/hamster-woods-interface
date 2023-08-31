@@ -2711,14 +2711,14 @@
     "@portkey/validator" "^0.0.1-alpha.9.0"
     aelf-sdk "^3.2.44"
 
-"@portkey/accounts@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/accounts/-/accounts-1.4.1-alpha.1.tgz#1df8db0984ffaf499ea5b326f56629db8c2585fd"
-  integrity sha512-FP5WUR8O6XFYoQoUlE++WyP2nMUSbNn3QDc1QiRIwLu/uiVJzg108TT2M9PjLU5Whf8L8Y/L1dTNkePGe9GD5Q==
+"@portkey/accounts@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/accounts/-/accounts-1.4.1.tgz#4c927eafca809dd0bf790780323c0b005284e192"
+  integrity sha512-flhvBHwqMyLGCpRy9L9sif+Z7MDoOsM5U3gtNWDdNRuX3WSVrKJfniPMbRlTyKv3vCDCLF2CE+VCjjiUFX5Tmg==
   dependencies:
-    "@portkey/types" "^1.4.1-alpha.1"
-    "@portkey/utils" "^1.4.1-alpha.1"
-    "@portkey/validator" "^1.4.1-alpha.1"
+    "@portkey/types" "^1.4.1"
+    "@portkey/utils" "^1.4.1"
+    "@portkey/validator" "^1.4.1"
     aelf-sdk "^3.2.44"
 
 "@portkey/contracts@^0.0.1-alpha.9.0":
@@ -2739,14 +2739,14 @@
     "@portkey/utils" "^1.3.0-alpha.1"
     aelf-sdk "^3.2.44"
 
-"@portkey/contracts@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-1.4.1-alpha.1.tgz#e4490c584b2aa581a139c03d39be4312f24a5b65"
-  integrity sha512-vsWPWTlxZqciVUtrPxm0YxfOjkbuDp0XKQQnwppQjc5v3oIQYcqcoz1xdSUSld/ss5jQkDXKhAOwNgYmH3yemQ==
+"@portkey/contracts@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-1.4.1.tgz#389a65e339bb615feefd431e32c1b9a7508543c3"
+  integrity sha512-WdAIQf0Of/KFvkdvhcrIcliRlJzlG5FB0nxG4Wjo/R5c3R885wIEqvVYdcJ0huqa7dsz/AqWrRAnQNp7OZp6+Q==
   dependencies:
     "@portkey/provider-types" "^1.0.1-alpha.0"
-    "@portkey/types" "^1.4.1-alpha.1"
-    "@portkey/utils" "^1.4.1-alpha.1"
+    "@portkey/types" "^1.4.1"
+    "@portkey/utils" "^1.4.1"
     aelf-sdk "^3.2.44"
 
 "@portkey/detect-provider@1.0.1-alpha.0":
@@ -2763,14 +2763,14 @@
   dependencies:
     "@portkey/provider-types" "^0.0.1-alpha.26"
 
-"@portkey/did-ui-react@1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-1.4.1-alpha.1.tgz#f06901227ffed1b347811a6fadadd1579ef1053d"
-  integrity sha512-7hHCBtYjNcySO7cRL8LuPDWBw0RXCbm2BU93nNazZRce5daJkt7I5FAUw8/CzXjJljBMgmFjor66+2hzKPBQJw==
+"@portkey/did-ui-react@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-1.4.1.tgz#210f7dc0a4eac58a5dcf8d5c7795764cb2c94d4c"
+  integrity sha512-hsWIbDfrU8aS3dyz1d3yp4aDXdXmLVdAjUmFSJJpt210WzbLkyVPhvT3NhAJVsvdh69oEP3JebXjadOWvyp+eA==
   dependencies:
     "@matt-block/react-recaptcha-v2" "^2.0.0"
-    "@portkey/did" "^1.4.1-alpha.1"
-    "@portkey/socket" "^1.4.1-alpha.1"
+    "@portkey/did" "^1.4.1"
+    "@portkey/socket" "^1.4.1"
     "@rc-component/portal" "1.0.2"
     aelf-sdk "^3.2.40"
     antd "4.24.4"
@@ -2823,18 +2823,18 @@
     aelf-sdk "^3.2.44"
     react "^18.2.0"
 
-"@portkey/did@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/did/-/did-1.4.1-alpha.1.tgz#8d22a65e3c0ac6b5caff6eb0fe1777cf2be18422"
-  integrity sha512-13NYgT5GCVtZa7lKmc/pv3A2Hpx43k+Ad0egCB/N0k53EdpHpbPezMs8O3AJFryZiAqsd9jAbog5BY3aAU8uIA==
+"@portkey/did@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/did/-/did-1.4.1.tgz#b461ba54295e87f3d1aa4504445736362e61cbb6"
+  integrity sha512-YH4oPXCX7Qp2DLaHzxTYcg5SxGrQcwculRDje3AljJrOVF1VeqmaU9ePDeV/2qr1KXTQUfjJxhcpJbd10mXfhQ==
   dependencies:
-    "@portkey/accounts" "^1.4.1-alpha.1"
-    "@portkey/contracts" "^1.4.1-alpha.1"
-    "@portkey/graphql" "^1.4.1-alpha.1"
-    "@portkey/request" "^1.4.1-alpha.1"
-    "@portkey/services" "^1.4.1-alpha.1"
-    "@portkey/types" "^1.4.1-alpha.1"
-    "@portkey/utils" "^1.4.1-alpha.1"
+    "@portkey/accounts" "^1.4.1"
+    "@portkey/contracts" "^1.4.1"
+    "@portkey/graphql" "^1.4.1"
+    "@portkey/request" "^1.4.1"
+    "@portkey/services" "^1.4.1"
+    "@portkey/types" "^1.4.1"
+    "@portkey/utils" "^1.4.1"
     aelf-sdk "^3.2.44"
     react "^18.2.0"
 
@@ -2848,13 +2848,13 @@
     graphql "^16.6.0"
     subscriptions-transport-ws "^0.11.0"
 
-"@portkey/graphql@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/graphql/-/graphql-1.4.1-alpha.1.tgz#ed4b7cb6e1086452db4bc5d9996428d4f2825761"
-  integrity sha512-E0yfMejHPpcz7Xyn3Lp73hZpMy9UqiJsxGfm1kxnnz78m6eAicqNHKFbhZe8t+iaKdXa5Im8yVCZPzsfLheYcg==
+"@portkey/graphql@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/graphql/-/graphql-1.4.1.tgz#c16e35472d469431bb5b6e13d8fb71f27c93917b"
+  integrity sha512-2ja+lieuysVxMjyod8iro8Z3vf2dPbmIX7OCiaO4EuyrplTZWcY7x9vbNQMkn0E5nCBMirsEr7IaXC0ITWE9TA==
   dependencies:
     "@apollo/client" "^3.7.3"
-    "@portkey/types" "^1.4.1-alpha.1"
+    "@portkey/types" "^1.4.1"
     graphql "^16.6.0"
     subscriptions-transport-ws "^0.11.0"
 
@@ -2889,12 +2889,12 @@
     "@portkey/types" "^0.0.1-alpha.9.0"
     query-string "^6.14.1"
 
-"@portkey/request@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/request/-/request-1.4.1-alpha.1.tgz#28afc6250b76c2255532f0fd703a31d1cbd8769c"
-  integrity sha512-d3VuV9sJeiqWpPh/nFxK2ZB7RgSInhivgToaTCMQhbBSnCOMpYt3L7OG3uITKHR6dV//t8GKoUiD8WsdQqy6tQ==
+"@portkey/request@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/request/-/request-1.4.1.tgz#1b51b7dc2e5d2514a394325202be68659be67871"
+  integrity sha512-0bU1/j7IULghCs3FyeNd0i/8c5jXuyxfgIXOpmAdwrTJIikh3lV63VQbfw3t0dio/joUMgoRcE0MkWVtQXtoWQ==
   dependencies:
-    "@portkey/types" "^1.4.1-alpha.1"
+    "@portkey/types" "^1.4.1"
     query-string "^7.1.1"
 
 "@portkey/services@^0.0.1-alpha.9.0":
@@ -2908,24 +2908,24 @@
     aelf-sdk "^3.2.44"
     query-string "^7.1.1"
 
-"@portkey/services@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/services/-/services-1.4.1-alpha.1.tgz#488ebc9ca8ab96485e7f6695e741b876d1ac7229"
-  integrity sha512-00JNDrnF7eounfyvk8o80BSjMhCQFTt/kQbzzKZgQerDq9XJOfBjdV/FpfLqgdFmVyt4FwHxY1bgIa975y9lww==
+"@portkey/services@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/services/-/services-1.4.1.tgz#9f007f09ac83a518982c970bb9ce443a9cc841a2"
+  integrity sha512-J9dLozBdi90yHRZEMkdqX1a/9Ihsc7LqrrzyacBk3sb4w9tRdWq4m1LoOBw1cElDcHQLtJmA8Rsu2qhA0D1aQA==
   dependencies:
-    "@portkey/graphql" "^1.4.1-alpha.1"
-    "@portkey/request" "^1.4.1-alpha.1"
-    "@portkey/types" "^1.4.1-alpha.1"
+    "@portkey/graphql" "^1.4.1"
+    "@portkey/request" "^1.4.1"
+    "@portkey/types" "^1.4.1"
     aelf-sdk "^3.2.44"
     query-string "^7.1.1"
 
-"@portkey/socket@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-1.4.1-alpha.1.tgz#1ff76c1bd6343b7f3137d4c8e3baf26ad4609ed1"
-  integrity sha512-8DIEgKPOKjW30xbFf2qmNhu27otWGBdMECn81rRXqHDDp4wG6iab6se+HU6pSePNFKrappXu/Llab6blkdJADw==
+"@portkey/socket@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-1.4.1.tgz#00c2970930928ddb2d4d51d1193d3d245fc6f9fc"
+  integrity sha512-LBbEYB4CREsnVtXWmLQ1b/1K1cZON5rb7nOQwY3Rc7zfK+h0xdx5uFcY5dwQ7fN7dCJFklqjaMVnj+oor7pG0A==
   dependencies:
     "@abp/signalr" "^7.0.0"
-    "@portkey/utils" "^1.4.1-alpha.1"
+    "@portkey/utils" "^1.4.1"
 
 "@portkey/types@1.0.0-alpha.4":
   version "1.0.0-alpha.4"
@@ -2948,10 +2948,10 @@
   dependencies:
     "@types/elliptic" "^6.4.14"
 
-"@portkey/types@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-1.4.1-alpha.1.tgz#feb81ebb6839c3213bb1cea72762310bfe512bb2"
-  integrity sha512-kUNs3HodmoVfMpCX5S2prYdLApsWi559WtTR4jP0fQj5kX1nQzqIiTi6E5ublSTzTdypjsB94qNa8zCMzijsjw==
+"@portkey/types@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-1.4.1.tgz#1729a6abb0e34a5e5ddc76b7a28e0ce03018e541"
+  integrity sha512-98WR5xe2SN3650xtZ/FWdkpNuKvgnek4nERYNMzbqwwq3PPhUUUiJ7E/QegRnOcGiolapJ4rxI/YaV53f0ilqg==
   dependencies:
     "@types/elliptic" "^6.4.14"
 
@@ -2970,10 +2970,10 @@
     aelf-sdk "^3.2.44"
     query-string "^7.1.1"
 
-"@portkey/utils@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-1.4.1-alpha.1.tgz#659241440d8579d530f844aceb1952b39651c656"
-  integrity sha512-eFLW01EC9UDrQEqF5Y5ymy8RRZp5+re4mvSWts8NZvgjWmfIKgU348j+FDDCTHIHBL7morulUHy8hXeQhPVnpA==
+"@portkey/utils@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-1.4.1.tgz#1c21f863cb45510fa73792eb600a948172d56134"
+  integrity sha512-HZqpCvtJCThhpK/fENZUZ6TPD+4uCBLPMWkHrB5nXcZOESoMIO8pYu54cnt3G3TSREcDLgnB8ArTRynj4BEgAA==
   dependencies:
     aelf-sdk "^3.2.44"
     query-string "^7.1.1"
@@ -2983,10 +2983,10 @@
   resolved "https://registry.npmjs.org/@portkey/validator/-/validator-0.0.1-alpha.9.0.tgz"
   integrity sha512-0m3TpgMnEThNYG0qySX+1vZ1BLbIRjxavt404xkS94KMWtus4tUpRrP4/NixMrDFOPSgoa2Yabe6UXQIjaq4pA==
 
-"@portkey/validator@^1.4.1-alpha.1":
-  version "1.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@portkey/validator/-/validator-1.4.1-alpha.1.tgz#015c9f7534362881bed109571343a4b84e7ac7c7"
-  integrity sha512-T8iBQ2/8lGPu7Iqglp4Y0MIvWobz2GiDyO18bHZ9hyh9Ph4xlbsOY8dDOkDc5yDNLVvRuQPEsfa/9S6cQlCwVQ==
+"@portkey/validator@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@portkey/validator/-/validator-1.4.1.tgz#ae07d7aa424a11434dbea11ed79a2a2be931e760"
+  integrity sha512-AVGjbwzwEIAabZCSzpxmPaoe2vbd8EsdX4vXyEfkZ/Z2rPnCJ051xHcaOlFwdf4mlQIIa5W0NDh0k4RzP2a2rg==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
