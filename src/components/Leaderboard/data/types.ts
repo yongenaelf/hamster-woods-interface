@@ -5,7 +5,7 @@ export interface IRankItem {
 }
 
 interface IRankResult {
-  rankingList: IRankItem[];
+  rankingList: IRankItem[] | null;
   selfRank: IRankItem;
 }
 

@@ -24,7 +24,7 @@ interface IGameHistoryResult {
 
 export const useGameHistory = () => {
   const address = useAddressWithPrefixSuffix();
-  return useSWR<IGameHistoryResult | undefined>([address, 'getGameHis'], async () => {
+  return useSWR([address, 'getGameHis'], async () => {
     const { getGameHistory } =
       (await graphQLRequest<{
         getGameHistory: IGameHistoryResult;
