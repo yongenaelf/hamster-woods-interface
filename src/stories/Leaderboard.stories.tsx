@@ -7,6 +7,7 @@ import { storybookStore } from '../../.storybook/preview';
 import { useSeasonRank } from '../components/Leaderboard/data/useSeasonRank';
 import { useRankingSeasonList } from '../components/Leaderboard/data/useRankingSeasonList';
 import { useRankingHistory } from '../components/Leaderboard/data/useRankingHistory';
+import { setConfigInfo } from 'redux/reducer/configInfo';
 
 const meta: Meta<typeof Leaderboard> = {
   title: 'BeangoTown/Leaderboard',
@@ -68,10 +69,6 @@ export const WithData: Story = {
     status: {
       control: { type: 'range', min: 0, max: 2, step: 1 },
     },
-    dateNull: {
-      control: { type: 'boolean' },
-      if: { arg: 'status', eq: 0 },
-    },
   },
   decorators: [
     (Story, context) => {
@@ -88,9 +85,9 @@ export const WithData: Story = {
       const { mutate: list } = useRankingSeasonList();
       const { mutate: his } = useRankingHistory('11');
 
-      const mockDate = new Date().toISOString().slice(0, 10) + `T09:30:00`;
+      const mockDate = new Date().toISOString().slice(0, 10) + `T19:30:00`;
 
-      const refreshTime = status === 0 ? (dateNull ? null : mockDate) : status === 1 ? mockDate : null;
+      const refreshTime = dateNull ? null : mockDate;
 
       useEffect(() => {
         weekly(
@@ -178,6 +175,26 @@ export const WithData: Story = {
         if (storybookStore.getState().info.showLeaderboardInfo !== showInfoModal)
           storybookStore.dispatch(toggleShowLeaderboardInfo());
       }, [showInfoModal]);
+
+      useEffect(() => {
+        storybookStore.dispatch(
+          setConfigInfo({
+            leaderboardWeekAward: [
+              { text: '1', reward: 100 },
+              { text: '2', reward: 80 },
+              { text: '3', reward: 50 },
+              { text: '4-15', reward: 20 },
+              { text: '16-30', reward: 10 },
+            ],
+            leaderboardSeasonAward: [
+              { text: '1', reward: 100 },
+              { text: '2', reward: 80 },
+              { text: '3', reward: 50 },
+              { text: '4-10', reward: 10 },
+            ],
+          }),
+        );
+      }, []);
 
       return <Story />;
     },
