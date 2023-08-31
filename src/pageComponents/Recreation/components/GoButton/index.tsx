@@ -42,7 +42,7 @@ function GoButton({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }:
       <>
         <span
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px]'
+            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
           Go
         </span>
@@ -64,7 +64,7 @@ function GoButton({ go, status = Status.NONE, playableCount = 0, sumScore = 5 }:
       <>
         <span
           className={`font-fonarto font-[500] text-[#fff] text-stroke-[#8E8E8E] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px]'
+            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
           Go
         </span>
