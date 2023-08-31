@@ -1,18 +1,24 @@
 import { WalletType } from 'constants/index';
-import { getContractBasic } from '@portkey/contracts';
-import { ChainId, SendOptions } from '@portkey/types';
+import { IPortkeyContract, getContractBasic } from '@portkey/contracts';
+import { ChainId, IContract, IViewContract, SendOptions } from '@portkey/types';
 import { did } from '@portkey/did-ui-react';
 
-import { CallContractParams } from 'types';
+import { CallContractParams, IDiscoverInfo, PortkeyInfoType, WalletInfoType } from 'types';
 import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
 import { formatErrorMsg } from 'utils/formattError';
-import { aelf, sleep } from '@portkey/utils';
+import { aelf } from '@portkey/utils';
 import { getTxResult } from 'utils/getTxResult';
 import DetectProvider from 'utils/InstanceProvider';
 
 interface IContractConfig {
   chainId: ChainId;
   rpcUrl?: string;
+  contractAddress: string;
+}
+
+interface IWallet {
+  discoverInfo?: IDiscoverInfo;
+  portkeyInfo?: PortkeyInfoType;
 }
 
 export default class ContractRequest {
@@ -20,7 +26,12 @@ export default class ContractRequest {
   private walletType: WalletType = WalletType.unknown;
   private chainId: ChainId | undefined;
   private rpcUrl: string | undefined;
-  private wallet: any = {};
+  private wallet: IWallet = {};
+  public caContractProvider?: IContract;
+  public caContract?: IPortkeyContract;
+  public viewContract?: IViewContract;
+  private caAddress: string | undefined;
+  private caHash: string | undefined;
 
   static get() {
     if (!ContractRequest.instance) {
@@ -32,9 +43,22 @@ export default class ContractRequest {
   public setConfig(config: IContractConfig) {
     this.chainId = config.chainId;
     this.rpcUrl = config.rpcUrl;
+    this.initCaContract(config.contractAddress);
   }
 
-  public setWallet(wallet: any, walletType: WalletType) {
+  public resetConfig() {
+    this.chainId = undefined;
+    this.rpcUrl = undefined;
+    this.caContractProvider = undefined;
+    this.caContract = undefined;
+    this.viewContract = undefined;
+    this.caAddress = undefined;
+    this.caHash = undefined;
+    this.walletType = WalletType.unknown;
+    this.wallet = {};
+  }
+
+  public setWallet(wallet: WalletInfoType, walletType: WalletType) {
     if (wallet) {
       this.walletType = walletType;
       if (walletType === WalletType.discover) {
@@ -44,6 +68,66 @@ export default class ContractRequest {
       }
     }
   }
+
+  public async initCaContract(contractAddress: string) {
+    if (this.walletType === WalletType.discover) {
+      this.caContractProvider = await this.getProviderCaContract(contractAddress);
+    } else {
+      this.caContract = await this.getCaContract();
+    }
+
+    this.viewContract = await this.getViewContract(contractAddress);
+  }
+
+  private getCaContract = async () => {
+    if (!this.caContract) {
+      const chainsInfo = await did.services.getChainsInfo();
+      const chainInfo = chainsInfo.find((chain) => chain.chainId === this.chainId);
+      if (!chainInfo) {
+        throw new Error(`Chain is not running: ${this.chainId}`);
+      }
+      const didWalletInfo = this.wallet.portkeyInfo!;
+      const account = aelf.getWallet(didWalletInfo.walletInfo.privateKey);
+      const caContract = await getContractBasic({
+        contractAddress: chainInfo.caContractAddress,
+        account,
+        rpcUrl: chainInfo.endPoint,
+      });
+      this.caContract = caContract;
+
+      this.caAddress = didWalletInfo.walletInfo.address;
+      this.caHash = didWalletInfo.caInfo.caHash;
+    }
+    return this.caContract;
+  };
+
+  private getViewContract = async (contractAddress: string) => {
+    if (!this.viewContract) {
+      const aelfInstance = getAElfInstance(this.rpcUrl!);
+      const viewWallet = getViewWallet();
+
+      const contract = await aelfInstance.chain.contractAt(contractAddress, viewWallet);
+      this.viewContract = contract;
+    }
+    return this.viewContract;
+  };
+
+  private getProviderCaContract = async (contractAddress: string) => {
+    if (!this.caContractProvider) {
+      console.log('getProviderCaContract');
+
+      const dp = await DetectProvider.getDetectProvider();
+      const chainProvider = await dp?.getChain(this.chainId as ChainId);
+      if (!chainProvider) return;
+      const contract = await getContractBasic({
+        contractAddress: contractAddress,
+        chainProvider: chainProvider,
+      });
+      this.caContractProvider = contract;
+      return contract;
+    }
+    return this.caContractProvider;
+  };
 
   public async callSendMethod<T, R>(params: CallContractParams<T>, sendOptions?: SendOptions) {
     if (this.walletType === WalletType.unknown) {
@@ -57,20 +141,19 @@ export default class ContractRequest {
       case WalletType.discover: {
         const discoverInfo = this.wallet.discoverInfo!;
         try {
-          const dp = await DetectProvider.getDetectProvider();
-          const chainProvider = await dp?.getChain(this.chainId as ChainId);
-          if (!chainProvider) return;
-          const contract = await getContractBasic({
-            contractAddress: params.contractAddress,
-            chainProvider: chainProvider,
-          });
+          const contract = await this.getProviderCaContract(params.contractAddress);
           const accounts = discoverInfo.accounts;
+
+          if (!accounts) {
+            throw new Error('Account not found');
+          }
+
           const accountsInChain = accounts[this.chainId as ChainId];
           if (!accountsInChain || accountsInChain.length === 0) {
             throw new Error(`Account not found in chain: ${this.chainId}`);
           }
           const address = accountsInChain[0];
-          result = await contract.callSendMethod(params.methodName, address, params.args, sendOptions);
+          result = await contract?.callSendMethod(params.methodName, address, params.args, sendOptions);
         } catch (error) {
           console.error('=====callSendMethod error', error);
           return Promise.reject(error);
@@ -79,23 +162,11 @@ export default class ContractRequest {
       }
       case WalletType.portkey: {
         try {
-          const chainsInfo = await did.services.getChainsInfo();
-          const chainInfo = chainsInfo.find((chain) => chain.chainId === this.chainId);
-          if (!chainInfo) {
-            throw new Error(`Chain is not running: ${this.chainId}`);
-          }
-          const didWalletInfo = this.wallet.portkeyInfo!;
-          const account = aelf.getWallet(didWalletInfo.walletInfo.privateKey);
-          const caContract = await getContractBasic({
-            contractAddress: chainInfo.caContractAddress,
-            account,
-            rpcUrl: chainInfo.endPoint,
-          });
-          result = await caContract.callSendMethod(
+          result = await this.caContract?.callSendMethod(
             'ManagerForwardCall',
-            didWalletInfo.walletInfo.address,
+            this.caAddress!,
             {
-              caHash: didWalletInfo.caInfo.caHash,
+              caHash: this.caHash,
               contractAddress: params.contractAddress,
               methodName: params.methodName,
               args: params.args,
@@ -114,7 +185,6 @@ export default class ContractRequest {
 
     const { transactionId, TransactionId } = result.result || result;
     const resTransactionId = TransactionId || transactionId;
-    await sleep(1000);
     const transaction = await getTxResult(resTransactionId!, this.chainId as ChainId, 0, this.rpcUrl!);
 
     return Promise.resolve({

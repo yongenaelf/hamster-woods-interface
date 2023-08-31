@@ -1,4 +1,3 @@
-import { sleep } from './common';
 import { getAElf } from './getTxResult';
 
 export async function getBlockHeight(
@@ -20,7 +19,6 @@ export async function getBlockHeight(
     if (reGetCount > 10) {
       throw Error(`timeout;`);
     }
-    await sleep(1000);
     reGetCount++;
     return getBlockHeight(chainId, reGetCount, rpcUrl, expectedBlockHeight);
   }

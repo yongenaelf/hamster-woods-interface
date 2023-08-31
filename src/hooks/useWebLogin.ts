@@ -238,6 +238,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const config = {
       chainId: curChain,
       rpcUrl: configInfo.configInfo?.rpcUrl,
+      contractAddress: configInfo!.configInfo!.bingoContractAddress,
     };
     contract.setWallet(walletInfo, walletType);
     contract.setConfig(config);

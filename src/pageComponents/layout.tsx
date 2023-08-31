@@ -6,7 +6,6 @@ import Header from 'components/Header';
 import LoadingAnimation from 'components/Loading/LoadingAnimation';
 // import WebLoginInstance from 'contract/webLogin';
 
-import AWS from 'aws-sdk';
 import dynamic from 'next/dynamic';
 
 import { store } from 'redux/store';
@@ -95,15 +94,6 @@ const Layout = dynamic(async () => {
       });
     };
 
-    const initAwsConfig = () => {
-      AWS.config.update({
-        region: 'ap-northeast-1',
-        credentials: new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: 'identityPoolID',
-        }),
-      });
-    };
-
     const showHeaderAndFooter = useMemo(() => {
       return pathname === '/';
     }, [pathname]);
@@ -149,7 +139,6 @@ const Layout = dynamic(async () => {
 
     useEffect(() => {
       initConfigAndResurce();
-      initAwsConfig();
 
       const resize = () => {
         const ua = navigator.userAgent;
