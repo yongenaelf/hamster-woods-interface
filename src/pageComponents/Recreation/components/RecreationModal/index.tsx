@@ -116,7 +116,6 @@ function RecreationModal(props: IRecreationModal) {
           onClick={treasureStatus === TreasureStatus.OPENED ? onClose : openTreasure}>
           {treasureStatus === TreasureStatus.OPENED ? 'Confirm' : 'OPEN'}
         </button>
-        <button onClick={() => onClose && onClose()}>close</button>
       </div>
     ),
   };

@@ -77,7 +77,7 @@ button {
   .bean-show-message-error {
     @apply !bg-[#F65D5D] !rounded-[20px] !p-[15px];
     .ant-notification-notice-message {
-      @apply !ml-[32px] !min-h-[24px] !text-[#fff] !text-[16px] !leading-[24px];
+      @apply !ml-[32Px] !min-h-[24Px] !text-[#fff] !text-[16Px] !leading-[24Px];
     }
   }
 
