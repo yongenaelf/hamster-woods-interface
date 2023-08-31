@@ -13,11 +13,9 @@ export const LeaderBoardTopSection = ({ children, onClick }: ILeaderBoardTopSect
         isMobile ? 'text-md' : 'text-xl'
       }`}>
       {children ? (
-        <div>
-          <span className="mr-2 inline-flex h-[1.2em] w-[1.2em] justify-center rounded-full bg-[#5197FF] font-fonarto text-white font-bold">
-            i
-          </span>
-          <span className="text-white opacity-60">{children}</span>
+        <div className="flex">
+          <img src={require('assets/images/info-icon.png').default.src} className="w-4 h-4 mt-1" />
+          <span className="text-white opacity-60 ml-2">{children}</span>
         </div>
       ) : null}
     </div>
