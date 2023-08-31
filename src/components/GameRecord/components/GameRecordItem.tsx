@@ -6,12 +6,14 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { getDateFormat } from 'utils/getDateFormat';
 import { formatElfValue } from 'utils/formatElfValue';
 import { useSelector, AppState } from 'redux/store';
+import useGetState from 'redux/state/useGetState';
 
 const explorerSelector = (state: AppState) => state.configInfo.configInfo?.explorerBaseUrl;
 
 const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; title: string }) => {
-  const isMobile = useIsMobile();
   const explorerBaseUrl = useSelector(explorerSelector);
+
+  const { isMobile, imageResources } = useGetState();
 
   if (!data) return null;
 
@@ -50,7 +52,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
             <td className="text-right">
               {middleEllipsis(data.transactionId)}{' '}
               <button onClick={() => copyText(data.transactionId)}>
-                <img src={require('assets/images/copy.png').default.src} alt="copy" className="h-4" />
+                <img src={imageResources!.copyIcon} alt="copy" className="h-4" />
               </button>
             </td>
           </tr>

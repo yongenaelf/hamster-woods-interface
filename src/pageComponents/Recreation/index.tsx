@@ -22,7 +22,6 @@ import useGetState from 'redux/state/useGetState';
 import RecreationModal, { RecreationModalType } from './components/RecreationModal';
 import { useDebounce, useDeepCompareEffect, useEffectOnce, useWindowSize } from 'react-use';
 import { CheckBeanPass, GetBingoReward, GetBoutInformation, Play } from 'contract/bingo';
-import { sleep } from '@portkey/utils';
 import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
@@ -38,6 +37,7 @@ import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
 import { ChainId } from '@portkey/types';
+import { formatErrorMsg } from 'utils/formattError';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -269,7 +269,7 @@ export default function Game() {
     } catch (error) {
       console.error('=====error', error);
       const resError = error as IContractError;
-      showMessage.error(resError.errorMessage?.message);
+      showMessage.error(formatErrorMsg(resError).errorMessage?.message);
       setMoving(false);
       setGoLoading(false);
     }

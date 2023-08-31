@@ -1,10 +1,10 @@
-import { useIsMobile } from 'redux/selector/mobile';
+import useGetState from 'redux/state/useGetState';
 
 interface ILeaderBoardTopSection extends React.PropsWithChildren {
   onClick?: () => void;
 }
 export const LeaderBoardTopSection = ({ children, onClick }: ILeaderBoardTopSection) => {
-  const isMobile = useIsMobile();
+  const { isMobile, imageResources } = useGetState();
 
   return (
     <div
@@ -14,7 +14,7 @@ export const LeaderBoardTopSection = ({ children, onClick }: ILeaderBoardTopSect
       }`}>
       {children ? (
         <div className="flex">
-          <img src={require('assets/images/info-icon.png').default.src} className="w-4 h-4 mt-1" />
+          <img src={imageResources!.infoIcon} className="w-4 h-4 mt-1" />
           <span className="text-white opacity-60 ml-2">{children}</span>
         </div>
       ) : null}

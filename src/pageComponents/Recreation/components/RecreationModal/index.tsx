@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 
-import LightTreasure from 'assets/images/recreation/treasure-box-light.svg';
+import lightTreasure from 'assets/base64/lightTreasure';
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
@@ -89,7 +89,7 @@ function RecreationModal(props: IRecreationModal) {
               className={`absolute left-0 right-0 z-[40] m-auto ${
                 isMobile ? 'h-auto w-[67%] top-[-105%]' : 'h-auto w-[377px] top-[-60%]'
               }`}>
-              <LightTreasure className="relative z-[20] h-full w-full" />
+              <img src={lightTreasure} className="relative z-[20] h-full w-full" alt="lightTreasure" />
               <span
                 className={`absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
                   isMobile ? 'text-[64px]' : 'text-[96px]'
