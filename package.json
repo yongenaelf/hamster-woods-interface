@@ -28,7 +28,6 @@
     "aelf-web-login": "0.2.0-alpha.19",
     "animejs": "^3.2.1",
     "antd": "^4.21.7",
-    "aws-sdk": "^2.1399.0",
     "axios": "^0.24.0",
     "date-fns": "^2.30.0",
     "eslint-plugin-no-inline-styles": "^1.0.5",

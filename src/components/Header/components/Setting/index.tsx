@@ -13,6 +13,7 @@ import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
 import { did } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
+import ContractRequest from 'contract/contractRequest';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -37,6 +38,7 @@ export default function Setting() {
     if (walletType === WalletType.discover) {
       return;
     }
+    ContractRequest.get().resetConfig();
     did.reset();
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
   }, [walletType]);

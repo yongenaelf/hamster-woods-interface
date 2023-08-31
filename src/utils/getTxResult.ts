@@ -1,5 +1,4 @@
 import AElf from 'aelf-sdk';
-import { sleep } from './common';
 
 export function getAElf(rpcUrl?: string) {
   const rpc = rpcUrl || '';
@@ -26,7 +25,6 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
     if (reGetCount > 10) {
       throw Error(`timeout; TransactionId:${TransactionId}`);
     }
-    await sleep(1000);
     reGetCount++;
     return getTxResult(TransactionId, chainId, reGetCount, rpcUrl);
   }
