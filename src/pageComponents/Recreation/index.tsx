@@ -261,11 +261,6 @@ export default function Game() {
           setScore(bingoRes.score);
           setStep(step);
           setOpen(true);
-          await sleep(1500);
-          setOpen(false);
-          setMoving(true);
-          setShowAdd(false);
-          jump(step);
         }
       } else {
         setMoving(false);
@@ -341,6 +336,7 @@ export default function Game() {
       }
       setBeanPassModalVisible(false);
       setNFTModalType(ShowBeanPassType.Success);
+      updatePlayerInformation(address);
       setIsShowNFT(true);
     } else if (beanPassModalType === GetBeanPassStatus.Recharge) {
       if (walletType === WalletType.discover || walletType === WalletType.unknown) {
@@ -397,7 +393,6 @@ export default function Game() {
 
   const onShowNFTModalCancel = () => {
     if (nftModalType === ShowBeanPassType.Success) {
-      updatePlayerInformation(address);
       initCheckBeanPass();
     }
     setIsShowNFT(false);
@@ -413,7 +408,14 @@ export default function Game() {
     }
   };
 
-  const recreationModalonClose = () => {
+  const diceModalOnClose = () => {
+    setOpen(false);
+    setMoving(true);
+    setShowAdd(false);
+    jump(step);
+  };
+
+  const recreationModalOnClose = () => {
     updatePlayerInformation(address);
     setTreasureOpen(false);
   };
@@ -432,7 +434,7 @@ export default function Game() {
       )}
       <div
         className={`${styles['game__content']} flex overflow-hidden ${
-          isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500px] max-w-[784px]'
+          isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
         }`}>
         {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
         <SideBorder side="left" />
@@ -507,10 +509,10 @@ export default function Game() {
         <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
       )}
 
-      <RecreationModal open={open} type={RecreationModalType.DICE} step={step} />
+      <RecreationModal open={open} onClose={diceModalOnClose} type={RecreationModalType.DICE} step={step} />
       <RecreationModal
         open={treasureOpen}
-        onClose={recreationModalonClose}
+        onClose={recreationModalOnClose}
         type={RecreationModalType.TREASURE}
         step={step}
         bean={score}

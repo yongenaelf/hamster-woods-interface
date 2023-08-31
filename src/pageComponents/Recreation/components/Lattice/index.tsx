@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './index.module.css';
-import Image from 'next/image';
 import Arrow from 'assets/images/recreation/arrow.svg';
 import { ArrowDirection, ICheckerboardItem } from 'pageComponents/Recreation/checkerboard';
 import useGetState from 'redux/state/useGetState';
@@ -29,11 +28,9 @@ function Lattice(props: { value: ICheckerboardItem }) {
           height: `calc(${(value.height ?? 1) * 100}% + ${((value.height ?? 1) - 1) * 0.8}px)`,
         }}>
         {value.positionImage && (
-          <Image
-            width={10}
-            height={10}
+          <img
             className={`absolute top-[-8px] h-auto ${
-              isMobile ? 'left-[10px]  h-[529px] w-[20px]' : 'left-[30px] h-[58px] w-[40px]'
+              isMobile ? 'left-[10px] h-[529px] w-[20px]' : 'left-[30px] h-[58px] w-[40px]'
             }`}
             src={value.positionImage}
             alt="image"
