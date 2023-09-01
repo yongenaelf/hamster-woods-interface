@@ -1,6 +1,6 @@
 import { WalletType } from 'constants/index';
 import { IPortkeyContract, getContractBasic } from '@portkey/contracts';
-import { ChainId, IContract, IViewContract, SendOptions } from '@portkey/types';
+import { ChainId, IContract, SendOptions } from '@portkey/types';
 import { did } from '@portkey/did-ui-react';
 
 import { CallContractParams, IDiscoverInfo, PortkeyInfoType, WalletInfoType } from 'types';
@@ -19,6 +19,12 @@ interface IContractConfig {
 interface IWallet {
   discoverInfo?: IDiscoverInfo;
   portkeyInfo?: PortkeyInfoType;
+}
+
+interface IViewContract {
+  [props: string]: {
+    call: any;
+  };
 }
 
 export default class ContractRequest {
@@ -194,16 +200,17 @@ export default class ContractRequest {
   }
 
   public async callViewMethod<T, R>(params: CallContractParams<T>): Promise<R> {
-    const aelfInstance = getAElfInstance(this.rpcUrl!);
-    const viewWallet = getViewWallet();
-
-    const contract = await aelfInstance.chain.contractAt(params.contractAddress, viewWallet);
-    let res;
-    if (!params.args) {
-      res = await contract[params.methodName].call();
-    } else {
-      res = await contract[params.methodName].call(params.args);
+    try {
+      const contract = await this.getViewContract(params.contractAddress);
+      let res;
+      if (!params.args) {
+        res = await contract![params.methodName].call();
+      } else {
+        res = await contract![params.methodName].call(params.args);
+      }
+      return res;
+    } catch (error) {
+      return Promise.reject(error);
     }
-    return res;
   }
 }

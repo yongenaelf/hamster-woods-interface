@@ -19,11 +19,10 @@ export default function Intro() {
       <CommonModal
         open={rulesVisible}
         title="Game Rules"
-        width={850}
         onCancel={() => {
           setRulesVisible(false);
         }}
-        className={styles.rulesModal}>
+        className={`${styles.rulesModal} !w-[850px]`}>
         <div
           className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] ${
             isMobile ? '' : styles.content
@@ -34,7 +33,7 @@ export default function Intro() {
         </div>
         <CommonBtn
           title="I know"
-          className="mx-3 mx-auto mt-6 md:!h-[77.5px] md:w-[360px] md:!rounded-[38.75px] md:!text-[32px] md:!leading-[77.5px]"
+          className={`mx-[12px] mt-[24px] ${isMobile ? styles.buttonMobile : styles.button}`}
           onClick={() => {
             setRulesVisible(false);
           }}></CommonBtn>

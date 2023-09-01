@@ -47,7 +47,7 @@ function Role(props: IRole) {
   } = props;
 
   const [popoverPlacement, setPopoverPlacement] = useState<PlacementType>(PlacementType.TOP);
-  const { isMobile, imageResources } = useGetState();
+  const { isMobile } = useGetState();
 
   const PopoverComponent = (
     <div className={`flex h-full items-center pb-[8px] ${styles['role__info']}`}>

@@ -16,9 +16,6 @@ export async function getBlockHeight(
   }
 
   if (blockResult < expectedBlockHeight) {
-    if (reGetCount > 10) {
-      throw Error(`timeout;`);
-    }
     reGetCount++;
     return getBlockHeight(chainId, reGetCount, rpcUrl, expectedBlockHeight);
   }
