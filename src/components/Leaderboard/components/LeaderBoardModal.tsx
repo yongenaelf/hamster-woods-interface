@@ -22,7 +22,7 @@ export default function LeaderBoardModal({
           <CloseIcon className={isMobile ? styles.modal__closeIcon_m : styles.modal__closeIcon} onClick={onCancel} />
         )}
       </Row>
-      <div className={`${isMobile ? 'h-[60vh]' : 'h-[50vh]'} overflow-auto`}>{children}</div>
+      <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} overflow-auto`}>{children}</div>
     </Modal>
   );
 }
