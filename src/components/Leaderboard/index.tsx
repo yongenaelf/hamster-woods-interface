@@ -32,27 +32,29 @@ export const Leaderboard = () => {
 
   return (
     <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel}>
-      <div className="flex flex-col h-full">
-        <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
-          <button
-            className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
-            onClick={() => setTab(Tabs.Weekly)}>
-            {Tabs.Weekly}
-          </button>
-          <button
-            className={`${tabClassName} ${tab === Tabs.Season ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
-            onClick={() => setTab(Tabs.Season)}>
-            {Tabs.Season}
-          </button>
-          <button
-            className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
-            onClick={() => setTab(Tabs.PastRecord)}>
-            {Tabs.PastRecord}
-          </button>
+      <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'}`}>
+        <div className="flex flex-col h-full">
+          <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
+            <button
+              className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
+              onClick={() => setTab(Tabs.Weekly)}>
+              {Tabs.Weekly}
+            </button>
+            <button
+              className={`${tabClassName} ${tab === Tabs.Season ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
+              onClick={() => setTab(Tabs.Season)}>
+              {Tabs.Season}
+            </button>
+            <button
+              className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
+              onClick={() => setTab(Tabs.PastRecord)}>
+              {Tabs.PastRecord}
+            </button>
+          </div>
+          {tab === Tabs.Weekly ? <WeeklyTabContent /> : null}
+          {tab === Tabs.Season ? <SeasonTabContent /> : null}
+          {tab === Tabs.PastRecord ? <PastRecordContent /> : null}
         </div>
-        {tab === Tabs.Weekly ? <WeeklyTabContent /> : null}
-        {tab === Tabs.Season ? <SeasonTabContent /> : null}
-        {tab === Tabs.PastRecord ? <PastRecordContent /> : null}
       </div>
     </LeaderBoardModal>
   );

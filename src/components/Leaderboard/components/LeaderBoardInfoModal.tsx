@@ -9,11 +9,7 @@ const AElfLogo = () => {
   const isMobile = useIsMobile();
 
   return (
-    <img
-      className={`h-full ${isMobile ? 'p-2' : 'p-4'}`}
-      src={require('assets/images/elf.png').default.src}
-      alt="elf"
-    />
+    <img className={`p-2 ${isMobile ? 'h-10' : 'h-16'}`} src={require('assets/images/elf.png').default.src} alt="elf" />
   );
 };
 
@@ -36,7 +32,7 @@ const NormalItem = ({ leftText, reward }: INormalItem) => {
         {leftText}
       </div>
       <div className="flex-grow"></div>
-      <div className={`${isMobile ? 'w-1/2' : 'w-1/3'} h-full flex items-center`}>
+      <div className={`${isMobile ? 'w-[7rem] justify-between mr-4' : 'w-[13rem]'} h-full flex items-center`}>
         <AElfLogo />
         <span className={`${isMobile ? '' : 'text-2xl'} text-white text-bold`}>{reward} ELF</span>
       </div>
@@ -66,7 +62,7 @@ const RankedItem = ({ bgClassName, shadowInsetColor, src, reward, textClassName 
       }}>
       <img className="h-full" src={src} alt="rank" />
       <span className="flex-grow"></span>
-      <div className={`h-full flex items-center ${isMobile ? 'w-1/2' : 'w-1/3'}`}>
+      <div className={`h-full flex items-center ${isMobile ? 'w-[7rem] justify-between mr-3' : 'w-[13rem]'}`}>
         <AElfLogo />
         <span className={`${textClassName} ${isMobile ? 'text-lg' : 'text-4xl'} text-bold font-fonarto`}>
           {reward} ELF
