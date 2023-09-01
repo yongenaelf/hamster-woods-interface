@@ -366,7 +366,7 @@ export default function Login() {
     <div
       className={`cursor-custom ${styles.loginContainer}`}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources!.aloginBgMobile : imageResources!.aloginBgPc})`,
+        backgroundImage: `url(${isMobileStore ? imageResources?.aloginBgMobile : imageResources?.aloginBgPc})`,
       }}>
       {isLock ? (
         <div

@@ -30,6 +30,8 @@ export const SeasonTabContent = () => {
 
   const FIRST_WEEK =
     data?.status === ChallengeStatus.InProgress && data.rankingList.length === 0 && data.refreshTime !== null;
+  const FIRST_WEEK_TEXT =
+    'The seasonal leaderboard will be displayed after the first weekly challenge ends and its data will be updated on a weekly basis.';
 
   const topText = data?.refreshTime
     ? 'Next leaderboard updates on '
@@ -37,14 +39,11 @@ export const SeasonTabContent = () => {
 
   return (
     <>
-      <TabContent
-        data={data}
-        topText={topText}
-        emptyText="The seasonal leaderboard will be displayed after the first weekly challenge ends and its data will be updated on a weekly basis."
-        showEmptyText={FIRST_WEEK}
-      />
+      <TabContent data={data} topText={topText} emptyText={FIRST_WEEK_TEXT} showEmptyText={FIRST_WEEK} />
       <LeaderBoardInfoModal data={rewards}>
-        {data?.status === ChallengeStatus.Settlement ? (
+        {FIRST_WEEK ? (
+          <>{FIRST_WEEK_TEXT}</>
+        ) : data?.status === ChallengeStatus.Settlement ? (
           <>
             The ranking for {seasonName} has been finalized and the rewards will be distributed to the top {top} players
             soon.
