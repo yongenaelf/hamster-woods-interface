@@ -52,7 +52,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
             <td className="text-right">
               {middleEllipsis(data.transactionId)}{' '}
               <button onClick={() => copyText(data.transactionId)}>
-                <img src={imageResources!.copyIcon} alt="copy" className="h-4" />
+                <img src={imageResources?.copyIcon} alt="copy" className="h-4" />
               </button>
             </td>
           </tr>
