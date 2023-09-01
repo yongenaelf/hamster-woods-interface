@@ -21,10 +21,6 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
   }
 
   if (txResult.Status.toLowerCase() === 'pending') {
-    // || txResult.Status.toLowerCase() === 'notexisted'
-    if (reGetCount > 10) {
-      throw Error(`timeout; TransactionId:${TransactionId}`);
-    }
     reGetCount++;
     return getTxResult(TransactionId, chainId, reGetCount, rpcUrl);
   }

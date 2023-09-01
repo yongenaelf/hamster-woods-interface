@@ -11,6 +11,14 @@
   }
 }
 
+.buttonMobile {
+  @apply mx-auto !h-[48px] !w-[262px] !rounded-[24px] !text-[20px] !leading-[48px];
+}
+
+.button {
+  @apply mx-auto !h-[77.5px] !w-[360px] !rounded-[38.75px] !text-[32px] !leading-[77.5px];
+}
+
 .intro {
   @apply h-10 w-10;
 }

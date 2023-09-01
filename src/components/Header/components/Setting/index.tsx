@@ -73,22 +73,26 @@ export default function Setting() {
         className={isMobile ? styles.setting : styles['setting-pc']}
         onClick={handleSetting}
       />
-      <CommonModal open={settingModalVisible} title="Setting" onCancel={handleCancel} className={styles.settingModal}>
+      <CommonModal
+        open={settingModalVisible}
+        title="Setting"
+        onCancel={handleCancel}
+        className={`${styles.settingModal} ${isMobile && styles.settingModalMobile}`}>
         <div className="mt-2 px-4">
           <CommonBtn
             title="Game Record"
             onClick={handleRecord}
-            className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px] md:!rounded-[38.75px] md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
+            className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           {walletType !== WalletType.discover && (
             <CommonBtn
               title="Lock"
               onClick={handleLock}
-              className="mx-auto mb-4 md:mb-[24.5px] md:!h-[77.5px] md:!w-[360px]  md:!rounded-[38.75px]  md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
+              className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           )}
           <CommonBtn
             title="Exit Game"
             onClick={handleExit}
-            className="mx-auto !bg-[#F75D56] md:!h-[77.5px]  md:!w-[360px] md:!rounded-[38.75px]  md:!text-[32px] md:!leading-[77.5px]"></CommonBtn>
+            className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonBtn>
         </div>
       </CommonModal>
     </>
