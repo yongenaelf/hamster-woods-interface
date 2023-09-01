@@ -32,7 +32,7 @@ export const Leaderboard = () => {
 
   return (
     <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel}>
-      <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} overflow-auto`}>
+      <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'}`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
             <button

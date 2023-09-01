@@ -59,10 +59,10 @@ export const PastRecordContent = () => {
           {dateString}
         </div>
       </div>
-      <div className="text-md h-1 w-full flex-grow overflow-auto rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner">
+      <div className="text-md h-1 w-full flex-grow rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner">
         {isMobile ? (
           <>
-            <div className="mb-8 flex">
+            <div className="mb-4 flex">
               <PastRecordIcon />
               <div className="flex-1">
                 <DiagonalContainers his={his} />
@@ -72,14 +72,14 @@ export const PastRecordContent = () => {
           </>
         ) : (
           <>
-            <div className="flex gap-8 p-4">
-              <div className="flex-1">
+            <div className="flex gap-32 p-4">
+              <div className="w-1/3">
                 <PastRecordIcon />
                 <div>
                   <DiagonalContainers his={his} />
                 </div>
               </div>
-              <div className="flex-1">
+              <div className="flex-grow">
                 <Table his={his} />
               </div>
             </div>
@@ -101,17 +101,19 @@ const Table = ({ his }: IData) => {
     <table className={`${isMobile ? '' : 'text-lg'} w-full text-white`}>
       <thead className="bg-white bg-opacity-20 text-white text-opacity-70">
         <tr>
-          <th className="w-1/2 p-4 text-left">Time</th>
-          <th className="py-4 text-left">Points</th>
-          <th className="p-4 text-right">Ranking</th>
+          <th className={`${isMobile ? 'p-2' : 'p-4'} w-1/2 text-left`}>Time</th>
+          <th className={`${isMobile ? 'py-2' : 'py-4'} text-left`}>Points</th>
+          <th className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>Ranking</th>
         </tr>
       </thead>
       <tbody>
         {his?.weeks.map((i, idx) => (
           <tr key={idx} className="border-b border-white border-opacity-40">
-            <td className="p-4">{i.week}</td>
-            <td className="py-4">{i.score || <div className="text-white text-opacity-60">Not in</div>}</td>
-            <td className="p-4 text-right">{i.rank === -1 ? '-' : i.rank}</td>
+            <td className={`${isMobile ? 'p-2' : 'p-4'}`}>{i.week}</td>
+            <td className={`${isMobile ? 'py-2' : 'py-4'}`}>
+              {i.score || <div className="text-white text-opacity-60">Not in</div>}
+            </td>
+            <td className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>{i.rank === -1 ? '-' : i.rank}</td>
           </tr>
         ))}
       </tbody>
@@ -125,7 +127,7 @@ const PastRecordIcon = () => {
   return (
     <img
       src={require('assets/images/past-record-icon.png').default.src}
-      className={`${isMobile ? 'mr-2 h-auto w-1/3' : 'mx-auto h-1/3 px-4 pb-8'}`}
+      className={`h-auto ${isMobile ? 'mr-2 w-1/3' : 'mx-auto px-4 pb-8'}`}
       alt="Past Record"
     />
   );
