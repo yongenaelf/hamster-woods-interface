@@ -25,7 +25,7 @@ function error(content: ReactNode, duration = 2, params?: ArgsProps) {
   notification.error({
     key: 'error',
     prefixCls: 'ant-notification',
-    message: content,
+    message: content || 'FailedOperation!',
     placement: 'top',
     closeIcon: <></>,
     icon: <Info className="mt-[2px] h-[20Px] w-[20Px]" />,

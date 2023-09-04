@@ -26,6 +26,10 @@ input[type='number'] {
   appearance: textfield;
 }
 
+.email-input-wrapper .login-input.portkey-ant-input {
+  font-size: 16Px !important;
+}
+
 * {
   font-family: Poppins, sans-serif;
   transition: background 0.3s, fill 0.3s, stork 0.3s, color 0.3s, box-shadow 0.3s;
@@ -80,15 +84,6 @@ button {
       @apply !ml-[32Px] !min-h-[24Px] !text-[#fff] !text-[16Px] !leading-[24Px];
     }
   }
-
-  /* 
-        demo for antd
-        .{app-prefix}-wrapper {
-            .ant-layout {
-                background: #fff;
-            }
-        }
-    */
 }
 
 .portkey-ui-wrapper {
