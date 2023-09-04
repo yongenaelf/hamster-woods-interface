@@ -26,9 +26,11 @@ input[type='number'] {
   appearance: textfield;
 }
 
-.email-input-wrapper .login-input.portkey-ant-input {
+.email-input-wrapper .login-input.portkey-ant-input,
+.phone-number-input-wrapper .phone-number-input-content .portkey-ant-input {
   font-size: 16Px !important;
 }
+
 .portkey-ui-receive-content {
   max-width: 100%;
 }
