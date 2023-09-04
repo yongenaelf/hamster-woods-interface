@@ -29,6 +29,9 @@ input[type='number'] {
 .email-input-wrapper .login-input.portkey-ant-input {
   font-size: 16Px !important;
 }
+.portkey-ui-receive-content {
+  max-width: 100%;
+}
 
 * {
   font-family: Poppins, sans-serif;
