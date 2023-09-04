@@ -21,7 +21,7 @@ import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { LOGIN_EARGLY_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -349,6 +349,7 @@ export default function Login() {
 
   const handlePortKeyLoginFinish = useCallback(
     (wallet: DIDWalletInfo) => {
+      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
       handleFinish(WalletType.portkey, wallet);
     },
     [handleFinish],

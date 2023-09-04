@@ -4,7 +4,7 @@ import { WalletInfoType } from 'types';
 
 export default class InstanceProvider {
   private static instance: IPortkeyProvider | null = null;
-  private static walletInstance: WalletInfoType | any = null;
+  private static walletInstance: WalletInfoType | null = null;
 
   static async getDetectProvider() {
     if (!InstanceProvider.instance) {

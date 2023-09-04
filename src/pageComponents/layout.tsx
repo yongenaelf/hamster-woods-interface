@@ -24,15 +24,6 @@ import { LoginStatus } from 'redux/types/reducerTypes';
 import { fetchChessboardData, fetchConfigItems } from 'api/request';
 import { setConfigInfo } from 'redux/reducer/configInfo';
 import { setChessboardData } from 'redux/reducer/chessboardData';
-const { configInfo } = store.getState();
-
-ConfigProvider.setGlobalConfig({
-  storageMethod: new Store(),
-  requestDefaults: {
-    baseURL: '/portkey',
-  },
-  graphQLUrl: configInfo.configInfo?.graphqlServer,
-});
 
 const Layout = dynamic(
   async () => {
@@ -119,6 +110,13 @@ const Layout = dynamic(
         const [chessBoardRes, configRes] = await Promise.all([fetchChessboardData(), fetchConfigItems()]);
         configRes && store.dispatch(setConfigInfo(configRes.data));
         chessBoardRes && store.dispatch(setChessboardData(chessBoardRes.data));
+        ConfigProvider.setGlobalConfig({
+          storageMethod: new Store(),
+          requestDefaults: {
+            baseURL: '/portkey',
+          },
+          graphQLUrl: configRes.data.graphqlServer,
+        });
       };
 
       useEffect(() => {
