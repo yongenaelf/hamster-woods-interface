@@ -1,4 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+/* eslint-disable no-inline-styles/no-inline-styles */
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { ANIMATION_DURATION } from 'constants/animation';
 
 import styles from './index.module.css';
@@ -48,6 +49,8 @@ function Role(props: IRole) {
 
   const [popoverPlacement, setPopoverPlacement] = useState<PlacementType>(PlacementType.TOP);
   const { isMobile } = useGetState();
+  const popoverHeight = useRef<number>();
+  const popoverRef = useRef<HTMLDivElement | null>(null);
 
   const PopoverComponent = (
     <div className={`flex h-full items-center pb-[8px] ${styles['role__info']}`}>
@@ -65,31 +68,37 @@ function Role(props: IRole) {
   const Popover: Record<PlacementType, ReactElement> = {
     [PlacementType.TOP]: (
       <div
-        className={`relative flex h-full w-full justify-center bg-[100%_100%] bg-cover bg-no-repeat ${styles['appears-animation']}`}
+        className={`relative flex h-full w-full justify-center bg-[100%_100%] bg-no-repeat ${styles['appears-animation']}`}
         style={{
           backgroundImage: `url(${beanTop})`,
+          backgroundSize: '100% 100%',
+          top: popoverHeight?.current ? `${popoverHeight.current * 0.8}px` : 0,
         }}>
         {PopoverComponent}
       </div>
     ),
     [PlacementType.RIGHT]: (
       <div
-        className={`relative left-[90%] top-[120%] aspect-[89/44] w-full bg-[100%_100%] bg-cover bg-no-repeat ${
+        className={`relative left-[90%] aspect-[89/44] w-full bg-[100%_100%] bg-no-repeat ${
           isMobile ? 'pl-[8px]' : 'pl-[18px]'
         } pt-[4px] ${styles['appears-animation-right']}`}
         style={{
           backgroundImage: `url(${beanRight})`,
+          backgroundSize: '100% 100%',
+          top: popoverHeight?.current ? `${popoverHeight.current * 1.2}px` : 0,
         }}>
         {PopoverComponent}
       </div>
     ),
     [PlacementType.LEFT]: (
       <div
-        className={`relative right-[90%] top-[120%] aspect-[89/44] w-full bg-[100%_100%] bg-cover bg-no-repeat ${
+        className={`relative aspect-[89/44] w-full bg-[100%_100%] bg-no-repeat ${
           isMobile ? 'pl-[4px]' : 'pl-[6px]'
         } pt-[4px] ${styles['appears-animation-left']}`}
         style={{
           backgroundImage: `url(${beanLeft})`,
+          backgroundSize: '100% 100%',
+          top: popoverHeight?.current ? `${popoverHeight.current * 1.2}px` : 0,
         }}>
         {PopoverComponent}
       </div>
@@ -136,6 +145,10 @@ function Role(props: IRole) {
     }
   }, [position]);
 
+  useEffect(() => {
+    popoverHeight.current = popoverRef.current?.clientHeight;
+  }, []);
+
   return (
     <div
       id={id}
@@ -147,7 +160,9 @@ function Role(props: IRole) {
       }}>
       <div className="aspect-[56/60] w-full">
         <div className={styles.role}>
-          <div className="mb-[4px] aspect-[86/50] h-auto w-[150%]">{showAdd && bean && Popover[popoverPlacement]}</div>
+          <div ref={(ref) => (popoverRef.current = ref)} className="mb-[4px] aspect-[86/50] h-auto w-[150%]">
+            {showAdd && bean && Popover[popoverPlacement]}
+          </div>
           {children}
         </div>
       </div>

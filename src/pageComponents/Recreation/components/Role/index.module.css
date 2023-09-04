@@ -14,7 +14,6 @@
 {
   0%, 100% {
     transform: scale(0);
-    top: 80%;
     animation-timing-function: cubic-bezier(0.8,0,1,1);
   }
   40% {
@@ -39,25 +38,21 @@
   0%, 100% {
     transform: scale(0);
     left: 40%;
-    top: 120%;
     animation-timing-function: cubic-bezier(0.8,0,1,1);
   }
   40% {
     transform: scale(1);
-    left: 100%;
-    top: 120%;
+    left: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
   50% {
     transform: scale(1);
-    left: 100%;
-    top: 120%;
+    left: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
   60% {
     transform: scale(1);
-    left: 100%;
-    top: 120%;
+    left: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
 }
@@ -67,25 +62,21 @@
   0%, 100% {
     transform: scale(0);
     right: 40%;
-    top: 120%;
     animation-timing-function: cubic-bezier(0.8,0,1,1);
   }
   40% {
     transform: scale(1);
-    right: 100%;
-    top: 120%;
+    right: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
   50% {
     transform: scale(1);
-    right: 100%;
-    top: 120%;
+    right: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
   60% {
     transform: scale(1);
-    right: 100%;
-    top: 120%;
+    right: 90%;
     animation-timing-function: cubic-bezier(0,0,0.2,1);
   }
 }
