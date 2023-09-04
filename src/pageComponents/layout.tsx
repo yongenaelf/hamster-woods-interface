@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Layout as AntdLayout } from 'antd';
+import 'utils/firebase';
 
 import Header from 'components/Header';
 import LoadingAnimation from 'components/Loading/LoadingAnimation';
@@ -106,16 +107,23 @@ const Layout = dynamic(
         }
       }, []);
 
-      const initConfigAndResurce = async () => {
-        const [chessBoardRes, configRes] = await Promise.all([fetchChessboardData(), fetchConfigItems()]);
-        configRes && store.dispatch(setConfigInfo(configRes.data));
-        chessBoardRes && store.dispatch(setChessboardData(chessBoardRes.data));
-        ConfigProvider.setGlobalConfig({
-          storageMethod: new Store(),
-          requestDefaults: {
-            baseURL: '/portkey',
-          },
-          graphQLUrl: configRes.data.graphqlServer,
+      const initConfigAndResource = async () => {
+        const chessBoardPromise = fetchChessboardData();
+        const configPromise = fetchConfigItems();
+
+        chessBoardPromise.then((res) => {
+          store.dispatch(setChessboardData(res.data));
+        });
+
+        configPromise.then((res) => {
+          store.dispatch(setConfigInfo(res.data));
+          ConfigProvider.setGlobalConfig({
+            storageMethod: new Store(),
+            requestDefaults: {
+              baseURL: '/portkey',
+            },
+            graphQLUrl: res.data.graphqlServer,
+          });
         });
       };
 
@@ -152,7 +160,7 @@ const Layout = dynamic(
       }, [chessBoardInfo]);
 
       useEffect(() => {
-        initConfigAndResurce();
+        initConfigAndResource();
 
         const resize = () => {
           const ua = navigator.userAgent;

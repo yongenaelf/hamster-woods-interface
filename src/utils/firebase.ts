@@ -8,13 +8,13 @@ import { getAnalytics, logEvent, Analytics } from 'firebase/analytics';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCQVKqZoxl5EPnayYlnyR66-8DCLV7q-Og',
-  authDomain: 'aelf-block-explorer.firebaseapp.com',
-  projectId: 'aelf-block-explorer',
-  storageBucket: 'aelf-block-explorer.appspot.com',
-  messagingSenderId: '110395960830',
-  appId: '1:110395960830:web:89a856e73017d3967264af',
-  measurementId: 'G-H42GV4QSHP',
+  apiKey: 'AIzaSyDRSLx_4mw1dS6i1FeIZEvPxVmUKTftn5A',
+  authDomain: 'bean-go-town.firebaseapp.com',
+  projectId: 'bean-go-town',
+  storageBucket: 'bean-go-town.appspot.com',
+  messagingSenderId: '296185596722',
+  appId: '1:296185596722:web:dd9fa3892d97e0ff6aa52b',
+  measurementId: 'G-KMCSM7Q42G',
 };
 
 // Initialize Firebase
