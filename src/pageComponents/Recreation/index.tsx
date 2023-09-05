@@ -38,6 +38,7 @@ import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
 import { ChainId } from '@portkey/types';
 import { formatErrorMsg } from 'utils/formattError';
+import { sleep } from 'utils/common';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -59,6 +60,7 @@ export default function Game() {
     walletType,
     walletInfo,
     imageResources,
+    configInfo,
     chessBoardInfo: checkerboardData,
   } = useGetState();
 
@@ -91,8 +93,6 @@ export default function Game() {
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
 
   const [countDownModalOpen, setCountDownModalOpen] = useState(false);
-
-  const { configInfo } = store.getState();
 
   const translateRef = useRef<{
     x: number;
@@ -249,9 +249,9 @@ export default function Game() {
         const boutInformation = await GetBoutInformation(res?.TransactionId);
         console.log('=====Play GetBoutInformation', boutInformation);
         const blockRes = await getBlockHeight(
-          configInfo.configInfo!.curChain as ChainId,
+          configInfo!.curChain as ChainId,
           0,
-          configInfo!.configInfo!.rpcUrl, // TODO
+          configInfo!.rpcUrl,
           boutInformation.expectedBlockHeight,
         );
         if (blockRes) {
@@ -326,6 +326,7 @@ export default function Game() {
 
   const handleConfirm = async () => {
     if (beanPassModalType === GetBeanPassStatus.Abled) {
+      showMessage.loading();
       const getNFTRes = await receiveBeanPassNFT({
         caAddress: address,
       });
@@ -336,8 +337,11 @@ export default function Game() {
       }
       setBeanPassModalVisible(false);
       setNFTModalType(ShowBeanPassType.Success);
+
+      await sleep(configInfo?.stepUpdateDelay || 3000);
       updatePlayerInformation(address);
       setIsShowNFT(true);
+      showMessage.hideLoading();
     } else if (beanPassModalType === GetBeanPassStatus.Recharge) {
       if (walletType === WalletType.discover || walletType === WalletType.unknown) {
         return;
