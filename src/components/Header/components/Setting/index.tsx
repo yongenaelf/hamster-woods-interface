@@ -72,6 +72,7 @@ export default function Setting() {
     store.dispatch(setWalletType(WalletType.unknown));
     store.dispatch(setPlayerInfo(null));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    ContractRequest.get().resetConfig();
 
     router.push('/login');
   };
