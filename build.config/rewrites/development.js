@@ -5,7 +5,8 @@ module.exports = [
   },
   {
     source: '/portkey/:path*',
-    destination: 'https://localtest-applesign2.portkey.finance/:path*',
+    // destination: 'https://localtest-applesign2.portkey.finance/:path*',
+    destination: 'https://dapp-portkey-test.portkey.finance/:path*',
   },
   {
     source: '/api/:path*',

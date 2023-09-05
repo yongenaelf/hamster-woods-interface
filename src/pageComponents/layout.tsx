@@ -120,7 +120,7 @@ const Layout = dynamic(
           ConfigProvider.setGlobalConfig({
             storageMethod: new Store(),
             requestDefaults: {
-              baseURL: '/portkey',
+              baseURL: res.data.portkeyServer,
             },
             graphQLUrl: res.data.graphqlServer,
           });
