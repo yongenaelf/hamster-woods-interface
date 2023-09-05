@@ -310,7 +310,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         discoverInfo: walletInfo,
       });
       store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-      router.push('/');
     } else if (type === WalletType.portkey) {
       did.save((walletInfo as PortkeyInfoType)?.pin, KEY_NAME);
       setDidWalletInfo(walletInfo as PortkeyInfoType);
@@ -332,7 +331,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         );
       }
       store.dispatch(setLoginStatus(LoginStatus.LOGGED));
-      router.push('/');
     }
   };
 
