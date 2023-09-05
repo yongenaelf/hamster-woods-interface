@@ -1,12 +1,13 @@
 module.exports = [
   {
     source: '/connect/:path*',
-    destination: 'http://192.168.67.51:8080/connect/:path*',
+    destination: 'https://auth-portkey-test.portkey.finance/connect/:path*',
+    // destination: 'http://192.168.67.51:8080/connect/:path*',
   },
   {
     source: '/portkey/:path*',
     // destination: 'https://localtest-applesign2.portkey.finance/:path*',
-    destination: 'https://dapp-portkey-test.portkey.finance/:path*',
+    destination: 'https://did-portkey-test.portkey.finance/:path*',
   },
   {
     source: '/api/:path*',
