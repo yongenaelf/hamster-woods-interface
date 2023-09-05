@@ -175,6 +175,8 @@ export interface IConfigItems {
   leaderboardWeekAward: IReward[];
   leaderboardSeasonAward: IReward[];
   gameRules: string[];
+  beanPassTerminalUrl: string;
+  beanPassPicUrl: string;
 }
 
 export interface IChessboardData {

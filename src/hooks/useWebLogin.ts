@@ -28,8 +28,8 @@ import DetectProvider from 'utils/InstanceProvider';
 import useIntervalAsync from './useInterValAsync';
 import InstanceProvider from 'utils/InstanceProvider';
 import showMessage from 'utils/setGlobalComponentsInfo';
-import { useRouter } from 'next/navigation';
 import { ChainId } from '@portkey/provider-types';
+import { useRouter } from 'next/navigation';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -79,26 +79,30 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (!wallet?.portkeyInfo) {
       return;
     }
-    const { holder, filteredHolders } = await getAccountInfoSync(curChain, wallet?.portkeyInfo);
+    try {
+      const { holder, filteredHolders } = await getAccountInfoSync(curChain, wallet?.portkeyInfo);
 
-    if (filteredHolders.length) {
-      localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, curChain);
-      store.dispatch(
-        setWalletInfo({
-          portkeyInfo: {
-            caInfo: {
-              caAddress: holder.caAddress,
-              caHash: holder.caHash,
+      if (filteredHolders.length) {
+        localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, curChain);
+        store.dispatch(
+          setWalletInfo({
+            portkeyInfo: {
+              caInfo: {
+                caAddress: holder.caAddress,
+                caHash: holder.caHash,
+              },
+              pin: wallet.portkeyInfo.pin,
+              chainId: curChain,
+              walletInfo: wallet.portkeyInfo.walletInfo,
+              accountInfo: wallet.portkeyInfo.accountInfo,
             },
-            pin: wallet.portkeyInfo.pin,
-            chainId: curChain,
-            walletInfo: wallet.portkeyInfo.walletInfo,
-            accountInfo: wallet.portkeyInfo.accountInfo,
-          },
-        }),
-      );
+          }),
+        );
 
-      syncAddress.current = true;
+        syncAddress.current = true;
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, 5000);
 
@@ -306,6 +310,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         discoverInfo: walletInfo,
       });
       store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+      router.push('/');
     } else if (type === WalletType.portkey) {
       did.save((walletInfo as PortkeyInfoType)?.pin, KEY_NAME);
       setDidWalletInfo(walletInfo as PortkeyInfoType);
@@ -327,6 +332,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         );
       }
       store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+      router.push('/');
     }
   };
 
