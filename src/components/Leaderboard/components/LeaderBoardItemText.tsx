@@ -1,9 +1,9 @@
 import { useIsMobile } from 'redux/selector/mobile';
 
 export enum LeaderboardTextColors {
-  Gold = 'text-white text-stroke-leaderboard-gold',
-  Silver = 'text-white text-stroke-leaderboard-silver',
-  Bronze = 'text-white text-stroke-leaderboard-bronze',
+  Gold = 'text-white',
+  Silver = 'text-white',
+  Bronze = 'text-white',
   Blue = 'text-leaderboard-blue',
   White = 'text-white',
 }
