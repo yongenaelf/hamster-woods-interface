@@ -1,5 +1,5 @@
 import { Asset, PortkeyAssetProvider } from '@portkey/did-ui-react';
-import { KEY_NAME, PORTKEY_ORIGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import useGetState from 'redux/state/useGetState';
@@ -18,13 +18,13 @@ export default function MyAsset() {
     }
   }, [isLogin, router, walletType]);
 
-  const originChainId = localStorage.getItem(PORTKEY_ORIGIN_CHAIN_ID_KEY) || '';
+  const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
   return (
     <div className={styles.asset}>
       <PortkeyAssetProvider
         originChainId={originChainId as Chain}
         pin={walletInfo?.portkeyInfo?.pin}
-        caHash={walletInfo?.portkeyInfo?.caInfo.caHash}
+        caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         didStorageKeyName={KEY_NAME}>
         <Asset
           backIcon={<LeftOutlined />}

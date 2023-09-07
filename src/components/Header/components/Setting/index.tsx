@@ -5,12 +5,7 @@ import { useCallback, useState } from 'react';
 import CommonModal from 'components/CommonModal';
 import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
-import {
-  KEY_NAME,
-  LOGIN_EARGLY_KEY,
-  PORTKEY_LOGIN_CHAIN_ID_KEY,
-  PORTKEY_ORIGIN_CHAIN_ID_KEY,
-} from 'constants/platform';
+import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
 import { setLoginStatus, setPlayerInfo, setWalletInfo, setWalletType, toggleShowGameRecord } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
@@ -52,7 +47,6 @@ export default function Setting() {
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
-      localStorage.removeItem(PORTKEY_ORIGIN_CHAIN_ID_KEY);
       if (originChainId) {
         try {
           await did.logout({

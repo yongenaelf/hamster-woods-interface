@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isMobileDevices } from 'utils/isMobile';
-import { LOGIN_EARGLY_KEY, PORTKEY_ORIGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY } from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import {
@@ -83,7 +83,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       const { holder, filteredHolders } = await getAccountInfoSync(curChain, wallet?.portkeyInfo);
 
       if (filteredHolders.length) {
-        localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, curChain);
         store.dispatch(
           setWalletInfo({
             portkeyInfo: {
@@ -323,7 +322,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           portkeyInfo: walletInfo as PortkeyInfoType,
         });
       } else {
-        localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, (walletInfo as PortkeyInfoType)?.chainId || '');
         store.dispatch(
           setWalletInfo({
             portkeyInfo: walletInfo,
