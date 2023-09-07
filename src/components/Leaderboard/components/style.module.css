@@ -53,3 +53,7 @@
     }
   }
 }
+
+.scrollbar::-webkit-scrollbar {
+  @apply !w-0;
+}
