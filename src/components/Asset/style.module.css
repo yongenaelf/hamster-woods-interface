@@ -1,5 +1,5 @@
 .asset {
-  @apply w-full h-full overflow-hidden;
+  @apply w-full h-full overflow-hidden bg-[#fff];
 
   :global(.portkey-ui-asset-wrapper) {
     @apply w-full h-full overflow-auto;

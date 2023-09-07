@@ -14,7 +14,6 @@ import SideBorder from './components/SideBorder';
 import Role from './components/Role';
 
 import Bus from 'assets/images/recreation/bus.svg';
-import RoleImg from 'assets/images/recreation/role.svg';
 import Board from './components/Board';
 import GoButton, { Status } from './components/GoButton';
 import { ANIMATION_DURATION } from 'constants/animation';
@@ -39,6 +38,7 @@ import { store } from 'redux/store';
 import { ChainId } from '@portkey/types';
 import { formatErrorMsg } from 'utils/formattError';
 import { sleep } from 'utils/common';
+import roleImg from 'assets/base64/role';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -459,7 +459,7 @@ export default function Game() {
                   showAdd={showAdd}
                   hideAdd={hideAdd}>
                   {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                  <RoleImg />
+                  <img className="w-full h-full" src={roleImg} alt="role" />
                 </Role>
               )}
 
