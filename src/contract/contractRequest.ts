@@ -93,7 +93,7 @@ export default class ContractRequest {
         throw new Error(`Chain is not running: ${this.chainId}`);
       }
       const didWalletInfo = this.wallet.portkeyInfo!;
-      const account = aelf.getWallet(didWalletInfo.walletInfo.privateKey);
+      const account = aelf.getWallet(didWalletInfo?.walletInfo?.privateKey);
       const caContract = await getContractBasic({
         contractAddress: chainInfo.caContractAddress,
         account,
@@ -101,8 +101,8 @@ export default class ContractRequest {
       });
       this.caContract = caContract;
 
-      this.caAddress = didWalletInfo.walletInfo.address;
-      this.caHash = didWalletInfo.caInfo.caHash;
+      this.caAddress = didWalletInfo?.walletInfo?.address;
+      this.caHash = didWalletInfo?.caInfo?.caHash;
     }
     return this.caContract;
   };

@@ -34,6 +34,7 @@ import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
+import showMessage from 'utils/setGlobalComponentsInfo';
 
 const components = {
   phone: PhoneIcon,
@@ -104,19 +105,19 @@ export default function Login() {
     onError: undefined,
   });
 
-  const { isLogin, handlePortKey, handleFinish, handleApple, handleGoogle, loginEagerly } = useWebLogin({
+  const { handlePortKey, handleFinish, handleApple, handleGoogle, loginEagerly } = useWebLogin({
     signHandle,
   });
 
-  const { isLock, isLogin: isLoginState, isMobile: isMobileStore } = useGetState();
+  const { isLock, isLogin, isMobile: isMobileStore } = useGetState();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoginState) {
+    if (isLogin) {
       router.push('/');
     }
-  }, [isLoginState, router]);
+  }, [isLogin, router]);
 
   const isInIOS = isMobile().apple.device;
 
@@ -253,18 +254,23 @@ export default function Login() {
       setIsErrorTipShow(true);
       return;
     }
-    setIsUnlockShow(false);
 
     let caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
     let caHash = caInfo?.caHash;
     if (!caInfo) {
       const key = Object.keys(wallet.didWallet.caInfo)[0];
-      caHash = wallet.didWallet.caInfo[key].caHash;
-      caInfo = await did.didWallet.getHolderInfoByContract({
-        caHash: caHash,
-        chainId: configInfo!.curChain as ChainId,
-      });
+      try {
+        caHash = wallet.didWallet.caInfo[key].caHash;
+        caInfo = await did.didWallet.getHolderInfoByContract({
+          caHash: caHash,
+          chainId: configInfo!.curChain as ChainId,
+        });
+      } catch (err) {
+        showMessage.error();
+        return;
+      }
     }
+    setIsUnlockShow(false);
     const walletInfo = {
       caInfo,
       pin: passwordValue,
@@ -377,7 +383,7 @@ export default function Login() {
           className={styles.unlockBtn}>
           unLock
         </div>
-      ) : (
+      ) : isLogin ? null : (
         <>
           {renderLoginMethods(false)}
           {!isInApp && (

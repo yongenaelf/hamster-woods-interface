@@ -254,7 +254,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (walletType === WalletType.discover) {
       address = walletInfo?.discoverInfo?.address || '';
     } else if (walletType === WalletType.portkey) {
-      address = walletInfo?.portkeyInfo?.caInfo.caAddress || '';
+      address = walletInfo?.portkeyInfo?.caInfo?.caAddress || '';
     } else {
       console.log('unknown address');
       return;
@@ -311,7 +311,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       });
       store.dispatch(setLoginStatus(LoginStatus.LOGGED));
     } else if (type === WalletType.portkey) {
-      did.save((walletInfo as PortkeyInfoType)?.pin, KEY_NAME);
+      did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
       setDidWalletInfo(walletInfo as PortkeyInfoType);
       setWallet({
         portkeyInfo: walletInfo as PortkeyInfoType,
@@ -323,7 +323,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           portkeyInfo: walletInfo as PortkeyInfoType,
         });
       } else {
-        localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, (walletInfo as PortkeyInfoType).chainId);
+        localStorage.setItem(PORTKEY_ORIGIN_CHAIN_ID_KEY, (walletInfo as PortkeyInfoType)?.chainId || '');
         store.dispatch(
           setWalletInfo({
             portkeyInfo: walletInfo,
