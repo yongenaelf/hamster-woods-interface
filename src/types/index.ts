@@ -1,6 +1,7 @@
-import { DIDWalletInfo, IVerifyInfo, TVerifierItem } from '@portkey/did-ui-react';
-import { Accounts } from '@portkey/provider-types';
+import { IVerifyInfo, ManagerInfoType, TVerifierItem } from '@portkey/did-ui-react';
+import { Accounts, ChainId } from '@portkey/provider-types';
 import type { Manager } from '@portkey/services';
+import { IBlockchainWallet } from '@portkey/types';
 import { ICheckerboardItem } from 'pageComponents/Recreation/checkerboard';
 
 export type TokenInfo = {
@@ -125,7 +126,21 @@ export enum WalletType {
   portkey = 'portkey',
 }
 
-export type PortkeyInfoType = DIDWalletInfo & { accounts?: { [key: string]: any } };
+export interface IDIDWalletInfo {
+  caInfo: {
+    caAddress: string;
+    caHash: string;
+  };
+  pin: string;
+  chainId: ChainId;
+  walletInfo: IBlockchainWallet | { [key: string]: any };
+  accountInfo: ManagerInfoType;
+}
+
+export type PortkeyInfoType = Partial<IDIDWalletInfo> & {
+  accounts?: { [key: string]: any };
+  walletInfo?: { [key: string]: any } | IBlockchainWallet;
+};
 
 export type WalletInfoType = {
   portkeyInfo?: PortkeyInfoType;

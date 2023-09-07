@@ -21,7 +21,7 @@ function hidePageLoading() {
   );
 }
 
-function error(content: ReactNode, duration = 2, params?: ArgsProps) {
+function error(content?: ReactNode, duration = 2, params?: ArgsProps) {
   notification.error({
     key: 'error',
     prefixCls: 'ant-notification',
