@@ -9,7 +9,7 @@ import styles from './style.module.css';
 
 export default function MyAsset() {
   const router = useRouter();
-  const { walletInfo, walletType, isLogin } = useGetState();
+  const { walletInfo, walletType, isLogin, configInfo } = useGetState();
   useEffect(() => {
     if (!isLogin) {
       router.push('/login');
@@ -27,6 +27,9 @@ export default function MyAsset() {
         caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         didStorageKeyName={KEY_NAME}>
         <Asset
+          faucet={{
+            faucetContractAddress: configInfo?.faucetContractAddress,
+          }}
           backIcon={<LeftOutlined />}
           onOverviewBack={() => router.back()}
           onLifeCycleChange={(lifeCycle) => {
