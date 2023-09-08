@@ -186,6 +186,7 @@ export interface IConfigItems {
   explorerBaseUrl: string;
   bingoGraphqlServer: string;
   portKeyExtensionUrl: string;
+  portkeyServiceUrl: string;
   bingoContractAddress: string;
   leaderboardWeekAward: IReward[];
   leaderboardSeasonAward: IReward[];

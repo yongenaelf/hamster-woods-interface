@@ -122,6 +122,7 @@ const Layout = dynamic(
             requestDefaults: {
               baseURL: res.data.portkeyServer,
             },
+            serviceUrl: res.data.portkeyServiceUrl,
             graphQLUrl: res.data.graphqlServer,
           });
         });
