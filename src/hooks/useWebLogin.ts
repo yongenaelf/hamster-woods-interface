@@ -182,7 +182,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const network = await provider?.request({ method: 'network' });
     if (network !== Network) {
       console.log(configInfo);
-      showMessage.error('Synchronizing on-chain account information');
+      showMessage.error('network error');
       return;
     }
     let accounts: any = await provider?.request({ method: 'accounts' });
@@ -194,7 +194,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (accounts[curChain] && accounts[curChain].length > 0) {
       onAccountsSuccess(provider, accounts);
     } else {
-      showMessage.error('account error');
+      showMessage.error('Synchronizing on-chain account information');
     }
   }, []);
 
