@@ -78,7 +78,7 @@ export default function Game() {
   const [treasureOpen, setTreasureOpen] = useState<boolean>(false);
 
   const [playableCount, setPlayableCount] = useState<number>(0);
-  const [sumScore] = useState<number>(5);
+  const [sumScore] = useState<number>(configInfo!.sumScore);
   const [hasNft, setHasNft] = useState<boolean>(false);
   const [resetStart, setResetStart] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);

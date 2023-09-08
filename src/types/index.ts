@@ -195,6 +195,8 @@ export interface IConfigItems {
   stepUpdateDelay: number;
   beanPassTerminalUrl: string;
   beanPassPicUrl: string;
+  sumScore: number;
+  minElfNum: number;
 }
 
 export interface IChessboardData {
