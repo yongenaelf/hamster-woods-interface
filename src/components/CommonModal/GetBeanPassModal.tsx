@@ -10,7 +10,7 @@ import { WalletType } from 'types';
 import getCountdown from 'utils/getCountdown';
 
 export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsType) {
-  const { walletType } = useGetState();
+  const { walletType, configInfo } = useGetState();
   const [countTime, setCountTime] = useState<{ hours: number; minutes: number; seconds: number }>({
     hours: 0,
     minutes: 0,
@@ -31,8 +31,10 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         title: 'Get a BeanPass',
         btnText: walletType !== WalletType.discover ? 'Go to wallet' : '',
         contentArr: [
-          'You need to have a BeanPass NFT to start the game. ',
-          'To claim the free BeanPass, please make sure your MainChain and SideChain balances combined to be no less than 5 ELF.',
+          'You need to have a BeanPass NFT to start the game.',
+          `To claim the free BeanPass, please make sure your MainChain or SideChain balance is no less than ${
+            configInfo!.minElfNum
+          } ELF.`,
         ],
       },
       [GetBeanPassStatus.Abled]: {
