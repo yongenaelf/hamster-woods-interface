@@ -380,15 +380,13 @@ export default function Game() {
   useEffect(() => {
     if (!isLogin) {
       router.push('/login');
+    } else {
+      if (walletType !== WalletType.unknown && walletInfo) {
+        showMessage.hideLoading();
+        initializeContract();
+      }
     }
-  }, [isLogin]);
-
-  useEffect(() => {
-    if (walletType !== WalletType.unknown && walletInfo) {
-      showMessage.hideLoading();
-      initializeContract();
-    }
-  }, [walletType]);
+  }, [initializeContract, isLogin, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
