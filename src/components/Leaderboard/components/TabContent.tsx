@@ -17,6 +17,7 @@ interface ITabContent {
 }
 export const TabContent = ({ data, topText, emptyText, showEmptyText }: ITabContent) => {
   const refreshTime = data?.refreshTime;
+  const status = data?.status;
 
   return (
     <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 pb-2 shadow-inner">
@@ -24,7 +25,13 @@ export const TabContent = ({ data, topText, emptyText, showEmptyText }: ITabCont
         onClick={() => {
           dispatch(toggleShowLeaderboardInfo());
         }}>
-        {topText ? refreshTime ? <RefreshTime refreshTime={refreshTime} text={topText} /> : topText : null}
+        {topText ? (
+          status === 0 && refreshTime ? (
+            <RefreshTime refreshTime={refreshTime} text={topText} />
+          ) : (
+            topText
+          )
+        ) : null}
       </LeaderBoardTopSection>
       {showEmptyText ? (
         <LeaderBoardNoRecord>{emptyText}</LeaderBoardNoRecord>
