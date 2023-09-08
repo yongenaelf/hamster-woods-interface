@@ -14,6 +14,7 @@ import { WalletType } from 'types/index';
 import { did } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
+import { setChessboardResetStart, setCurChessboardNode } from 'redux/reducer/chessboardData';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -41,6 +42,8 @@ export default function Setting() {
     ContractRequest.get().resetConfig();
     did.reset();
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
+    store.dispatch(setCurChessboardNode(null));
+    store.dispatch(setChessboardResetStart(true));
   }, [walletType]);
 
   const handleExit = async () => {
@@ -65,6 +68,8 @@ export default function Setting() {
     store.dispatch(setWalletInfo(null));
     store.dispatch(setWalletType(WalletType.unknown));
     store.dispatch(setPlayerInfo(null));
+    store.dispatch(setCurChessboardNode(null));
+    store.dispatch(setChessboardResetStart(true));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
     ContractRequest.get().resetConfig();
 
