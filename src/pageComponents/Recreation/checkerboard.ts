@@ -119,6 +119,10 @@ export class CheckerboardList {
     }
   }
 
+  updateCurrentNode(node: CheckerboardNode | null) {
+    this.currentNode = node;
+  }
+
   resize(baseWidth: number, baseHeight: number) {
     this.baseWidth = baseWidth;
     this.baseHeight = baseHeight;

@@ -39,6 +39,7 @@ import { ChainId } from '@portkey/types';
 import { formatErrorMsg } from 'utils/formattError';
 import { sleep } from 'utils/common';
 import roleImg from 'assets/base64/role';
+import { setChessboardResetStart, setCurChessboardNode } from 'redux/reducer/chessboardData';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -62,6 +63,8 @@ export default function Game() {
     imageResources,
     configInfo,
     chessBoardInfo: checkerboardData,
+    resetStart: chessboardResetStart,
+    curChessboardNode,
   } = useGetState();
 
   const firstNode = checkerboardData![5][4];
@@ -91,6 +94,9 @@ export default function Game() {
 
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
+
+  const [opacity, setOpacity] = useState<number>(0);
+  const [roleAnimationDuration, setRoleAnimationDuration] = useState<number>(0);
 
   const [countDownModalOpen, setCountDownModalOpen] = useState(false);
 
@@ -124,6 +130,7 @@ export default function Game() {
         clearTimeout(timer);
         if (currentNode) {
           currentNodeRef.current = currentNode;
+          store.dispatch(setCurChessboardNode(currentNode));
           if (currentNode.info.info.type === CheckerboardType.TREASURE) {
             setTreasureOpen(true);
           } else {
@@ -192,12 +199,17 @@ export default function Game() {
     setShowAdd(false);
   };
 
-  const initCheckerboard = () => {
+  const resetPosition = () => {
     setTranslate({
-      x: 0,
-      y: 0,
+      x: ((currentNodeRef.current?.info.column ?? 4) - 4) * translateRef.current.x,
+      y: ((currentNodeRef.current?.info.row ?? 5) - 5) * translateRef.current.y,
     });
-    setResetStart(true);
+  };
+
+  const initCheckerboard = () => {
+    resetPosition();
+    setResetStart(chessboardResetStart);
+    store.dispatch(setChessboardResetStart(chessboardResetStart));
     // animationRef.current?.pause();
     translateRef.current = {
       x: document.getElementById('animationId')?.clientWidth || 0,
@@ -208,23 +220,27 @@ export default function Game() {
       baseHeight: translateRef.current.y,
       animationDuration: ANIMATION_DURATION,
     });
+
+    if (curChessboardNode) {
+      linkedList.current.updateCurrentNode(curChessboardNode);
+    }
+
     getList(firstNode, firstNodePosition);
   };
 
   const updateCheckerboard = () => {
+    setRoleAnimationDuration(0);
     translateRef.current = {
       x: document.getElementById('animationId')?.clientWidth || 0,
       y: document.getElementById('animationId')?.clientHeight || 0,
     };
-    setTranslate({
-      x: ((currentNodeRef.current?.info.column ?? 4) - 4) * translateRef.current.x,
-      y: ((currentNodeRef.current?.info.row ?? 5) - 5) * translateRef.current.y,
-    });
+    resetPosition();
     linkedList.current?.resize(translateRef.current.x, translateRef.current.y);
   };
   useDebounce(updateCheckerboard, 500, [width, height]);
 
   const go = async () => {
+    setRoleAnimationDuration(ANIMATION_DURATION);
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
         setBeanPassModalType(GetBeanPassStatus.Need);
@@ -246,6 +262,7 @@ export default function Game() {
       if (res?.TransactionId) {
         updateStep();
         setResetStart(false);
+        store.dispatch(setChessboardResetStart(false));
         const boutInformation = await GetBoutInformation(res?.TransactionId);
         console.log('=====Play GetBoutInformation', boutInformation);
         const blockRes = await getBlockHeight(
@@ -314,6 +331,7 @@ export default function Game() {
       console.log(hasBeanPass);
       if (hasBeanPass && hasBeanPass.value) {
         setHasNft(true);
+        setOpacity(1);
       } else {
         setHasNft(false);
         checkBeanPassStatus();
@@ -362,13 +380,15 @@ export default function Game() {
   useEffect(() => {
     if (!isLogin) {
       router.push('/login');
-    } else {
-      if (walletType !== WalletType.unknown && walletInfo) {
-        showMessage.hideLoading();
-        initializeContract();
-      }
     }
-  }, [initializeContract, isLogin, router, walletInfo, walletType]);
+  }, [isLogin]);
+
+  useEffect(() => {
+    if (walletType !== WalletType.unknown && walletInfo) {
+      showMessage.hideLoading();
+      initializeContract();
+    }
+  }, [walletType]);
 
   useEffect(() => {
     initCheckerboard();
@@ -376,7 +396,15 @@ export default function Game() {
 
   useEffectOnce(() => {
     showMessage.hideLoading();
-    setResetStart(true);
+    setResetStart(chessboardResetStart);
+    currentNodeRef.current = curChessboardNode;
+    if (curChessboardNode) {
+      setOpacity(0);
+      updateCheckerboard();
+      setTimeout(() => {
+        setOpacity(1);
+      }, 25);
+    }
   });
 
   useDeepCompareEffect(() => {
@@ -445,23 +473,22 @@ export default function Game() {
         <div className="w-full overflow-y-auto overflow-x-hidden">
           <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
             <div className="relative z-[30]">
-              {hasNft && (
-                <Role
-                  id="animationId"
-                  width={`calc(100% / ${checkerboardData?.[0]?.length})`}
-                  translate={translate}
-                  bean={score}
-                  position={{
-                    x: currentNodeRef.current?.info.row,
-                    y: currentNodeRef.current?.info.column,
-                  }}
-                  animationDuration={ANIMATION_DURATION}
-                  showAdd={showAdd}
-                  hideAdd={hideAdd}>
-                  {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                  <img className="w-full h-full" src={roleImg} alt="role" />
-                </Role>
-              )}
+              <Role
+                id="animationId"
+                width={`calc(100% / ${checkerboardData?.[0]?.length})`}
+                translate={translate}
+                bean={score}
+                opacity={opacity}
+                position={{
+                  x: currentNodeRef.current?.info.row,
+                  y: currentNodeRef.current?.info.column,
+                }}
+                animationDuration={roleAnimationDuration}
+                showAdd={showAdd}
+                hideAdd={hideAdd}>
+                {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
+                <img className="w-full h-full" src={roleImg} alt="role" />
+              </Role>
 
               {checkerboardData?.map((row, index) => {
                 return (

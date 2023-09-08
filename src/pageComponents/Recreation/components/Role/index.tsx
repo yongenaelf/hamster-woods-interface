@@ -18,6 +18,7 @@ interface IRole {
     x: number;
     y: number;
   };
+  opacity?: number;
   animationDuration?: number;
   showAdd?: boolean;
   position?: {
@@ -39,6 +40,7 @@ function Role(props: IRole) {
     id = 'animationId',
     width,
     bean,
+    opacity = 0,
     translate,
     animationDuration = ANIMATION_DURATION,
     showAdd,
@@ -155,6 +157,7 @@ function Role(props: IRole) {
       className={`absolute bottom-0 right-0 z-50 flex items-center justify-center pb-[8px] pr-[12px]`}
       style={{
         width: width,
+        opacity,
         transition: `transform ${animationDuration}ms linear`,
         transform: `translate(${translate.x}px, ${translate.y}px)`,
       }}>
