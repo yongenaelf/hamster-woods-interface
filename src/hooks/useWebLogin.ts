@@ -182,7 +182,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const network = await provider?.request({ method: 'network' });
     if (network !== Network) {
       console.log(configInfo);
-      showMessage.error('network error');
+      showMessage.error('Synchronizing on-chain account information');
       return;
     }
     let accounts: any = await provider?.request({ method: 'accounts' });
