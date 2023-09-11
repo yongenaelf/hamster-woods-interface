@@ -85,7 +85,7 @@ export default function Setting() {
       />
       <CommonModal
         open={settingModalVisible}
-        title="Setting"
+        title="Settings"
         onCancel={handleCancel}
         className={`${styles.settingModal} ${isMobile && styles.settingModalMobile}`}>
         <div className="mt-2 px-4">

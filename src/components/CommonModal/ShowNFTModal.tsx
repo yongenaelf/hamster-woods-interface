@@ -19,7 +19,7 @@ export default function GetBeanPassModal({ type, onCancel, open }: ShowNFTModalP
     <Modal
       className={styles.showBeanPassModal}
       open={open}
-      title={type === ShowBeanPassType.Display ? 'Your BeanPass' : 'Congratulation'}
+      title={type === ShowBeanPassType.Display ? 'Your BeanPass' : 'Congratulations'}
       onCancel={onCancel}>
       <img
         src={configInfo?.beanPassPicUrl || ''}

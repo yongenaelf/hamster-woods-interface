@@ -25,6 +25,7 @@ const useGetState = () => {
     walletInfo: infoState.walletInfo,
     assetVisible: infoState.assetVisible,
     playerInfo: infoState.playerInfo,
+    gameSetting: infoState.gameSetting,
     configInfo,
     chessBoardInfo,
     imageResources,
