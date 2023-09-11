@@ -5,10 +5,11 @@ import { dispatch } from 'redux/store';
 import Info from 'assets/images/info.svg';
 import { ArgsProps } from 'antd/lib/notification';
 
-function openPageLoading() {
+function openPageLoading(content?: ReactNode) {
   dispatch(
     setPageLoading({
       open: true,
+      content,
     }),
   );
 }

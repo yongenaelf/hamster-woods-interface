@@ -16,7 +16,7 @@ enum Tabs {
 }
 
 const _tabClassName =
-  'w-1/3 rounded-tl-lg rounded-tr-lg shadow-inner text-white flex items-center justify-center font-fonarto font-bold p-2';
+  'w-1/3 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-white flex items-center justify-center font-fonarto font-bold';
 
 export const Leaderboard = () => {
   const open = useSelector((state) => state.info.showLeaderboard);
@@ -24,7 +24,9 @@ export const Leaderboard = () => {
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
 
-  const tabClassName = `${_tabClassName} ${isMobile ? 'text-md' : 'text-xl'}`;
+  const tabClassName = `${_tabClassName} ${
+    isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
+  }`;
 
   const onCancel = () => dispatch(toggleShowLeaderboard());
 
@@ -34,7 +36,7 @@ export const Leaderboard = () => {
     <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel}>
       <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'}`}>
         <div className="flex flex-col h-full">
-          <div className={`${isMobile ? 'mx-4' : 'mx-10'} flex`}>
+          <div className={`${isMobile ? 'mx-[16px]' : 'mx-[40px]'} flex`}>
             <button
               className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#79A3DC]' : 'bg-[#144CEA]'}`}
               onClick={() => setTab(Tabs.Weekly)}>

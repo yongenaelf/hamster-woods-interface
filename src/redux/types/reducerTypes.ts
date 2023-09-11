@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { IAccountInfoSync, IGameSetting, IPlayerInformation, WalletInfoType, WalletType } from 'types';
 
 export type InfoStateType = {
@@ -22,6 +23,7 @@ export type InfoStateType = {
 
 export type PageLoadingType = {
   open: boolean;
+  content?: ReactNode;
 };
 
 export type GlobalComponentsInfoStateType = {

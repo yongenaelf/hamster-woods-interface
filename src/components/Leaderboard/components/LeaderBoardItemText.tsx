@@ -10,9 +10,14 @@ export enum LeaderboardTextColors {
 
 export interface ILeaderBoardItemText extends React.PropsWithChildren {
   color?: LeaderboardTextColors;
+  className?: string;
 }
 
-export const LeaderBoardItemText = ({ children, color = LeaderboardTextColors.White }: ILeaderBoardItemText) => {
+export const LeaderBoardItemText = ({
+  children,
+  color = LeaderboardTextColors.White,
+  className,
+}: ILeaderBoardItemText) => {
   const isMobile = useIsMobile();
   const isRankedColor = [
     LeaderboardTextColors.Gold,
@@ -21,7 +26,7 @@ export const LeaderBoardItemText = ({ children, color = LeaderboardTextColors.Wh
   ].includes(color);
 
   const fontFamily = isRankedColor ? 'font-fonarto' : '';
-  const textSize = isRankedColor ? (isMobile ? 'text-md' : 'text-xl') : isMobile ? 'text-xs' : 'text-sm';
+  const textSize = isRankedColor ? (isMobile ? 'text-[12px]' : 'text-xl') : isMobile ? 'text-[12px]' : 'text-sm';
 
-  return <div className={`font-bold ${fontFamily} ${color} ${textSize}`}>{children}</div>;
+  return <div className={`font-bold ${fontFamily} ${color} ${textSize} ${className}`}>{children}</div>;
 };

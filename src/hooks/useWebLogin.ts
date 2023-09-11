@@ -73,7 +73,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (syncAddress.current) {
       return;
     }
-    showMessage.loading();
+    showMessage.loading('Syncing on-chain account info');
     const wallet = await InstanceProvider.getWalletInstance();
 
     if (!wallet?.portkeyInfo) {

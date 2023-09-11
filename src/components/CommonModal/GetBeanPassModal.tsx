@@ -20,7 +20,7 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         btnText: walletType !== WalletType.discover ? 'Go to wallet' : '',
         contentArr: [
           'You need to have a BeanPass NFT to start the game.',
-          `To claim the free BeanPass, please make sure your MainChain or SideChain balance is no less than ${
+          `To claim the free BeanPass, please make sure your MainChain and SideChain balances combined to be no less than ${
             configInfo!.minElfNum
           } ELF.`,
         ],
@@ -29,7 +29,7 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         title: 'Get a BeanPass',
         btnText: 'Get a BeanPass',
         contentArr: [
-          'You need to have a BeanPass NFT to start the game！',
+          'You need to have a BeanPass NFT to start the game!',
           'Click the button below to claim it for free. ',
         ],
       },
