@@ -15,6 +15,7 @@ import { did } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setCurChessboardNode } from 'redux/reducer/chessboardData';
+import showMessage from 'utils/setGlobalComponentsInfo';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -47,6 +48,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
+    showMessage.loading('Signing out of BeanGo Town');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
@@ -72,6 +74,7 @@ export default function Setting() {
     store.dispatch(setChessboardResetStart(true));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
     ContractRequest.get().resetConfig();
+    showMessage.hideLoading();
 
     router.push('/login');
   };
@@ -90,7 +93,7 @@ export default function Setting() {
         className={`${styles.settingModal} ${isMobile && styles.settingModalMobile}`}>
         <div className="mt-2 px-4">
           <CommonBtn
-            title="Game Record"
+            title="Game Records"
             onClick={handleRecord}
             className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           {walletType !== WalletType.discover && (
@@ -100,7 +103,7 @@ export default function Setting() {
               className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           )}
           <CommonBtn
-            title="Exit Game"
+            title="Exit"
             onClick={handleExit}
             className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonBtn>
         </div>

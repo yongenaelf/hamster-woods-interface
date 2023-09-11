@@ -9,8 +9,8 @@ export const LeaderBoardTopSection = ({ children, onClick }: ILeaderBoardTopSect
   return (
     <div
       onClick={onClick}
-      className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 p-4 pb-0 shadow-inner text-left ${
-        isMobile ? 'text-md' : 'text-xl'
+      className={`rounded-tl-2xl rounded-tr-2xl bg-blue-700 pb-0 shadow-inner text-left ${
+        isMobile ? 'text-[12px] p-[8px]' : 'text-xl p-[18px]'
       }`}>
       {children ? (
         <div className="flex">

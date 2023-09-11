@@ -27,7 +27,7 @@ export const WeeklyTabContent = () => {
   }, [data?.refreshTime]);
 
   const topText =
-    data?.status === 0
+    data?.status === ChallengeStatus.InProgress
       ? 'This weekly challenge ends in: '
       : 'This weekly challenge has ended and rewards will be distributed shortly.';
 

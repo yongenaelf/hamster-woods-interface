@@ -36,7 +36,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
         </thead>
         <tbody>
           <tr>
-            <td className="text-white text-opacity-60">Date</td>
+            <td className="text-white text-opacity-60">Time</td>
             <td className="text-right">{getDateFormat(data.triggerTime, 'MMM dd HH:mm:ss')}</td>
           </tr>
           <tr>
@@ -90,8 +90,8 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <thead>
               <tr className={`text-white text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
                 <th>Random step result</th>
-                <th>Earn points</th>
-                <th className="text-right">Transaction Fee</th>
+                <th>Beans earned</th>
+                <th className="text-right">Transaction fee</th>
               </tr>
             </thead>
             <tbody>

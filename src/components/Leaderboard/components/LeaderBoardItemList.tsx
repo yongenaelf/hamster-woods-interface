@@ -3,6 +3,7 @@ import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import { LeaderBoardItem } from './LeaderBoardItem';
 import { MAX_LEADERBOARD_EMPTY } from 'constants/platform';
 import styles from './style.module.css';
+import useGetState from 'redux/state/useGetState';
 
 const EmptyItem = () => {
   const isMobile = useIsMobile();
@@ -23,8 +24,10 @@ interface ILeaderBoardItemList {
 export const LeaderBoardItemList = ({ data }: ILeaderBoardItemList) => {
   const length = data?.rankingList?.length ?? 0;
 
+  const { isMobile } = useGetState();
+
   return (
-    <div className="flex flex-grow w-full flex-col bg-blue-700 p-[16px] shadow-inner">
+    <div className={`flex flex-grow w-full flex-col bg-blue-700 ${isMobile ? 'p-[8px]' : 'p-[16px]'} shadow-inner`}>
       <div className="h-[4px] flex-grow overflow-y-hidden">
         <div className={`${styles.scrollbar} h-full overflow-y-auto`}>
           {data?.rankingList?.map((i) => (

@@ -109,7 +109,7 @@ const Table = ({ his }: IData) => {
       <tbody>
         {his?.weeks.map((i, idx) => (
           <tr key={idx} className="border-b border-white border-opacity-40">
-            <td className={`${isMobile ? 'p-2' : 'p-4'}`}>{i.week}</td>
+            <td className={`${isMobile ? 'p-2' : 'p-4'}`}>Week-{i.week}</td>
             <td className={`${isMobile ? 'py-2' : 'py-4'}`}>
               {i.score || <div className="text-white text-opacity-60">Not in</div>}
             </td>

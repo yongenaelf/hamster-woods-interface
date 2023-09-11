@@ -29,7 +29,7 @@ function Board({ hasNft, go, status = Status.NONE, playableCount = 0, sumScore =
         />
         <Menu
           icon={<Nft className="h-[auto] w-[29.5px]" />}
-          title={hasNft ? 'BeanPass NFT' : 'NFT Giveaway'}
+          title={hasNft ? 'BeanPass NFT' : 'BeanPass Giveaway'}
           onClick={() => onNftClick && onNftClick()}
         />
       </div>
@@ -50,7 +50,7 @@ function Board({ hasNft, go, status = Status.NONE, playableCount = 0, sumScore =
           />
           <Menu
             icon={<Nft className="h-[auto] w-[59px]" />}
-            title={hasNft ? 'BeanPass NFT' : 'NFT Giveaway'}
+            title={hasNft ? 'BeanPass NFT' : 'BeanPass Giveaway'}
             onClick={() => onNftClick && onNftClick()}
           />
         </div>

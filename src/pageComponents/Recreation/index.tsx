@@ -255,7 +255,7 @@ export default function Game() {
     }
     try {
       setGoLoading(true);
-      showMessage.loading();
+      showMessage.loading('Generating random step numbers on-chain');
       console.log('=====Play resetStart', resetStart);
       const res = await Play(resetStart);
       console.log('=====Play res', res);

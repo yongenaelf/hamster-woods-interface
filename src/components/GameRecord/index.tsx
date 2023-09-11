@@ -14,7 +14,7 @@ export const GameRecord = () => {
   return (
     <GameRecordModal
       open={open}
-      title="Game Record"
+      title="Game Records"
       onCancel={() => {
         dispatch(toggleShowGameRecord());
       }}>
@@ -27,7 +27,7 @@ export const GameRecord = () => {
               className={`mx-auto ${isMobile ? 'mb-8 w-32' : 'mb-16 w-64'}`}
             />
             <div className={`text-center ${isMobile ? 'text-[2rem]' : 'text-[4rem]'} text-[#89A5F5]`}>
-              No record yet
+              No records yet
             </div>
           </div>
         </div>
