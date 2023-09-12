@@ -33,7 +33,7 @@ export const Leaderboard = () => {
   if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
 
   return (
-    <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel}>
+    <LeaderBoardModal open={open} title="Leader Board" onCancel={onCancel} destroyOnClose>
       <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'}`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'mx-[16px]' : 'mx-[40px]'} flex`}>
