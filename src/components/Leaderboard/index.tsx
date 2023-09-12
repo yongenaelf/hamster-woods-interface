@@ -12,7 +12,7 @@ import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal'
 enum Tabs {
   Weekly = 'Weekly',
   Season = 'Season',
-  PastRecord = 'Past Record',
+  PastRecord = 'Past Records',
 }
 
 const _tabClassName =

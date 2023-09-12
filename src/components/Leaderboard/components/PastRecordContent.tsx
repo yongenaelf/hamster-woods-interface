@@ -102,8 +102,8 @@ const Table = ({ his }: IData) => {
       <thead className="bg-white bg-opacity-20 text-white text-opacity-70">
         <tr>
           <th className={`${isMobile ? 'p-2' : 'p-4'} w-1/2 text-left`}>Time</th>
-          <th className={`${isMobile ? 'py-2' : 'py-4'} text-left`}>Points</th>
-          <th className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>Ranking</th>
+          <th className={`${isMobile ? 'py-2' : 'py-4'} text-left`}>Beans</th>
+          <th className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>Rank</th>
         </tr>
       </thead>
       <tbody>
@@ -111,7 +111,7 @@ const Table = ({ his }: IData) => {
           <tr key={idx} className="border-b border-white border-opacity-40">
             <td className={`${isMobile ? 'p-2' : 'p-4'}`}>Week-{i.week}</td>
             <td className={`${isMobile ? 'py-2' : 'py-4'}`}>
-              {i.score || <div className="text-white text-opacity-60">Not in</div>}
+              {i.score || <div className="text-white text-opacity-60">N/A</div>}
             </td>
             <td className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>{i.rank === -1 ? '-' : i.rank}</td>
           </tr>
@@ -128,7 +128,7 @@ const PastRecordIcon = () => {
     <img
       src={require('assets/images/past-record-icon.png').default.src}
       className={`h-auto ${isMobile ? 'mr-2 w-1/3' : 'mx-auto px-4 pb-8'}`}
-      alt="Past Record"
+      alt="Past Records"
     />
   );
 };
@@ -142,12 +142,12 @@ const DiagonalContainers = ({ his }: IData) => {
     <>
       <DiagonalContainer
         icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className={className} />}
-        leftText="Ranking"
+        leftText="Rank"
         value={his?.season.rank}
       />
       <DiagonalContainer
         icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className={className} />}
-        leftText="Points"
+        leftText="Beans"
         value={his?.season.score}
       />
     </>

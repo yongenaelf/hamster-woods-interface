@@ -23,6 +23,7 @@ const bingoContract = async <T, R>(methodName: string, params: T, type: Contract
     return res as R;
   } catch (error) {
     const resError = error as IContractError;
+    console.error('=====bingoContract', resError);
     return Promise.reject(formatErrorMsg(resError));
   }
 };

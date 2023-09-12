@@ -1,15 +1,41 @@
 import { GameRecordItem } from './components/GameRecordItem';
-import { useGameHistory } from './data/useGameHistory';
+import { IGameHistoryResult, useGameHistory } from './data/useGameHistory';
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
 import { toggleShowGameRecord } from 'redux/reducer/info';
 import GameRecordModal from './components/GameRecordModal';
 import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
+import { useEffect, useState } from 'react';
+import { useAddress } from 'hooks/useAddress';
 
 export const GameRecord = () => {
   const open = useSelector((state) => state.info.showGameRecord);
   const isMobile = useIsMobile();
-  const { data } = useGameHistory();
+  const [data, setData] = useState<IGameHistoryResult>();
+  const { gameHistory } = useGameHistory();
+
+  const address = useAddress();
+
+  const getGameHistory = async () => {
+    try {
+      const res = await gameHistory();
+      setData(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      getGameHistory();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (address) {
+      getGameHistory();
+    }
+  }, [address]);
 
   return (
     <GameRecordModal

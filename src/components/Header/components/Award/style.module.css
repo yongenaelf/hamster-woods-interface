@@ -1,5 +1,5 @@
 .award {
-  @apply mx-auto flex h-[36px] w-[148px] items-center rounded-[20px] bg-[#305CD9] px-[8px];
+  @apply mr-auto flex h-[36px] w-[148px] items-center rounded-[20px] bg-[#305CD9] px-[8px];
 
   box-shadow: 0 -0.9px 0.9px 0 rgb(54 135 255 / 30%), 0 0.9px 3.6px 0 #0048b6 inset;
 }

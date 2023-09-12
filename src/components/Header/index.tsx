@@ -11,12 +11,12 @@ export default function Header() {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.header__menu}>
-        {walletType !== WalletType.discover && <Wallet />}
         <Award />
-        <Intro />
-        <div className="ml-3">
-          <Setting />
+        {walletType !== WalletType.discover && <Wallet />}
+        <div className="mx-3">
+          <Intro />
         </div>
+        <Setting />
       </div>
     </div>
   );

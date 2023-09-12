@@ -1,7 +1,8 @@
 import { graphQLRequest } from 'api/graphql';
 import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
-import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
-import useSWR from 'swr';
+import { useAddress } from 'hooks/useAddress';
+import { useCallback } from 'react';
+import { addPrefixSuffix } from 'utils/addressFormatting';
 
 export interface ITransactionInfo {
   transactionId: string;
@@ -18,45 +19,47 @@ export interface IGameItem {
   bingoTransactionInfo: ITransactionInfo | null;
 }
 
-interface IGameHistoryResult {
+export interface IGameHistoryResult {
   gameList: IGameItem[];
 }
 
 export const useGameHistory = () => {
-  const address = useAddressWithPrefixSuffix();
-  return useSWR([address, 'getGameHis'], async () => {
+  const address = addPrefixSuffix(useAddress());
+  const gameHistory = useCallback(async () => {
     const { getGameHistory } =
       (await graphQLRequest<{
         getGameHistory: IGameHistoryResult;
       }>(`
-    query {
-      getGameHistory(
-        getGameHisDto: {
-          caAddress: "${address}"
-          skipCount: 0
-          maxResultCount: ${MAX_GAME_RECORD_ITEMS}
-        }
-      ) {
-        gameList {
-          id
-          gridNum
-          score
-          transcationFee
-          playTransactionInfo {
-            transactionId
-            transactionFee
-            triggerTime
+      query {
+        getGameHistory(
+          getGameHisDto: {
+            caAddress: "${address}"
+            skipCount: 0
+            maxResultCount: ${MAX_GAME_RECORD_ITEMS}
           }
-          bingoTransactionInfo {
-            transactionId
-            transactionFee
-            triggerTime
+        ) {
+          gameList {
+            id
+            gridNum
+            score
+            transcationFee
+            playTransactionInfo {
+              transactionId
+              transactionFee
+              triggerTime
+            }
+            bingoTransactionInfo {
+              transactionId
+              transactionFee
+              triggerTime
+            }
           }
         }
       }
-    }
-  `)) || {};
+    `)) || {};
 
     return getGameHistory;
-  });
+  }, [address]);
+
+  return { gameHistory };
 };

@@ -7,14 +7,13 @@
 }
 
 .treasure-btn {
-  @apply flex items-center justify-center bg-[#FEB800] rounded-full text-center;
+  @apply flex items-center justify-center bg-no-repeat bg-[100%_100%] rounded-full text-center;
 
-  box-shadow: 0 2px 1px 0 #FFE051 inset;
-  box-shadow: 0 8px 16px 0 #244CBD99;
-
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 25%);
+  background-size: 100% 100%;
 }
 .treasure-btn-pc {
-  @apply h-[78px] w-[377px] text-[20px] text-[#fff] leading-[24px] ; 
+  @apply h-[78px] w-[377px] text-[32px] text-[#fff] leading-[24px] ; 
 
 }
 .treasure-btn-mobile {
