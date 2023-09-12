@@ -14,6 +14,7 @@ import dice3 from 'assets/images/animation/dice3.json';
 import dice4 from 'assets/images/animation/dice4.json';
 import dice5 from 'assets/images/animation/dice5.json';
 import dice6 from 'assets/images/animation/dice6.json';
+import buttonBg from 'assets/base64/buttonBg';
 
 export enum RecreationModalType {
   DICE = 'dice',
@@ -110,11 +111,16 @@ function RecreationModal(props: IRecreationModal) {
           />
         </div>
         <button
-          className={`font-fonarto ${styles['treasure-btn']} ${
+          style={{
+            backgroundImage: `url(${buttonBg})`,
+          }}
+          className={`${styles['treasure-btn']} ${
             isMobile ? styles['treasure-btn-mobile'] : styles['treasure-btn-pc']
           }`}
           onClick={treasureStatus === TreasureStatus.OPENED ? onClose : openTreasure}>
-          {treasureStatus === TreasureStatus.OPENED ? 'Confirm' : 'OPEN'}
+          <span className="mb-[6.5px] font-fonarto">
+            {treasureStatus === TreasureStatus.OPENED ? 'Confirm' : 'OPEN'}
+          </span>
         </button>
       </div>
     ),
