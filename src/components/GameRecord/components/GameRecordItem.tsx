@@ -29,7 +29,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
                 className="text-white underline"
                 target="_blank"
                 rel="noopener noreferrer">
-                View on Explore
+                View on Explorer
               </a>
             </th>
           </tr>

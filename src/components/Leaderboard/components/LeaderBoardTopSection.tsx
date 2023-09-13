@@ -14,7 +14,7 @@ export const LeaderBoardTopSection = ({ children, onClick }: ILeaderBoardTopSect
       }`}>
       {children ? (
         <div className="flex">
-          <img src={imageResources?.infoIcon} className="w-4 h-4 mt-1" />
+          {/* <img src={imageResources?.infoIcon} className="w-4 h-4 mt-1" /> */}
           <span className="text-white opacity-60 ml-2">{children}</span>
         </div>
       ) : null}

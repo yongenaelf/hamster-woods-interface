@@ -35,7 +35,6 @@ export const graphQLRequest = async <T>(document: RequestDocument) => {
           showMessage.error(errorMessage);
           return;
         default:
-          showMessage.error(errorMessage);
           return;
       }
     }

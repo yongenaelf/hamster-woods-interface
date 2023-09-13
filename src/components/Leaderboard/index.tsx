@@ -11,7 +11,7 @@ import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal'
 
 enum Tabs {
   Weekly = 'Weekly',
-  Season = 'Season',
+  Season = 'Seasonal',
   PastRecord = 'Past Records',
 }
 
