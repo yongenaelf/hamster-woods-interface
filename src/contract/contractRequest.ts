@@ -5,7 +5,6 @@ import { did } from '@portkey/did-ui-react';
 
 import { CallContractParams, IDiscoverInfo, PortkeyInfoType, WalletInfoType } from 'types';
 import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
-import { formatErrorMsg } from 'utils/formattError';
 import { aelf } from '@portkey/utils';
 import { getTxResult } from 'utils/getTxResult';
 import DetectProvider from 'utils/InstanceProvider';
@@ -177,7 +176,7 @@ export default class ContractRequest {
               methodName: params.methodName,
               args: params.args,
             },
-            sendOptions,
+            { onMethod: 'transactionHash' },
           );
         } catch (error) {
           return Promise.reject(error);
