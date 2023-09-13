@@ -186,7 +186,7 @@ export default class ContractRequest {
     }
 
     if (result?.error || result?.code || result?.Error) {
-      return Promise.reject(formatErrorMsg(result));
+      return Promise.reject(result);
     }
 
     const { transactionId, TransactionId } = result.result || result;

@@ -24,16 +24,18 @@ export const graphQLRequest = async <T>(document: RequestDocument) => {
 
     if (isError(response)) {
       // handle errors here
+      const errorMessage = 'Please check your internet connection and try again.';
       switch (response.status) {
         case 400:
-          showMessage.error('An error has occurred. Please try again later.');
+          showMessage.error(errorMessage);
           return;
         case 401:
           return;
         case 404:
-          showMessage.error('Not found.');
+          showMessage.error(errorMessage);
           return;
         default:
+          showMessage.error(errorMessage);
           return;
       }
     }

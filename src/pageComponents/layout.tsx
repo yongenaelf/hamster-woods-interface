@@ -98,9 +98,11 @@ const Layout = dynamic(
         return (
           <AntdLayout className="xx-wrapper flex h-full w-[100vw] flex-col overflow-hidden">
             {isMobileDevice && <Header />}
-            <AntdLayout.Content className="marketplace-content flex-1 overflow-hidden" id="marketplace-content">
+            <AntdLayout.Content
+              className="marketplace-content flex-1 overflow-hidden relative"
+              id="marketplace-content">
               {children}
-              <div className="absolute w-full h-full bg-gradient-to-t from-[#1D628B] to-[#14436E]"></div>
+              <div className="absolute top-0 w-full h-full bg-gradient-to-t from-[#1D628B] to-[#14436E]"></div>
             </AntdLayout.Content>
           </AntdLayout>
         );

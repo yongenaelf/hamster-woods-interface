@@ -54,18 +54,18 @@ class Request {
         let errMessage = '';
         switch (error?.response?.status) {
           case 400:
-            errMessage = 'Bad Request';
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           case 401:
-            showMessage.error('The signature has expired. Please log in again.');
+            showMessage.error('Please check your internet connection and try again.');
             setTimeout(() => {
               location.pathname = '/login';
             }, 3000);
             break;
 
           case 404:
-            errMessage = 'Not Found';
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           case 500:
@@ -73,11 +73,11 @@ class Request {
           case 502:
           case 503:
           case 504:
-            errMessage = `${error.response.status}: something is wrong in server`;
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           default:
-            errMessage = `${error.response.status}: something is wrong, please try again later`;
+            errMessage = 'Please check your internet connection and try again.';
             break;
         }
 
