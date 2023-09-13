@@ -456,7 +456,7 @@ export default function Game() {
 
   return (
     <>
-      <div className={`${styles.game} cursor-custom relative ${isMobile && 'flex-col'}`}>
+      <div className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
         {!isMobile && (
           <div className={styles['game__pc__side']}>
             <div

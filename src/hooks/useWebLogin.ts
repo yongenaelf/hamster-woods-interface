@@ -30,6 +30,7 @@ import InstanceProvider from 'utils/InstanceProvider';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import { ChainId } from '@portkey/provider-types';
 import { useRouter } from 'next/navigation';
+import { NetworkType } from 'constants/index';
 
 const KEY_NAME = 'BEANGOTOWN';
 
@@ -176,13 +177,18 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
     const provider = await detect();
     if (!provider) {
-      showMessage.error('unknow');
+      showMessage.error('Please update your extension to the latest version.');
       return;
     }
     const network = await provider?.request({ method: 'network' });
     if (network !== Network) {
       console.log(configInfo);
-      showMessage.error('network error');
+      if (Network === NetworkType.MAIN) {
+        showMessage.error('Please switch to aelf Mainnet.');
+      } else {
+        showMessage.error('Please switch to aelf Testnet.');
+      }
+
       return;
     }
     let accounts: any = await provider?.request({ method: 'accounts' });
@@ -194,7 +200,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (accounts[curChain] && accounts[curChain].length > 0) {
       onAccountsSuccess(provider, accounts);
     } else {
-      showMessage.error('Synchronizing on-chain account information');
+      showMessage.error('Syncing on-chain account info');
     }
   }, []);
 
