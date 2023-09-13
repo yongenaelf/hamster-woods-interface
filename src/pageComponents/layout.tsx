@@ -88,7 +88,6 @@ const Layout = dynamic(
       }, []);
 
       const pathname = usePathname();
-      console.log('pathname', pathname);
 
       if (!isFetchFinished) {
         return null;

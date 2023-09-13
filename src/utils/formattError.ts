@@ -15,7 +15,7 @@ enum TargetErrorType {
   Error4 = 'Invalid operation',
   Error5 = 'You have tried too many times',
   Error6 = 'Please try again later',
-  Default = 'FailedOperation!',
+  Default = 'Please check your internet connection and try again.',
 }
 
 const matchErrorMsg = <T>(message: T) => {

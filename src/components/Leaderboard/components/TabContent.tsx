@@ -1,8 +1,6 @@
 import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import { TabContentUser } from './TabContentUser';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
-import { dispatch } from 'redux/store';
-import { toggleShowLeaderboardInfo } from 'redux/reducer/info';
 import { RefreshTime } from './RefreshTime';
 import { LeaderBoardItemList } from './LeaderBoardItemList';
 import { LeaderBoardNoRecord } from './LeaderBoardNoRecord';
@@ -23,7 +21,7 @@ export const TabContent = ({ data, topText, emptyText, showEmptyText }: ITabCont
     <div className="flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 pb-2 shadow-inner">
       <LeaderBoardTopSection
         onClick={() => {
-          dispatch(toggleShowLeaderboardInfo());
+          // dispatch(toggleShowLeaderboardInfo());
         }}>
         {topText ? (
           status === 0 && refreshTime ? (
