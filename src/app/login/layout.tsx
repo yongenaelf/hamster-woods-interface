@@ -128,15 +128,20 @@ const Layout = dynamic(
       return hasLoadedSource ? (
         <>
           {children}
-          <img src={bgImage} className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat" />
+          <div
+            className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url(${bgImage})`,
+            }}></div>
         </>
       ) : (
         <>
           <LoadingAnimation />
-          <img
-            src={bgImage}
+          <div
             className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat z-[-1000]"
-          />
+            style={{
+              backgroundImage: `url(${bgImage})`,
+            }}></div>
         </>
       );
     };
