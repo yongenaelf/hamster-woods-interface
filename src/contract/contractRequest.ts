@@ -96,7 +96,7 @@ export default class ContractRequest {
       const caContract = await getContractBasic({
         contractAddress: chainInfo.caContractAddress,
         account,
-        rpcUrl: chainInfo.endPoint,
+        rpcUrl: this.rpcUrl,
       });
       this.caContract = caContract;
 
