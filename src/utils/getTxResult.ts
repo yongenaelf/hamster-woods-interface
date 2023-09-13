@@ -1,4 +1,5 @@
 import AElf from 'aelf-sdk';
+import { sleep } from './common';
 
 export function getAElf(rpcUrl?: string) {
   const rpc = rpcUrl || '';
@@ -10,7 +11,13 @@ export function getAElf(rpcUrl?: string) {
   return httpProviders[rpc];
 }
 
-export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0, rpcUrl: string): Promise<any> {
+export async function getTxResult(
+  TransactionId: string,
+  chainId: Chain,
+  reGetCount = 0,
+  rpcUrl: string,
+  reNotexistedCount = 3,
+): Promise<any> {
   const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
   if (txResult.error && txResult.errorMessage) {
     throw Error(txResult.errorMessage.message || txResult.errorMessage.Message);
@@ -22,7 +29,13 @@ export async function getTxResult(TransactionId: string, chainId: Chain, reGetCo
 
   if (txResult.Status.toLowerCase() === 'pending') {
     reGetCount++;
-    return getTxResult(TransactionId, chainId, reGetCount, rpcUrl);
+    return getTxResult(TransactionId, chainId, reGetCount, rpcUrl, reNotexistedCount);
+  }
+
+  if (txResult.Status.toLowerCase() === 'notexisted' && reNotexistedCount) {
+    await sleep(500);
+    reNotexistedCount--;
+    return getTxResult(TransactionId, chainId, reGetCount, rpcUrl, reNotexistedCount);
   }
 
   if (txResult.Status.toLowerCase() === 'mined') {
