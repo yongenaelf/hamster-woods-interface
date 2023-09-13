@@ -1,4 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+import Leaderboard from 'components/Leaderboard';
+
+import PageLoading from 'components/PageLoading';
+import GameRecord from 'components/GameRecord';
+
 import {
   ArrowDirection,
   CheckerboardNode,
@@ -321,7 +327,6 @@ export default function Game() {
       }
     }
     setBeanPassModalVisible(true);
-    showMessage.hideLoading();
   }, [address]);
 
   const initCheckBeanPass = useCallback(async () => {
@@ -332,6 +337,7 @@ export default function Game() {
       if (hasBeanPass && hasBeanPass.value) {
         setHasNft(true);
         setOpacity(1);
+        showMessage.hideLoading();
       } else {
         setHasNft(false);
         checkBeanPassStatus();
@@ -339,7 +345,6 @@ export default function Game() {
     } catch (error) {
       console.error('=====CheckBeanPass error', error);
     }
-    showMessage.hideLoading();
   }, [address]);
 
   const handleConfirm = async () => {
@@ -372,7 +377,6 @@ export default function Game() {
 
   useEffect(() => {
     if (address) {
-      showMessage.loading();
       initCheckBeanPass();
     }
   }, [address]);
@@ -382,7 +386,6 @@ export default function Game() {
       router.push('/login');
     } else {
       if (walletType !== WalletType.unknown && walletInfo) {
-        showMessage.hideLoading();
         initializeContract();
       }
     }
@@ -393,7 +396,8 @@ export default function Game() {
   }, [checkerboardData, hasNft]);
 
   useEffectOnce(() => {
-    showMessage.hideLoading();
+    showMessage.loading();
+
     setResetStart(chessboardResetStart);
     currentNodeRef.current = curChessboardNode;
     if (curChessboardNode) {
@@ -451,114 +455,120 @@ export default function Game() {
   };
 
   return (
-    <div className={`${styles.game} cursor-custom relative ${isMobile && 'flex-col'}`}>
-      {!isMobile && (
-        <div className={styles['game__pc__side']}>
-          <div
-            className={`${styles['game__pc__blur']}`}
-            style={{
-              backgroundImage: `url(${imageResources?.aloginBgPc})`,
-            }}></div>
-          <BoardLeft />
-        </div>
-      )}
-      <div
-        className={`${styles['game__content']} flex overflow-hidden ${
-          isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
-        }`}>
-        {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
-        <SideBorder side="left" />
-        <div className="w-full overflow-y-auto overflow-x-hidden">
-          <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
-            <div className="relative z-[30]">
-              <Role
-                id="animationId"
-                width={`calc(100% / ${checkerboardData?.[0]?.length})`}
-                translate={translate}
-                bean={score}
-                opacity={opacity}
-                position={{
-                  x: currentNodeRef.current?.info.row,
-                  y: currentNodeRef.current?.info.column,
-                }}
-                animationDuration={roleAnimationDuration}
-                showAdd={showAdd}
-                hideAdd={hideAdd}>
-                {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                <img className="w-full h-full" src={roleImg} alt="role" />
-              </Role>
+    <>
+      <div className={`${styles.game} cursor-custom relative ${isMobile && 'flex-col'}`}>
+        {!isMobile && (
+          <div className={styles['game__pc__side']}>
+            <div
+              className={`${styles['game__pc__blur']}`}
+              style={{
+                backgroundImage: `url(${imageResources?.aloginBgPc})`,
+              }}></div>
+            <BoardLeft />
+          </div>
+        )}
+        <div
+          className={`${styles['game__content']} flex overflow-hidden ${
+            isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
+          }`}>
+          {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
+          <SideBorder side="left" />
+          <div className="w-full overflow-y-auto overflow-x-hidden">
+            <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
+              <div className="relative z-[30]">
+                <Role
+                  id="animationId"
+                  width={`calc(100% / ${checkerboardData?.[0]?.length})`}
+                  translate={translate}
+                  bean={score}
+                  opacity={opacity}
+                  position={{
+                    x: currentNodeRef.current?.info.row,
+                    y: currentNodeRef.current?.info.column,
+                  }}
+                  animationDuration={roleAnimationDuration}
+                  showAdd={showAdd}
+                  hideAdd={hideAdd}>
+                  {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
+                  <img className="w-full h-full" src={roleImg} alt="role" />
+                </Role>
 
-              {checkerboardData?.map((row, index) => {
-                return (
-                  <div key={index} className="flex">
-                    {row.map((column) => {
-                      return (
-                        <div
-                          key={column.id}
-                          style={{
-                            width: `calc(100% / ${row.length})`,
-                          }}>
-                          <Checkerboard value={column} />
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="ml-[-16px] mt-[-50px] w-full">
-              <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+                {checkerboardData?.map((row, index) => {
+                  return (
+                    <div key={index} className="flex">
+                      {row.map((column) => {
+                        return (
+                          <div
+                            key={column.id}
+                            style={{
+                              width: `calc(100% / ${row.length})`,
+                            }}>
+                            <Checkerboard value={column} />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="ml-[-16px] mt-[-50px] w-full">
+                <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <SideBorder side="right" />
+          <SideBorder side="right" />
+        </div>
+        {!isMobile && (
+          <div className={`${styles['game__pc__side']}`}>
+            <div
+              className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}
+              style={{
+                backgroundImage: `url(${imageResources?.aloginBgPc})`,
+              }}></div>
+            <div className="z-30 h-full w-full">
+              <Board
+                hasNft={hasNft}
+                onNftClick={onNftClick}
+                playableCount={playableCount}
+                sumScore={hasNft ? sumScore : 0}
+                status={goStatus}
+                go={go}
+              />
+            </div>
+          </div>
+        )}
+
+        {isMobile && (
+          <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
+        )}
+
+        <RecreationModal open={open} onClose={diceModalOnClose} type={RecreationModalType.DICE} step={step} />
+        <RecreationModal
+          open={treasureOpen}
+          onClose={recreationModalOnClose}
+          type={RecreationModalType.TREASURE}
+          step={step}
+          bean={score}
+        />
+        <GetBeanPassModal
+          type={beanPassModalType}
+          open={beanPassModalVisible}
+          onCancel={() => setBeanPassModalVisible(false)}
+          onConfirm={handleConfirm}
+        />
+
+        <ShowNFTModal open={isShowNFT} onCancel={onShowNFTModalCancel} type={nftModalType} />
+        <CountDownModal
+          open={countDownModalOpen}
+          onCancel={() => setCountDownModalOpen(false)}
+          onConfirm={() => setCountDownModalOpen(false)}
+        />
       </div>
-      {!isMobile && (
-        <div className={`${styles['game__pc__side']}`}>
-          <div
-            className={`${styles['game__pc__blur']} ${styles['game__pc__blur__right']}`}
-            style={{
-              backgroundImage: `url(${imageResources?.aloginBgPc})`,
-            }}></div>
-          <div className="z-30 h-full w-full">
-            <Board
-              hasNft={hasNft}
-              onNftClick={onNftClick}
-              playableCount={playableCount}
-              sumScore={hasNft ? sumScore : 0}
-              status={goStatus}
-              go={go}
-            />
-          </div>
-        </div>
-      )}
 
-      {isMobile && (
-        <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
-      )}
-
-      <RecreationModal open={open} onClose={diceModalOnClose} type={RecreationModalType.DICE} step={step} />
-      <RecreationModal
-        open={treasureOpen}
-        onClose={recreationModalOnClose}
-        type={RecreationModalType.TREASURE}
-        step={step}
-        bean={score}
-      />
-      <GetBeanPassModal
-        type={beanPassModalType}
-        open={beanPassModalVisible}
-        onCancel={() => setBeanPassModalVisible(false)}
-        onConfirm={handleConfirm}
-      />
-
-      <ShowNFTModal open={isShowNFT} onCancel={onShowNFTModalCancel} type={nftModalType} />
-      <CountDownModal
-        open={countDownModalOpen}
-        onCancel={() => setCountDownModalOpen(false)}
-        onConfirm={() => setCountDownModalOpen(false)}
-      />
-    </div>
+      <Leaderboard />
+      <GameRecord />
+      <PageLoading />
+    </>
   );
 }

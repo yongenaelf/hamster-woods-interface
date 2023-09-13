@@ -115,7 +115,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isLogin) {
-      router.push('/');
+      router.replace('/');
     }
   }, [isLogin, router]);
 

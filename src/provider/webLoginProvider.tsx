@@ -8,5 +8,9 @@ import useGetState from 'redux/state/useGetState';
 
 export default ({ children }: { children: React.ReactNode }) => {
   const { configInfo } = useGetState();
+
+  if (!configInfo) {
+    return <>{children}</>;
+  }
   return <PortkeyProvider networkType={configInfo?.network as NetworkType}>{children}</PortkeyProvider>;
 };
