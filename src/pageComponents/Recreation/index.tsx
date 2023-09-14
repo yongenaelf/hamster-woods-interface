@@ -352,6 +352,7 @@ export default function Game() {
         checkBeanPassStatus();
       }
     } catch (error) {
+      showMessage.hideLoading();
       console.error('=====CheckBeanPass error', error);
     }
   }, [address]);

@@ -4,7 +4,7 @@ import { formatErrorMsg } from 'utils/formattError';
 import { store } from 'redux/store';
 import { getTxResult, getTxResultOnce } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
-
+import checkSynchronization from 'utils/checkSynchronization';
 const { configInfo } = store.getState();
 
 export enum ContractMethodType {
@@ -86,14 +86,19 @@ export const Play = async (
     };
   } catch (error) {
     const resError = error as IContractError;
-    console.error('=====bingoContract', resError);
+    const res = await checkSynchronization(resError?.Error || '');
+    if (!res) {
+      return Promise.reject(
+        formatErrorMsg({
+          ...resError,
+          message: 'Syncing on-chain account info',
+        }),
+      );
+    }
+
     return Promise.reject(formatErrorMsg(resError));
   }
 };
-
-// export const Bingo = async (hash: string) => {
-//   return await bingoContract('Bingo', hash, ContractMethodType.SEND);
-// };
 
 export const GetBingoReward = async (hash: string): Promise<IBoutInformation> => {
   try {
@@ -141,7 +146,7 @@ export const Bingo = async (hash: string): Promise<{ TransactionId: string; TxRe
     };
   } catch (error) {
     const resError = error as IContractError;
-    console.error('=====bingoContract', resError);
+    console.error('=====Bingo bingoContract', resError);
     return Promise.reject(formatErrorMsg(resError));
   }
 };
