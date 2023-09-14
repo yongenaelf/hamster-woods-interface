@@ -266,11 +266,20 @@ export default function Game() {
       const res = await Play(resetStart);
       console.log('=====Play res', res);
       if (res?.TransactionId) {
+        const boutInformation = await GetBoutInformation(res?.TransactionId);
+        console.log('=====Play GetBoutInformation', boutInformation);
         updateStep();
         setResetStart(false);
         store.dispatch(setChessboardResetStart(false));
-        const boutInformation = await GetBoutInformation(res?.TransactionId);
-        console.log('=====Play GetBoutInformation', boutInformation);
+
+        const blockGap = Number(boutInformation.expectedBlockHeight) - res.TxResult.BlockNumber;
+        const waitTime = blockGap * 0.5 - (Date.now() - res.startTime) / 1000;
+        console.log(waitTime, blockGap, res.startTime);
+
+        if (waitTime > 0.1) {
+          await sleep(waitTime * 1000);
+        }
+
         const blockRes = await getBlockHeight(
           configInfo!.curChain as ChainId,
           0,

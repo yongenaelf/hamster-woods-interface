@@ -198,6 +198,72 @@ export default class ContractRequest {
     });
   }
 
+  public async callSendMethodNoResult<T, R>(params: CallContractParams<T>) {
+    if (this.walletType === WalletType.unknown) {
+      throw new Error('Wallet not login');
+    }
+
+    let result: R | any;
+
+    const walletType = this.walletType;
+    switch (walletType) {
+      case WalletType.discover: {
+        const discoverInfo = this.wallet.discoverInfo!;
+        try {
+          const contract = await this.getProviderCaContract(params.contractAddress);
+          const accounts = discoverInfo.accounts;
+
+          if (!accounts) {
+            throw new Error('Account not found');
+          }
+
+          const accountsInChain = accounts[this.chainId as ChainId];
+          if (!accountsInChain || accountsInChain.length === 0) {
+            throw new Error(`Account not found in chain: ${this.chainId}`);
+          }
+          const address = accountsInChain[0];
+          result = await contract?.callSendMethod(params.methodName, address, params.args, {
+            onMethod: 'transactionHash',
+          });
+        } catch (error) {
+          console.error('=====callSendMethod error', error);
+          return Promise.reject(error);
+        }
+        break;
+      }
+      case WalletType.portkey: {
+        try {
+          result = await this.caContract?.callSendMethod(
+            'ManagerForwardCall',
+            this.caAddress!,
+            {
+              caHash: this.caHash,
+              contractAddress: params.contractAddress,
+              methodName: params.methodName,
+              args: params.args,
+            },
+            { onMethod: 'transactionHash' },
+          );
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      }
+    }
+
+    if (result?.error || result?.code || result?.Error) {
+      return Promise.reject(result);
+    }
+
+    const { transactionId, TransactionId } = result.result || result;
+    const resTransactionId = TransactionId || transactionId;
+
+    return Promise.resolve({
+      transactionId: resTransactionId,
+      chainId: this.chainId,
+      rpcUrl: this.rpcUrl,
+    });
+  }
+
   public async callViewMethod<T, R>(params: CallContractParams<T>): Promise<R> {
     try {
       const contract = await this.getViewContract(params.contractAddress);
