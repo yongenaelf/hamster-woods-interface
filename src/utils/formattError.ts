@@ -7,6 +7,8 @@ enum SourceErrorType {
   Error4 = 'Bout not found',
   Error5 = 'Bout already finished',
   Error6 = 'Invalid target height',
+  Error7 = 'Syncing on-chain account info',
+  Error8 = 'You closed the prompt without any action',
 }
 enum TargetErrorType {
   Error1 = 'Not enough BeanPass NFT to start the game',
@@ -15,6 +17,8 @@ enum TargetErrorType {
   Error4 = 'Invalid operation',
   Error5 = 'You have tried too many times',
   Error6 = 'Please try again later',
+  Error7 = 'Syncing on-chain account info',
+  Error8 = 'You closed the prompt without any action',
   Default = 'Please check your internet connection and try again.',
 }
 
@@ -27,6 +31,8 @@ const matchErrorMsg = <T>(message: T) => {
       SourceErrorType.Error4,
       SourceErrorType.Error5,
       SourceErrorType.Error6,
+      SourceErrorType.Error7,
+      SourceErrorType.Error8,
     ];
     const targetErrors = [
       TargetErrorType.Error1,
@@ -35,6 +41,8 @@ const matchErrorMsg = <T>(message: T) => {
       TargetErrorType.Error4,
       TargetErrorType.Error5,
       TargetErrorType.Error6,
+      TargetErrorType.Error7,
+      TargetErrorType.Error8,
     ];
 
     for (let index = 0; index < sourceErrors.length; index++) {

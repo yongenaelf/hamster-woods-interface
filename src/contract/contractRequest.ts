@@ -8,6 +8,7 @@ import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
 import { aelf } from '@portkey/utils';
 import { getTxResult } from 'utils/getTxResult';
 import DetectProvider from 'utils/InstanceProvider';
+import { Manager } from '@portkey/services';
 
 interface IContractConfig {
   chainId: ChainId;
@@ -34,10 +35,14 @@ export default class ContractRequest {
   private wallet: IWallet = {};
   public caContractProvider?: IContract;
   public caContract?: IPortkeyContract;
+  public viewContractMap: { [x: string]: IPortkeyContract };
+
   public viewContract?: IViewContract;
   private caAddress: string | undefined;
   private caHash: string | undefined;
-
+  constructor() {
+    this.viewContractMap = {};
+  }
   static get() {
     if (!ContractRequest.instance) {
       ContractRequest.instance = new ContractRequest();
@@ -106,6 +111,20 @@ export default class ContractRequest {
     return this.caContract;
   };
 
+  public getViewContracts = async (rpcUrl: string, chainId: ChainId, address: string) => {
+    const key = rpcUrl + chainId;
+    if (!this.viewContractMap[key]) {
+      const aelfInstance = getAElfInstance(rpcUrl);
+
+      this.viewContractMap[key] = await getContractBasic({
+        aelfInstance,
+        contractAddress: address,
+        account: aelf.getWallet('f6e512a3c259e5f9af981d7f99d245aa5bc52fe448495e0b0dd56e8406be6f71'),
+      });
+    }
+    return this.viewContractMap[key];
+  };
+
   private getViewContract = async (contractAddress: string) => {
     if (!this.viewContract) {
       const aelfInstance = getAElfInstance(this.rpcUrl!);
@@ -119,8 +138,6 @@ export default class ContractRequest {
 
   private getProviderCaContract = async (contractAddress: string) => {
     if (!this.caContractProvider) {
-      console.log('getProviderCaContract');
-
       const dp = await DetectProvider.getDetectProvider();
       const chainProvider = await dp?.getChain(this.chainId as ChainId);
       if (!chainProvider) return;
@@ -185,6 +202,7 @@ export default class ContractRequest {
     }
 
     if (result?.error || result?.code || result?.Error) {
+      console.error('=====callSendMethod error result', result);
       return Promise.reject(result);
     }
 
@@ -226,7 +244,7 @@ export default class ContractRequest {
             onMethod: 'transactionHash',
           });
         } catch (error) {
-          console.error('=====callSendMethod error', error);
+          console.error('=====callSendMethodNoResult error discover', error);
           return Promise.reject(error);
         }
         break;
@@ -245,12 +263,14 @@ export default class ContractRequest {
             { onMethod: 'transactionHash' },
           );
         } catch (error) {
+          console.error('=====callSendMethodNoResult error portkey', error);
           return Promise.reject(error);
         }
       }
     }
 
     if (result?.error || result?.code || result?.Error) {
+      console.error('=====callSendMethodNoResult result', result);
       return Promise.reject(result);
     }
 
@@ -277,5 +297,41 @@ export default class ContractRequest {
     } catch (error) {
       return Promise.reject(error);
     }
+  }
+
+  public async getHolder(caAddress: string) {
+    // get caHash
+    const rst = await did.services.communityRecovery.getHolderInfoByManager({
+      caAddresses: [caAddress],
+    } as any);
+    const caHash = rst[0].caHash;
+    let managerInfo: Manager[] = [];
+    const originChainId = rst[0].originChainId;
+
+    // get every chain HolderInfo
+    const chainsInfo = await did.services.getChainsInfo();
+    const result = await Promise.all(
+      chainsInfo.map(async (item) => {
+        const contract = await this.getViewContracts(item.endPoint, item.chainId, item.caContractAddress);
+        const info = await contract.callViewMethod('GetHolderInfo', {
+          caHash,
+        });
+        if (item.chainId === originChainId) managerInfo = info.data.managerInfos;
+        return info.data;
+      }),
+    );
+
+    // compare
+    const managerList = result.map((item) => {
+      return item.managerInfos as Manager[];
+    });
+
+    const managerInfoStr = JSON.stringify(managerInfo);
+    const isSame = managerList.every((item) => JSON.stringify(item) === managerInfoStr);
+    if (isSame) return true;
+    const lastManager = managerInfo.slice(-1)[0].address;
+    const isLastManager = managerList.every((item) => item.slice(-1)[0].address === lastManager);
+    if (isLastManager) return true;
+    return false;
   }
 }

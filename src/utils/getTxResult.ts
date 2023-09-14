@@ -42,8 +42,7 @@ export async function getTxResult(
   if (txResult.Status.toLowerCase() === 'mined') {
     return { TransactionId, txResult };
   }
-
-  throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+  throw Error('Transaction error');
 }
 
 export async function getTxResultOnce(TransactionId: string, rpcUrl: string): Promise<any> {
