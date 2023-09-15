@@ -39,7 +39,7 @@
 
 .loginBtnIcon,
 .loginBtnBlueIcon {
-  @apply absolute left-5 top-[50%] -translate-y-[50%] text-2xl md:left-8 md:text-[44px] flex items-center;
+  @apply text-2xl md:left-8 md:text-[44px] flex items-center;
   path {
     @apply fill-white;
   }
@@ -59,7 +59,7 @@
     }
   }
   .loginBtn {
-    @apply !mb-5 !h-[77px] !justify-end !rounded-[39px] !px-10;
+    @apply !mb-5 !h-[77px] !justify-center !rounded-[39px] !px-10;
 
     box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%) !important;
   }
