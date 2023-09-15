@@ -17,7 +17,6 @@ import {
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { setLoginStatus } from 'redux/reducer/info';
-import { store } from 'redux/store';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
@@ -212,7 +211,8 @@ export default function Login() {
     }
     return filterMethods.map((item, index) => (
       <div key={index} onClick={item.onclick} className={item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn}>
-        {getIconComponent(item.iconName as IconType, inModel)} {item.name}
+        {getIconComponent(item.iconName as IconType, inModel)}
+        <span className="flex-1 text-center font-fonarto">{item.name}</span>
       </div>
     ));
   };
