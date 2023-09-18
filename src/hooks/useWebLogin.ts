@@ -22,7 +22,6 @@ import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
 import ContractRequest from 'contract/contractRequest';
 import { GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
-import { SignatureParams } from 'aelf-web-login';
 import useGetState from 'redux/state/useGetState';
 import DetectProvider from 'utils/InstanceProvider';
 import useIntervalAsync from './useInterValAsync';
@@ -35,6 +34,13 @@ import { NetworkType } from 'constants/index';
 const KEY_NAME = 'BEANGOTOWN';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
+
+export type SignatureParams = {
+  appName: string;
+  address: string;
+  signInfo: string;
+  hexToBeSign?: string;
+};
 
 export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [isLogin, setIsLogin] = useState(false);
