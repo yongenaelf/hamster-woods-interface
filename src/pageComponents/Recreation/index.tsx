@@ -33,7 +33,6 @@ import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
 import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
-import { getBlockHeight } from 'utils/getBlockHeight';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
 import { setPlayerInfo } from 'redux/reducer/info';
@@ -41,11 +40,11 @@ import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
 import { store } from 'redux/store';
-import { ChainId } from '@portkey/types';
 import { formatErrorMsg } from 'utils/formattError';
 import { sleep } from 'utils/common';
 import roleImg from 'assets/base64/role';
 import { setChessboardResetStart, setCurChessboardNode } from 'redux/reducer/chessboardData';
+import { getBlockHeightFromServer } from 'utils/getBlockHeightFromServer';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -279,13 +278,7 @@ export default function Game() {
         if (waitTime > 0.1) {
           await sleep(waitTime * 1000);
         }
-
-        const blockRes = await getBlockHeight(
-          configInfo!.curChain as ChainId,
-          0,
-          configInfo!.rpcUrl,
-          boutInformation.expectedBlockHeight,
-        );
+        const blockRes = await getBlockHeightFromServer(boutInformation.expectedBlockHeight);
         if (blockRes) {
           const bingoRes = await GetBingoReward(res.TransactionId);
           console.log('=====Play GetBingoReward', bingoRes);

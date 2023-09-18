@@ -10,7 +10,7 @@ enum SourceErrorType {
   Error7 = 'Syncing on-chain account info',
   Error8 = 'You closed the prompt without any action',
 }
-enum TargetErrorType {
+export enum TargetErrorType {
   Error1 = 'Not enough BeanPass NFT to start the game',
   Error2 = 'Not enough GOs to start the game',
   Error3 = 'Invalid operation',
@@ -18,7 +18,7 @@ enum TargetErrorType {
   Error5 = 'You have tried too many times',
   Error6 = 'Please try again later',
   Error7 = 'Syncing on-chain account info',
-  Error8 = 'You closed the prompt without any action',
+  Error8 = 'Request rejected. BeanGo Town needs your permission to continue',
   Default = 'Please check your internet connection and try again.',
 }
 
@@ -46,6 +46,9 @@ const matchErrorMsg = <T>(message: T) => {
     ];
 
     for (let index = 0; index < sourceErrors.length; index++) {
+      if (message.includes(targetErrors[index])) {
+        return message;
+      }
       if (message.includes(sourceErrors[index])) {
         return message.replace(sourceErrors[index], targetErrors[index]);
       }
