@@ -9,6 +9,10 @@ export const receiveBeanPassNFT = async (body: IBeanPassClaimReq): Promise<IBean
   return request.post('app/bean-pass/claim', body);
 };
 
+export const blockHeight = async (): Promise<number> => {
+  return request.get('app/chain/blockHeight');
+};
+
 export const fetchConfigItems = async (): Promise<IConfigResponse> => {
   return cmsRequest.get<IConfigResponse>('items/config');
 };

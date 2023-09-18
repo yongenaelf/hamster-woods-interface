@@ -1,5 +1,6 @@
 import AElf from 'aelf-sdk';
 import { sleep } from './common';
+import { TargetErrorType } from './formattError';
 
 export function getAElf(rpcUrl?: string) {
   const rpc = rpcUrl || '';
@@ -24,7 +25,7 @@ export async function getTxResult(
   }
 
   if (!txResult) {
-    throw Error('Can not get transaction result.');
+    throw Error(TargetErrorType.Default);
   }
 
   if (txResult.Status.toLowerCase() === 'pending') {
@@ -42,7 +43,7 @@ export async function getTxResult(
   if (txResult.Status.toLowerCase() === 'mined') {
     return { TransactionId, txResult };
   }
-  throw Error('Transaction error');
+  throw Error(TargetErrorType.Default);
 }
 
 export async function getTxResultOnce(TransactionId: string, rpcUrl: string): Promise<any> {
@@ -52,7 +53,7 @@ export async function getTxResultOnce(TransactionId: string, rpcUrl: string): Pr
   }
 
   if (!txResult) {
-    throw Error('Can not get transaction result.');
+    throw Error(TargetErrorType.Default);
   }
 
   if (txResult.Status.toLowerCase() === 'pending') {
@@ -75,5 +76,5 @@ export async function getTxResultOnce(TransactionId: string, rpcUrl: string): Pr
     return { TransactionId, txResult };
   }
 
-  throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+  throw Error(TargetErrorType.Default);
 }
