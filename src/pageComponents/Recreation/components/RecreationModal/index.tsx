@@ -8,6 +8,7 @@ import useGetState from 'redux/state/useGetState';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import dataAnimation from 'assets/images/animation/treasureBox.json';
+import loadingDice from 'assets/images/animation/dice.json';
 import dice1 from 'assets/images/animation/dice1.json';
 import dice2 from 'assets/images/animation/dice2.json';
 import dice3 from 'assets/images/animation/dice3.json';
@@ -15,8 +16,10 @@ import dice4 from 'assets/images/animation/dice4.json';
 import dice5 from 'assets/images/animation/dice5.json';
 import dice6 from 'assets/images/animation/dice6.json';
 import buttonBg from 'assets/base64/buttonBg';
+import { RANDOM_STEP } from 'constants/copywriting';
 
 export enum RecreationModalType {
+  LOADING = 'loading',
   DICE = 'dice',
   TREASURE = 'treasure',
 }
@@ -80,6 +83,22 @@ function RecreationModal(props: IRecreationModal) {
           }}
           className={`${isMobile ? 'h-auto w-[90%]' : 'h-auto w-[80%]'}`}
         />
+      </div>
+    ),
+    [RecreationModalType.LOADING]: (
+      <div className="relative w-full h-full flex items-center justify-center">
+        <Lottie
+          loop={true}
+          autoplay={true}
+          animationData={loadingDice}
+          className={`${isMobile ? 'h-auto w-[90%]' : 'h-auto w-[80%]'}`}
+        />
+        <span
+          className={`text-[#fff] absolute left-0 right-0 m-auto text-center font-fonarto bottom-[16%] ${
+            isMobile ? 'text-[16px]' : 'text-[42px]'
+          }`}>
+          {RANDOM_STEP}
+        </span>
       </div>
     ),
     [RecreationModalType.TREASURE]: (

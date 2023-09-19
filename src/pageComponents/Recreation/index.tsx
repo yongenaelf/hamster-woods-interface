@@ -45,6 +45,8 @@ import { sleep } from 'utils/common';
 import roleImg from 'assets/base64/role';
 import { setChessboardResetStart, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { getBlockHeightFromServer } from 'utils/getBlockHeightFromServer';
+import { getTxResult } from 'utils/getTxResult';
+import { ChainId } from '@portkey/types';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -81,6 +83,7 @@ export default function Game() {
   const [score, setScore] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
+  const [diceType, setDiceType] = useState<RecreationModalType>(RecreationModalType.LOADING);
   const [treasureOpen, setTreasureOpen] = useState<boolean>(false);
 
   const [playableCount, setPlayableCount] = useState<number>(0);
@@ -261,7 +264,8 @@ export default function Game() {
     }
     try {
       setGoLoading(true);
-      showMessage.loading('Generating random step numbers on-chain');
+      setDiceType(RecreationModalType.LOADING);
+      setOpen(true);
       console.log('=====Play resetStart', resetStart);
       const res = await Play(resetStart);
       console.log('=====Play res', res);
@@ -286,7 +290,8 @@ export default function Game() {
           const step = bingoRes.gridNum;
           setScore(bingoRes.score);
           setStep(step);
-          setOpen(true);
+          setDiceType(RecreationModalType.DICE);
+          return;
         }
       } else {
         setMoving(false);
@@ -299,7 +304,7 @@ export default function Game() {
       setMoving(false);
       setGoLoading(false);
     }
-    showMessage.hideLoading();
+    setOpen(false);
   };
 
   const checkBeanPassStatus = useCallback(async () => {
@@ -358,7 +363,7 @@ export default function Game() {
       const getNFTRes = await receiveBeanPassNFT({
         caAddress: address,
       });
-      const { claimable, reason } = getNFTRes;
+      const { claimable, reason, transactionId } = getNFTRes;
       if (!claimable) {
         showMessage.error(reason);
         return;
@@ -367,8 +372,14 @@ export default function Game() {
       setNFTModalType(ShowBeanPassType.Success);
 
       await sleep(configInfo?.stepUpdateDelay || 3000);
-      updatePlayerInformation(address);
-      setIsShowNFT(true);
+      try {
+        await getTxResult(transactionId, configInfo?.curChain as ChainId, 0, configInfo!.rpcUrl, 4);
+        updatePlayerInformation(address);
+        setIsShowNFT(true);
+      } catch (error) {
+        /* empty */
+      }
+
       showMessage.hideLoading();
     } else if (beanPassModalType === GetBeanPassStatus.Recharge) {
       if (walletType === WalletType.discover || walletType === WalletType.unknown) {
@@ -553,7 +564,7 @@ export default function Game() {
           <GoButton playableCount={playableCount} sumScore={hasNft ? sumScore : 0} status={goStatus} go={go} />
         )}
 
-        <RecreationModal open={open} onClose={diceModalOnClose} type={RecreationModalType.DICE} step={step} />
+        <RecreationModal open={open} onClose={diceModalOnClose} type={diceType} step={step} />
         <RecreationModal
           open={treasureOpen}
           onClose={recreationModalOnClose}
