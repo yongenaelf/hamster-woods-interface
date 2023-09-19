@@ -255,29 +255,36 @@ export default function Login() {
       return;
     }
 
-    let caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
+    const caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
+    const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    if (!originChainId) return;
     let caHash = caInfo?.caHash;
+
     if (!caInfo) {
-      const key = Object.keys(wallet.didWallet.caInfo)[0];
       try {
-        caHash = wallet.didWallet.caInfo[key].caHash;
-        caInfo = await did.didWallet.getHolderInfoByContract({
-          caHash: caHash,
-          chainId: configInfo!.curChain as ChainId,
+        caHash = wallet.didWallet.caInfo[originChainId].caHash;
+        const caAddress = wallet.didWallet.caInfo[originChainId].caAddress;
+        setIsUnlockShow(false);
+        handleFinish(WalletType.portkey, {
+          caInfo: { caHash, caAddress },
+          walletInfo: wallet.didWallet.managementAccount,
+          pin: passwordValue,
+          chainId: originChainId as ChainId,
         });
       } catch (err) {
         showMessage.error();
         return;
       }
+    } else {
+      setIsUnlockShow(false);
+      const walletInfo = {
+        caInfo,
+        pin: passwordValue,
+        chainId: configInfo!.curChain,
+        walletInfo: wallet.didWallet.managementAccount,
+      };
+      handleFinish(WalletType.portkey, walletInfo);
     }
-    setIsUnlockShow(false);
-    const walletInfo = {
-      caInfo,
-      pin: passwordValue,
-      chainId: configInfo!.curChain,
-      walletInfo: wallet.didWallet.managementAccount,
-    };
-    handleFinish(WalletType.portkey, walletInfo);
   }, [configInfo, handleFinish, passwordValue]);
 
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();

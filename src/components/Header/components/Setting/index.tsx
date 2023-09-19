@@ -7,7 +7,14 @@ import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
 import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
-import { setLoginStatus, setPlayerInfo, setWalletInfo, setWalletType, toggleShowGameRecord } from 'redux/reducer/info';
+import {
+  setIsNeedSyncAccountInfo,
+  setLoginStatus,
+  setPlayerInfo,
+  setWalletInfo,
+  setWalletType,
+  toggleShowGameRecord,
+} from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
@@ -72,6 +79,7 @@ export default function Setting() {
     store.dispatch(setPlayerInfo(null));
     store.dispatch(setCurChessboardNode(null));
     store.dispatch(setChessboardResetStart(true));
+    store.dispatch(setIsNeedSyncAccountInfo(true));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
     ContractRequest.get().resetConfig();
     showMessage.hideLoading();

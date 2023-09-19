@@ -26,6 +26,7 @@ const useGetState = () => {
     assetVisible: infoState.assetVisible,
     playerInfo: infoState.playerInfo,
     gameSetting: infoState.gameSetting,
+    needSync: infoState.isNeedSyncAccountInfo,
     configInfo,
     chessBoardInfo,
     imageResources,

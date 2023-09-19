@@ -18,6 +18,7 @@ const initialState: InfoStateType = {
   showLeaderboardInfo: false,
   showGameRecord: false,
   assetVisible: false,
+  isNeedSyncAccountInfo: true,
 };
 
 // Actual Slice
@@ -58,6 +59,9 @@ export const infoSlice = createSlice({
     setGameSetting(state, action) {
       state.gameSetting = action.payload;
     },
+    setIsNeedSyncAccountInfo(state, action) {
+      state.isNeedSyncAccountInfo = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -83,6 +87,7 @@ export const {
   toggleShowGameRecord,
   setAssetVisible,
   setGameSetting,
+  setIsNeedSyncAccountInfo,
 } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;
