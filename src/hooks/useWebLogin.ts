@@ -78,6 +78,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
 
     if (walletType === WalletType.portkey && walletInfo) {
+      store.dispatch(setIsNeedSyncAccountInfo(false));
       return;
     }
     const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
@@ -89,7 +90,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     do {
       try {
         if (wallet.discoverInfo) {
-          if (wallet.discoverInfo?.address) return;
+          if (!wallet.discoverInfo?.address) return;
           showMessage.loading('Syncing on-chain account info');
           let hasHolder = false;
           try {
