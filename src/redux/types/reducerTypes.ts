@@ -19,6 +19,7 @@ export type InfoStateType = {
   showGameRecord: boolean;
   assetVisible: boolean;
   gameSetting?: IGameSetting;
+  isNeedSyncAccountInfo: boolean;
 };
 
 export type PageLoadingType = {

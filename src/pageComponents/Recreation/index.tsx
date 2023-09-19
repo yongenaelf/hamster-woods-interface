@@ -57,7 +57,7 @@ export default function Game() {
   const { width, height } = useWindowSize();
   const address = useAddress();
   const router = useRouter();
-  const { initializeContract, updatePlayerInformation } = useWebLogin({});
+  const { initializeContract, updatePlayerInformation, syncAccountInfo } = useWebLogin({});
 
   const {
     isMobile,
@@ -70,6 +70,7 @@ export default function Game() {
     chessBoardInfo: checkerboardData,
     resetStart: chessboardResetStart,
     curChessboardNode,
+    needSync,
   } = useGetState();
 
   const firstNode = checkerboardData![5][4];
@@ -332,6 +333,7 @@ export default function Game() {
   }, [address]);
 
   const initCheckBeanPass = useCallback(async () => {
+    if (!address) return;
     try {
       console.log('=====CheckBeanPass address', address);
       const hasBeanPass = await CheckBeanPass(address);
@@ -378,21 +380,26 @@ export default function Game() {
     }
   };
 
+  const initContractAndCheckBeanPass = useCallback(async () => {
+    const contractRes = await initializeContract();
+    contractRes && initCheckBeanPass();
+  }, [initCheckBeanPass, initializeContract]);
+
   useEffect(() => {
-    if (address) {
-      initCheckBeanPass();
+    if (isLogin && needSync) {
+      syncAccountInfo();
     }
-  }, [address]);
+  }, [isLogin, needSync, syncAccountInfo]);
 
   useEffect(() => {
     if (!isLogin) {
       router.push('/login');
     } else {
-      if (walletType !== WalletType.unknown && walletInfo) {
-        initializeContract();
+      if (walletType !== WalletType.unknown && walletInfo && !needSync) {
+        initContractAndCheckBeanPass();
       }
     }
-  }, [initializeContract, isLogin, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, needSync, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
