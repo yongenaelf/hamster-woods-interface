@@ -157,6 +157,7 @@ export enum BeanPassResons {
 export interface IBeanPassClaimRes {
   claimable: boolean;
   reason: BeanPassResons;
+  transactionId: string;
 }
 
 export interface IBeanPassClaimReq {
