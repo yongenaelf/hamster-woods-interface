@@ -1,51 +1,36 @@
 import useSWR from 'swr';
-import { ISeasonRankResult } from './types';
-import { graphQLRequest } from 'api/graphql';
 import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
 import { addPrefixSuffix } from 'utils/addressFormatting';
 import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
+import { getSeasonRank } from 'api/request';
 
 export const useSeasonRank = () => {
   const address = useAddressWithPrefixSuffix();
-  return useSWR([address, 'getSeasonRank'], async () => {
-    const { getSeasonRank } =
-      (await graphQLRequest<{
-        getSeasonRank: ISeasonRankResult;
-      }>(`
-    query {
-      getSeasonRank(getRankDto: { 
-        caAddress: "${address}"
-        skipCount: 0
-        maxResultCount: ${MAX_LEADERBOARD_ITEMS}
-      }) {
-        status
-        refreshTime
-        seasonName
-        rankingList {
-          rank
-          score
-          caAddress
-        }
-        selfRank {
-          rank
-          score
-          caAddress
-        }
-      }
-    }
-  `)) || {};
+  return useSWR(
+    ['getSeasonRank', address],
+    async () => {
+      if (!address) return;
+      const seasonRank = await getSeasonRank({
+        CaAddress: `${address}`,
+        SkipCount: 0,
+        MaxResultCount: `${MAX_LEADERBOARD_ITEMS}`,
+      });
 
-    if (getSeasonRank) {
-      const { rankingList } = getSeasonRank;
+      if (seasonRank) {
+        const { rankingList } = seasonRank;
 
-      return {
-        ...getSeasonRank,
-        rankingList: rankingList?.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })) ?? [],
-        selfRank: {
-          ...getSeasonRank.selfRank,
-          caAddress: addPrefixSuffix(getSeasonRank.selfRank.caAddress),
-        },
-      };
-    } else return undefined;
-  });
+        return {
+          ...seasonRank,
+          rankingList: rankingList?.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })) ?? [],
+          selfRank: {
+            ...seasonRank.selfRank,
+            caAddress: addPrefixSuffix(seasonRank.selfRank.caAddress),
+          },
+        };
+      } else return undefined;
+    },
+    {
+      dedupingInterval: 0,
+    },
+  );
 };

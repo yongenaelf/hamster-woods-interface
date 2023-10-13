@@ -6,9 +6,7 @@
   }
 
   .game__pc__blur {
-    @apply absolute z-[20] top-0 left-0 w-full h-full bg-no-repeat bg-[auto_100%];
-
-    filter: blur(10px);
+    @apply absolute z-[20] top-0 left-0 w-full h-full bg-no-repeat bg-[auto_100%] blur-[10px];
   }
 
   .game__pc__blur__right {
