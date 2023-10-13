@@ -1,0 +1,14 @@
+[defaults]
+url=https://sentry.io/
+project=bean-go-town
+org=blockchainforever
+
+[auth]
+token=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
+
+
+[log]
+level=debug
+
+[http]
+verify_ssl=false

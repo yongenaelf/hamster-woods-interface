@@ -1,0 +1,90 @@
+.appears-animation {
+  animation: appears-animation 1.5s;
+}
+
+.appears-animation-right {
+  animation: appears-animation-right 1.5s;
+}
+
+.appears-animation-left {
+  animation: appears-animation-left 1.5s;
+}
+
+@keyframes appears-animation
+{
+  0%, 100% {
+    transform: scale(0);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  40% {
+    transform: scale(1);
+    top: 0;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  50% {
+    transform: scale(1);
+    top: 0;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  60% {
+    transform: scale(1);
+    top: 0;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+@keyframes appears-animation-right
+{
+  0%, 100% {
+    transform: scale(0);
+    left: 40%;
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  40% {
+    transform: scale(1);
+    left: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  50% {
+    transform: scale(1);
+    left: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  60% {
+    transform: scale(1);
+    left: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+@keyframes appears-animation-left
+{
+  0%, 100% {
+    transform: scale(0);
+    right: 40%;
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  40% {
+    transform: scale(1);
+    right: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  50% {
+    transform: scale(1);
+    right: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+  60% {
+    transform: scale(1);
+    right: 90%;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+.role {
+  @apply w-[90%] pr-[12px] absolute top-[-120%] left-0 right-0 m-auto flex flex-col justify-center items-center;
+
+  > svg {
+    @apply w-auto;
+  }
+}

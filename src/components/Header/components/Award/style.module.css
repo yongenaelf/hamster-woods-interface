@@ -1,0 +1,14 @@
+.award {
+  @apply mr-auto flex h-[36px] w-[148px] items-center rounded-[20px] bg-[#305CD9] px-[8px];
+
+  box-shadow: 0 -0.9px 0.9px 0 rgb(54 135 255 / 30%), 0 0.9px 3.6px 0 #0048b6 inset;
+}
+.award__coin {
+  @apply h-[32px] w-[32px];
+}
+.award__amount {
+  @apply ml-[8px] flex items-center text-[20px] leading-[24px] text-white font-[700];
+
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: 'Tahoma', 'Verdana', 'STHeiTi', 'simsun', 'sans-serif';
+}

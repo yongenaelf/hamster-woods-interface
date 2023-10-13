@@ -1,0 +1,15 @@
+.menu-mobile {
+  @apply w-[110px] h-[52px] bg-[url('/images/recreation/menu-bg.svg')] bg-[100%_100%] bg-no-repeat rounded-tl-full rounded-bl-full flex p-[6px];
+
+  .menu__title {
+    @apply flex flex-1 font-fonarto font-normal text-[12px] flex-wrap items-center justify-center text-center text-[#fff] font-fonarto;
+  }
+}
+
+.menu {
+  @apply w-[394px] h-[104px] bg-[#5197FF] rounded-full flex p-[16px];
+
+  .menu__title {
+    @apply flex flex-1 font-fonarto text-[26px] font-normal flex-wrap items-center ml-[24px] text-[#fff] font-fonarto;
+  }
+}

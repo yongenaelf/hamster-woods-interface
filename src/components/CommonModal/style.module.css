@@ -1,0 +1,91 @@
+/* stylelint-disable number-max-precision */
+.commonModal {
+  @apply rounded-[20px] text-center text-white;
+  :global {
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-modal-content {
+      @apply rounded-[20px] bg-[var(--color-main)] p-0 text-white;
+
+      box-shadow: 0 1.1666667461395264px 2.3333334922790527px 0 #3687ff inset,
+        0 -1.1666667461395264px 2.3333334922790527px 0 #005ae1 inset,
+        0 9.333333969116211px 9.333333969116211px 0 rgb(0 0 0 / 30%);
+      .ant-modal-body {
+        @apply px-4 pb-8 pt-0 leading-6;
+      }
+    }
+  }
+  .modal__title {
+    @apply relative h-[72px]  text-2xl leading-6 text-white;
+    span {
+      @apply font-fonarto;
+    }
+
+    text-shadow: 0 0 1px rgb(0 0 0 / 25%);
+  }
+  .modal__closeIcon,
+  .modal__closeicon_m {
+    @apply absolute right-0 top-[50%] -translate-y-[50%];
+  }
+
+  .modal__closeIcon_m {
+    @apply absolute right-0 top-[50%] -translate-y-[50%];
+    svg {
+      @apply !w-[30px] !h-[30px] fill-white;
+    }
+  }
+}
+
+.showBeanPassModal {
+  @apply md:!w-[580px];
+  :global(.ant-modal-body) {
+    @apply md:!pb-[51px];
+    .modal__title {
+      @apply md:!h-[111px] md:!text-[32px];
+    }
+  }
+  :global(.ant-modal-content) {
+    @apply md:rounded-[20px];
+  }
+  .nft_label {
+    @apply mt-6 flex justify-center md:mt-[35px];
+  }
+  .nft_text {
+    @apply text-base leading-6 md:text-[24px];
+  }
+}
+
+.getBeanPassModal {
+  @apply md:!w-[750px];
+  :global(.ant-modal-body) {
+    @apply md:!pb-[45px];
+    .modal__title {
+      @apply md:!h-[125px] md:!text-[32px];
+    }
+  }
+  :global(.ant-modal-content) {
+    @apply md:rounded-[20px];
+    .confirmBtn {
+      @apply mx-auto md:h-[77.5px] md:w-[360px] md:rounded-[38.75px] md:text-[32px] md:leading-6 md:leading-[77.5px];
+    }
+  }
+}
+
+.settingModal {
+  :global(.ant-modal-body) {
+    @apply !pb-[27px] md:!pb-[61.5px];
+    .modal__title {
+      @apply md:!h-[118px] md:!text-[32px] md:!leading-6;
+    }
+  }
+  :global(.ant-modal-content) {
+    @apply md:!w-[580px] md:rounded-[20px];
+  }
+}
+.assetModal {
+  :global(.ant-modal-footer) {
+    @apply hidden;
+  }
+}

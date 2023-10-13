@@ -10,6 +10,8 @@ interface Window {
   web3?: {};
   plus?: any;
   NightElf?: {};
+  portkey?: any;
+  open?: Function;
 }
 
 interface HTMLAttributes<T> {

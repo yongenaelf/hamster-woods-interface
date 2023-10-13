@@ -4,46 +4,93 @@
 
 html,
 body {
-	overflow-x: hidden;
-	overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 body {
-	margin: 0;
+  margin: 0;
 
-	/* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
-	appearance: none;
-	margin: 0;
+  appearance: none;
+  margin: 0;
 }
 input[type='number'] {
-	appearance: textfield;
+  appearance: textfield;
+}
+
+.email-input-wrapper .login-input.portkey-ant-input,
+.phone-number-input-wrapper .phone-number-input-content .portkey-ant-input {
+  font-size: 16Px !important;
+}
+
+.portkey-ui-receive-content {
+  max-width: 100%;
 }
 
 * {
-	font-family: Poppins, sans-serif;
-	transition: background 0.3s, fill 0.3s, stork 0.3s, color 0.3s,
-		box-shadow 0.3s;
+  font-family: Poppins, sans-serif;
+  transition: background 0.3s, fill 0.3s, stork 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 5px;
+}
+
+@font-face {
+  font-family: 'Fonarto';
+  src: url('../assets/font/Fonarto-Regular.otf');
+}
+
+.anticon[tabindex],
+a,
+button {
+  cursor: pointer;
+  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
+}
+
+.ant-modal-root {
+  cursor: pointer;
+  cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
 @layer components {
-	/* 
-        demo for antd
-        .{app-prefix}-wrapper {
-            .ant-layout {
-                background: #fff;
-            }
-        }
-    */
+  .cursor-custom {
+    cursor: pointer;
+    cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
+  }
+
+  .bean-show-message-error {
+    @apply !bg-[#F65D5D] !rounded-[20px] !p-[15px];
+    .ant-notification-notice-message {
+      @apply !ml-[32Px] !min-h-[24Px] !text-[#fff] !text-[16Px] !leading-[24Px];
+    }
+  }
+}
+
+.portkey-ui-wrapper {
+  @apply h-full;
 }

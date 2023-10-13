@@ -1,0 +1,23 @@
+.game {
+  @apply w-full h-full flex items-center bg-[#3F4A5C];
+
+  .game__pc__side {
+    @apply relative flex-1 flex justify-center items-center h-full;
+  }
+
+  .game__pc__blur {
+    @apply absolute z-[20] top-0 left-0 w-full h-full bg-no-repeat bg-[auto_100%];
+
+    filter: blur(10px);
+  }
+
+  .game__pc__blur__right {
+    @apply bg-right;
+  }
+
+  .game__content {
+    @apply bg-gradient-to-t from-[#1D628B] to-[#14436E];
+
+    /* background: linear-gradient(180deg, #14436E 0%, #1D628B 100%); */
+  }
+}

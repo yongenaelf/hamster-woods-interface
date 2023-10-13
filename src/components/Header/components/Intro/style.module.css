@@ -1,0 +1,37 @@
+.rulesModal {
+  :global(.ant-modal-body) {
+    @apply md:!pb-[37.5px];
+  }
+  :global(.ant-modal-content) {
+    @apply md:!w-[850px] md:rounded-[20px];
+  }
+
+  :global(.modal__title) {
+    @apply md:!h-[110px] md:!text-[32px] md:!leading-6;
+  }
+}
+
+.buttonMobile {
+  @apply mx-auto !h-[48px] !w-[262px] !rounded-[24px] !text-[20px] !leading-[48px];
+}
+
+.button {
+  @apply mx-auto !h-[77.5px] !w-[360px] !rounded-[38.75px] !text-[32px] !leading-[77.5px];
+}
+
+.intro {
+  @apply h-10 w-10;
+}
+
+.intro-pc {
+  @apply h-20 w-20;
+}
+
+.content {
+  &::-webkit-scrollbar {
+    @apply w-4;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply !rounded-lg;
+  }
+}

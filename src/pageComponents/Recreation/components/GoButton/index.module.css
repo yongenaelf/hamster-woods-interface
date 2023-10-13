@@ -1,0 +1,56 @@
+.button-mobile {  
+  @apply mt-[-41px];
+
+  .button__border {
+    @apply absolute z-50 top-0 bottom-0 left-0 m-auto w-full h-max pb-[9px];
+
+    .button__border__top {
+      @apply  w-full h-[18px] shadow-[0_1px_2px_0_#FFF_inset] bg-[#E0DDCB];
+    }
+    .button__border__bottom {
+    @apply w-full h-[6px] shadow-[3px_0_3px_0_#FFFFFF29_inset] bg-[#E0DDCB];
+    
+      background: linear-gradient(270deg, #898694 15.84%, #95919B 53.29%);
+    }
+  }
+
+  .button__icon {
+    @apply relative z-50 w-[128px] h-[106px];
+
+    .button__icon__loading {
+      @apply aspect-[1/1] relative;
+
+      .button__icon__loading__bounce1,
+      .button__icon__loading__bounce2 {
+        @apply w-full h-full rounded-full bg-[#fff] opacity-[0.6] absolute top-0 left-0;
+
+        animation: loading-bounce 2.0s infinite ease-in-out;
+      }
+
+      .button__icon__loading__bounce2 {
+        animation-delay: -1.0s;
+      }
+    }
+    svg {
+      @apply w-full h-auto;
+    }
+  }
+}
+
+.button {
+  @apply pb-[78px] mt-0 w-[398px] h-[142px];
+  .button__icon {
+    @apply relative z-50 w-[398px] h-[142px];
+    svg {
+      @apply w-full h-auto;
+    }
+  }
+}
+
+@keyframes loading-bounce {
+  0%, 100% { 
+    transform: scale(0.0);
+  } 50% { 
+    transform: scale(1.0);
+  }
+}

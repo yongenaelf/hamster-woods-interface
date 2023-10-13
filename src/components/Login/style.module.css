@@ -1,0 +1,118 @@
+.inputForm {
+  :global {
+    .web2design-qrcode-icon,
+    .divider-center.portkey-ant-divider-with-text,
+    .social-content-wrapper {
+      @apply hidden;
+    }
+  }
+}
+
+.qrcodeBox {
+  :global {
+    .back-icon-wrapper {
+      @apply !hidden;
+    }
+  }
+}
+
+.loginContainer {
+  @apply flex h-full w-full flex-col items-center justify-end  !bg-cover bg-center bg-no-repeat px-10 text-base text-white  md:justify-start md:pt-[46.7vh];
+  .more {
+    @apply z-20 pb-4 font-fonarto underline md:pb-0 md:text-2xl;
+  }
+  .loginBtn,
+  .unlockBtn,
+  .loginBtnYellow {
+    @apply relative flex items-center z-20 mb-6 flex h-14 w-full items-center justify-center rounded-[30px]  border-2 bg-[var(--bg-blue-btn)] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:!border-white md:px-8 md:text-[32px] md:leading-6;
+
+    border-color: rgb(0 0 0 / 10%);
+    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%);
+  }
+  .unlockBtn {
+    @apply mb-[94px] bg-[var(--color-main)] md:mb-0 md:mt-[3.7vh] md:justify-center;
+  }
+  .loginBtnYellow {
+    @apply bg-[var(--btn-bg-yellow)];
+  }
+}
+
+.loginBtnIcon,
+.loginBtnBlueIcon {
+  @apply text-2xl md:left-8 md:text-[44px] flex items-center;
+  path {
+    @apply fill-white;
+  }
+}
+
+.loginBtnBlueIcon {
+  path {
+    @apply fill-[var(--color-blue-icon)];
+  }
+}
+
+.loginMethodModal {
+  @apply !w-[750px];
+  :global {
+    .ant-modal-body {
+      @apply !px-[145px] !pb-[28px] text-[32px] leading-6;
+    }
+  }
+  .loginBtn {
+    @apply !mb-5 !h-[77px] !justify-center !rounded-[39px] !px-10;
+
+    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%) !important;
+  }
+  .drawerHeader {
+    @apply !mb-[44px] mt-[13px] text-center font-fonarto !text-[32px] leading-6;
+  }
+  .drawer__close {
+    @apply absolute !right-[26px] !top-[37px] !text-[30px];
+  }
+  .loginBtnBlueIcon {
+    @apply left-[44.7px];
+    path {
+      @apply fill-white;
+    }
+  }
+}
+
+.loginMethodDrawer,
+.loginMethodModal {
+  @apply text-base;
+  :global {
+    .ant-drawer-header,
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-drawer-content {
+      @apply rounded-tl-2xl rounded-tr-2xl;
+    }
+    .ant-modal-content {
+      @apply overflow-auto rounded-2xl bg-[var(--color-main)] bg-[var(--color-main)] text-base  text-white;
+    }
+    .ant-drawer-wrapper-body {
+      @apply overflow-auto bg-[var(--color-main)] text-base  text-white;
+    }
+    .ant-drawer-body,
+    .ant-modal-body {
+      @apply relative px-10 pb-6;
+    }
+    .ant-drawer-content-wrapper {
+      @apply min-h-[392px];
+    }
+  }
+  .loginBtn {
+    @apply relative mb-4 flex h-14 w-full items-center justify-center rounded-[36px] border-2 border-solid border-[var(--border-blue-btn)] bg-[var(--color-blue-bg-btn)] px-5 font-fonarto text-white;
+  }
+  .drawerHeader {
+    @apply mb-8 text-center font-fonarto text-2xl leading-6;
+  }
+  .drawer__close {
+    @apply absolute right-6 top-6;
+    svg {
+      @apply w-6 h-6;
+    }
+  }
+}

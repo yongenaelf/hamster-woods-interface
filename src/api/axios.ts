@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { message } from 'antd';
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import showMessage from 'utils/setGlobalComponentsInfo';
 
 interface ResponseType<T> {
   code: string;
@@ -43,9 +43,10 @@ class Request {
           case '20001':
             return {};
           case '50000':
+            showMessage.error(errorMessage);
             return null;
           default:
-            message.error(errorMessage);
+            showMessage.error(errorMessage);
             return res;
         }
       },
@@ -53,18 +54,18 @@ class Request {
         let errMessage = '';
         switch (error?.response?.status) {
           case 400:
-            errMessage = 'Bad Request';
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           case 401:
-            message.error('The signature has expired. Please log in again.');
+            showMessage.error('Please check your internet connection and try again.');
             setTimeout(() => {
-              location.pathname = '/';
+              location.pathname = '/login';
             }, 3000);
             break;
 
           case 404:
-            errMessage = 'Not Found';
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           case 500:
@@ -72,15 +73,15 @@ class Request {
           case 502:
           case 503:
           case 504:
-            errMessage = `${error.response.status}: something is wrong in server`;
+            errMessage = 'Please check your internet connection and try again.';
             break;
 
           default:
-            errMessage = `${error.response.status}: something is wrong, please try again later`;
+            errMessage = 'Please check your internet connection and try again.';
             break;
         }
 
-        message.error(errMessage);
+        showMessage.error(errMessage);
         return Promise.reject(errMessage);
       },
     );
@@ -107,9 +108,10 @@ class Request {
   }
 }
 
+const cmsRequest = new Request({ baseURL: '/cms' });
 const tokenRequest = new Request({
   baseURL: '/connect',
 });
 
 export default new Request({});
-export { tokenRequest };
+export { tokenRequest, cmsRequest };

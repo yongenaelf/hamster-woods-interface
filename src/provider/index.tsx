@@ -7,16 +7,10 @@ import enUS from 'antd/lib/locale/en_US';
 
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
-import { store } from 'redux/store';
-import Loading from 'components/Loading';
-
-import { fetchConfig } from 'api/request';
 
 function Provider({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const storeConfig = async () => {
-    // const { data } = await fetchConfig();
-    // u can update data to store
     setLoading(false);
   };
   useEffect(() => {
@@ -25,8 +19,8 @@ function Provider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <StoreProvider>
-        <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'xx'}>
-          {loading ? <Loading></Loading> : <WebLoginProvider>{children}</WebLoginProvider>}
+        <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'ant'}>
+          <WebLoginProvider>{children}</WebLoginProvider>
         </ConfigProvider>
       </StoreProvider>
     </>

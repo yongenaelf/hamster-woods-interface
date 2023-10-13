@@ -1,0 +1,33 @@
+.lattice >div {
+  @apply bg-cover bg-no-repeat;
+}
+
+.lattice.lattice--shadow {
+  @apply bg-cover bg-no-repeat shadow-[-8px_1px_4px_0_#00000052];
+}
+
+.lattice .lattice__arrow {
+  @apply w-[16px] h-[16px] absolute left-0 right-0 m-auto top-[30%] text-[16px] flex items-center justify-center;
+
+  > svg {
+    @apply h-[16px];
+
+    >path {
+      @apply stroke-inherit;
+    }
+  }
+}
+
+.lattice-mobile .lattice__arrow {
+  @apply w-[28px] h-[28px];
+
+  > svg {
+    @apply h-[28px];
+
+    >path {
+      @apply stroke-inherit;
+    }
+  }
+}
+
+

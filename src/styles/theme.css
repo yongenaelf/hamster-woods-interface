@@ -1,7 +1,14 @@
 :root {
-    --brand-base: #1b76e2;
+  --brand-base: #1b76e2;
+  --color-main: #3989ff;
+  --color-blue-bg-btn: #5197ff;
+  --bg-blue-btn: #5b8ef4;
+  --border-blue-btn: #244cbd;
+  --color-blue-icon: #244cbd;
+  --btn-bg-yellow: #f2c045;
+  --confirm-btn-bg: #feb800;
 }
 
 .dark-theme {
-    --brand-base: #136dd7;
+  --brand-base: #136dd7;
 }

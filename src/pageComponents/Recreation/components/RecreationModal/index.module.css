@@ -1,0 +1,22 @@
+.recreation-modal {
+  @apply flex items-center justify-center overflow-hidden !w-full !max-w-full h-full top-0 !m-0 !p-0 z-[1001];
+
+  :global(.ant-modal-content) {
+    @apply w-full !bg-transparent !shadow-none;
+  }
+}
+
+.treasure-btn {
+  @apply flex items-center justify-center bg-no-repeat bg-[100%_100%] rounded-full text-center;
+
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 25%);
+  background-size: 100% 100%;
+}
+.treasure-btn-pc {
+  @apply h-[78px] w-[377px] text-[32px] text-[#fff] leading-[24px] ; 
+
+}
+.treasure-btn-mobile {
+  @apply h-[48px] w-[67%] text-[20px] text-[#fff] leading-[24px]; 
+
+}

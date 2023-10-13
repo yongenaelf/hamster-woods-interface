@@ -1,23 +1,24 @@
 import Script from 'next/script';
 
-import Layout from 'pageComponents/layout';
-
 import 'antd/dist/antd.css';
+import Provider from 'provider';
+
+import Layout from 'pageComponents/layout';
 
 import 'styles/global.css';
 import 'styles/theme.css';
 
-import Provider from 'provider/';
-
 export const metadata = {
-  title: 'Forest',
-  description: 'Forest',
+  title: 'BeanGoTown',
+  description: 'BeanGoTown',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
         <meta
           name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -30,8 +31,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 var fn = function () {
                   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                   var width = docEle.clientWidth;
-                  var unitWidth = isMobile ? 375 : 1920;
-                  width && (docEle.style.fontSize = 10 * (width / unitWidth) + 'px');
+                  var unitWidth = isMobile ? 390 : 1920;
+                  if(width){
+                    if(isMobile && (width > 580)) {
+                      docEle.style.fontSize = '16px'
+                    } else if (!isMobile && (width < 1200)) {
+                      docEle.style.fontSize = '10px'
+                    } else {
+                      docEle.style.fontSize = 16 * (width / unitWidth) + 'px'
+                    }
+                  }
                 };
                 fn();
                 win.addEventListener(event, fn, false);

@@ -1,13 +1,19 @@
 const rewritesConfig = require('./rewrites/index');
 module.exports = {
   reactStrictMode: true,
+  // output: 'export',
   async rewrites() {
     return rewritesConfig;
   },
   images: {
-    loader: 'akamai',
-    path: '',
-    domains: ['raw.githubusercontent.com'],
+    // loader: 'akamai',
+    // path: '',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.com',
+      },
+    ],
   },
   // i18n: {
   //   locales: ['en-US', 'zh'],
@@ -24,5 +30,8 @@ module.exports = {
     });
     config.ignoreWarnings = [{ module: /node_modules/ }];
     return config;
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
 };
