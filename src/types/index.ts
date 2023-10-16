@@ -113,6 +113,15 @@ export interface IBoutInformation {
   roundNumber: number;
   gridNum: number;
   expectedBlockHeight: number;
+  diceCount: number;
+  diceNumbers: number[];
+  startGridNum: number;
+  endGridNum: number;
+}
+
+export interface IPlayerProps {
+  resetStart?: boolean;
+  diceCount: number;
 }
 
 export interface IPlayerInformation {
@@ -203,8 +212,20 @@ export interface IConfigItems {
 export interface IChessboardData {
   data: ICheckerboardItem[][];
   imageResources: Record<string, string>;
+  checkerboardCounts: number;
 }
 
 export interface IChessboardDataResponse {
   data: IChessboardData;
+}
+
+export interface IGetRankQuery {
+  CaAddress?: string;
+  SkipCount?: number;
+  MaxResultCount?: number | string;
+}
+
+export interface IRankHistoryQuery {
+  CaAddress?: string;
+  SeasonId?: string;
 }

@@ -7,6 +7,8 @@ import {
   getImageResources,
   getResetStart,
   getCurChessboardNode,
+  getChessboardTotalStep,
+  getCheckerboardCounts,
 } from 'redux/reducer/chessboardData';
 
 const useGetState = () => {
@@ -16,6 +18,8 @@ const useGetState = () => {
   const imageResources = useSelector(getImageResources);
   const resetStart = useSelector(getResetStart);
   const curChessboardNode = useSelector(getCurChessboardNode);
+  const chessboardTotalStep = useSelector(getChessboardTotalStep);
+  const checkerboardCounts = useSelector(getCheckerboardCounts);
 
   return {
     isMobile: infoState.isMobile,
@@ -32,6 +36,8 @@ const useGetState = () => {
     imageResources,
     resetStart,
     curChessboardNode,
+    chessboardTotalStep,
+    checkerboardCounts,
   };
 };
 
