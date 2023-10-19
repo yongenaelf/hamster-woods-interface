@@ -1,10 +1,8 @@
-import { IBoutInformation, IContractError, IGameSetting, IPlayerInformation } from 'types';
+import { IBoutInformation, IContractError, IGameSetting, IPlayerInformation, IPlayerProps } from 'types';
 import contractRequest from './contractRequest';
 import { formatErrorMsg } from 'utils/formattError';
 import { store } from 'redux/store';
-import { getTxResult, getTxResultOnce } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
-import checkSynchronization from 'utils/checkSynchronization';
 const { configInfo } = store.getState();
 
 export enum ContractMethodType {
@@ -43,110 +41,62 @@ export const GetGameLimitSettings = async (): Promise<IGameSetting> => {
   return await bingoContract('GetGameLimitSettings', null, ContractMethodType.VIEW);
 };
 
-export const GetBoutInformation = async (playId: string): Promise<IBoutInformation> => {
-  return await bingoContract(
-    'GetBoutInformation',
-    {
-      playId,
-    },
-    ContractMethodType.VIEW,
-  );
-};
-
-export const Play = async (
-  resetStart?: boolean,
-): Promise<{ TransactionId: string; TxResult: any; startTime: number }> => {
-  const contract = contractRequest.get();
-  const contractAddress = configInfo.configInfo!.bingoContractAddress;
-
+export const GetBoutInformation = async (playId: string, count = 2): Promise<IBoutInformation> => {
   try {
-    const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
-      methodName: 'Play',
-      contractAddress,
-      args: {
-        resetStart: !!resetStart,
+    const res: IBoutInformation = await bingoContract(
+      'GetBoutInformation',
+      {
+        playId,
       },
-    });
+      ContractMethodType.VIEW,
+    );
 
-    let result;
-
-    await sleep(1000);
-    const { status, txResult } = await getTxResultOnce(transactionId, rpcUrl!);
-    result = txResult;
-    if (['pending', 'notexisted'].includes(status)) {
+    if (count && (res.score === 0 || res.gridNum === 0)) {
       await sleep(500);
-      const finalTxRes = await getTxResult(transactionId!, chainId!, 0, rpcUrl!);
-      result = finalTxRes.txResult;
+      await GetBoutInformation(playId, --count);
+    } else {
+      return res;
     }
-
-    return {
-      TransactionId: transactionId,
-      TxResult: result,
-      startTime: Date.now(),
-    };
   } catch (error) {
-    const resError = error as IContractError;
-    const res = await checkSynchronization(resError?.Error || '');
-    if (!res) {
-      return Promise.reject(
-        formatErrorMsg({
-          ...resError,
-          message: 'Syncing on-chain account info',
-        }),
-      );
+    if (count) {
+      await sleep(500);
+      await GetBoutInformation(playId, --count);
     }
-
-    return Promise.reject(formatErrorMsg(resError));
   }
 };
 
-export const GetBingoReward = async (hash: string): Promise<IBoutInformation> => {
+export const Play = async ({
+  resetStart,
+  diceCount,
+}: IPlayerProps): Promise<{ TransactionId: string; TxResult: any }> => {
   try {
-    await bingoContract('Bingo', hash, ContractMethodType.SEND);
-    const rewardRes = await GetBoutInformation(hash);
-    return rewardRes;
+    const res = (await bingoContract(
+      'Play',
+      { resetStart, diceCount, executeBingo: true },
+      ContractMethodType.SEND,
+    )) as {
+      TransactionId: string;
+      TransactionResult: any;
+    };
+    return {
+      TransactionId: res?.TransactionId,
+      TxResult: res?.TransactionResult,
+    };
   } catch (error) {
+    console.log('=====Play error', error);
     return Promise.reject(error);
   }
 };
 
-export const Bingo = async (hash: string): Promise<{ TransactionId: string; TxResult: any }> => {
-  const contract = contractRequest.get();
-  const contractAddress = configInfo.configInfo!.bingoContractAddress;
-
+export const GetBingoReward = async (params: IPlayerProps): Promise<IBoutInformation> => {
   try {
-    const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
-      methodName: 'Bingo',
-      contractAddress,
-      args: {
-        hash,
-      },
-    });
-
-    // const startTime = Date.now();
-    let result;
-
-    const { status, txResult } = await getTxResultOnce(transactionId, rpcUrl!);
-    result = txResult;
-    if (['pending', 'notexisted'].includes(status)) {
-      await sleep(2000);
-
-      const response = await getTxResultOnce(transactionId, rpcUrl!);
-      result = response.txResult;
-
-      if (['pending', 'notexisted'].includes(response.status)) {
-        const finalTxRes = await getTxResult(transactionId!, chainId!, 0, rpcUrl!);
-        result = finalTxRes.txResult;
-      }
+    const { TransactionId } = await Play(params);
+    const rewardRes = await GetBoutInformation(TransactionId);
+    if (rewardRes) {
+      return rewardRes;
     }
-
-    return {
-      TransactionId: transactionId,
-      TxResult: result,
-    };
+    return Promise.reject();
   } catch (error) {
-    const resError = error as IContractError;
-    console.error('=====Bingo bingoContract', resError);
-    return Promise.reject(formatErrorMsg(resError));
+    return Promise.reject(error);
   }
 };
