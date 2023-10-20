@@ -18,9 +18,22 @@ import { useRouter, usePathname } from 'next/navigation';
 import useGetState from 'redux/state/useGetState';
 import { KEY_NAME } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import { fetchChessboardData, fetchConfigItems } from 'api/request';
+import { fetchChessboardConfig, fetchChessboardData, fetchConfigItems, fetchNoticeModal } from 'api/request';
 import { setConfigInfo } from 'redux/reducer/configInfo';
 import { setChessboardData } from 'redux/reducer/chessboardData';
+import { setNoticeModal } from 'redux/reducer/noticeModal';
+import { convertToUtcTimestamp } from 'hooks/useCountDown';
+
+export const isCurrentTimeInterval = (date: [string, string]) => {
+  const startTime = new Date(date[0]).getTime();
+  const endTime = new Date(date[1]).getTime();
+  const now = convertToUtcTimestamp(new Date().getTime());
+
+  if (now >= startTime && now <= endTime) {
+    return true;
+  }
+  return false;
+};
 
 const Layout = dynamic(
   async () => {
@@ -45,27 +58,55 @@ const Layout = dynamic(
       }, []);
 
       const initConfigAndResource = async () => {
-        const chessBoardPromise = fetchChessboardData();
-        const configPromise = fetchConfigItems();
+        const chessboardConfigPromise = fetchChessboardConfig();
+        const noticeModalPromise = fetchNoticeModal();
 
-        chessBoardPromise.then((res) => {
-          store.dispatch(setChessboardData(res.data));
-        });
+        chessboardConfigPromise.then((chessboardConfig) => {
+          let url = 'chessboard_data';
+          Object.keys(chessboardConfig.data).map((key) => {
+            if (isCurrentTimeInterval(chessboardConfig.data[key])) {
+              url = key;
+            }
+          });
 
-        configPromise.then((res) => {
-          store.dispatch(setConfigInfo(res.data));
-          ConfigProvider.setGlobalConfig({
-            storageMethod: new Store(),
-            requestDefaults: {
-              baseURL: res.data.portkeyServer,
-            },
-            serviceUrl: res.data.portkeyServiceUrl,
-            graphQLUrl: res.data.graphqlServer,
+          const configPromise = fetchConfigItems();
+          const chessBoardPromise = fetchChessboardData(url).then((res) => {
+            store.dispatch(setChessboardData(res.data));
+          });
+
+          configPromise.then((res) => {
+            store.dispatch(
+              setConfigInfo({
+                ...res.data,
+                isHalloween: chessboardConfig?.data?.['chessboard_data_halloween']
+                  ? isCurrentTimeInterval(chessboardConfig.data['chessboard_data_halloween'])
+                  : false,
+              }),
+            );
+            ConfigProvider.setGlobalConfig({
+              storageMethod: new Store(),
+              requestDefaults: {
+                baseURL: res.data.portkeyServer,
+              },
+              serviceUrl: res.data.portkeyServiceUrl,
+              graphQLUrl: res.data.graphqlServer,
+            });
+          });
+
+          Promise.all([chessBoardPromise, configPromise]).then((res) => {
+            setIsFetchFinished(true);
           });
         });
 
-        Promise.all([chessBoardPromise, configPromise]).then((res) => {
-          setIsFetchFinished(true);
+        noticeModalPromise.then((res) => {
+          if (res?.data?.halloween) {
+            store.dispatch(
+              setNoticeModal({
+                ...res.data.halloween,
+                open: false,
+              }),
+            );
+          }
         });
       };
 
