@@ -12,10 +12,18 @@ export enum ShowBeanPassType {
   Display = 'display',
 }
 
+export type BeanPassItemType = {
+  nftImageUrl: string;
+  symbol: string;
+  tokenName: string;
+};
+
 export type ShowNFTModalPropsType = {
   onCancel: (e: MouseEvent<any>) => void;
   open: boolean;
   type: ShowBeanPassType;
+  beanPassItem?: BeanPassItemType;
+  handleNoneOwned: () => void;
 };
 
 export enum GetBeanPassStatus {

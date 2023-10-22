@@ -1,3 +1,4 @@
+import { USER_REJECTED } from 'constants/errorMessage';
 import { IContractError } from 'types';
 
 enum SourceErrorType {
@@ -9,16 +10,23 @@ enum SourceErrorType {
   Error6 = 'Invalid target height',
   Error7 = 'Syncing on-chain account info',
   Error8 = 'You closed the prompt without any action',
+  Error9 = 'Operation canceled',
+  Error10 = 'User denied',
+  Error11 = 'User close the prompt',
 }
 export enum TargetErrorType {
-  Error1 = 'Not enough BeanPass NFT to start the game',
+  Error1 = "You don't have any BeanPass NFTs in your account.",
   Error2 = 'Not enough GOs to start the game',
   Error3 = 'Invalid operation',
   Error4 = 'Invalid operation',
   Error5 = 'You have tried too many times',
   Error6 = 'Please try again later',
   Error7 = 'Syncing on-chain account info',
-  Error8 = 'Request rejected. BeanGo Town needs your permission to continue',
+  Error8 = USER_REJECTED,
+  Error9 = USER_REJECTED,
+  Error10 = USER_REJECTED,
+  Error11 = USER_REJECTED,
+  Error12 = 'This BeanPass NFT is currently not in your account.',
   Default = 'Please check your internet connection and try again.',
 }
 
@@ -33,6 +41,9 @@ const matchErrorMsg = <T>(message: T) => {
       SourceErrorType.Error6,
       SourceErrorType.Error7,
       SourceErrorType.Error8,
+      SourceErrorType.Error9,
+      SourceErrorType.Error10,
+      SourceErrorType.Error11,
     ];
     const targetErrors = [
       TargetErrorType.Error1,
@@ -43,6 +54,9 @@ const matchErrorMsg = <T>(message: T) => {
       TargetErrorType.Error6,
       TargetErrorType.Error7,
       TargetErrorType.Error8,
+      TargetErrorType.Error9,
+      TargetErrorType.Error10,
+      TargetErrorType.Error11,
     ];
 
     for (let index = 0; index < sourceErrors.length; index++) {
@@ -62,15 +76,15 @@ const matchErrorMsg = <T>(message: T) => {
 export const formatErrorMsg = (result: IContractError) => {
   let resError: IContractError = result;
 
-  if (result.message) {
+  if (result?.message) {
     resError = {
       ...result,
-      error: result.code,
+      error: result?.code,
       errorMessage: {
         message: result.message,
       },
     };
-  } else if (result.Error) {
+  } else if (result?.Error) {
     resError = {
       ...result,
       error: '401',
@@ -78,8 +92,8 @@ export const formatErrorMsg = (result: IContractError) => {
         message: JSON.stringify(result.Error).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
       },
     };
-  } else if (typeof result.error !== 'number' && typeof result.error !== 'string') {
-    if (result.error?.message) {
+  } else if (typeof result?.error !== 'number' && typeof result?.error !== 'string') {
+    if (result?.error?.message) {
       resError = {
         ...result,
         error: '401',
@@ -90,7 +104,7 @@ export const formatErrorMsg = (result: IContractError) => {
     }
   }
 
-  const errorMessage = resError.errorMessage?.message;
+  const errorMessage = resError?.errorMessage?.message;
 
   return {
     ...resError,

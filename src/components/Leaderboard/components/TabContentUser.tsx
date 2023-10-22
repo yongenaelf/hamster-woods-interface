@@ -5,6 +5,8 @@ import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
 import { LeaderBoardItemScore } from './LeaderBoardItemScore';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
 import { Rank } from './Rank';
+import useGetState from 'redux/state/useGetState';
+import { DEFAULT_SYMBOL, Avatar } from 'constants/role';
 
 interface ITabContentUser {
   showMeIcon?: boolean;
@@ -14,6 +16,7 @@ interface ITabContentUser {
 }
 export const TabContentUser = ({ showMeIcon, rank, address, score }: ITabContentUser) => {
   const isMobile = useIsMobile();
+  const { curBeanPass } = useGetState();
   const color: LeaderboardTextColors = LeaderboardTextColors.White;
 
   const wrapperClassName = useConditionalRank({
@@ -33,7 +36,7 @@ export const TabContentUser = ({ showMeIcon, rank, address, score }: ITabContent
       } flex items-center rounded-bl-2xl rounded-br-2xl`}>
       <img
         className={`${isMobile ? 'w-8' : 'w-16'}`}
-        src={require('assets/images/me-avatar.png').default.src}
+        src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
         alt="avatar"
       />
       <Rank rank={rank} />
