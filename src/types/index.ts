@@ -2,7 +2,10 @@ import { IVerifyInfo, ManagerInfoType, TVerifierItem } from '@portkey/did-ui-rea
 import { Accounts, ChainId } from '@portkey/provider-types';
 import type { Manager } from '@portkey/services';
 import { IBlockchainWallet } from '@portkey/types';
+import { ModalProps } from 'antd';
+import { BeanPassItemType } from 'components/CommonModal/type';
 import { ICheckerboardItem } from 'pageComponents/Recreation/checkerboard';
+import { INoticeModal } from 'redux/reducer/noticeModal';
 
 export type TokenInfo = {
   decimals: number;
@@ -167,6 +170,7 @@ export interface IBeanPassClaimRes {
   claimable: boolean;
   reason: BeanPassResons;
   transactionId: string;
+  beanPassInfoDto: BeanPassItemType;
 }
 
 export interface IBeanPassClaimReq {
@@ -189,6 +193,7 @@ export interface IReward {
 
 export interface IConfigItems {
   rpcUrl: string;
+  discoverRpcUrl: string;
   network: string;
   curChain: Chain;
   graphqlServer: string;
@@ -204,19 +209,33 @@ export interface IConfigItems {
   faucetContractAddress: string;
   stepUpdateDelay: number;
   beanPassTerminalUrl: string;
-  beanPassPicUrl: string;
   sumScore: number;
   minElfNum: number;
+  isHalloween?: boolean;
+  explorerBeanPassUrl: string;
+  forestNftDetailUrl: string;
 }
 
 export interface IChessboardData {
   data: ICheckerboardItem[][];
   imageResources: Record<string, string>;
+  btnImageResources: {
+    pc: Record<string, string>;
+    mobile: Record<string, string>;
+  };
   checkerboardCounts: number;
 }
 
 export interface IChessboardDataResponse {
   data: IChessboardData;
+}
+
+export interface IChessboardDataResponse {
+  data: IChessboardData;
+}
+
+export interface INoticeModalResponse {
+  data: Record<string, ModalProps & INoticeModal>;
 }
 
 export interface IGetRankQuery {
@@ -228,4 +247,17 @@ export interface IGetRankQuery {
 export interface IRankHistoryQuery {
   CaAddress?: string;
   SeasonId?: string;
+}
+
+export interface IBeanPassListItem {
+  symbol: string;
+  tokenName: string;
+  nftImageUrl: string;
+  owned: boolean;
+  usingBeanPass: boolean;
+}
+
+export interface ISetCurBeanBody {
+  caAddress: string;
+  symbol: string;
 }

@@ -18,10 +18,10 @@ import Board from './components/Board';
 import GoButton, { Status } from './components/GoButton';
 import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
-import RecreationModal, { LoadingType, RecreationModalType } from './components/RecreationModal';
+import RecreationModal, { RecreationModalType } from './components/RecreationModal';
 import { useDebounce, useDeepCompareEffect, useEffectOnce, useWindowSize } from 'react-use';
 import { CheckBeanPass, GetBingoReward } from 'contract/bingo';
-import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
+import { BeanPassItemType, GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
@@ -29,20 +29,24 @@ import { getBeanPassClaimClaimable, receiveBeanPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
-import { setPlayerInfo } from 'redux/reducer/info';
+import { setCurBeanPass, setPlayerInfo } from 'redux/reducer/info';
 import { BeanPassResons, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import CountDownModal from 'components/CommonModal/CountDownModal';
-import { store } from 'redux/store';
+import { dispatch, store } from 'redux/store';
 import { formatErrorMsg } from 'utils/formattError';
 import { sleep } from 'utils/common';
-import roleImg from 'assets/base64/role';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { getTxResultRetry } from 'utils/getTxResult';
 import { ChainId } from '@portkey/types';
 import { getList } from './utils/getList';
 import BoardRight from './components/BoardRight';
 import { SECONDS_60 } from 'constants/time';
+import NoticeModal from 'components/NoticeModal';
+import { getModalInfo } from './utils/getModalInfo';
+import { DEFAULT_SYMBOL, RoleImg } from 'constants/role';
+import { getBeanPassModalType } from './utils/getBeanPassModalType';
+import { setNoticeModal } from 'redux/reducer/noticeModal';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -70,7 +74,10 @@ export default function Game() {
     curChessboardNode,
     needSync,
     checkerboardCounts,
+    curBeanPass,
   } = useGetState();
+
+  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>();
 
   const firstNode = checkerboardData![5][4];
   const firstNodePosition: [number, number] = [5, 4];
@@ -265,42 +272,37 @@ export default function Game() {
     } catch (error) {
       console.error('=====error', error);
       const resError = error as IContractError;
-      showMessage.error(formatErrorMsg(resError).errorMessage?.message);
+      showMessage.error(formatErrorMsg(resError)?.errorMessage?.message);
       console.log('=====GetBingoReward end');
       setMoving(false);
       setOpen(false);
+      updatePlayerInformation(address);
     }
     setGoLoading(false);
   };
 
-  const checkBeanPassStatus = useCallback(async () => {
-    let beanPassClaimClaimableRes;
-    try {
-      beanPassClaimClaimableRes = await getBeanPassClaimClaimable({
-        caAddress: address,
-      });
-      console.log('BeanPassClaimClaimableRes', beanPassClaimClaimableRes);
-      showMessage.hideLoading();
-    } catch (err) {
-      showMessage.hideLoading();
-      console.log('checkBeanPassStatusError:', err);
-      return;
-    }
-    if (!beanPassClaimClaimableRes) return;
-    const { claimable, reason } = beanPassClaimClaimableRes;
+  const doubleClaimCallback = () => {
+    dispatch(
+      setNoticeModal({
+        onCancel: () => {
+          dispatch(
+            setNoticeModal({
+              open: false,
+            }),
+          );
+          setBeanPassModalType(GetBeanPassStatus.Notfound);
+          setBeanPassModalVisible(true);
+        },
+      }),
+    );
+  };
 
-    if (claimable) {
-      setBeanPassModalType(GetBeanPassStatus.Abled);
-    } else {
-      if (reason === BeanPassResons.Claimed) {
-        setBeanPassModalType(GetBeanPassStatus.Noneleft);
-      } else if (reason === BeanPassResons.InsufficientElfAmount) {
-        setBeanPassModalType(GetBeanPassStatus.Recharge);
-      } else if (reason === BeanPassResons.DoubleClaim) {
-        setBeanPassModalType(GetBeanPassStatus.Notfound);
-      }
+  const checkBeanPassStatus = useCallback(async () => {
+    const res = await getBeanPassModalType({ address, doubleClaimCallback });
+    if (res) {
+      setBeanPassModalType(res);
+      setBeanPassModalVisible(true);
     }
-    setBeanPassModalVisible(true);
   }, [address]);
 
   const initCheckBeanPass = useCallback(async () => {
@@ -329,12 +331,13 @@ export default function Game() {
       const getNFTRes = await receiveBeanPassNFT({
         caAddress: address,
       });
-      const { claimable, reason, transactionId } = getNFTRes;
+      const { claimable, reason, transactionId, beanPassInfoDto } = getNFTRes;
       if (!claimable) {
         showMessage.error(reason);
         return;
       }
       setBeanPassModalVisible(false);
+      setBeanPassInfoDto(beanPassInfoDto);
       setNFTModalType(ShowBeanPassType.Success);
 
       await sleep(configInfo?.stepUpdateDelay || 3000);
@@ -347,7 +350,15 @@ export default function Game() {
           reNotexistedCount: 5,
         });
         updatePlayerInformation(address);
+        setBeanPassInfoDto(beanPassInfoDto);
         setIsShowNFT(true);
+        dispatch(
+          setCurBeanPass({
+            ...beanPassInfoDto,
+            owned: true,
+            usingBeanPass: true,
+          }),
+        );
       } catch (error) {
         /* empty */
       }
@@ -403,6 +414,15 @@ export default function Game() {
     }
   });
 
+  useEffect(() => {
+    if (address) {
+      getModalInfo({
+        isHalloween: configInfo?.isHalloween,
+        caAddress: address,
+      });
+    }
+  }, [address]);
+
   useDeepCompareEffect(() => {
     setPlayableCount(playerInfo?.playableCount || 0);
     if (!hasNft || !sumScore || moving) {
@@ -426,7 +446,7 @@ export default function Game() {
     setIsShowNFT(false);
   };
 
-  const onNftClick = () => {
+  const onNftClick = async () => {
     if (hasNft) {
       setNFTModalType(ShowBeanPassType.Display);
       setIsShowNFT(true);
@@ -452,6 +472,12 @@ export default function Game() {
     setCurDiceCount(num);
   };
 
+  const handleNoneOwned = () => {
+    setIsShowNFT(false);
+    initCheckBeanPass();
+    updatePlayerInformation(address);
+  };
+
   return (
     <>
       <div className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
@@ -459,18 +485,18 @@ export default function Game() {
         <div
           className={`${styles['game__content']} flex overflow-hidden ${
             isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
-          }`}>
+          } ${configInfo?.isHalloween && '!bg-[url(/images/recreation/checkerboard-bg.svg)] bg-cover'}`}>
           {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
           <SideBorder side="left" />
           <div className="w-full overflow-y-auto overflow-x-hidden">
-            <div className={`flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
+            <div className={`relative flex-1 pl-[16px] ${isMobile ? 'pt-[41px]' : 'pt-[80px]'}`}>
               <div className="relative z-[30]">
                 <Role
                   id="animationId"
                   width={`calc(100% / ${checkerboardData?.[0]?.length})`}
                   translate={translate}
                   bean={score}
-                  opacity={opacity}
+                  opacity={curBeanPass?.symbol ? opacity : 0}
                   position={{
                     x: currentNodeRef.current?.info.row,
                     y: currentNodeRef.current?.info.column,
@@ -479,7 +505,7 @@ export default function Game() {
                   showAdd={showAdd}
                   hideAdd={hideAdd}>
                   {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                  <img className="w-full h-full" src={roleImg} alt="role" />
+                  <img className="w-full h-full" src={RoleImg[curBeanPass?.symbol || DEFAULT_SYMBOL]} alt="role" />
                 </Role>
 
                 {checkerboardData?.map((row, index) => {
@@ -500,9 +526,27 @@ export default function Game() {
                   );
                 })}
               </div>
-              <div className="ml-[-16px] mt-[-50px] w-full">
-                <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
-              </div>
+              {configInfo?.isHalloween ? (
+                <div
+                  className={`absolute left-0 w-full flex ${
+                    isMobile ? 'h-[112px] bottom-[-46px] pl-[10px]' : 'h-[212px] bottom-[-76px] pl-[28px]'
+                  }`}>
+                  <img
+                    className={`${isMobile ? 'h-[94.5px] w-auto' : 'h-[185px] w-auto'}`}
+                    src={require('assets/images/recreation/grave.png').default.src}
+                    alt=""
+                  />
+                  <img
+                    className={`absolute bottom-0 right-[8px] ${isMobile ? 'h-[46px] w-auto' : 'h-[76px] w-auto'}`}
+                    src={require('assets/images/recreation/fence.png').default.src}
+                    alt=""
+                  />
+                </div>
+              ) : (
+                <div className="ml-[-16px] mt-[-50px] w-full">
+                  <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
+                </div>
+              )}
             </div>
           </div>
 
@@ -556,7 +600,13 @@ export default function Game() {
           onConfirm={handleConfirm}
         />
 
-        <ShowNFTModal open={isShowNFT} onCancel={onShowNFTModalCancel} type={nftModalType} />
+        <ShowNFTModal
+          open={isShowNFT}
+          beanPassItem={beanPassInfoDto}
+          onCancel={onShowNFTModalCancel}
+          type={nftModalType}
+          handleNoneOwned={handleNoneOwned}
+        />
         <CountDownModal
           open={countDownModalOpen}
           onCancel={() => setCountDownModalOpen(false)}
@@ -567,6 +617,7 @@ export default function Game() {
       <Leaderboard />
       <GameRecord />
       <PageLoading />
+      <NoticeModal />
     </>
   );
 }

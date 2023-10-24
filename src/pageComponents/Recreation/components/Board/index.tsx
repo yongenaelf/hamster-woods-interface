@@ -10,6 +10,9 @@ import styles from './index.module.css';
 import Image from 'next/image';
 import { dispatch } from 'redux/store';
 import { toggleShowLeaderboard } from 'redux/reducer/info';
+import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard';
+import showMessage from 'utils/setGlobalComponentsInfo';
+import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -27,6 +30,27 @@ function Board({
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
 
+  const { initialize } = useInitLeaderBoard();
+
+  const handleShowLeaderboard = async () => {
+    showMessage.loading();
+    try {
+      await initialize();
+    } catch (err) {
+      captureMessage({
+        type: SentryMessageType.ERROR,
+        params: {
+          name: 'useInitLeaderBoard',
+          method: 'get',
+          description: err,
+        },
+      });
+    } finally {
+      showMessage.hideLoading();
+      dispatch(toggleShowLeaderboard());
+    }
+  };
+
   if (isMobile) {
     return (
       <div className="absolute right-0 top-[15px] z-[40]">
@@ -34,7 +58,7 @@ function Board({
           icon={<Ranking className="h-[auto] w-[44px]" />}
           className="mb-[12px]"
           title="Leader Board"
-          onClick={() => dispatch(toggleShowLeaderboard())}
+          onClick={handleShowLeaderboard}
         />
         <Menu
           icon={<Nft className="h-[auto] w-[29.5px]" />}
@@ -55,7 +79,7 @@ function Board({
             icon={<Ranking className="h-[auto] w-[76px]" />}
             className="mb-[24px]"
             title="Leader Board"
-            onClick={() => dispatch(toggleShowLeaderboard())}
+            onClick={handleShowLeaderboard}
           />
           <Menu
             icon={<Nft className="h-[auto] w-[59px]" />}

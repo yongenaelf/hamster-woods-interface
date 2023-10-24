@@ -1,15 +1,18 @@
 import { getBeanPassClaimClaimable } from 'api/request';
 import { GetBeanPassStatus } from 'components/CommonModal/type';
+import { store } from 'redux/store';
 import { BeanPassResons } from 'types';
 import showMessage from 'utils/setGlobalComponentsInfo';
 
 interface IProps {
   address: string;
+  doubleClaimCallback?: () => void;
 }
 
-export const getBeanPassModalType = async ({ address }: IProps) => {
+export const getBeanPassModalType = async ({ address, doubleClaimCallback }: IProps) => {
+  const open = store.getState().noticeModal.noticeModal?.open;
   let beanPassClaimClaimableRes;
-  let beanPassModalType = undefined;
+  let beanPassModalType = GetBeanPassStatus.Abled;
   try {
     beanPassClaimClaimableRes = await getBeanPassClaimClaimable({
       caAddress: address,
@@ -19,9 +22,9 @@ export const getBeanPassModalType = async ({ address }: IProps) => {
   } catch (err) {
     showMessage.hideLoading();
     console.log('checkBeanPassStatusError:', err);
-    return;
+    return false;
   }
-  if (!beanPassClaimClaimableRes) return;
+  if (!beanPassClaimClaimableRes) return false;
   const { claimable, reason } = beanPassClaimClaimableRes;
 
   if (claimable) {
@@ -33,6 +36,10 @@ export const getBeanPassModalType = async ({ address }: IProps) => {
       beanPassModalType = GetBeanPassStatus.Recharge;
     } else if (reason === BeanPassResons.DoubleClaim) {
       beanPassModalType = GetBeanPassStatus.Notfound;
+      if (open) {
+        doubleClaimCallback && doubleClaimCallback();
+        return false;
+      }
     }
   }
 
