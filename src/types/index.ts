@@ -113,9 +113,7 @@ export interface CallContractParams<T> {
 export interface IBoutInformation {
   score: number;
   playId: number;
-  roundNumber: number;
   gridNum: number;
-  expectedBlockHeight: number;
   diceCount: number;
   diceNumbers: number[];
   startGridNum: number;
@@ -131,6 +129,7 @@ export interface IPlayerInformation {
   playableCount: number;
   sumScore: number;
   curGridNum: number;
+  beanPassOwned: boolean;
 }
 export enum WalletType {
   unknown = 'unknown',
@@ -260,4 +259,18 @@ export interface IBeanPassListItem {
 export interface ISetCurBeanBody {
   caAddress: string;
   symbol: string;
+}
+
+export interface ITransactionLog {
+  Address: string;
+  Name: string;
+  Indexed: string[];
+  NonIndexed: string;
+}
+
+export interface ITransactionResult {
+  TransactionId: string;
+  Status: string;
+  Logs: ITransactionLog[];
+  [props: string]: any;
 }

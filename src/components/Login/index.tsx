@@ -34,6 +34,8 @@ import { KEY_NAME } from 'constants/platform';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
 import showMessage from 'utils/setGlobalComponentsInfo';
+import { Proto } from 'utils/proto';
+import { getProto } from 'utils/deserializeLog';
 
 const components = {
   phone: PhoneIcon,
@@ -375,6 +377,18 @@ export default function Login() {
       setModalVisible(true);
     }
   };
+
+  const initializeProto = async () => {
+    if (configInfo?.rpcUrl && configInfo?.bingoContractAddress) {
+      const protoBuf = await getProto(configInfo.bingoContractAddress, configInfo.rpcUrl);
+      const proto = Proto.getInstance();
+      proto.setProto(protoBuf);
+    }
+  };
+
+  useEffect(() => {
+    initializeProto();
+  }, [configInfo?.rpcUrl, configInfo?.bingoContractAddress]);
 
   return (
     <div
