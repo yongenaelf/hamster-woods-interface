@@ -23,7 +23,7 @@ export enum ContractMethodType {
 
 const bingoContract = async <T, R>(methodName: string, params: T, type: ContractMethodType) => {
   const contract = contractRequest.get();
-  const contractAddress = configInfo.configInfo!.bingoContractAddress;
+  const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
   const method = type === ContractMethodType.SEND ? 'callSendMethod' : 'callViewMethod';
   try {
     const res = await contract[method]({
@@ -81,7 +81,7 @@ export const Play = async ({
   diceCount,
 }: IPlayerProps): Promise<{ TransactionId: string; TxResult: ITransactionResult }> => {
   const contract = contractRequest.get();
-  const contractAddress = configInfo.configInfo!.bingoContractAddress;
+  const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
 
   try {
     const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
