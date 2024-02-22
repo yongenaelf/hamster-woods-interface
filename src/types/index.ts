@@ -32,6 +32,7 @@ export enum ContractMethodType {
 export enum SocialLoginType {
   APPLE = 'Apple',
   GOOGLE = 'Google',
+  TELEGRAM = 'Telegram',
 }
 
 export interface IContractError extends Error {
@@ -219,6 +220,8 @@ export interface IConfigItems {
   isHalloween?: boolean;
   explorerBeanPassUrl: string;
   forestNftDetailUrl: string;
+  isShowRampBuy?: boolean;
+  isShowRampSell?: boolean;
 }
 
 export interface IChessboardData {
