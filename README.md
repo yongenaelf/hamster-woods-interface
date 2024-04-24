@@ -211,3 +211,4 @@ const firebaseConfig = {
 	measurementId: 'G-<update>',
 };
 ```
+
