@@ -17,7 +17,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, socialLoginAuth } from '@portkey/did-ui-react';
+import { DIDWalletInfo, did, socialLoginAuth, useGetTelegramAccessToken } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -459,6 +459,26 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     },
     [didWalletInfo],
   );
+
+  const handleAutoTelegramAuth = useCallback(
+    async (data?: { accessToken?: string }) => {
+      if (!data?.accessToken) {
+        throw new Error('No access token');
+      }
+      await signHandle.onSocialFinish({
+        type: SocialLoginType.TELEGRAM,
+        data: { accessToken: data?.accessToken },
+      });
+    },
+    [signHandle],
+  );
+
+  useGetTelegramAccessToken({
+    autoTelegramAuth: true,
+    network: Network as NetworkType,
+    storageKeyName: KEY_NAME,
+    callback: handleAutoTelegramAuth,
+  });
 
   return {
     isLogin,

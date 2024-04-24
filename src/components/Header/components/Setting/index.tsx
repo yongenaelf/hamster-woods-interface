@@ -18,7 +18,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did } from '@portkey/did-ui-react';
+import { did, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
@@ -69,6 +69,7 @@ export default function Setting() {
           console.error('portkey: error', error);
         }
       }
+      TelegramPlatform.close();
     } else if (walletType === WalletType.discover) {
       window.localStorage.removeItem(LOGIN_EARGLY_KEY);
     }

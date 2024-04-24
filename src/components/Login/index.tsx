@@ -80,6 +80,7 @@ export default function Login() {
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
     setDrawerVisible(false);
     setModalVisible(false);
+    if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
@@ -342,6 +343,8 @@ export default function Login() {
         ) {
           setLoading(true);
           console.log('authenticationInfo', authenticationInfo);
+          const operationDetails = JSON.stringify({ manager: did.didWallet.managementAccount?.address });
+
           const result = await verifySocialToken({
             accountType,
             token: authenticationInfo?.authToken,
@@ -349,9 +352,11 @@ export default function Login() {
             verifier,
             chainId: curChain,
             operationType: OperationTypeEnum.register,
+            operationDetails,
           });
           setLoading(false);
           console.log(result);
+          if (!result?.signature || !result?.verificationDoc) throw 'Verify social login error';
           onStep2OfSignUpFinish(
             {
               verifier,
@@ -376,7 +381,7 @@ export default function Login() {
         );
       }
     },
-    [getRecommendationVerifier, onStep2OfSignUpFinish, verifySocialToken],
+    [curChain, getRecommendationVerifier, onStep2OfSignUpFinish, verifySocialToken],
   );
 
   const handlePortKeyLoginFinish = useCallback(
@@ -407,6 +412,24 @@ export default function Login() {
   useEffect(() => {
     initializeProto();
   }, [configInfo?.rpcUrl, configInfo?.beanGoTownContractAddress]);
+
+  const TelegramRef = useRef<any>();
+
+  const getTelegram = useCallback(async () => {
+    if (typeof window !== 'undefined') {
+      await sleep(3000);
+
+      TelegramRef.current = (window as any)?.Telegram;
+      if (!TelegramRef.current) return;
+
+      TelegramRef.current.WebApp.ready();
+    }
+  }, []);
+  console.log('TelegramRef.current: ', TelegramRef.current);
+
+  useEffect(() => {
+    getTelegram();
+  }, [getTelegram]);
 
   return (
     <div

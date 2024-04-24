@@ -90,6 +90,11 @@ const Layout = dynamic(
               },
               serviceUrl: res.data.portkeyServiceUrl,
               graphQLUrl: res.data.graphqlServer,
+              socialLogin: {
+                Telegram: {
+                  dappTelegramLink: 'https://t.me/BeangoTown_bot/BeangoTown_testnet',
+                },
+              },
             });
           });
 

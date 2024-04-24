@@ -54,6 +54,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             }
         })();
       `}</Script>
+        <Script src="https://telegram.org/js/telegram-web-app.js" />
       </head>
       <body>
         <Provider>
