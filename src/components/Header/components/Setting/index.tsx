@@ -69,7 +69,6 @@ export default function Setting() {
           console.error('portkey: error', error);
         }
       }
-      TelegramPlatform.close();
     } else if (walletType === WalletType.discover) {
       window.localStorage.removeItem(LOGIN_EARGLY_KEY);
     }
@@ -86,7 +85,10 @@ export default function Setting() {
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
     ContractRequest.get().resetConfig();
     showMessage.hideLoading();
-
+    if (TelegramPlatform.isTelegramPlatform()) {
+      TelegramPlatform.close();
+      return;
+    }
     router.push('/login');
   };
   return (

@@ -45,7 +45,13 @@ export type SignatureParams = {
   hexToBeSign?: string;
 };
 
-export default function useWebLogin({ signHandle }: { signHandle?: any }) {
+export default function useWebLogin({
+  signHandle,
+  needAutoAuth = false,
+}: {
+  signHandle?: any;
+  needAutoAuth?: boolean;
+}) {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loginStatus } = useSelector(selectInfo);
@@ -474,6 +480,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   );
 
   useGetTelegramAccessToken({
+    canGetAuthToken: needAutoAuth,
     autoTelegramAuth: true,
     network: Network as NetworkType,
     storageKeyName: KEY_NAME,

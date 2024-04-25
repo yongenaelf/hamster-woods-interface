@@ -111,6 +111,7 @@ export default function Login() {
   });
 
   const { handlePortKey, handleFinish, handleApple, handleGoogle, handleTeleGram, loginEagerly } = useWebLogin({
+    needAutoAuth: true,
     signHandle,
   });
 
