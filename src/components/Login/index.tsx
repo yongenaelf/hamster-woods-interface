@@ -427,7 +427,8 @@ export default function Login() {
           className={styles.unlockBtn}>
           unLock
         </div>
-      ) : isLogin ? null : (
+      ) : null}
+      {/* ) : isLogin ? null : (
         <>
           {renderLoginMethods(false)}
           {!isInApp && (
@@ -440,7 +441,7 @@ export default function Login() {
             </div>
           )}
         </>
-      )}
+      )} */}
 
       <Drawer
         open={drawerVisible}
