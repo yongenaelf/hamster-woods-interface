@@ -413,24 +413,6 @@ export default function Login() {
     initializeProto();
   }, [configInfo?.rpcUrl, configInfo?.beanGoTownContractAddress]);
 
-  const TelegramRef = useRef<any>();
-
-  const getTelegram = useCallback(async () => {
-    if (typeof window !== 'undefined') {
-      await sleep(3000);
-
-      TelegramRef.current = (window as any)?.Telegram;
-      if (!TelegramRef.current) return;
-
-      TelegramRef.current.WebApp.ready();
-    }
-  }, []);
-  console.log('TelegramRef.current: ', TelegramRef.current);
-
-  useEffect(() => {
-    getTelegram();
-  }, [getTelegram]);
-
   return (
     <div
       className={`cursor-custom ${styles.loginContainer}`}

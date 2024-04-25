@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Header from 'components/Header';
 import { Layout as AntdLayout } from 'antd';
 
@@ -23,6 +23,7 @@ import { setConfigInfo } from 'redux/reducer/configInfo';
 import { setChessboardData } from 'redux/reducer/chessboardData';
 import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
+import { sleep } from '@portkey/utils';
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
@@ -44,6 +45,24 @@ const Layout = dynamic(
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
       const router = useRouter();
+
+      const TelegramRef = useRef<any>();
+
+      const getTelegram = useCallback(async () => {
+        if (typeof window !== 'undefined') {
+          await sleep(3000);
+
+          TelegramRef.current = (window as any)?.Telegram;
+          if (!TelegramRef.current) return;
+
+          TelegramRef.current.WebApp.ready();
+        }
+      }, []);
+      console.log('TelegramRef.current: ', TelegramRef.current);
+
+      useEffect(() => {
+        getTelegram();
+      }, [getTelegram]);
 
       useEffect(() => {
         if (!isLogin) {
