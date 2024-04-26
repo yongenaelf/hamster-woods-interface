@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from 'components/Header';
 import { Layout as AntdLayout } from 'antd';
 
@@ -11,7 +11,8 @@ import { store } from 'redux/store';
 import { setIsMobile, setLoginStatus } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import { Store } from 'utils/store';
-import { ConfigProvider, did } from '@portkey/did-ui-react';
+import { handleSDKLogout } from 'utils/handleLogout';
+import { ConfigProvider, TelegramPlatform, did } from '@portkey/did-ui-react';
 
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -23,7 +24,6 @@ import { setConfigInfo } from 'redux/reducer/configInfo';
 import { setChessboardData } from 'redux/reducer/chessboardData';
 import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
-import { sleep } from '@portkey/utils';
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
@@ -46,23 +46,9 @@ const Layout = dynamic(
 
       const router = useRouter();
 
-      const TelegramRef = useRef<any>();
-
-      const getTelegram = useCallback(async () => {
-        if (typeof window !== 'undefined') {
-          await sleep(3000);
-
-          TelegramRef.current = (window as any)?.Telegram;
-          if (!TelegramRef.current) return;
-
-          TelegramRef.current.WebApp.ready();
-        }
-      }, []);
-      console.log('TelegramRef.current: ', TelegramRef.current);
-
       useEffect(() => {
-        getTelegram();
-      }, [getTelegram]);
+        TelegramPlatform.initializeTelegramWebApp(handleSDKLogout);
+      }, []);
 
       useEffect(() => {
         if (!isLogin) {
