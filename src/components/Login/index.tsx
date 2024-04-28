@@ -13,6 +13,9 @@ import {
   handleErrorMessage,
   errorTip,
   setLoading,
+  TelegramPlatform,
+  useLoginWallet,
+  AddManagerType,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -39,6 +42,7 @@ import {
 import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
+import { DEFAULT_PIN } from 'constants/login';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
 import showMessage from 'utils/setGlobalComponentsInfo';
@@ -114,6 +118,8 @@ export default function Login() {
     needAutoAuth: true,
     signHandle,
   });
+
+  const createWallet = useLoginWallet();
 
   const { isLock, isLogin, isMobile: isMobileStore } = useGetState();
 
@@ -304,30 +310,61 @@ export default function Login() {
     [configInfo, handleFinish],
   );
 
+  useEffect(() => {
+    if (TelegramPlatform.isTelegramPlatform() && isLock) {
+      unlock(DEFAULT_PIN);
+    }
+  }, [isLock, unlock]);
+
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
-  const onStep2OfSignUpFinish = useCallback((res: TSignUpVerifier, value?: IGuardianIdentifierInfo) => {
-    const identifier = value;
-    if (!identifier) return console.error('No guardianIdentifier!');
-    const list = [
-      {
-        type: identifier?.accountType,
-        identifier: identifier?.identifier,
-        verifierId: res.verifier.id,
-        verificationDoc: res.verificationDoc,
-        signature: res.signature,
-      },
-    ];
-    setCurrentLifeCircle({
-      SetPinAndAddManager: {
-        guardianIdentifierInfo: identifier,
-        approvedList: list,
-      },
-    });
-    setTimeout(() => {
-      signInRef.current?.setOpen(true);
-    }, 500);
-  }, []);
+  const handlePortKeyLoginFinish = useCallback(
+    (wallet: DIDWalletInfo) => {
+      signInRef.current?.setOpen(false);
+      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
+      handleFinish(WalletType.portkey, wallet);
+    },
+    [handleFinish],
+  );
+
+  const onStep2OfSignUpFinish = useCallback(
+    async (res: TSignUpVerifier, value?: IGuardianIdentifierInfo) => {
+      const identifier = value;
+      if (!identifier) return console.error('No guardianIdentifier!');
+      const list = [
+        {
+          type: identifier?.accountType,
+          identifier: identifier?.identifier,
+          verifierId: res.verifier.id,
+          verificationDoc: res.verificationDoc,
+          signature: res.signature,
+        },
+      ];
+      if (TelegramPlatform.isTelegramPlatform()) {
+        const params = {
+          pin: DEFAULT_PIN,
+          type: 'register' as AddManagerType,
+          chainId: curChain,
+          accountType: identifier?.accountType,
+          guardianIdentifier: identifier?.identifier,
+          guardianApprovedList: list,
+        };
+        const createResult = await createWallet(params);
+        createResult && handlePortKeyLoginFinish(createResult);
+      } else {
+        setCurrentLifeCircle({
+          SetPinAndAddManager: {
+            guardianIdentifierInfo: identifier,
+            approvedList: list,
+          },
+        });
+        setTimeout(() => {
+          signInRef.current?.setOpen(true);
+        }, 500);
+      }
+    },
+    [createWallet, curChain, handlePortKeyLoginFinish],
+  );
 
   const onSignUp = useCallback(
     async (value: IGuardianIdentifierInfo) => {
@@ -385,15 +422,6 @@ export default function Login() {
     [curChain, getRecommendationVerifier, onStep2OfSignUpFinish, verifySocialToken],
   );
 
-  const handlePortKeyLoginFinish = useCallback(
-    (wallet: DIDWalletInfo) => {
-      signInRef.current?.setOpen(false);
-      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
-      handleFinish(WalletType.portkey, wallet);
-    },
-    [handleFinish],
-  );
-
   const setModalOpen = () => {
     if (isMobileDevices()) {
       setDrawerVisible(true);
@@ -420,29 +448,29 @@ export default function Login() {
       style={{
         backgroundImage: `url(${isMobileStore ? imageResources?.aloginBgMobile : imageResources?.aloginBgPc})`,
       }}>
-      {isLock ? (
-        <div
-          onClick={() => {
-            setIsUnlockShow(true);
-          }}
-          className={styles.unlockBtn}>
-          unLock
-        </div>
-      ) : null}
-      {/* ) : isLogin ? null : (
-        <>
-          {renderLoginMethods(false)}
-          {!isInApp && (
-            <div
-              className={styles.more}
-              onClick={() => {
-                setModalOpen();
-              }}>
-              More
-            </div>
-          )}
-        </>
-      )} */}
+      {!TelegramPlatform.isTelegramPlatform() &&
+        (isLock ? (
+          <div
+            onClick={() => {
+              setIsUnlockShow(true);
+            }}
+            className={styles.unlockBtn}>
+            unLock
+          </div>
+        ) : isLogin ? null : (
+          <>
+            {renderLoginMethods(false)}
+            {!isInApp && (
+              <div
+                className={styles.more}
+                onClick={() => {
+                  setModalOpen();
+                }}>
+                More
+              </div>
+            )}
+          </>
+        ))}
 
       <Drawer
         open={drawerVisible}
@@ -465,6 +493,7 @@ export default function Login() {
       </Modal>
 
       <SignIn
+        pin={TelegramPlatform.isTelegramPlatform() ? DEFAULT_PIN : undefined}
         keyboard
         ref={signInRef}
         design={design}

@@ -109,7 +109,7 @@ export default function Setting() {
             title="Game Records"
             onClick={handleRecord}
             className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
-          {walletType !== WalletType.discover && (
+          {walletType !== WalletType.discover && !TelegramPlatform.isTelegramPlatform() && (
             <CommonBtn
               title="Lock"
               onClick={handleLock}
