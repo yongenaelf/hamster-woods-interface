@@ -47,7 +47,7 @@ const Layout = dynamic(
       const router = useRouter();
 
       useEffect(() => {
-        TelegramPlatform.initializeTelegramWebApp(handleSDKLogout);
+        TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
       }, []);
 
       useEffect(() => {
