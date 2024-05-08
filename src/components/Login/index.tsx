@@ -69,6 +69,7 @@ interface IAuthenticationInfo {
 
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
+  const isGettingTelegramAuthRef = useRef(false);
 
   const [style, setStyle] = useState<string>(styles.inputForm);
 
@@ -115,7 +116,6 @@ export default function Login() {
   });
 
   const { handlePortKey, handleFinish, handleApple, handleGoogle, handleTeleGram, loginEagerly } = useWebLogin({
-    needAutoAuth: true,
     signHandle,
   });
 
@@ -138,7 +138,7 @@ export default function Login() {
   const [_isWalletExist, setIsWalletExist] = useState(false);
 
   useEffect(() => {
-    if (isLock) {
+    if (isLock || isGettingTelegramAuthRef.current) {
       return;
     }
     if (typeof window !== undefined) {
@@ -149,9 +149,13 @@ export default function Login() {
       if (window.localStorage.getItem(KEY_NAME)) {
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
+      } else if (TelegramPlatform.isTelegramPlatform()) {
+        // Automatically obtain Telegram authorization
+        isGettingTelegramAuthRef.current = true;
+        handleTeleGram();
       }
     }
-  }, [isLock, loginEagerly]);
+  }, [isLock, loginEagerly, handleTeleGram]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();

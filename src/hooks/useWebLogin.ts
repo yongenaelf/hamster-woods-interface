@@ -6,7 +6,6 @@ import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import {
   selectInfo,
-  setAccountInfoSync,
   setGameSetting,
   setIsNeedSyncAccountInfo,
   setLoginStatus,
@@ -17,7 +16,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, socialLoginAuth, useGetTelegramAccessToken } from '@portkey/did-ui-react';
+import { DIDWalletInfo, did, socialLoginAuth } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -25,7 +24,6 @@ import ContractRequest from 'contract/contractRequest';
 import { GetGameLimitSettings, GetPlayerInformation } from 'contract/bingo';
 import useGetState from 'redux/state/useGetState';
 import DetectProvider from 'utils/InstanceProvider';
-import useIntervalAsync from './useInterValAsync';
 import InstanceProvider from 'utils/InstanceProvider';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import { ChainId } from '@portkey/provider-types';
@@ -45,13 +43,7 @@ export type SignatureParams = {
   hexToBeSign?: string;
 };
 
-export default function useWebLogin({
-  signHandle,
-  needAutoAuth = false,
-}: {
-  signHandle?: any;
-  needAutoAuth?: boolean;
-}) {
+export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loginStatus } = useSelector(selectInfo);
@@ -465,27 +457,6 @@ export default function useWebLogin({
     },
     [didWalletInfo],
   );
-
-  const handleAutoTelegramAuth = useCallback(
-    async (data?: { accessToken?: string }) => {
-      if (!data?.accessToken) {
-        throw new Error('No access token');
-      }
-      await signHandle.onSocialFinish({
-        type: SocialLoginType.TELEGRAM,
-        data: { accessToken: data?.accessToken },
-      });
-    },
-    [signHandle],
-  );
-
-  useGetTelegramAccessToken({
-    canGetAuthToken: needAutoAuth,
-    autoTelegramAuth: true,
-    network: Network as NetworkType,
-    storageKeyName: KEY_NAME,
-    callback: handleAutoTelegramAuth,
-  });
 
   return {
     isLogin,
