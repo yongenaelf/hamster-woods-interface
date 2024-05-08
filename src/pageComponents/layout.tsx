@@ -51,6 +51,35 @@ const Layout = dynamic(
       }, []);
 
       useEffect(() => {
+        if (!window || !document) return;
+        const docEle = document.documentElement;
+        const event = 'onorientationchange' in window ? 'orientationchange' : 'resize';
+        const fn = function () {
+          const isMobile =
+            TelegramPlatform.isTelegramPlatform() ||
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          const width = docEle.clientWidth;
+          const unitWidth = isMobile ? 390 : 1920;
+          if (width) {
+            if (isMobile && width > 580) {
+              docEle.style.fontSize = '16px';
+            } else if (!isMobile && width < 1200) {
+              docEle.style.fontSize = '10px';
+            } else {
+              docEle.style.fontSize = 16 * (width / unitWidth) + 'px';
+            }
+          }
+        };
+        fn();
+        window.addEventListener(event, fn, false);
+        document.addEventListener('DOMContentLoaded', fn, false);
+        return () => {
+          window.removeEventListener(event, fn, false);
+          document.removeEventListener('DOMContentLoaded', fn, false);
+        };
+      }, []);
+
+      useEffect(() => {
         if (!isLogin) {
           router.replace('/login');
         }
@@ -127,7 +156,11 @@ const Layout = dynamic(
           const ua = navigator.userAgent;
           const mobileType = isMobile(ua);
           const isMobileDevice =
-            mobileType.apple.phone || mobileType.android.phone || mobileType.apple.tablet || mobileType.android.tablet;
+            mobileType.apple.phone ||
+            mobileType.android.phone ||
+            mobileType.apple.tablet ||
+            mobileType.android.tablet ||
+            TelegramPlatform.isTelegramPlatform();
           setIsMobileDevice(isMobileDevice);
           store.dispatch(setIsMobile(isMobileDevice));
         };
