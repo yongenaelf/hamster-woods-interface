@@ -17,7 +17,7 @@ import { ConfigProvider, TelegramPlatform, did } from '@portkey/did-ui-react';
 import { useRouter, usePathname } from 'next/navigation';
 
 import useGetState from 'redux/state/useGetState';
-import { KEY_NAME } from 'constants/platform';
+import { KEY_NAME, TELEGRAM_BOT_ID } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { fetchChessboardConfig, fetchChessboardData, fetchConfigItems, fetchNoticeModal } from 'api/request';
 import { setConfigInfo } from 'redux/reducer/configInfo';
@@ -126,7 +126,7 @@ const Layout = dynamic(
               graphQLUrl: res.data.graphqlServer,
               socialLogin: {
                 Telegram: {
-                  dappTelegramLink: 'https://t.me/BeangoTown_bot/BeangoTown_testnet',
+                  botId: TELEGRAM_BOT_ID,
                 },
               },
             });

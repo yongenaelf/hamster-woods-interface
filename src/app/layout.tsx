@@ -26,7 +26,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <Script strategy="afterInteractive" id="rem-px" />
-        <Script src="https://telegram.org/js/telegram-web-app.js" />
       </head>
       <body>
         <Provider>
