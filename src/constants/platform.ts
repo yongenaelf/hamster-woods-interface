@@ -12,4 +12,4 @@ export const MAX_GAME_RECORD_ITEMS = 150;
 
 export const PORTKEY_LOGIN_CHAIN_ID_KEY = 'portkeyLoginChainId';
 
-export const TELEGRAM_BOT_ID = '7095254173';
+export const TELEGRAM_BOT_ID = '6495817430';
