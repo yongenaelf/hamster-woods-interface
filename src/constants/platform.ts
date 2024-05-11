@@ -15,6 +15,6 @@ export const MAX_GAME_RECORD_ITEMS = 150;
 export const PORTKEY_LOGIN_CHAIN_ID_KEY = 'portkeyLoginChainId';
 
 export const TELEGRAM_TESTNET_BOT_ID = '6495817430';
-export const TELEGRAM_MAINNET_BOT_ID = '6495817430'; // TODO: adjust bot id
+export const TELEGRAM_MAINNET_BOT_ID = '6794091084';
 
 export const TELEGRAM_BOT_ID = NEXT_PUBLIC_APP_ENV === 'test' ? TELEGRAM_TESTNET_BOT_ID : TELEGRAM_MAINNET_BOT_ID;
