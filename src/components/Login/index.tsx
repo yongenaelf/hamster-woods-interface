@@ -16,6 +16,7 @@ import {
   TelegramPlatform,
   useLoginWallet,
   AddManagerType,
+  useSignInHandler,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -82,6 +83,7 @@ export default function Login() {
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
   >({});
 
+  const onSignInHandler = useSignInHandler({ isErrorTip: true });
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
     setDrawerVisible(false);
     setModalVisible(false);
@@ -89,20 +91,31 @@ export default function Login() {
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
-      setCurrentLifeCircle({
-        GuardianApproval: {
-          guardianIdentifierInfo: {
-            chainId: value.chainId,
-            isLoginGuardian: value.isLoginGuardian,
-            identifier: value.identifier,
-            accountType: value.accountType,
-            authenticationInfo: value.authenticationInfo,
-          },
-        },
-      });
-      setTimeout(() => {
-        signInRef.current?.setOpen(true);
-      }, 500);
+      const signResult = await onSignInHandler(value);
+      if (!signResult) return;
+      if (signResult.nextStep === 'SetPinAndAddManager') {
+        const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
+        const approvedList = signResult.value.approvedList;
+        if (!approvedList) return;
+        const type: AddManagerType = guardianIdentifierInfo?.isLoginGuardian ? 'recovery' : 'register';
+        const params = {
+          pin: DEFAULT_PIN,
+          type,
+          chainId: guardianIdentifierInfo.chainId,
+          accountType: guardianIdentifierInfo.accountType,
+          guardianIdentifier: guardianIdentifierInfo?.identifier,
+          guardianApprovedList: approvedList,
+        };
+        const didWallet = await createWallet(params);
+        didWallet && handlePortKeyLoginFinish(didWallet);
+      } else {
+        setCurrentLifeCircle({
+          [signResult.nextStep as any]: signResult.value,
+        });
+        setTimeout(() => {
+          signInRef.current?.setOpen(true);
+        }, 500);
+      }
     }
   };
 
