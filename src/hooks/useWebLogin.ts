@@ -250,6 +250,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const getSocialToken = async ({ type }: { type: SocialLoginType; clientId?: string; redirectURI?: string }) => {
     const tokenRes = await socialLoginAuth({
       type,
+      network: Network as NetworkType,
     });
     return tokenRes;
   };
