@@ -109,6 +109,7 @@ export default function Login() {
         const didWallet = await createWallet(params);
         didWallet && handlePortKeyLoginFinish(didWallet);
       } else {
+        setLoading(false);
         setCurrentLifeCircle({
           [signResult.nextStep as any]: signResult.value,
         });
