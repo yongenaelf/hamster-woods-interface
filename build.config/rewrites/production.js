@@ -17,6 +17,6 @@ module.exports = [
   },
   {
     source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
-    destination: 'https://www.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+    destination: 'https://dapp.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
   },
 ];
