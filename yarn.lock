@@ -2718,23 +2718,23 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@portkey/accounts@2.5.4", "@portkey/accounts@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/accounts/-/accounts-2.5.4.tgz#db2edd6b21e603fadfa65f319432b08680f0b660"
-  integrity sha512-slTpC0vY9bbUXMGfafitj1U9fQ9mOQ9EEydtNHK7ff+UtwEUOLUGsPb5utYb2BpUq/b15fkETZCZnWVohQq4Og==
+"@portkey/accounts@2.5.5", "@portkey/accounts@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/accounts/-/accounts-2.5.5.tgz#f2f588e5ac29689e201d6eaa047364688ae769af"
+  integrity sha512-3Axa8F++m2BV4hSXVOgomsxeyTZtOZyUf60NChBZkCD5S2O5BSdnlVgLjUA1gD+PijSNjLtBSQSSdFvCB4gvMg==
   dependencies:
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
-    "@portkey/validator" "^2.5.4"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
+    "@portkey/validator" "^2.5.5"
 
-"@portkey/contracts@2.5.4", "@portkey/contracts@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-2.5.4.tgz#b21411f7f2ad67f2eebe298bd410f564d9b1bd03"
-  integrity sha512-mSh1RAysPjbHM2uvjuvhxFuWVUl37JL5Pya4sr7L/ymMH4EV3B/NV6K2Fhu8wuWVxJ0TbWpH4P1NdB1u5Jg3kw==
+"@portkey/contracts@2.5.5", "@portkey/contracts@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-2.5.5.tgz#99cb8d3076df1c287daf5c969da39e9d5b0f17c1"
+  integrity sha512-kCKV6N7qGDFVd4z/47wqyl8DntGRIIPJm5iHZACfrXqgDIG/EGNYf/xVPgGq4B2Sfn+4A6+hYb6uiiB3kzTomw==
   dependencies:
     "@portkey/provider-types" "^2.1.0"
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
 
 "@portkey/detect-provider@2.2.0":
   version "2.2.0"
@@ -2750,24 +2750,24 @@
   dependencies:
     "@portkey/provider-types" "^2.0.0-alpha.5"
 
-"@portkey/did-ui-react@2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-2.5.4.tgz#dcc944f8e982db762e774a89c5cf3e57f1895570"
-  integrity sha512-FvX5oPjszysdiOJxXigH6l4Dbqp+GqTuKSTTKl3NuZrJS17Y+B7wpNdUHGkNr1+OEC7dr4rM/poG4pNBjXWO1w==
+"@portkey/did-ui-react@2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-2.5.5.tgz#671631e64e31872939ef06847224cf4b805b3353"
+  integrity sha512-I9OU4Fi7mqCTwZ7edfA6hlQzqvSpvcnrw8F6kLl4bDj/OiHOF6ssZssjb2P4BDGdYkRBvLiR4TDm0+KzJJ6ggg==
   dependencies:
     "@matt-block/react-recaptcha-v2" "^2.0.0"
-    "@portkey/accounts" "^2.5.4"
-    "@portkey/contracts" "^2.5.4"
-    "@portkey/did" "^2.5.4"
-    "@portkey/graphql" "^2.5.4"
-    "@portkey/onboarding" "^2.5.4"
-    "@portkey/ramp" "^2.5.4"
-    "@portkey/request" "^2.5.4"
-    "@portkey/services" "^2.5.4"
-    "@portkey/socket" "^2.5.4"
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
-    "@portkey/validator" "^2.5.4"
+    "@portkey/accounts" "^2.5.5"
+    "@portkey/contracts" "^2.5.5"
+    "@portkey/did" "^2.5.5"
+    "@portkey/graphql" "^2.5.5"
+    "@portkey/onboarding" "^2.5.5"
+    "@portkey/ramp" "^2.5.5"
+    "@portkey/request" "^2.5.5"
+    "@portkey/services" "^2.5.5"
+    "@portkey/socket" "^2.5.5"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
+    "@portkey/validator" "^2.5.5"
     "@rc-component/portal" "1.0.2"
     antd "4.24.14"
     antd-mobile "5.33.0"
@@ -2782,37 +2782,37 @@
     spark-md5 "^3.0.2"
     uuid "^8.3.2"
 
-"@portkey/did@2.5.4", "@portkey/did@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/did/-/did-2.5.4.tgz#23ac37cad89dd929679f8be5eba05364dcec8b39"
-  integrity sha512-Xje1O8ASOftAaH1MlsTphxwnTf0gl/mAD26MVSieZXBzJFkOYdazFH6qCH0KBO7VRfhI4Xs0TzTPnawxyd3BvA==
+"@portkey/did@2.5.5", "@portkey/did@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/did/-/did-2.5.5.tgz#9edb165bdb56bff2064dccc6c585f6e4f3c68e04"
+  integrity sha512-2V+NTAXYtsNGRUMHcx/NEJxV4hKYGPXKo5sYCEyt/JR1YF5s1Fa4HVgxvhafAagZLRraN7sfDBmh3gf9lOrkcA==
   dependencies:
-    "@portkey/accounts" "^2.5.4"
-    "@portkey/contracts" "^2.5.4"
-    "@portkey/graphql" "^2.5.4"
-    "@portkey/request" "^2.5.4"
-    "@portkey/services" "^2.5.4"
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
+    "@portkey/accounts" "^2.5.5"
+    "@portkey/contracts" "^2.5.5"
+    "@portkey/graphql" "^2.5.5"
+    "@portkey/request" "^2.5.5"
+    "@portkey/services" "^2.5.5"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
 
-"@portkey/graphql@2.5.4", "@portkey/graphql@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/graphql/-/graphql-2.5.4.tgz#f7857631a629e72d4fa72f2a4a0e38c7ff572076"
-  integrity sha512-7wKqxjt1vkutn0hY2cr1cfM/vsbW4Y1cjLolaCQAEvUHJ8EDjMlajPgmgXMb6ESfFzknVij/IYntKh7klhS2pQ==
+"@portkey/graphql@2.5.5", "@portkey/graphql@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/graphql/-/graphql-2.5.5.tgz#99b42cb94e911dde91cfe38d19a9a29d5d5fd663"
+  integrity sha512-zvfZiYehHIZqnMMuWmqNDtskMeVUcaolCCXDuQ8DMtxwcwzli7z3z2hkp3wAIvY7ixZii7jd5bl+A6daIRwf4w==
   dependencies:
     "@apollo/client" "^3.7.3"
-    "@portkey/types" "^2.5.4"
+    "@portkey/types" "^2.5.5"
     graphql "^16.6.0"
     subscriptions-transport-ws "^0.11.0"
 
-"@portkey/onboarding@2.5.4", "@portkey/onboarding@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/onboarding/-/onboarding-2.5.4.tgz#09dd3bf8225cd92196f6e1f1716e75ddc93e7e29"
-  integrity sha512-LbDkRiLcJseIxYjTOn8esp98pfkyrIkfjLjzetcz3OchSvWj/Ok1JbHJJG0zXFEdHT5RF2r5Dsil5tENkZBcgA==
+"@portkey/onboarding@2.5.5", "@portkey/onboarding@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/onboarding/-/onboarding-2.5.5.tgz#2967adedad536dacc11eff53764276535c4e4c77"
+  integrity sha512-kSPvhmZQsdmhO9mXBF07RL/j1fxnNZF8OReS6fPE+zvavPdnGOxmFvn7+vo8WU4K38m9xY+RJi/mPK1BOQiFNw==
   dependencies:
     "@portkey/detect-provider" "^2.0.0-alpha.2"
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
     bowser "^2.11.0"
     query-string "^7.1.1"
 
@@ -2840,58 +2840,58 @@
     "@portkey/types" "^2.0.0-alpha.0"
     "@types/readable-stream" "^2.3.15"
 
-"@portkey/ramp@2.5.4", "@portkey/ramp@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/ramp/-/ramp-2.5.4.tgz#78ec05f9fd93fcab7d5b6a8d3d216d1bc89d098d"
-  integrity sha512-Sunb7QL9pcw7htYJ/75aKjc2BG03BVVh/eplH7En/SQP+JRtIZkjDIxQza6+HMEK6QFQjfQFQsym0iYSSyynhw==
+"@portkey/ramp@2.5.5", "@portkey/ramp@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/ramp/-/ramp-2.5.5.tgz#4fe1615cfe7582dd1ca845b218c82450a693ff7c"
+  integrity sha512-EFIcEfnZZrdo8qNuvvUSXrAsTZ+a7xgUcqNNb9zlA+JT4LnVJ1R92Bx9YOjA3e1LnXstWi2QBYJMC5+CpItp4A==
   dependencies:
-    "@portkey/request" "^2.5.4"
-    "@portkey/socket" "^2.5.4"
-    "@portkey/types" "^2.5.4"
-    "@portkey/utils" "^2.5.4"
+    "@portkey/request" "^2.5.5"
+    "@portkey/socket" "^2.5.5"
+    "@portkey/types" "^2.5.5"
+    "@portkey/utils" "^2.5.5"
     query-string "^7.1.1"
 
-"@portkey/request@2.5.4", "@portkey/request@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/request/-/request-2.5.4.tgz#f93108fb4ad358b1ea673167e1bf06da34822cc7"
-  integrity sha512-ISl8TwFqt8+5snxem3wHJsvr7H5ykGd+/7ETFNw6V0UwHvspZFKfdaaaLIOlLSySv0VDamy8QrKGvSB3Se9ERg==
+"@portkey/request@2.5.5", "@portkey/request@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/request/-/request-2.5.5.tgz#34543a4be3465abe22c110c7741b5002a60f56ec"
+  integrity sha512-W3EcIgHUG5wtH5fj6Tz3Pns3dPTJ/bhJER3hXZwxBf0gO3ClhMpJzM1ImRiTYOdTUkICM4Jl3TeeVpLWlRGizA==
   dependencies:
-    "@portkey/types" "^2.5.4"
+    "@portkey/types" "^2.5.5"
     query-string "^7.1.1"
 
-"@portkey/services@2.5.4", "@portkey/services@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/services/-/services-2.5.4.tgz#d31c1a1ed9d868cdd4abfbfb84106dbcb250bb1a"
-  integrity sha512-a3wMKjnXspIm77HaL8lCvL5C0JaZGt/7ZhgeigFzht/9FnXxUOxkUl2WC6XVCig5PqT6xhPHgpa8T0aTBwXlrw==
+"@portkey/services@2.5.5", "@portkey/services@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/services/-/services-2.5.5.tgz#0821a3905e69206ae6353958b357d695b162a903"
+  integrity sha512-k5I94ueZlPkVl5B8jExel3cuw9e20e3TB3xbzXL6562vBxuQtGhoCwmBf8gKe6YhMB5LEBJWeNepRjkaOYbagw==
   dependencies:
-    "@portkey/graphql" "^2.5.4"
-    "@portkey/request" "^2.5.4"
-    "@portkey/types" "^2.5.4"
+    "@portkey/graphql" "^2.5.5"
+    "@portkey/request" "^2.5.5"
+    "@portkey/types" "^2.5.5"
 
-"@portkey/socket@2.5.4", "@portkey/socket@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-2.5.4.tgz#37ddfdc7d230b6dcaa92b92a7c6718a7258fe61a"
-  integrity sha512-SD95KkXBUds5lYw/uU394N1YLBP6kPLObwa5Gwac/+sRjsQP+FvpK6qUmcy8Wok6RpArDiWkW94q+hqElCdTog==
+"@portkey/socket@2.5.5", "@portkey/socket@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-2.5.5.tgz#a6a606b36cf86fe0bda5410d10abf83be74e7882"
+  integrity sha512-amRG9BygNpI/tKQaIKzCBZmxW9vEUy6F9cIXgwsC7WUl2gpDKdDl5MgIjxDVrWWqqVAaNDsmtkKFrcTmkzWO7A==
   dependencies:
     "@abp/signalr" "^7.0.0"
-    "@portkey/utils" "^2.5.4"
+    "@portkey/utils" "^2.5.5"
 
-"@portkey/types@2.5.4", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.5.4.tgz#cdc5b7c1f806253dae19dca47d35acd14521f3a0"
-  integrity sha512-lvtIuUTNh2Q7KM7eh6dV2f3jD4Dig3Vn+ZL47TrdQ0xDbxlrBwTQ3HlQjYJ73Nuop+s3VdxWB3AXlHAonijDYw==
+"@portkey/types@2.5.5", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.5.5.tgz#338da4c4f5495e1c29fd7bb4b16f57d41bebfe82"
+  integrity sha512-Bghx9rFRbfJ0awEkMXD+xaxbT6ZN2S2EH5LuF34lljMxcLO5a37aVk5gi/JTRlr3CHowhvBRrxdqKB8gVG+PwQ==
 
-"@portkey/utils@2.5.4", "@portkey/utils@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.5.4.tgz#73b15099b6857409dbde028a34a32b7339079874"
-  integrity sha512-g+QFwn/lPkYNV9fIY1Lj+utivZ48NNDAVjKPClcm4m5JEk6khSvkJTzNr7dO/sJZZ6WvE466/px3BHGS2IzCcg==
+"@portkey/utils@2.5.5", "@portkey/utils@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.5.5.tgz#3fe8da6697778450cccb4d31a88144d1ce9f053c"
+  integrity sha512-N3kHPCd1QvWThO+THqUWpuwDhxz1KWNDctjtFBJkvvaj4e4cuMz5LrRGsgN6ALjy/NF0y5R0PFeSP4RFx6td3A==
   dependencies:
     node-forge "^1.3.1"
 
-"@portkey/validator@2.5.4", "@portkey/validator@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/@portkey/validator/-/validator-2.5.4.tgz#691e58cd75cae558f57706780474f47ebe481b41"
-  integrity sha512-VAW4Mcl4vphqSKMyAKMtaGmLZ5FTt4B3hxTKRIHt+Tfl3KiyY61pneh69byoShn3tzz9tZga1O1twPFaSJXjaw==
+"@portkey/validator@2.5.5", "@portkey/validator@^2.5.5":
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/@portkey/validator/-/validator-2.5.5.tgz#568e8b2a0eb8291bd60bc35ee6a07b9f43f11cd4"
+  integrity sha512-Xgt6LzGUcW+XYoFtIirgyhKhnqm1PRWG3G7F7BgzJ7AKotSsxx++eXuMpUPVQ2JpWYuUJyBLeWyOm75Nc5XfyQ==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
