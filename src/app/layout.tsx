@@ -5,10 +5,9 @@ import Script from 'next/script';
 import 'antd/dist/antd.css';
 import Provider from 'provider';
 
-import Layout from 'pageComponents/layout';
-
 import 'styles/global.css';
 import 'styles/theme.css';
+import LayoutProvider from './LayoutProvider';
 
 export const metadata = {
   title: 'BeanGoTown',
@@ -18,6 +17,7 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
@@ -30,7 +30,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body>
         <Provider>
-          <Layout>{children}</Layout>
+          <LayoutProvider>{children}</LayoutProvider>
         </Provider>
       </body>
     </html>
