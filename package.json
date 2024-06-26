@@ -99,7 +99,7 @@
     "typescript": "4.7.4"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{jsx,ts,tsx}": [
       "eslint --cache --fix",
       "eslint --cache --ext .js,.jsx,.ts,.tsx"
     ],

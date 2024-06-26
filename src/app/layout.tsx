@@ -7,7 +7,7 @@ import Provider from 'provider';
 
 import 'styles/global.css';
 import 'styles/theme.css';
-import LayoutProvider from './LayoutProvider';
+import Layout from 'pageComponents/layout';
 
 export const metadata = {
   title: 'BeanGoTown',
@@ -26,11 +26,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <Script strategy="afterInteractive" id="rem-px" />
-        <Script strategy="afterInteractive" src="https://telegram.org/js/telegram-web-app.js" />
+        <Script strategy="afterInteractive" src="/telegram-web-app.js" />
       </head>
       <body>
         <Provider>
-          <LayoutProvider>{children}</LayoutProvider>
+          <Layout>{children}</Layout>
         </Provider>
       </body>
     </html>
