@@ -22,6 +22,7 @@ export interface IGoButton {
   curDiceCount?: number;
   changeCurDiceCount?: (num: number) => void;
   go?: () => void;
+  getChance?: () => void;
 }
 
 function GoButton({
@@ -31,6 +32,7 @@ function GoButton({
   sumScore = 5,
   curDiceCount,
   changeCurDiceCount,
+  getChance,
 }: IGoButton) {
   const { isMobile, btnImageResources } = useGetState();
 
@@ -44,6 +46,9 @@ function GoButton({
 
   const [curPress, setCurPress] = useState<number | null>(null);
   const [curTouch, setCurTouch] = useState<number | null>(null);
+
+  const [chanceBtnPress, setChanceBtnPress] = useState<boolean>(false);
+  const [chanceBtnTouch, setChanceBtnTouch] = useState<boolean>(false);
 
   const [curPressM, setCurPressM] = useState<number | null>(null);
 
@@ -72,7 +77,7 @@ function GoButton({
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
             isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
-          Go
+          Hop
         </span>
         <span
           className={`${
@@ -94,7 +99,7 @@ function GoButton({
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
             isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
-          Go
+          Hop
         </span>
         <span
           className={`${
@@ -263,40 +268,73 @@ function GoButton({
             </div>
           </div>
         ) : (
-          <div
-            onMouseEnter={() => {
-              setPcBtnMouseOn(true);
-            }}
-            onMouseLeave={() => {
-              setPcBtnMouseOn(false);
-            }}
-            onMouseDown={() => {
-              setPcBtnPress(true);
-            }}
-            onMouseUp={() => {
-              setPcBtnPress(false);
-              go && go();
-            }}
-            style={{
-              backgroundImage: `url(${
-                btnImageResources?.pc[
-                  pcBtnMouseOn && status === Status.NONE
-                    ? 'bg-go-hover-pc'
-                    : pcBtnPress && status === Status.NONE
-                    ? 'bg-go-press-pc'
-                    : status === Status.DISABLED
-                    ? 'bg-go-disabled-pc'
-                    : 'bg-go-default-pc'
-                ]
-              })`,
-            }}
-            className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
-            {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
+          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
             <div
-              className={`${
-                pcBtnPress ? 'mt-[5px]' : ''
-              } absolute top-[10px] flex ml-[12px] flex-col items-center justify-center`}>
-              {statusCom[status]}
+              onMouseEnter={() => {
+                setPcBtnMouseOn(true);
+              }}
+              onMouseLeave={() => {
+                setPcBtnMouseOn(false);
+              }}
+              onMouseDown={() => {
+                setPcBtnPress(true);
+              }}
+              onMouseUp={() => {
+                setPcBtnPress(false);
+                go && go();
+              }}
+              style={{
+                backgroundImage: `url(${
+                  btnImageResources?.pc[
+                    pcBtnMouseOn && status === Status.NONE
+                      ? 'bg-go-hover-pc'
+                      : pcBtnPress && status === Status.NONE
+                      ? 'bg-go-press-pc'
+                      : status === Status.DISABLED
+                      ? 'bg-go-disabled-pc'
+                      : 'bg-go-default-pc'
+                  ]
+                })`,
+              }}
+              className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
+              {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
+              <div
+                className={`${
+                  pcBtnPress ? 'mt-[5px]' : ''
+                } absolute top-[10px] flex ml-[12px] flex-col items-center justify-center`}>
+                {statusCom[status]}
+              </div>
+            </div>
+            <div
+              onMouseEnter={() => {
+                setChanceBtnTouch(true);
+              }}
+              onMouseLeave={() => {
+                setChanceBtnTouch(false);
+              }}
+              onMouseDown={() => {
+                setChanceBtnPress(true);
+              }}
+              onMouseUp={() => {
+                setChanceBtnPress(false);
+                getChance && getChance();
+              }}
+              style={{
+                backgroundImage: `url(${
+                  btnImageResources?.pc[
+                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-dice-default'
+                  ]
+                })`,
+              }}
+              className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
+              <span
+                className={`font-fonarto tracking-tight text-[#fff] text-stroke-[#52300B] text-center ml-[14px] ${
+                  isMobile
+                    ? 'text-[48px] leading-[48px] mt-[10px]'
+                    : 'text-[24px] leading-[24px] mt-[33px] text-white w-[110px]'
+                }`}>
+                Get Chance
+              </span>
             </div>
           </div>
         )}

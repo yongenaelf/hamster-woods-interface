@@ -1,0 +1,32 @@
+.customModal {
+  @apply relative  border-[16px] rounded-[32px] p-[32px];
+  :global {
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-modal-content {
+      @apply h-full bg-inherit shadow-none;
+      .ant-modal-close {
+        @apply md:w-[48px] md:h-[48px] absolute right-[-18px] top-[-18px];
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+    .ant-modal-body {
+      @apply w-full p-0;
+    }
+  }
+}
+
+.mobileCustomModal {
+  @apply relative border-[8px] rounded-[20px] p-[16px];
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply !w-[28px] !h-[28px] absolute right-[-12px] top-[-12px];
+      }
+    }
+  }
+}

@@ -25,7 +25,6 @@ import BoardLeft from './components/BoardLeft';
 import { setCurBeanPass, setPlayerInfo } from 'redux/reducer/info';
 import { IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
-import CountDownModal from 'components/CommonModal/CountDownModal';
 import { dispatch, store } from 'redux/store';
 import { TargetErrorType, formatErrorMsg } from 'utils/formattError';
 import { sleep } from 'utils/common';
@@ -42,6 +41,8 @@ import { setNoticeModal } from 'redux/reducer/noticeModal';
 import GlobalCom from './components/GlobalCom';
 import CheckerboardBottom from './components/CheckerboardBottom';
 import play from './utils/play';
+import GetChanceModal from 'components/GetChanceModal';
+import CountDownModal from 'components/CountDownModal';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -113,6 +114,8 @@ export default function Game() {
 
   const [curDiceCount, setCurDiceCount] = useState<number>(1);
   const [diceNumbers, setDiceNumbers] = useState<number[]>([]);
+
+  const [getChanceModalVisible, setGetChanceModalVisible] = useState(false);
 
   const translateRef = useRef<{
     x: number;
@@ -239,10 +242,10 @@ export default function Game() {
         onNftClick();
         return;
       }
-      if (hasNft && playableCount === 0) {
-        setCountDownModalOpen(true);
-        return;
-      }
+      return;
+    }
+    if (hasNft && playableCount === 0) {
+      setCountDownModalOpen(true);
       return;
     }
     try {
@@ -428,11 +431,12 @@ export default function Game() {
       setGoStatus(Status.LOADING);
       return;
     }
-    if (playerInfo?.playableCount && playerInfo?.playableCount > 0) {
-      setGoStatus(Status.NONE);
-    } else {
-      setGoStatus(Status.DISABLED);
-    }
+    setGoStatus(Status.NONE);
+    // if (playerInfo?.playableCount && playerInfo?.playableCount > 0) {
+    //   setGoStatus(Status.NONE);
+    // } else {
+    //   setGoStatus(Status.DISABLED);
+    // }
   }, [hasNft, moving, goLoading, playerInfo]);
 
   const onShowNFTModalCancel = () => {
@@ -547,6 +551,7 @@ export default function Game() {
               curDiceCount={curDiceCount}
               changeCurDiceCount={changeCurDiceCount}
               go={go}
+              getChance={() => setGetChanceModalVisible(true)}
             />
           </BoardRight>
         )}
@@ -559,6 +564,7 @@ export default function Game() {
             curDiceCount={curDiceCount}
             changeCurDiceCount={changeCurDiceCount}
             go={go}
+            getChance={() => setGetChanceModalVisible(true)}
           />
         )}
 
@@ -583,6 +589,13 @@ export default function Game() {
           onCancel={() => setBeanPassModalVisible(false)}
           onConfirm={handleConfirm}
         />
+        <GetChanceModal
+          open={getChanceModalVisible}
+          onCancel={() => setGetChanceModalVisible(false)}
+          onConfirm={() => {
+            //
+          }}
+        />
 
         <ShowNFTModal
           open={isShowNFT}
@@ -593,8 +606,12 @@ export default function Game() {
         />
         <CountDownModal
           open={countDownModalOpen}
+          btnText="Get More Hopping Chances"
           onCancel={() => setCountDownModalOpen(false)}
-          onConfirm={() => setCountDownModalOpen(false)}
+          onConfirm={() => {
+            setCountDownModalOpen(false);
+            setGetChanceModalVisible(true);
+          }}
         />
       </div>
 

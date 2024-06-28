@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import styles from './style.module.css';
 import CommonBtn from 'components/CommonBtn';
-import CommonModal from 'components/CommonModal';
 import { useState } from 'react';
 import useGetState from 'redux/state/useGetState';
+import CustomModal from 'components/CustomModal';
 export default function Intro() {
   const [rulesVisible, setRulesVisible] = useState(false);
   const { isMobile, configInfo } = useGetState();
@@ -16,16 +16,16 @@ export default function Intro() {
         className={`${isMobile ? styles.intro : styles['intro-pc']}`}
         onClick={() => setRulesVisible(true)}
       />
-      <CommonModal
+      <CustomModal
         open={rulesVisible}
         title="Game Rules"
         onCancel={() => {
           setRulesVisible(false);
         }}
-        className={`${styles.rulesModal} !w-[850px]`}>
+        className={`${styles.rulesModal} ${isMobile ? '!w-[358px]' : '!w-[750px]'}`}>
         <div
-          className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] ${
-            isMobile ? '' : styles.content
+          className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] w-full ${
+            isMobile ? 'text-base leading-6' : styles.content
           }`}>
           {configInfo?.gameRules.map((item, index) => {
             return <p key={index}>{item}</p>;
@@ -33,11 +33,13 @@ export default function Intro() {
         </div>
         <CommonBtn
           title="I know"
-          className={`mx-[12px] mt-[24px] ${isMobile ? styles.buttonMobile : styles.button}`}
+          className={`font-fonarto ${
+            isMobile ? 'mt-[24px] text-[20px] leading-[20px]' : 'mt-[40px] mx-[64px] text-[32px] leading-[40px]'
+          }`}
           onClick={() => {
             setRulesVisible(false);
           }}></CommonBtn>
-      </CommonModal>
+      </CustomModal>
     </>
   );
 }
