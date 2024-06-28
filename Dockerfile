@@ -6,8 +6,13 @@ WORKDIR ${web}
 
 COPY . ${web}
 
-RUN yarn \
-    && yarn build-dev
+ARG ENVIRONMENT
+RUN yarn && \ 
+    if [ "$ENVIRONMENT" = "mainnet" ]; \
+    then yarn build;\ 
+    elif [ "$ENVIRONMENT" = "testnet" ]; \
+    then yarn build-test; \
+    fi
 
 ENTRYPOINT yarn start
 

@@ -1,12 +1,12 @@
 import { useIsMobile } from 'redux/selector/mobile';
 
-export const Bean = () => {
+export const Neat = () => {
   const isMobile = useIsMobile();
 
   return (
     <img
       className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
-      src={require('assets/images/bean.png').default.src}
+      src={require('assets/images/neat.png').default.src}
       alt="bean"
     />
   );

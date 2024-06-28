@@ -8,6 +8,7 @@ import { WalletType } from 'types';
 
 export default function Header() {
   const { walletType } = useGetState();
+
   return (
     <div className={styles.headerContainer}>
       <div className={styles.header__menu}>

@@ -1,5 +1,5 @@
 import { useIsMobile } from 'redux/selector/mobile';
-import { Bean } from './Bean';
+import { Bean } from './Neat';
 import { Rank } from './Rank';
 import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
 import { LeaderBoardItemScore } from './LeaderBoardItemScore';

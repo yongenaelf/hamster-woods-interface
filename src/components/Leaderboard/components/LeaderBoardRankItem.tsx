@@ -1,4 +1,4 @@
-import { Bean } from './Bean';
+import { Bean } from './Neat';
 import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
 import { LeaderboardTextColors } from './LeaderBoardItemText';
 import { LeaderBoardItemScore } from './LeaderBoardItemScore';

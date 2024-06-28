@@ -20,7 +20,7 @@
   .modal__title {
     @apply relative h-[72px]  text-2xl leading-6 text-white;
     span {
-      @apply font-fonarto;
+      @apply font-fonarto text-4xl;
     }
 
     text-shadow: 0 0 1px rgb(0 0 0 / 25%);

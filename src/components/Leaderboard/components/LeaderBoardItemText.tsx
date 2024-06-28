@@ -6,6 +6,7 @@ export enum LeaderboardTextColors {
   Bronze = 'text-white',
   Blue = 'text-leaderboard-blue',
   White = 'text-white',
+  Brown = 'text-[#AE694C]',
 }
 
 export interface ILeaderBoardItemText extends React.PropsWithChildren {

@@ -5,8 +5,11 @@ import { dispatch, useSelector } from 'redux/store';
 import { toggleShowGameRecord } from 'redux/reducer/info';
 import GameRecordModal from './components/GameRecordModal';
 import { MAX_GAME_RECORD_ITEMS } from 'constants/platform';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAddress } from 'hooks/useAddress';
+import CommonTab from 'components/CommonTab';
+import { TabsProps } from 'antd';
+import NoData from 'components/NoData';
 
 export const GameRecord = () => {
   const open = useSelector((state) => state.info.showGameRecord);
@@ -16,26 +19,66 @@ export const GameRecord = () => {
 
   const address = useAddress();
 
-  const getGameHistory = async () => {
+  const getGameHistory = useCallback(async () => {
     try {
       const res = await gameHistory();
       setData(res);
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [gameHistory]);
 
   useEffect(() => {
     if (open) {
       getGameHistory();
     }
-  }, [open]);
+  }, [getGameHistory, open]);
 
   useEffect(() => {
     if (address) {
       getGameHistory();
     }
-  }, [address]);
+  }, [address, getGameHistory]);
+
+  const PlayRecordDom = useMemo(() => {
+    return (
+      <div>
+        {data?.gameList?.length === 0 ? (
+          <NoData />
+        ) : (
+          <div className={`h-full overflow-auto h-[500px] [&::-webkit-scrollbar]:hidden`}>
+            {data?.gameList.map((i) => (
+              <GameRecordItem data={i} key={i.id} />
+            ))}
+            <div className="flex items-center py-8">
+              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <span className="flex-shrink px-4 text-white text-opacity-40">
+                Recent {MAX_GAME_RECORD_ITEMS} records
+              </span>
+              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }, [data, isMobile]);
+
+  const items = useMemo<TabsProps['items']>(() => {
+    return [
+      {
+        key: '1',
+        id: '1',
+        label: 'Play Records',
+        children: PlayRecordDom,
+      },
+      {
+        key: '2',
+        id: '2',
+        label: 'Buy Chance Records',
+        children: PlayRecordDom,
+      },
+    ];
+  }, [PlayRecordDom]);
 
   return (
     <GameRecordModal
@@ -44,33 +87,8 @@ export const GameRecord = () => {
       onCancel={() => {
         dispatch(toggleShowGameRecord());
       }}>
-      {!data || data.gameList.length === 0 ? (
-        <div className={`h-full flex flex-grow items-center justify-center`}>
-          <div>
-            <img
-              src={require('assets/images/no-record.png').default.src}
-              alt="No Record"
-              className={`mx-auto ${isMobile ? 'mb-8 w-32' : 'mb-16 w-64'}`}
-            />
-            <div className={`text-center ${isMobile ? 'text-[2rem]' : 'text-[4rem]'} text-[#89A5F5]`}>
-              No records yet
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className={`overflow-auto ${isMobile ? 'p-2' : 'px-4 py-8'}`}>
-          {data?.gameList.map((i) => (
-            <GameRecordItem data={i} key={i.id} />
-          ))}
-          <div className="flex items-center py-8">
-            <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
-            <span className="flex-shrink px-4 text-white text-opacity-40">Recent {MAX_GAME_RECORD_ITEMS} records</span>
-            <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
-          </div>
-        </div>
-      )}
+      <CommonTab defaultActiveKey="1" items={items} />
     </GameRecordModal>
   );
 };
-
 export default GameRecord;

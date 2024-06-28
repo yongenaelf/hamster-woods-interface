@@ -27,6 +27,7 @@ function Board({
   onNftClick,
   curDiceCount,
   changeCurDiceCount,
+  getChance,
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
 
@@ -94,6 +95,7 @@ function Board({
           curDiceCount={curDiceCount}
           changeCurDiceCount={changeCurDiceCount}
           go={() => go && go()}
+          getChance={getChance}
         />
       </div>
     );
