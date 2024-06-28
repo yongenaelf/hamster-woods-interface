@@ -72,5 +72,4 @@ export const GameRecord = () => {
     </GameRecordModal>
   );
 };
-
 export default GameRecord;
