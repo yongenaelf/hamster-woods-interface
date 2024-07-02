@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
-import { IConfigItems } from 'types';
+import { IServerConfig } from 'types';
 
 const initialState: {
-  configInfo: IConfigItems | undefined;
+  serverConfigInfo: IServerConfig | undefined;
 } = {
-  configInfo: undefined,
+  serverConfigInfo: undefined,
 };
 
 // Actual Slice
-export const configInfoSlice = createSlice({
-  name: 'configInfo',
+export const serverConfigInfoSlice = createSlice({
+  name: 'serverConfigInfo',
   initialState,
   reducers: {
-    setConfigInfo(state, action) {
-      state.configInfo = action.payload;
+    setServerConfigInfo(state, action) {
+      state.serverConfigInfo = action.payload;
     },
   },
 
@@ -24,12 +24,12 @@ export const configInfoSlice = createSlice({
     [HYDRATE]: (state, action) => {
       return {
         ...state,
-        ...action.payload.configInfo,
+        ...action.payload.serverConfigInfo,
       };
     },
   },
 });
 
-export const { setConfigInfo } = configInfoSlice.actions;
+export const { setServerConfigInfo } = serverConfigInfoSlice.actions;
 export const getConfigInfo = (state: AppState) => state.configInfo.configInfo;
-export default configInfoSlice.reducer;
+export default serverConfigInfoSlice.reducer;

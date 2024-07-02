@@ -9,6 +9,9 @@ import {
   IBeanPassListItem,
   ISetCurBeanBody,
   IErrorResponse,
+  IServerConfig,
+  IPrice,
+  IBalance,
 } from 'types';
 import request, { cmsRequest } from './axios';
 import {
@@ -77,4 +80,16 @@ export const setCurUsingBeanPass = async (body: ISetCurBeanBody): Promise<IBeanP
 
 export const trackUnlockInfo = async (body: { caAddress: string; caHash: string }) => {
   return request.post('/app/trace/user-action', body);
+};
+
+export const fetchServerConfig = async (): Promise<{ data: IServerConfig }> => {
+  return request.get('app/hamster-pass/config');
+};
+
+export const fetchPrice = async (): Promise<IPrice> => {
+  return request.get('app/hamster-pass/price');
+};
+
+export const fetchBalance = async (): Promise<IBalance[]> => {
+  return request.get('app/hamster-pass/asset');
 };

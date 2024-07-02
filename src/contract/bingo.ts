@@ -4,6 +4,7 @@ import {
   IGameSetting,
   IPlayerInformation,
   IPlayerProps,
+  IPurchaseProps,
   ITransactionResult,
 } from 'types';
 import contractRequest from './contractRequest';
@@ -92,6 +93,57 @@ export const Play = async ({
         resetStart,
         diceCount,
         executeBingo: true,
+      },
+    });
+
+    let result;
+
+    await sleep(1000);
+    const { status, txResult } = await getTxResultOnce(transactionId, rpcUrl!);
+    result = txResult;
+    if (['pending', 'notexisted'].includes(status)) {
+      await sleep(500);
+      const finalTxRes = await getTxResultRetry({
+        TransactionId: transactionId!,
+        chainId: chainId as ChainId,
+        rpcUrl: rpcUrl!,
+        rePendingEnd: new Date().getTime() + SECONDS_60,
+      });
+      result = finalTxRes.txResult;
+    }
+
+    return {
+      TransactionId: transactionId,
+      TxResult: result,
+    };
+  } catch (error) {
+    const resError = error as IContractError;
+    const res = await checkSynchronization(resError?.Error || '');
+    if (!res) {
+      return Promise.reject(
+        formatErrorMsg({
+          ...resError,
+          message: 'Syncing on-chain account info',
+        }),
+      );
+    }
+
+    return Promise.reject(formatErrorMsg(resError));
+  }
+};
+
+export const PurchaseChance = async ({
+  input,
+}: IPurchaseProps): Promise<{ TransactionId: string; TxResult: ITransactionResult }> => {
+  const contract = contractRequest.get();
+  const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
+
+  try {
+    const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
+      methodName: 'PurchaseChance',
+      contractAddress,
+      args: {
+        input,
       },
     });
 

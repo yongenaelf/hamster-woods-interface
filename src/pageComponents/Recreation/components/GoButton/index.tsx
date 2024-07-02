@@ -109,7 +109,7 @@ function GoButton({
           className={`${
             isMobile ? 'text-[14px] leading-[14px]' : 'text-[21px] leading-[21px]'
           } font-bold text-[#8E8E8E]`}>
-          {playableCount}/{sumScore}
+          {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),

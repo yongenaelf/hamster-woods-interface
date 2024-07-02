@@ -18,12 +18,12 @@ import { BeanPassItemType, GetBeanPassStatus, ShowBeanPassType } from 'component
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
-import { receiveHamsterPassNFT } from 'api/request';
+import { fetchBalance, fetchPrice, receiveHamsterPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
 import { setCurBeanPass, setPlayerInfo } from 'redux/reducer/info';
-import { IContractError, WalletType } from 'types';
+import { IBalance, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import { dispatch, store } from 'redux/store';
 import { TargetErrorType, formatErrorMsg } from 'utils/formattError';
@@ -46,6 +46,7 @@ import CountDownModal from 'components/CountDownModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
+import { PurchaseChance } from 'contract/bingo';
 
 const mockHamsterPass = {
   symbol: 'TTZZ-1',
@@ -80,7 +81,6 @@ export default function Game() {
     curChessboardNode,
     needSync,
     checkerboardCounts,
-    curBeanPass,
   } = useGetState();
 
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>(mockHamsterPass);
@@ -133,6 +133,10 @@ export default function Game() {
   const [diceNumbers, setDiceNumbers] = useState<number[]>([]);
 
   const [getChanceModalVisible, setGetChanceModalVisible] = useState(false);
+
+  const [acornsInElf, setAcornsInElf] = useState(0.1);
+  const [elfInUsd, setElfInUsd] = useState(0.35);
+  const [assetBalance, setAssetBalance] = useState<IBalance[]>([]);
 
   const translateRef = useRef<{
     x: number;
@@ -253,14 +257,47 @@ export default function Game() {
     updateCheckerboard();
   }, [checkerboardContainerWidth]);
 
-  const getChance = useCallback(() => {
+  const updateAssetBalance = useCallback(async () => {
+    fetchBalance().then((res) => {
+      setAssetBalance(res);
+    });
+  }, []);
+
+  const updatePrice = useCallback(async () => {
+    fetchPrice().then((res) => {
+      setAcornsInElf(res.acornsInElf);
+      setElfInUsd(res.elfInUsd);
+    });
+  }, []);
+
+  const getChance = useCallback(async () => {
     if (!playerInfo?.weeklyPurchasedChancesCount) {
       purchaseNoticeTypeRef.current = PurchaseNoticeEnum.getChance;
       setPurchaseNoticeVisible(true);
       return;
     }
+    updatePrice();
+    updateAssetBalance();
     setGetChanceModalVisible(true);
-  }, [playerInfo]);
+  }, [playerInfo?.weeklyPurchasedChancesCount, updateAssetBalance, updatePrice]);
+
+  const handlePurchase = useCallback(
+    async (n: number) => {
+      // TODO approve
+
+      try {
+        showMessage.loading();
+        await PurchaseChance({ input: n });
+        updatePlayerInformation(address);
+        setGetChanceModalVisible(false);
+      } catch (error) {
+        console.log('===PurchaseChance error', error);
+      } finally {
+        showMessage.hideLoading();
+      }
+    },
+    [address, updatePlayerInformation],
+  );
 
   const go = async () => {
     if (goStatus !== Status.NONE) {
@@ -306,6 +343,7 @@ export default function Game() {
         setStep(bingoStep);
         setDiceNumbers(bingoRes.diceNumbers);
         setDiceType(RecreationModalType.DICE);
+        updatePlayerInformation(address);
       }
     } catch (error) {
       console.error('=====error', error);
@@ -411,6 +449,8 @@ export default function Game() {
     },
     [checkBeanPassStatus],
   );
+
+  console.log('🌹🌹🌹 opacity', opacity);
 
   useEffect(() => {
     if (isLogin && needSync) {
@@ -533,7 +573,7 @@ export default function Game() {
                   width={`calc(100% / ${checkerboardData?.[0]?.length})`}
                   translate={translate}
                   bean={score}
-                  opacity={curBeanPass?.symbol ? opacity : 0}
+                  opacity={beanPassInfoDto?.symbol ? opacity : 0}
                   position={{
                     x: currentNodeRef.current?.info.row,
                     y: currentNodeRef.current?.info.column,
@@ -542,7 +582,7 @@ export default function Game() {
                   showAdd={showAdd}
                   hideAdd={hideAdd}>
                   {/* <Lottie lottieRef={animationRef} animationData={dataAnimation} /> */}
-                  <img className="w-full h-full" src={RoleImg[curBeanPass?.symbol || DEFAULT_SYMBOL]} alt="role" />
+                  <img className="w-full h-full" src={RoleImg[beanPassInfoDto?.symbol || DEFAULT_SYMBOL]} alt="role" />
                 </Role>
 
                 {checkerboardData?.map((row, index) => {
@@ -621,11 +661,12 @@ export default function Game() {
           onConfirm={handleConfirm}
         />
         <GetChanceModal
+          acornsInElf={acornsInElf}
+          elfInUsd={elfInUsd}
+          assetBalance={assetBalance}
           open={getChanceModalVisible}
           onCancel={() => setGetChanceModalVisible(false)}
-          onConfirm={() => {
-            //
-          }}
+          onConfirm={handlePurchase}
         />
         <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
         <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} />
@@ -646,6 +687,8 @@ export default function Game() {
           onCancel={() => setCountDownModalOpen(false)}
           onConfirm={() => {
             setCountDownModalOpen(false);
+            updateAssetBalance();
+            updatePrice();
             setGetChanceModalVisible(true);
           }}
         />

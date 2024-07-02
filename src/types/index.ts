@@ -126,11 +126,14 @@ export interface IPlayerProps {
   diceCount: number;
 }
 
+export interface IPurchaseProps {
+  input: number;
+}
+
 export interface IPlayerInformation {
   playerAddress: string;
   playableCount: number;
-  // TODO
-  lastPlayTime: any;
+  dailyPlayableCount: number;
   curGridNum: number;
   hamsterPassOwned: boolean;
   sumScore: number;
@@ -138,8 +141,6 @@ export interface IPlayerInformation {
   weeklyAcorns: number;
   lockedAcorns: number;
   purchasedChancesCount: number;
-  // TODO
-  lastPurchaseChanceTime: any;
   weeklyPurchasedChancesCount: number;
 }
 export enum WalletType {
@@ -293,4 +294,20 @@ export interface ITransactionResult {
   Status: string;
   Logs: ITransactionLog[];
   [props: string]: any;
+}
+
+export interface IServerConfig {
+  chancePrice: number;
+  buyChanceTransactionFee: number;
+}
+
+export interface IPrice {
+  acornsInElf: number;
+  elfInUsd: number;
+}
+
+export interface IBalance {
+  symbol: string;
+  decimals: number;
+  balance: number;
 }

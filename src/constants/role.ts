@@ -1,14 +1,14 @@
 import roleCommon from 'assets/base64/role';
-import roleHalloween from 'assets/base64/roleHalloween';
+import noRoleCommon from 'assets/base64/noRole';
 
 export const Avatar: Record<string, string> = {
-  'BEANPASS-1': require('assets/images/me-avatar.png').default.src,
-  'BEANPASS-2': require('assets/images/me-avatar-halloween.png').default.src,
+  'TTZZ-1': require('assets/images/me-avatar.png').default.src,
+  NONE: require('assets/images/me-avatar.png').default.src,
 };
 
 export const RoleImg: Record<string, string> = {
-  'BEANPASS-1': roleCommon,
-  'BEANPASS-2': roleHalloween,
+  'TTZZ-1': roleCommon,
+  NONE: noRoleCommon,
 };
 
-export const DEFAULT_SYMBOL = 'BEANPASS-1';
+export const DEFAULT_SYMBOL = 'NONE';
