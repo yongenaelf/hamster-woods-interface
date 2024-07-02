@@ -296,7 +296,7 @@ export default function Game() {
           amount: n,
           symbol: 'ELF',
         });
-        return;
+        if (!isApproved) return;
         await PurchaseChance({ input: n });
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
