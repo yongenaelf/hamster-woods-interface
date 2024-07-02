@@ -18,14 +18,14 @@ import {
   IWeeklyRankResult,
 } from 'components/Leaderboard/data/types';
 
-export const getBeanPassClaimClaimable = async (
+export const getHamsterPassClaimClaimable = async (
   query: IBeanPassClaimReq,
 ): Promise<IBeanPassClaimRes & IErrorResponse> => {
-  return request.get('app/bean-pass/claimable', { params: query });
+  return request.get('app/hamster-pass/claimable', { params: query });
 };
 
-export const receiveBeanPassNFT = async (body: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
-  return request.post('app/bean-pass/claim', body);
+export const receiveHamsterPassNFT = async (body: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
+  return request.post('app/hamster-pass/claim', body);
 };
 
 export const blockHeight = async (): Promise<number> => {

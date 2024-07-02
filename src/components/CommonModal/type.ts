@@ -16,14 +16,14 @@ export type BeanPassItemType = {
   nftImageUrl: string;
   symbol: string;
   tokenName: string;
+  tokenId: number;
 };
 
 export type ShowNFTModalPropsType = {
-  onCancel: (e: MouseEvent<any>) => void;
+  onCancel: () => void;
   open: boolean;
   type: ShowBeanPassType;
   beanPassItem?: BeanPassItemType;
-  handleNoneOwned: () => void;
 };
 
 export enum GetBeanPassStatus {

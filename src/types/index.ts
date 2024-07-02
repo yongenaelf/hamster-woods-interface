@@ -127,10 +127,20 @@ export interface IPlayerProps {
 }
 
 export interface IPlayerInformation {
+  playerAddress: string;
   playableCount: number;
-  sumScore: number;
+  // TODO
+  lastPlayTime: any;
   curGridNum: number;
-  beanPassOwned: boolean;
+  hamsterPassOwned: boolean;
+  sumScore: number;
+  totalAcorns: number;
+  weeklyAcorns: number;
+  lockedAcorns: number;
+  purchasedChancesCount: number;
+  // TODO
+  lastPurchaseChanceTime: any;
+  weeklyPurchasedChancesCount: number;
 }
 export enum WalletType {
   unknown = 'unknown',
@@ -160,7 +170,7 @@ export type WalletInfoType = {
   accountInfoSync?: Array<Manager>;
 };
 
-export enum BeanPassResons {
+export enum BeanPassReasons {
   Claimed = 'Claimed',
   InsufficientElfAmount = 'InsufficientElfAmount',
   DoubleClaim = 'DoubleClaim',
@@ -168,9 +178,9 @@ export enum BeanPassResons {
 
 export interface IBeanPassClaimRes {
   claimable: boolean;
-  reason: BeanPassResons;
+  reason: BeanPassReasons;
   transactionId: string;
-  beanPassInfoDto: BeanPassItemType;
+  hamsterPassInfo: BeanPassItemType;
 }
 
 export interface IBeanPassClaimReq {
@@ -261,6 +271,7 @@ export interface IBeanPassListItem {
   symbol: string;
   tokenName: string;
   nftImageUrl: string;
+  tokenId: number;
   owned: boolean;
   usingBeanPass: boolean;
 }

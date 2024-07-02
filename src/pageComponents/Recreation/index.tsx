@@ -18,7 +18,7 @@ import { BeanPassItemType, GetBeanPassStatus, ShowBeanPassType } from 'component
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
-import { receiveBeanPassNFT } from 'api/request';
+import { receiveHamsterPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
@@ -43,6 +43,16 @@ import CheckerboardBottom from './components/CheckerboardBottom';
 import play from './utils/play';
 import GetChanceModal from 'components/GetChanceModal';
 import CountDownModal from 'components/CountDownModal';
+import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
+import LockedAcornsModal from 'components/LockedAcornsModal';
+import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
+
+const mockHamsterPass = {
+  symbol: 'TTZZ-1',
+  tokenName: 'TTZZ',
+  nftImageUrl: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1008xAUTO/1718204222065-Activity%20Icon.png',
+  tokenId: 111,
+};
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -73,7 +83,7 @@ export default function Game() {
     curBeanPass,
   } = useGetState();
 
-  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>();
+  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>(mockHamsterPass);
 
   const firstNode = checkerboardData![5][4];
   const firstNodePosition: [number, number] = [5, 4];
@@ -103,6 +113,13 @@ export default function Game() {
   const [beanPassModalVisible, setBeanPassModalVisible] = useState(false);
 
   const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
+
+  const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
+
+  const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
+
+  const [purchaseNoticeVisible, setPurchaseNoticeVisible] = useState(false);
+  const purchaseNoticeTypeRef = useRef(PurchaseNoticeEnum.hop);
 
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [nftModalType, setNFTModalType] = useState<ShowBeanPassType>(ShowBeanPassType.Display);
@@ -236,6 +253,15 @@ export default function Game() {
     updateCheckerboard();
   }, [checkerboardContainerWidth]);
 
+  const getChance = useCallback(() => {
+    if (!playerInfo?.weeklyPurchasedChancesCount) {
+      purchaseNoticeTypeRef.current = PurchaseNoticeEnum.getChance;
+      setPurchaseNoticeVisible(true);
+      return;
+    }
+    setGetChanceModalVisible(true);
+  }, [playerInfo]);
+
   const go = async () => {
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
@@ -245,6 +271,11 @@ export default function Game() {
       return;
     }
     if (hasNft && playableCount === 0) {
+      if (!playerInfo?.weeklyPurchasedChancesCount) {
+        purchaseNoticeTypeRef.current = PurchaseNoticeEnum.hop;
+        setPurchaseNoticeVisible(true);
+        return;
+      }
       setCountDownModalOpen(true);
       return;
     }
@@ -317,16 +348,16 @@ export default function Game() {
   const handleConfirm = async () => {
     if (beanPassModalType === GetBeanPassStatus.Abled) {
       showMessage.loading();
-      const getNFTRes = await receiveBeanPassNFT({
+      const getNFTRes = await receiveHamsterPassNFT({
         caAddress: address,
       });
-      const { claimable, reason, transactionId, beanPassInfoDto } = getNFTRes;
+      const { claimable, reason, transactionId, hamsterPassInfo } = getNFTRes;
       if (!claimable) {
         showMessage.error(reason);
         return;
       }
       setBeanPassModalVisible(false);
-      setBeanPassInfoDto(beanPassInfoDto);
+      setBeanPassInfoDto(hamsterPassInfo);
       setNFTModalType(ShowBeanPassType.Success);
 
       await sleep(configInfo?.stepUpdateDelay || 3000);
@@ -339,11 +370,11 @@ export default function Game() {
           reNotexistedCount: 5,
         });
         updatePlayerInformation(address);
-        setBeanPassInfoDto(beanPassInfoDto);
+        setBeanPassInfoDto(hamsterPassInfo);
         setIsShowNFT(true);
         dispatch(
           setCurBeanPass({
-            ...beanPassInfoDto,
+            ...hamsterPassInfo,
             owned: true,
             usingBeanPass: true,
           }),
@@ -367,16 +398,19 @@ export default function Game() {
     await initializeContract();
   }, [initializeContract]);
 
-  const handleHasNft = (hasNft: boolean) => {
-    if (hasNft) {
-      setHasNft(true);
-      setOpacity(1);
-      showMessage.hideLoading();
-    } else {
-      setHasNft(false);
-      checkBeanPassStatus();
-    }
-  };
+  const handleHasNft = useCallback(
+    (hasNft: boolean) => {
+      if (hasNft) {
+        setHasNft(true);
+        setOpacity(1);
+        showMessage.hideLoading();
+      } else {
+        setHasNft(false);
+        checkBeanPassStatus();
+      }
+    },
+    [checkBeanPassStatus],
+  );
 
   useEffect(() => {
     if (isLogin && needSync) {
@@ -411,6 +445,7 @@ export default function Game() {
         setOpacity(1);
       }, 25);
     }
+    showMessage.hideLoading();
   });
 
   useEffect(() => {
@@ -472,17 +507,11 @@ export default function Game() {
     setCurDiceCount(num);
   };
 
-  const handleNoneOwned = () => {
-    setIsShowNFT(false);
-    handleHasNft(false);
-    updatePlayerInformation(address);
-  };
-
   useEffect(() => {
-    if (playerInfo?.beanPassOwned !== undefined) {
-      handleHasNft(playerInfo?.beanPassOwned || false);
+    if (playerInfo?.hamsterPassOwned !== undefined) {
+      handleHasNft(playerInfo?.hamsterPassOwned || false);
     }
-  }, [playerInfo?.beanPassOwned, address]);
+  }, [playerInfo?.hamsterPassOwned, address, handleHasNft]);
 
   return (
     <>
@@ -551,7 +580,9 @@ export default function Game() {
               curDiceCount={curDiceCount}
               changeCurDiceCount={changeCurDiceCount}
               go={go}
-              getChance={() => setGetChanceModalVisible(true)}
+              getChance={getChance}
+              getMoreAcorns={() => setMoreAcornsVisible(true)}
+              showLockedAcorns={() => setLockedAcornsVisible(true)}
             />
           </BoardRight>
         )}
@@ -564,7 +595,7 @@ export default function Game() {
             curDiceCount={curDiceCount}
             changeCurDiceCount={changeCurDiceCount}
             go={go}
-            getChance={() => setGetChanceModalVisible(true)}
+            getChance={getChance}
           />
         )}
 
@@ -596,13 +627,18 @@ export default function Game() {
             //
           }}
         />
-
+        <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
+        <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} />
+        <PurchaseNoticeModal
+          open={purchaseNoticeVisible}
+          onConfirm={() => setPurchaseNoticeVisible(false)}
+          type={purchaseNoticeTypeRef.current}
+        />
         <ShowNFTModal
           open={isShowNFT}
           beanPassItem={beanPassInfoDto}
           onCancel={onShowNFTModalCancel}
           type={nftModalType}
-          handleNoneOwned={handleNoneOwned}
         />
         <CountDownModal
           open={countDownModalOpen}

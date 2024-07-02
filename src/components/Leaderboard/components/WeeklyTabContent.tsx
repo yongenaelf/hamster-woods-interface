@@ -8,6 +8,7 @@ import TipIcon from 'assets/images/Tip.png';
 import { LeaderBoardNoRecord } from './LeaderBoardNoRecord';
 import { LeaderBoardItemList } from './LeaderBoardItemList';
 import { useIsMobile } from 'redux/selector/mobile';
+import { LeaderBoardSettleList } from './LeaderBoardSettleList';
 
 const rewardSelector = (state: AppState) => state.configInfo.configInfo?.leaderboardWeekAward;
 
@@ -26,7 +27,7 @@ export const WeeklyTabContent = () => {
               ? 'Hop & Win Week X will end on YY.'
               : 'Hop & Win Week X has ended.'}{' '}
             Click{' '}
-            <span className="underline font-black" onClick={() => setWeeklyPrizeOpen(true)}>
+            <span className="underline font-black text-[#3989FF]" onClick={() => setWeeklyPrizeOpen(true)}>
               here
             </span>{' '}
             to learn more about the event and its prizes.
@@ -35,7 +36,8 @@ export const WeeklyTabContent = () => {
         {data?.rankingList.length ? (
           <LeaderBoardNoRecord>{`Leaderboards will be display at the end of the first week of rankings.`}</LeaderBoardNoRecord>
         ) : (
-          <LeaderBoardItemList data={data} />
+          <LeaderBoardSettleList data={data} />
+          // <LeaderBoardItemList data={data} />
         )}
       </div>
       <WeeklyPrizes open={weeklyPrizeOpen} onCancel={() => setWeeklyPrizeOpen(false)} />

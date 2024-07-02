@@ -15,26 +15,15 @@ export interface ITabContentUserProps {
   className?: string;
 }
 
+const showClaimBtn = true;
+
 export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const isMobile = useIsMobile();
   const { data } = useWeeklyRank();
   const { curBeanPass } = useGetState();
-  const color: LeaderboardTextColors = LeaderboardTextColors.White;
-  const wrapperClassName = useConditionalRank({
-    rank: data?.selfRank.rank,
-    first: 'bg-[#F5BF49]',
-    second: 'bg-[#CEDFF7]',
-    third: 'bg-[#E47B3D]',
-    ranked: 'bg-gradient-to-b from-[#FFD304] to-[#FFF4C1]',
-    unranked: 'bg-blue-700',
-    missing: 'bg-[#D7D7D7]',
-  });
 
   return (
-    <div
-      className={`${wrapperClassName} ${
-        isMobile ? 'h-16 p-2 border-x-[8px] rounded-b-[20px]' : 'h-20 pl-2 border-x-[16px] rounded-b-[32px]'
-      } flex items-center bg-[#9A531F] border-[#9A531F] ${className}`}>
+    <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
       <img
         className={`${isMobile ? 'w-8' : 'w-16'}`}
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
@@ -48,7 +37,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         <Image className="ml-2 w-16" src={MeIcon} alt="me" />
       ) : null}
       <div className="flex-grow mr-2"></div>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto ${color}`}>
+      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
         {data?.selfRank.score?.toLocaleString() ?? '-'}
       </div>
       <img
@@ -56,6 +45,22 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         src={require('assets/images/neat.png').default.src}
         alt="bean"
       />
+      {showClaimBtn && (
+        <>
+          <div className="flex-grow mr-2"></div>
+          <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
+            <span className="font-bold">Claim NFT Rewards</span>
+            <img
+              src={require('assets/images/prize-5.png').default.src}
+              className={`z-10 w-[24px] h-[24px]`}
+              width={24}
+              height={24}
+              alt="avatar"
+            />
+            <span className="font-black">*2</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,10 +1,10 @@
-import { Input, ModalProps } from 'antd';
-import { MouseEvent, useCallback, useState } from 'react';
+import { Input } from 'antd';
+import { useCallback, useState } from 'react';
 import Image from 'next/image';
 
 import { useIsMobile } from 'redux/selector/mobile';
 import CommonBtn from 'components/CommonBtn';
-import CustomModal from 'components/CustomModal';
+import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import NeatIcon from 'assets/images/neat.png';
 import PlusIcon from 'assets/images/plus.png';
 import MinusIcon from 'assets/images/minus.png';
@@ -14,8 +14,7 @@ import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 
 export type GetChanceModalPropsType = {
-  onConfirm?: (e: MouseEvent<any>) => void;
-  onCancel: (e: MouseEvent<any>) => void;
+  onConfirm?: () => void;
   open: boolean;
 };
 
@@ -24,7 +23,7 @@ export default function GetChanceModal({
   onCancel,
   closable = true,
   ...params
-}: ModalProps & GetChanceModalPropsType) {
+}: ICustomModalProps & GetChanceModalPropsType) {
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
@@ -43,12 +42,18 @@ export default function GetChanceModal({
     }
   }, []);
 
+  const handleClose = useCallback(() => {
+    setInputVal(1);
+    onCancel?.();
+  }, [onCancel]);
+
   return (
     <CustomModal
       className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
-      onCancel={onCancel}
+      onCancel={handleClose}
       title={title}
       closable={closable}
+      destroyOnClose
       {...params}>
       <div className={`overflow-auto`}>
         <div className="space-y-[28px]">
@@ -89,7 +94,7 @@ export default function GetChanceModal({
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>1500 ACORNS</span>
+                <span>{inputVal * 15} ACORNS</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -110,7 +115,7 @@ export default function GetChanceModal({
             <div className="flex items-center space-x-[8px] text-right font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>1500 ACORNS</span>
+                <span>{inputVal * 15} ACORNS</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -163,7 +168,14 @@ export default function GetChanceModal({
           </div>
           <div className="flex font-bold">ELF: 123,456,789.1234</div>
         </div>
-        <CommonBtn title="Purchase" className="mt-[40px] mb-[4px] px-[64px] h-[70px] w-full" />
+        <CommonBtn
+          title={'Purchase'}
+          className={`flex justify-center items-center font-fonarto ${
+            isMobile
+              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px]'
+              : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[6px]'
+          }`}
+        />
       </div>
     </CustomModal>
   );

@@ -1,6 +1,6 @@
 import { ModalProps } from 'antd';
 
-import CustomModal from 'components/CustomModal';
+import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import { RankEnum, RankItemDetail, WeeklyPrizeTip } from '../data/constant';
 import { useIsMobile } from 'redux/selector/mobile';
 
@@ -63,7 +63,7 @@ export function DefaultItem({ topText, avatarIcon, getNFTDetail }: IDefaultItemP
   );
 }
 
-export default function WeeklyPrizes(props: ModalProps) {
+export default function WeeklyPrizes(props: ICustomModalProps) {
   const { open, onCancel } = props;
   const isMobile = useIsMobile();
   return (

@@ -1,10 +1,28 @@
-.board__bean {
-  @apply mb-[44px] h-[72px] w-[394px] rounded-full border border-solid border-[#FFFFFF] pl-[16px] bg-[#305CD9] flex items-center;
+.board__acorn {
+  @apply mb-[12px] h-[80px] w-[394px] rounded-full border border-solid pl-[16px] bg-[#EBCFB8] flex items-center;
   svg > g {
-    @apply h-[64px] w-[64px];
+    @apply h-[60px] w-[60px];
   }
 
-  .board__bean__number {
-    @apply pl-[58px] flex flex-1 text-[#fff] text-[40px] leading-[48px] font-fonarto;
+  .board__acorn__number {
+    @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-fonarto;
+  }
+}
+.board__feature {
+  @apply mt-[24px] mb-[12px] h-[108px] w-[394px] rounded-full border border-solid pl-[16px] bg-[#A15A1C] flex items-center;
+  svg > g {
+    @apply h-[72px] w-[72px];
+  }
+
+  .board__feature__text {
+    @apply flex flex-1 text-white text-[26px] leading-[26px] font-fonarto;
+  }
+}
+
+.board__tooltip {
+  :global {
+    .ant-tooltip-inner {
+      @apply rounded-[32px];
+    }
   }
 }

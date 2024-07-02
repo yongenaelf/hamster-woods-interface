@@ -4,6 +4,7 @@ import { MAX_LEADERBOARD_EMPTY } from 'constants/platform';
 import styles from './style.module.css';
 import useGetState from 'redux/state/useGetState';
 import { useIsMobile } from 'redux/selector/mobile';
+import { useCallback } from 'react';
 
 const EmptyItem = () => {
   const isMobile = useIsMobile();
@@ -49,7 +50,7 @@ const mockData = {
     {
       rank: 5,
       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 10000000,
+      score: 10,
     },
   ],
   selfRank: {

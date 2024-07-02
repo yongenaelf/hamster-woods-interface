@@ -30,7 +30,7 @@ export const Leaderboard = () => {
 
   const onCancel = () => dispatch(toggleShowLeaderboard());
 
-  if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
+  // if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
 
   return (
     <>
@@ -39,17 +39,18 @@ export const Leaderboard = () => {
         open={open}
         title="Leader Board"
         onCancel={onCancel}
+        weeklyModal={tab === Tabs.Weekly}
         destroyOnClose>
         <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full overflow-hidden">
             <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
               <button
-                className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#D3B68A]' : 'bg-[#E8D1AE]'}`}
+                className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#E8D1AE]' : 'bg-[#D3B68A]'}`}
                 onClick={() => setTab(Tabs.Weekly)}>
                 {Tabs.Weekly}
               </button>
               <button
-                className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#D3B68A]' : 'bg-[#E8D1AE]'}`}
+                className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#E8D1AE]' : 'bg-[#D3B68A]'}`}
                 onClick={() => setTab(Tabs.PastRecord)}>
                 {Tabs.PastRecord}
               </button>

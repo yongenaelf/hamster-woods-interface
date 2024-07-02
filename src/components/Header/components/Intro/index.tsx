@@ -22,7 +22,7 @@ export default function Intro() {
         onCancel={() => {
           setRulesVisible(false);
         }}
-        className={`${styles.rulesModal} ${isMobile ? '!w-[358px]' : '!w-[750px]'}`}>
+        className={`${styles.rulesModal}`}>
         <div
           className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] w-full ${
             isMobile ? 'text-base leading-6' : styles.content
@@ -33,8 +33,10 @@ export default function Intro() {
         </div>
         <CommonBtn
           title="I know"
-          className={`font-fonarto ${
-            isMobile ? 'mt-[24px] text-[20px] leading-[20px]' : 'mt-[40px] mx-[64px] text-[32px] leading-[40px]'
+          className={`font-fonarto flex items-center justify-center ${
+            isMobile
+              ? 'mt-[24px] text-[20px] leading-[20px]'
+              : 'mt-[40px] mx-[64px] !text-[32px] !leading-[40px] !h-[76px]'
           }`}
           onClick={() => {
             setRulesVisible(false);

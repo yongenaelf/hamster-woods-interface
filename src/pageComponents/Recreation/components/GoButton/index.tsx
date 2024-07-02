@@ -19,10 +19,13 @@ export interface IGoButton {
   hasNft?: boolean;
   playableCount?: number;
   sumScore?: number;
+  purchasedChancesCount?: number;
   curDiceCount?: number;
   changeCurDiceCount?: (num: number) => void;
   go?: () => void;
   getChance?: () => void;
+  getMoreAcorns?: () => void;
+  showLockedAcorns?: () => void;
 }
 
 function GoButton({
@@ -30,6 +33,7 @@ function GoButton({
   status = Status.NONE,
   playableCount = 0,
   sumScore = 5,
+  purchasedChancesCount = 0,
   curDiceCount,
   changeCurDiceCount,
   getChance,
@@ -81,9 +85,9 @@ function GoButton({
         </span>
         <span
           className={`${
-            isMobile ? 'text-[14px] leading-[14px]' : 'text-[21px] leading-[21px]'
+            isMobile ? 'text-[12px] leading-[12px]' : 'text-[18px] leading-[18px]'
           } font-bold text-[#52300B]`}>
-          {playableCount}/{sumScore}
+          {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),
