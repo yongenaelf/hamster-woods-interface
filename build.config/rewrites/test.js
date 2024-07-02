@@ -13,7 +13,7 @@ module.exports = [
   },
   {
     source: '/cms/:path*',
-    destination: 'https://test-cms-hamster.beangotown.com/cms/:path*',
+    destination: 'https://test-cms-hamster.beangotown.com/:path*',
   },
   {
     source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',

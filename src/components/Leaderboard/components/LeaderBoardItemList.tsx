@@ -8,6 +8,7 @@ import { useCallback } from 'react';
 
 const EmptyItem = () => {
   const isMobile = useIsMobile();
+
   return (
     <div
       className={`flex text-slate-500 text-lg items-center bg-[#DEC49D] rounded-full h-[40px] ${

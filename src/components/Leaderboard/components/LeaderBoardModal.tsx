@@ -7,6 +7,7 @@ import { TabContentUser } from './TabContentUser';
 
 export interface ILeaderBoardModalProps extends ModalProps {
   weeklyModal?: boolean;
+  onCancel?: () => void;
 }
 
 export default function LeaderBoardModal({

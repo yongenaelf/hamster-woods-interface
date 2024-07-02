@@ -1,0 +1,54 @@
+.commonTab {
+  @apply rounded-[30px];
+
+  :global {
+    .ant-tabs-nav {
+      @apply mb-0;
+
+      .ant-tabs-nav-wrap {
+        @apply pl-[8px] pr-[8px] h-[44px];
+
+        .ant-tabs-nav-list {
+          @apply flex-1 flex text-center;
+
+          .ant-tabs-tab {
+            @apply flex-1 flex text-center  m-0 bg-[var(--background-color-quaternary)] rounded-t-[8px];
+
+            .ant-tabs-tab-btn {
+              color: var(--brand-base);
+              @apply font-fonarto w-full border-8 border-0 text-[24px];
+            }
+          }
+          .ant-tabs-tab-active {
+            @apply bg-[var(--background-color-secondary)];
+          }
+        }
+      }
+    }
+    .ant-tabs-nav::before {
+      border-bottom: 0;
+    }
+  }
+
+  @media screen and (max-width: 580px) {
+    :global {
+      .ant-tabs-nav {
+        .ant-tabs-nav-wrap {
+          @apply pl-2 pr-2 h-8;
+
+          .ant-tabs-nav-list {
+            @apply flex-1 flex text-center;
+
+            .ant-tabs-tab {
+              @apply rounded-t;
+
+              .ant-tabs-tab-btn {
+                @apply font-fonarto w-full border-8 border-0 text-sm;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
