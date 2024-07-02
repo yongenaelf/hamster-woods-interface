@@ -2,19 +2,23 @@ import { WalletType } from 'constants/index';
 import { IPortkeyContract, getContractBasic } from '@portkey/contracts';
 import { ChainId, IContract, SendOptions } from '@portkey/types';
 import { MethodsWallet } from '@portkey/provider-types';
-import { did } from '@portkey/did-ui-react';
+import { NetworkType, did, handleErrorMessage, managerApprove } from '@portkey/did-ui-react';
 
 import { CallContractParams, IDiscoverInfo, PortkeyInfoType, WalletInfoType } from 'types';
 import { getAElfInstance, getViewWallet } from 'utils/contractInstance';
 import { aelf } from '@portkey/utils';
 import { getTxResultRetry } from 'utils/getTxResult';
 import DetectProvider from 'utils/InstanceProvider';
-import { Manager } from '@portkey/services';
+import { ChainInfo, Manager } from '@portkey/services';
 import { store } from 'redux/store';
 import { SECONDS_60 } from 'constants/time';
 import { MethodType, SentryMessageType, captureMessage } from 'utils/captureMessage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
 import { compareVersion } from 'utils/version';
+import BigNumber from 'bignumber.js';
+import { timesDecimals } from 'utils/calculate';
+import { PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { message } from 'antd';
 
 interface IContractConfig {
   chainId: ChainId;
@@ -45,6 +49,9 @@ export default class ContractRequest {
   public viewContractMap: { [x: string]: IPortkeyContract };
 
   public viewContract?: IViewContract;
+  public tokenContractView?: IPortkeyContract;
+  public chainInfoMap?: { [chainId in ChainId]: ChainInfo };
+
   private caAddress: string | undefined;
   private caHash: string | undefined;
   constructor() {
@@ -75,6 +82,8 @@ export default class ContractRequest {
     this.caHash = undefined;
     this.walletType = WalletType.unknown;
     this.wallet = {};
+    this.tokenContractView = undefined;
+    this.chainInfoMap = undefined;
   }
 
   public setWallet(wallet: WalletInfoType, walletType: WalletType) {
@@ -99,6 +108,127 @@ export default class ContractRequest {
     this.viewContract = await this.getViewContract(contractAddress);
   }
 
+  public getChainInfo = async (chainId: ChainId = 'tDVV') => {
+    let chainInfo;
+    if (this.chainInfoMap) {
+      chainInfo = this.chainInfoMap[chainId];
+    } else {
+      const chainsList = await did.services.getChainsInfo();
+      this.chainInfoMap = {} as any;
+      chainsList.forEach((item) => {
+        this.chainInfoMap![item.chainId] = item;
+      });
+      chainInfo = this.chainInfoMap?.[chainId];
+    }
+    if (!chainInfo) {
+      throw new Error(`Chain is not running: ${this.chainId}`);
+    }
+    return chainInfo;
+  };
+
+  public getTokenContractView = async () => {
+    if (this.tokenContractView) return this.tokenContractView;
+    const chainInfo = await this.getChainInfo(this.chainId as ChainId);
+    const tokenAddress = chainInfo.defaultToken.address;
+    this.tokenContractView = await this.getViewContracts(
+      this.rpcUrl || chainInfo.endPoint,
+      chainInfo.chainId,
+      tokenAddress,
+    );
+
+    return this.tokenContractView;
+  };
+
+  public checkAllowanceAndApprove = async ({
+    approveTargetAddress,
+    amount,
+    symbol,
+  }: {
+    approveTargetAddress: string;
+    amount: string | number;
+    symbol: string;
+  }) => {
+    try {
+      const account =
+        this.walletType === WalletType.discover
+          ? this.wallet?.discoverInfo?.address
+          : this.wallet?.portkeyInfo?.caInfo?.caAddress;
+      if (!account) throw Error('Please login');
+      if (!this.chainId) throw Error('Something went wrong(chainId)');
+
+      const tokenContract = await this.getTokenContractView();
+      const [{ data: allowance }, { data: tokenInfo }] = await Promise.all([
+        tokenContract.callViewMethod('GetAvailableAllowance', {
+          symbol,
+          owner: account,
+          spender: approveTargetAddress,
+        }),
+        tokenContract.callViewMethod('GetTokenInfo', { symbol }),
+      ]);
+
+      console.log(allowance, 'allowance====checkAllowanceAndApprove');
+
+      const allowanceBN = new BigNumber(allowance.allowance ?? allowance.amount ?? 0);
+      const bigA = timesDecimals(amount, tokenInfo.decimals ?? 8);
+
+      if (allowanceBN.gte(bigA)) return true;
+      const approveAmount = bigA.toNumber();
+
+      if (this.walletType === WalletType.discover) {
+        const chainInfo = await this.getChainInfo(this.chainId);
+
+        const dp = await DetectProvider.getDetectProvider();
+        const chainProvider = await dp?.getChain(this.chainId as ChainId);
+        if (!chainProvider) return;
+        const portkeyContract = await getContractBasic({
+          contractAddress: chainInfo.caContractAddress,
+          chainProvider: chainProvider,
+        });
+
+        const result = await portkeyContract.callSendMethod('ManagerApprove', '', {
+          spender: approveTargetAddress,
+          symbol,
+          amount: approveAmount,
+        });
+        if (result?.error) throw result.error;
+        return true;
+      } else if (this.walletType === WalletType.portkey) {
+        const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || 'tDVV') as ChainId;
+
+        const result = await managerApprove({
+          originChainId,
+          symbol,
+          caHash: this.caHash || '',
+          amount: approveAmount,
+          targetChainId: this.chainId,
+          networkType: (store.getState().configInfo.configInfo?.network || 'MAINNET') as NetworkType,
+          batchApproveNFT: true,
+          dappInfo: {
+            icon: '/favicon.ico',
+            href: location.origin,
+            name: 'Hamster Woods',
+          },
+          spender: approveTargetAddress,
+        });
+        const portkeyContract = await this.getCaContract();
+        const approveResult = await portkeyContract?.callSendMethod('ManagerApprove', '', {
+          caHash: this.caHash || '',
+          spender: approveTargetAddress,
+          symbol: result.symbol,
+          amount: result.amount,
+          guardiansApproved: result.guardiansApproved,
+        });
+        if (approveResult.error) throw approveResult.error;
+        return true;
+      } else {
+        throw Error('Please login or refresh page');
+      }
+    } catch (error) {
+      message.error(handleErrorMessage(error, 'Token approver error'));
+      return false;
+    }
+  };
+
   private getCaContract = async () => {
     if (!this.caContract) {
       const chainsInfo = await did.services.getChainsInfo();
@@ -122,7 +252,7 @@ export default class ContractRequest {
   };
 
   public getViewContracts = async (rpcUrl: string, chainId: ChainId, address: string) => {
-    const key = rpcUrl + chainId;
+    const key = rpcUrl + chainId + address;
     if (!this.viewContractMap[key]) {
       const aelfInstance = getAElfInstance(rpcUrl);
 
