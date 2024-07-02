@@ -1,5 +1,5 @@
 .customModal {
-  @apply relative  border-[16px] rounded-[32px] p-[32px];
+  @apply relative !w-[358px] md:!w-[750px] border-[16px] rounded-[32px] p-[32px] bg-[#EEE2C4] border-[#9A531F] text-center text-[#953D22] max-h-[70vh];
   :global {
     .ant-modal-header,
     .ant-modal-footer {

@@ -1,61 +1,46 @@
 import { parseISO, format } from 'date-fns';
 import { useWeeklyRank } from '../data/useWeeklyRank';
-import { LeaderBoardInfoModal } from './LeaderBoardInfoModal';
-import { TabContent } from './TabContent';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ChallengeStatus } from '../data/types';
 import { AppState, useSelector } from 'redux/store';
+import WeeklyPrizes from './WeeklyPrizes';
+import TipIcon from 'assets/images/Tip.png';
+import { LeaderBoardNoRecord } from './LeaderBoardNoRecord';
+import { LeaderBoardItemList } from './LeaderBoardItemList';
+import { useIsMobile } from 'redux/selector/mobile';
+import { LeaderBoardSettleList } from './LeaderBoardSettleList';
 
 const rewardSelector = (state: AppState) => state.configInfo.configInfo?.leaderboardWeekAward;
 
 export const WeeklyTabContent = () => {
   const { data } = useWeeklyRank();
-  const rewards = useSelector(rewardSelector);
-
-  const top = useMemo(() => {
-    if (!rewards || rewards.length === 0) return '';
-
-    return rewards.slice(-1)[0].text.split('-').pop() ?? '';
-  }, [rewards]);
-
-  const confirmedDate = useMemo(() => {
-    if (!data?.refreshTime) return '';
-
-    const refreshTime = data.refreshTime;
-
-    return `on ${format(parseISO(refreshTime), "MMMM do 'at' HH:mm")} (UTC)`;
-  }, [data?.refreshTime]);
-
-  const topText =
-    data?.status === ChallengeStatus.InProgress
-      ? 'This weekly challenge ends in: '
-      : 'This weekly challenge has ended and rewards will be distributed shortly.';
+  const [weeklyPrizeOpen, setWeeklyPrizeOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <>
-      <TabContent data={data} topText={topText} />
-      <LeaderBoardInfoModal data={rewards}>
-        {data?.status === ChallengeStatus.InProgress ? (
-          <>
-            Your weekly score (number of Beans earned) will be updated until the weekly challenge ends. The weekly
-            ranking will be confirmed {confirmedDate} and the rewards will be distributed to the top {top} players
-            shortly. Players with the same score will be ranked in the order they achieve the score, giving higher
-            ranking to early achievers.
-          </>
-        ) : null}
-        {data?.status === ChallengeStatus.Settlement ? (
-          <>
-            Your weekly score (number of Beans earned) has been finalized. The rewards will be distributed to the top{' '}
-            {top} players soon. The next weekly challenge will start {confirmedDate}.
-          </>
-        ) : null}
-        {data?.status === ChallengeStatus.LastSettlement ? (
-          <>
-            Your weekly score (number of Beans earned) has been finalized. The rewards will be distributed to the top{' '}
-            {top} players soon.
-          </>
-        ) : null}
-      </LeaderBoardInfoModal>
+      <div className="flex w-full flex-grow flex-col m-0">
+        <div className={`flex items-center justify-start space-x-[8px] ${isMobile ? 'mb-2' : 'mb-4'}`}>
+          <img width={isMobile ? 20 : 24} height={isMobile ? 20 : 24} src={TipIcon.src} alt="tip" />
+          <div className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold`}>
+            {data?.status === ChallengeStatus.InProgress
+              ? 'Hop & Win Week X will end on YY.'
+              : 'Hop & Win Week X has ended.'}{' '}
+            Click{' '}
+            <span className="underline font-black text-[#3989FF]" onClick={() => setWeeklyPrizeOpen(true)}>
+              here
+            </span>{' '}
+            to learn more about the event and its prizes.
+          </div>
+        </div>
+        {data?.rankingList.length ? (
+          <LeaderBoardNoRecord>{`Leaderboards will be display at the end of the first week of rankings.`}</LeaderBoardNoRecord>
+        ) : (
+          <LeaderBoardSettleList data={data} />
+          // <LeaderBoardItemList data={data} />
+        )}
+      </div>
+      <WeeklyPrizes open={weeklyPrizeOpen} onCancel={() => setWeeklyPrizeOpen(false)} />
     </>
   );
 };

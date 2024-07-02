@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Menu from '../Menu';
-import Ranking from 'assets/images/recreation/ranking.svg';
-import Nft from 'assets/images/recreation/nft.svg';
+import RankingImage from 'assets/images/recreation/ranking.png';
+import NftImage from 'assets/images/recreation/nft.png';
 import GoButton, { IGoButton, Status } from '../GoButton';
 import useGetState from 'redux/state/useGetState';
-import beanImage from 'assets/images/recreation/bean.png';
+import AcornGetImage from 'assets/images/recreation/acorn-get.png';
+import AcornWeeklyImage from 'assets/images/recreation/acorn-weekly.png';
+import AcornLockedImage from 'assets/images/recreation/acorn-locked.png';
+import QuestionImage from 'assets/images/recreation/question.png';
 
 import styles from './index.module.css';
 import Image from 'next/image';
@@ -13,6 +16,7 @@ import { toggleShowLeaderboard } from 'redux/reducer/info';
 import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
+import { Tooltip } from 'antd';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -28,8 +32,11 @@ function Board({
   curDiceCount,
   changeCurDiceCount,
   getChance,
+  getMoreAcorns,
+  showLockedAcorns,
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const { initialize } = useInitLeaderBoard();
 
@@ -55,7 +62,7 @@ function Board({
   if (isMobile) {
     return (
       <div className="absolute right-0 top-[15px] z-[40]">
-        <Menu
+        {/* <Menu
           icon={<Ranking className="h-[auto] w-[44px]" />}
           className="mb-[12px]"
           title="Leader Board"
@@ -65,28 +72,58 @@ function Board({
           icon={<Nft className="h-[auto] w-[29.5px]" />}
           title={hasNft ? 'BeanPass NFT' : 'BeanPass Giveaway'}
           onClick={() => onNftClick && onNftClick()}
-        />
+        /> */}
       </div>
     );
   } else {
     return (
       <div className="flex h-full w-full flex-col px-[47px] pt-[56px]">
         <div className="relative z-40 flex-1">
-          <div className={styles['board__bean']}>
-            <Image src={beanImage} alt="bean" className="h-[64px] w-[64px]" />
-            <span className={styles['board__bean__number']}>{playerInfo?.sumScore || 0}</span>
+          <div className={styles['board__acorn']}>
+            <Image src={AcornGetImage} alt="bean" className="h-[60px] w-[60px]" onClick={getMoreAcorns} />
+            <span className={styles['board__acorn__number']}>{playerInfo?.totalAcorns || 0}</span>
+            <Tooltip
+              title={
+                <div className="px-[24px] py-[16px]">
+                  <div className="text-[18px] leading-[28px]">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
+In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
+                  <div className="text-right text-[24px] leading-[28px]" onClick={() => setTooltipOpen(false)}>
+                    OK
+                  </div>
+                </div>
+              }
+              open={tooltipOpen}
+              overlayStyle={{ maxWidth: 480, borderRadius: 32 }}
+              overlayClassName={styles.board__tooltip}
+              trigger="click"
+              placement="bottom"
+              color="#A15A1C">
+              <Image
+                src={QuestionImage}
+                alt="bean"
+                className="h-[24px] w-[24px] mr-[14px]"
+                onClick={() => setTooltipOpen(true)}
+              />
+            </Tooltip>
           </div>
-          <Menu
-            icon={<Ranking className="h-[auto] w-[76px]" />}
-            className="mb-[24px]"
-            title="Leader Board"
-            onClick={handleShowLeaderboard}
-          />
-          <Menu
-            icon={<Nft className="h-[auto] w-[59px]" />}
-            title={hasNft ? 'BeanPass NFT' : 'BeanPass Giveaway'}
-            onClick={() => onNftClick && onNftClick()}
-          />
+          <div className={styles['board__acorn']}>
+            <Image src={AcornWeeklyImage} alt="bean" className="h-[60px] w-[60px]" />
+            <span className={styles['board__acorn__number']}>{playerInfo?.weeklyAcorns || 0}</span>
+          </div>
+          <div className={styles['board__acorn']}>
+            <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" onClick={showLockedAcorns} />
+            <span className={styles['board__acorn__number']}>{playerInfo?.lockedAcorns || 0}</span>
+          </div>
+          <div className={styles['board__feature']} onClick={handleShowLeaderboard}>
+            <Image src={RankingImage} alt="bean" className="h-[72px] w-[72px]" />
+            <span className={`${styles['board__feature__text']} ml-[50px]`}>Leader Board</span>
+          </div>
+          <div className={styles['board__feature']} onClick={() => onNftClick && onNftClick()}>
+            <Image src={NftImage} alt="bean" className="h-[72px] w-[72px]" />
+            <span className={`${styles['board__feature__text']} ${hasNft ? 'ml-[25px]' : 'ml-[12px]'}`}>
+              {hasNft ? 'HamsterPass NFT' : 'HamsterPass Giveaway'}
+            </span>
+          </div>
         </div>
         <GoButton
           playableCount={playableCount}

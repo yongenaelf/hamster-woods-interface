@@ -7,6 +7,7 @@ import { ReactElement } from 'react';
 export interface INoticeModal {
   content?: string | string[] | React.ReactNode;
   url?: string;
+  onCancel: () => void;
 }
 
 const defaultInfo = {

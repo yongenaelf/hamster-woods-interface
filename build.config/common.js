@@ -2,6 +2,7 @@ const rewritesConfig = require('./rewrites/index');
 module.exports = {
   reactStrictMode: true,
   async rewrites() {
+    console.log('rewrites===', rewritesConfig);
     return rewritesConfig;
   },
   images: {

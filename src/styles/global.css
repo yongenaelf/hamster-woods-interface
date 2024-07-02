@@ -80,7 +80,8 @@ button {
   cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
-.ant-modal-root {
+.ant-modal-root,
+.ant-tooltip {
   cursor: pointer;
   cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }

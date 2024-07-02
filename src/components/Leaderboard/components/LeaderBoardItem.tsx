@@ -1,6 +1,6 @@
 import { LeaderBoardRankItem } from './LeaderBoardRankItem';
 import { LeaderBoardNormalItem } from './LeaderBoardNormalItem';
-import { LeaderboardTextColors } from './LeaderBoardItemText';
+import { LeaderboardTextColors } from '../data/constant';
 
 enum Rank {
   First = 1,

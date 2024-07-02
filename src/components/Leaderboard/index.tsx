@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 
 import { WeeklyTabContent } from './components/WeeklyTabContent';
 import { PastRecordContent } from './components/PastRecordContent';
@@ -9,7 +8,6 @@ import { toggleShowLeaderboard } from 'redux/reducer/info';
 import LeaderBoardModal from './components/LeaderBoardModal';
 import { useLeaderboardStarted } from './hooks/useLeaderboardStarted';
 import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal';
-import TipIcon from 'assets/images/Tip.png';
 import { TabContentUser } from './components/TabContentUser';
 
 enum Tabs {
@@ -41,43 +39,31 @@ export const Leaderboard = () => {
         open={open}
         title="Leader Board"
         onCancel={onCancel}
+        weeklyModal={tab === Tabs.Weekly}
         destroyOnClose>
         <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full overflow-hidden">
             <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
               <button
-                className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#D3B68A]' : 'bg-[#E8D1AE]'}`}
+                className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#E8D1AE]' : 'bg-[#D3B68A]'}`}
                 onClick={() => setTab(Tabs.Weekly)}>
                 {Tabs.Weekly}
               </button>
               <button
-                className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#D3B68A]' : 'bg-[#E8D1AE]'}`}
+                className={`${tabClassName} ${tab === Tabs.PastRecord ? 'bg-[#E8D1AE]' : 'bg-[#D3B68A]'}`}
                 onClick={() => setTab(Tabs.PastRecord)}>
                 {Tabs.PastRecord}
               </button>
             </div>
-            <div className="flex flex-col space-x-[8px] bg-[#E8D1AE] rounded-[8px] p-[24px] h-[540px]">
-              {tab === Tabs.Weekly ? (
-                <div className="flex flex-col flex-1">
-                  <div className="flex items-center justify-start space-x-[8px]">
-                    <Image className="w-[24px] h-[24px]" src={TipIcon} alt="tip" />
-                    <div className="text-[16px] leading-[18px] font-bold">
-                      Hop & Win Week X has ended. Click <span className="underline">here</span> to learn more about the
-                      event and its prizes.
-                    </div>
-                  </div>
-                  <WeeklyTabContent />
-                </div>
-              ) : null}
+            <div
+              className={`flex flex-col space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1 ${
+                isMobile ? 'p-[8px] mb-[8px]' : 'p-[24px] mb-[24px]'
+              }`}>
+              {tab === Tabs.Weekly ? <WeeklyTabContent /> : null}
               {tab === Tabs.PastRecord ? <PastRecordContent /> : null}
             </div>
           </div>
         </div>
-        {tab === Tabs.Weekly && (
-          <TabContentUser
-            className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} absolute bottom-[-10px] left-[-31px]`}
-          />
-        )}
       </LeaderBoardModal>
     </>
   );

@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'https://test.beangotown.com/api/:path*',
+    destination: 'https://test-hamster.beangotown.com/api/:path*',
   },
   {
     source: '/cms/:path*',
@@ -21,6 +21,6 @@ module.exports = [
   },
   {
     source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
-    destination: 'https://test.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+    destination: 'https://test-hamster.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
   },
 ];

@@ -1,10 +1,6 @@
 import { useIsMobile } from 'redux/selector/mobile';
-import { Bean } from './Neat';
-import { Rank } from './Rank';
-import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
-import { LeaderBoardItemScore } from './LeaderBoardItemScore';
-import { LeaderboardTextColors } from './LeaderBoardItemText';
-import { Me } from './Me';
+import { middleEllipsis } from 'utils/middleEllipsis';
+import { LeaderboardTextColors } from '../data/constant';
 
 export const LeaderBoardNormalItem = ({
   rank = 4,
@@ -18,24 +14,43 @@ export const LeaderBoardNormalItem = ({
   isCurrentUserRank?: boolean;
 }) => {
   const isMobile = useIsMobile();
-  const borderColor = isCurrentUserRank ? 'border-white' : 'border-[#003658]';
-  const bgColor = isCurrentUserRank ? 'bg-gradient-to-b from-[#FFD304] to-[#FFF4C1]' : 'bg-[#81A2D7]';
-  const shadow = isCurrentUserRank
-    ? 'shadow-[0px_2px_4px_rgba(0,0,0,0.12)]'
-    : 'shadow-[0px_2px_4px_0px_rgba(0,0,0,0.12),0px_-3px_0px_0px_#6D8EC3_inset] shadow-inner';
-  const color = isCurrentUserRank ? LeaderboardTextColors.Blue : LeaderboardTextColors.White;
-
   return (
     <div
-      className={`mb-2 flex w-full items-center rounded-3xl border p-1 ${borderColor} ${bgColor} ${shadow} ${
-        isMobile ? 'h-12' : 'h-16'
+      className={`flex w-full items-center justify-between rounded-full p-1 h-10 bg-[#DEC49D] ${
+        isMobile ? 'mb-2' : 'mb-3'
       }`}>
-      <Rank rank={rank} />
-      <LeaderBoardItemAddress address={address} color={color} />
-      {isCurrentUserRank ? <Me /> : null}
-      <div className="flex-grow"></div>
-      <LeaderBoardItemScore score={beans} color={color} />
-      <Bean />
+      <div className="basis-2 flex items-center">
+        <div
+          className={`${
+            isMobile ? '!w-[32px] mr-2' : '!w-[40px] mr-3'
+          } shrink-0 flex items-center justify-center ml-2 text-white text-[16px] font-fonarto bg-[#B26C27] rounded-full`}>
+          {rank}
+        </div>
+        <div className={`font-bold ${isMobile ? 'text-xs' : 'text-[16px]'} ${LeaderboardTextColors.Brown}`}>
+          {middleEllipsis(address)}
+        </div>
+        {isCurrentUserRank ? (
+          <img
+            width={32}
+            height={16}
+            className={`z-10 ml-2`}
+            src={require('assets/images/me.png').default.src}
+            alt="me"
+          />
+        ) : null}
+      </div>
+      <div className="basis-2 flex justify-end items-center text-right ">
+        <div className={`${isMobile ? 'text-[14px]' : 'text-[20px]'} font-fonarto text-[#AE694C] `}>
+          {beans?.toLocaleString() ?? '-'}
+        </div>
+        <img
+          width={20}
+          height={20}
+          className="ml-[5px] mr-4 w-[20px] h-[20px]"
+          src={require('assets/images/neat.png').default.src}
+          alt="bean"
+        />
+      </div>
     </div>
   );
 };

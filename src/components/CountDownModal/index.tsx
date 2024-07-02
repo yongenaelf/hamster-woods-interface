@@ -5,19 +5,21 @@ import CommonBtn from 'components/CommonBtn';
 import useCountdown from 'hooks/useCountDown';
 import { formatTime } from 'utils/formatTime';
 import CustomModal from 'components/CustomModal';
+import { useIsMobile } from 'redux/selector/mobile';
 
 export type CountDownModalPropsType = {
   onConfirm?: (e: MouseEvent<any>) => void;
-  onCancel: (e: MouseEvent<any>) => void;
+  onCancel: () => void;
   open: boolean;
   btnText?: string;
 };
 
 export default function CountDownModal({ onCancel, open, onConfirm, btnText }: CountDownModalPropsType) {
   const { hours, minutes, seconds } = useCountdown();
+  const isMobile = useIsMobile();
   return (
-    <CustomModal open={open} title="Notice" onCancel={onCancel} destroyOnClose className="flex justify-center">
-      <p className="text-2xl">
+    <CustomModal open={open} title="Notice" onCancel={onCancel} destroyOnClose className={`flex justify-center`}>
+      <p className={isMobile ? 'text-[16px] leading-6' : 'text-[24px] leading-8'}>
         {`Your hamster has used up all its HOPs for today. New HOPs will be available in `}
         <span className="font-black">
           {formatTime({
@@ -27,12 +29,16 @@ export default function CountDownModal({ onCancel, open, onConfirm, btnText }: C
           })}
         </span>
       </p>
-      <p className="text-2xl leading-6">
+      <p className={isMobile ? 'text-[16px] leading-6' : 'text-[24px] leading-8'}>
         {`If you want to help it hop some more, click the button below to get more chances.`}.
       </p>
       <CommonBtn
         title={btnText || 'Confirm'}
-        className="mx-[64px] mt-[40px] mb-[5px] h-[60px] text-[32px] leading-[40px]"
+        className={`flex justify-center items-center font-fonarto ${
+          isMobile
+            ? 'text-[20px] leading-[20px] mt-[24px] h-[48px]'
+            : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px]'
+        }`}
         onClick={onConfirm}
       />
     </CustomModal>

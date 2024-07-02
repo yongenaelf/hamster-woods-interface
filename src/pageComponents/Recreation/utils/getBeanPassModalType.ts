@@ -1,7 +1,7 @@
-import { getBeanPassClaimClaimable } from 'api/request';
+import { getHamsterPassClaimClaimable } from 'api/request';
 import { GetBeanPassStatus } from 'components/CommonModal/type';
 import { store } from 'redux/store';
-import { BeanPassResons } from 'types';
+import { BeanPassReasons } from 'types';
 import { sleep } from 'utils/common';
 import showMessage from 'utils/setGlobalComponentsInfo';
 
@@ -20,7 +20,7 @@ export const getBeanPassModalType: (params: IProps) => Promise<false | GetBeanPa
   let beanPassClaimClaimableRes;
   let beanPassModalType = GetBeanPassStatus.Abled;
   try {
-    beanPassClaimClaimableRes = await getBeanPassClaimClaimable({
+    beanPassClaimClaimableRes = await getHamsterPassClaimClaimable({
       caAddress: address,
     });
     if (beanPassClaimClaimableRes?.code === '20002') {
@@ -47,11 +47,11 @@ export const getBeanPassModalType: (params: IProps) => Promise<false | GetBeanPa
   if (claimable) {
     beanPassModalType = GetBeanPassStatus.Abled;
   } else {
-    if (reason === BeanPassResons.Claimed) {
+    if (reason === BeanPassReasons.Claimed) {
       beanPassModalType = GetBeanPassStatus.Noneleft;
-    } else if (reason === BeanPassResons.InsufficientElfAmount) {
+    } else if (reason === BeanPassReasons.InsufficientElfAmount) {
       beanPassModalType = GetBeanPassStatus.Recharge;
-    } else if (reason === BeanPassResons.DoubleClaim) {
+    } else if (reason === BeanPassReasons.DoubleClaim) {
       beanPassModalType = GetBeanPassStatus.Notfound;
       if (open) {
         doubleClaimCallback && doubleClaimCallback();
