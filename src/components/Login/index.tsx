@@ -51,7 +51,6 @@ import { Proto } from 'utils/proto';
 import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
 import CommonBtn from 'components/CommonBtn';
-import CustomModal from 'components/CustomModal';
 
 const components = {
   phone: PhoneIcon,
