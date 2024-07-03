@@ -50,6 +50,8 @@ import showMessage from 'utils/setGlobalComponentsInfo';
 import { Proto } from 'utils/proto';
 import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
+import CommonBtn from 'components/CommonBtn';
+import CustomModal from 'components/CustomModal';
 
 const components = {
   phone: PhoneIcon,
@@ -468,17 +470,16 @@ export default function Login() {
     <div
       className={`cursor-custom ${styles.loginContainer}`}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources?.aloginBgMobile : imageResources?.aloginBgPc})`,
+        backgroundImage: `url(${isMobileStore ? imageResources?.playgroundBgMobile : imageResources?.playgroundBgPc})`,
       }}>
       {!TelegramPlatform.isTelegramPlatform() &&
         (isLock ? (
-          <div
+          <CommonBtn
             onClick={() => {
               setIsUnlockShow(true);
             }}
-            className={styles.unlockBtn}>
-            unLock
-          </div>
+            className={`${styles.unlockBtn} !bg-[#A15A1C]`}
+            title="unLock"></CommonBtn>
         ) : isLogin ? null : (
           <>
             {renderLoginMethods(false)}

@@ -61,18 +61,17 @@ function Board({
 
   if (isMobile) {
     return (
-      <div className="absolute right-0 top-[15px] z-[40]">
-        {/* <Menu
-          icon={<Ranking className="h-[auto] w-[44px]" />}
-          className="mb-[12px]"
-          title="Leader Board"
-          onClick={handleShowLeaderboard}
-        />
-        <Menu
-          icon={<Nft className="h-[auto] w-[29.5px]" />}
-          title={hasNft ? 'BeanPass NFT' : 'BeanPass Giveaway'}
-          onClick={() => onNftClick && onNftClick()}
-        /> */}
+      <div className="absolute right-[-70px] top-[8px] z-[40]">
+        <div className={styles['board__feature__mobile']} onClick={handleShowLeaderboard}>
+          <Image src={RankingImage} alt="bean" className="h-[36px] w-[36px]" />
+          <span className={`${styles['board__feature__text']}`}>Leader Board</span>
+        </div>
+        <div className={styles['board__feature__mobile']} onClick={() => onNftClick && onNftClick()}>
+          <Image src={NftImage} alt="bean" className="h-[36px] w-[36px]" />
+          <span className={`${styles['board__feature__text']} `}>
+            {hasNft ? 'HamsterPass NFT' : 'HamsterPass Giveaway'}
+          </span>
+        </div>
       </div>
     );
   } else {

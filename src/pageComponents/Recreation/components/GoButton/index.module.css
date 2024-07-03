@@ -13,6 +13,12 @@
     background-size: cover;
   }
 
+  .get-chance-mobile {
+    @apply w-[71px] h-[71px] flex justify-center absolute left-[-58px] top-[24px] z-[51] bg-[100%_100%] bg-no-repeat;
+
+    background-size: cover;
+  }
+
   .dice-content-mobile-mask {
     @apply absolute w-[48px] h-[48px] ml-[16px] mt-[2px] rounded-[22px] z-[10];
 

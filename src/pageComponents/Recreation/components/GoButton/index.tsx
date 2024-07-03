@@ -85,7 +85,7 @@ function GoButton({
         </span>
         <span
           className={`${
-            isMobile ? 'text-[12px] leading-[12px]' : 'text-[18px] leading-[18px]'
+            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
           } font-bold text-[#52300B]`}>
           {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
         </span>
@@ -107,7 +107,7 @@ function GoButton({
         </span>
         <span
           className={`${
-            isMobile ? 'text-[14px] leading-[14px]' : 'text-[21px] leading-[21px]'
+            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
           } font-bold text-[#8E8E8E]`}>
           {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
         </span>
@@ -234,7 +234,6 @@ function GoButton({
         {isMobile ? (
           <div className={styles['button__border']}>
             <div
-              ref={mobileGoButtonRef}
               style={{
                 backgroundImage: `url(${
                   btnImageResources?.mobile[
@@ -246,8 +245,27 @@ function GoButton({
               {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
 
               <div
+                style={{
+                  backgroundImage: `url(${
+                    btnImageResources?.mobile[chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                  })`,
+                }}
+                onMouseDown={() => {
+                  setChanceBtnPress(true);
+                }}
+                onMouseUp={() => {
+                  setChanceBtnPress(false);
+                  getChance && getChance();
+                }}
+                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPress ? 'top-[5px]' : ''}`}>
+                {chanceBtnPress && <div className={styles['dice-content-mobile-mask']}></div>}
+
+                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center `}>Get Chance</div>
+              </div>
+              <div
+                ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : 'left-[54px] top-0'
+                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[40px]' : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
                 {statusCom[status]}
               </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import useGetState from 'redux/state/useGetState';
-import Bus from 'assets/images/recreation/bus.svg';
 
 function CheckerboardBottom() {
   const { configInfo, isMobile } = useGetState();
@@ -23,11 +22,7 @@ function CheckerboardBottom() {
             alt=""
           />
         </div>
-      ) : (
-        <div className="ml-[-16px] mt-[-50px] w-full">
-          <Bus className={`${isMobile ? 'h-[120px] w-[120px]' : 'h-[240px] w-[240px]'}`} />
-        </div>
-      )}
+      ) : null}
     </>
   );
 }

@@ -190,7 +190,7 @@ export default function GetChanceModal({
           onClick={() => onConfirm?.(inputVal * changePrice)}
           className={`flex justify-center items-center font-fonarto ${
             isMobile
-              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px]'
+              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-2'
               : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[6px]'
           }`}
         />

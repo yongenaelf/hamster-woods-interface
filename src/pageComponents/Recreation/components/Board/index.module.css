@@ -1,21 +1,32 @@
 .board__acorn {
-  @apply mb-[12px] h-[80px] w-[394px] rounded-full border border-solid pl-[16px] bg-[#EBCFB8] flex items-center;
-  svg > g {
-    @apply h-[60px] w-[60px];
-  }
+  @apply mb-[12px] h-[84px] w-[450px] pl-[16px] flex items-center;
+
+  background-image: url('../../../../assets/images/button-menu-default.png');
+  background-size: cover;
 
   .board__acorn__number {
     @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-fonarto;
   }
 }
 .board__feature {
-  @apply mt-[24px] mb-[12px] h-[108px] w-[394px] rounded-full border border-solid pl-[16px] bg-[#A15A1C] flex items-center;
-  svg > g {
-    @apply h-[72px] w-[72px];
-  }
+  @apply mt-[24px] mb-[12px] h-[108px] w-[450px] pl-[16px] flex items-center;
+  
+  background-image: url('../../../../assets/images/button-menu-spec.png');
+  background-size: cover;
 
   .board__feature__text {
     @apply flex flex-1 text-white text-[26px] leading-[26px] font-fonarto;
+  }
+}
+
+.board__feature__mobile {
+  @apply mb-[8px] h-[48px] w-[200px] pl-[6px] flex items-center;
+  
+  background-image: url('../../../../assets/images/button-menu-spec.png');
+  background-size: cover;
+
+  .board__feature__text {
+    @apply w-[50px] ml-[5px] text-white text-[13px] leading-[13px] font-fonarto;
   }
 }
 

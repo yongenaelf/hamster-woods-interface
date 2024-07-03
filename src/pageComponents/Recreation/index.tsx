@@ -5,7 +5,6 @@ import { CheckerboardList } from './checkerboard';
 import styles from './index.module.css';
 
 import Checkerboard from './components/Checkerboard';
-import SideBorder from './components/SideBorder';
 import Role from './components/Role';
 
 import Board from './components/Board';
@@ -81,6 +80,7 @@ export default function Game() {
     curChessboardNode,
     needSync,
     checkerboardCounts,
+    imageResources,
   } = useGetState();
 
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>(mockHamsterPass);
@@ -450,8 +450,6 @@ export default function Game() {
     [checkBeanPassStatus],
   );
 
-  console.log('🌹🌹🌹 opacity', opacity);
-
   useEffect(() => {
     if (isLogin && needSync) {
       syncAccountInfo();
@@ -555,14 +553,19 @@ export default function Game() {
 
   return (
     <>
-      <div className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
+      <div
+        style={{
+          backgroundImage: isMobile
+            ? `url(${imageResources?.playgroundBgMobile})`
+            : `url(${imageResources?.playgroundBgPc})`,
+        }}
+        className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
         {!isMobile && <BoardLeft />}
         <div
           className={`${styles['game__content']} flex overflow-hidden ${
             isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
-          } ${configInfo?.isHalloween && '!bg-[url(/images/recreation/checkerboard-bg.svg)] bg-cover'}`}>
+          }`}>
           {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
-          <SideBorder side="left" />
           <div
             ref={checkerboardContainerRef}
             className={`w-full overflow-y-auto overflow-x-hidden ${styles.scrollbar}`}>
@@ -606,8 +609,6 @@ export default function Game() {
               <CheckerboardBottom />
             </div>
           </div>
-
-          <SideBorder side="right" />
         </div>
         {!isMobile && (
           <BoardRight>

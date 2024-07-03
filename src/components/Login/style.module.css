@@ -66,10 +66,10 @@
 }
 
 .loginMethodModal {
-  @apply !w-[750px];
+  @apply !w-[750px] rounded-[32px];
   :global {
     .ant-modal-body {
-      @apply !px-[145px] !pb-[28px] text-[32px] leading-6;
+      @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
@@ -78,7 +78,7 @@
     box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%) !important;
   }
   .drawerHeader {
-    @apply !mb-[44px] mt-[13px] text-center font-fonarto !text-[32px] leading-6;
+    @apply !mb-[40px] text-center font-fonarto !text-[32px] leading-6 text-[#953D22];
   }
   .drawer__close {
     @apply absolute !right-[26px] !top-[37px] !text-[30px];
@@ -118,7 +118,7 @@
     }
   }
   .loginBtn {
-    @apply relative mb-4 flex h-14 w-full items-center justify-center rounded-[36px] border-2 border-solid border-[var(--border-blue-btn)] bg-[var(--color-blue-bg-btn)] px-5 font-fonarto text-white;
+    @apply relative mb-4 flex h-14 items-center justify-center rounded-[36px] border-2 border-solid bg-[var(--confirm-btn-bg)] mx-[97px] font-fonarto text-white;
   }
   .drawerHeader {
     @apply mb-8 text-center font-fonarto text-2xl leading-6;
