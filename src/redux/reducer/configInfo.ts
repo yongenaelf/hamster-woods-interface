@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { IConfigItems } from 'types';
-import contractRequest from 'contract/contractRequest';
 
 const initialState: {
   configInfo: IConfigItems | undefined;

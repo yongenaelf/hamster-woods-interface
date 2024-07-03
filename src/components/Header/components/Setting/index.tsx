@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import styles from './styles.module.css';
 import { useCallback, useState } from 'react';
-import CommonModal from 'components/CommonModal';
 import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
 import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
@@ -23,6 +22,7 @@ import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import showMessage from 'utils/setGlobalComponentsInfo';
+import CustomModal from 'components/CustomModal';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -99,11 +99,11 @@ export default function Setting() {
         className={isMobile ? styles.setting : styles['setting-pc']}
         onClick={handleSetting}
       />
-      <CommonModal
+      <CustomModal
         open={settingModalVisible}
         title="Settings"
         onCancel={handleCancel}
-        className={`${styles.settingModal} ${isMobile && styles.settingModalMobile}`}>
+        className={`${isMobile ? '!w-[358px]' : '!w-[580px]'}`}>
         <div className="mt-2 px-4">
           <CommonBtn
             title="Game Records"
@@ -120,7 +120,7 @@ export default function Setting() {
             onClick={handleExit}
             className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonBtn>
         </div>
-      </CommonModal>
+      </CustomModal>
     </>
   );
 }

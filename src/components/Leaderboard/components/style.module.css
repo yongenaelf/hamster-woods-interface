@@ -1,55 +1,26 @@
 /* stylelint-disable number-max-precision */
-.leaderboardModal {
-  @apply !w-[358px] md:!w-[60rem] rounded-[20px] text-center text-white;
+
+.WeeklyModal {
+  @apply relative  border-[16px] rounded-[32px] p-0;
   :global {
-    .ant-modal-header,
     .ant-modal-footer {
-      @apply hidden;
+      @apply block p-0 m-0 border-t-0;
+
     }
     .ant-modal-content {
-      @apply rounded-[20px] bg-[var(--color-main)] p-0 text-white;
-
-      box-shadow: 0 1.1666667461395264px 2.3333334922790527px 0 #3687ff inset,
-        0 -1.1666667461395264px 2.3333334922790527px 0 #005ae1 inset,
-        0 9.333333969116211px 9.333333969116211px 0 rgb(0 0 0 / 30%);
-      .ant-modal-body {
-        @apply px-[8px] pb-[8px] pt-0 leading-[24px];
+      @apply h-full bg-inherit shadow-none rounded-[32px];
+      .ant-modal-close {
+        @apply w-[48px] h-[48px] absolute top-1 right-1;
+        .ant-modal-close-x {
+          @apply w-full h-full;
+          img {
+            @apply !w-full !h-full;
+          }
+        }
       }
     }
-  }
-  .modal__title {
-    @apply relative pt-[24px] pb-[16px] text-[24px] leading-[24px] text-white;
-    span {
-      @apply font-fonarto;
-    }
-
-    text-shadow: 0 0 1px rgb(0 0 0 / 25%);
-  }
-  .modal__closeIcon,
-  .modal__closeIcon_m {
-    @apply absolute right-0 top-[50%] -translate-y-[50%];
-  }
-
-  .modal__closeIcon_m {
-    @apply absolute right-0 top-[50%] -translate-y-[50%];
-    svg {
-      @apply !w-[30px] !h-[30px] fill-white;
-    }
-  }
-}
-
-.leaderboardNotStartedModal {
-  @apply md:!w-[750px];
-  :global(.ant-modal-body) {
-    @apply md:!pb-[45px];
-    .modal__title {
-      @apply md:!h-[125px] md:!text-[32px];
-    }
-  }
-  :global(.ant-modal-content) {
-    @apply md:rounded-[20px];
-    .confirmBtn {
-      @apply mx-auto md:h-[77.5px] md:w-[360px] md:rounded-[38.75px] md:text-[32px] md:leading-[24px] md:leading-[77.5px];
+    .ant-modal-body {
+      @apply w-full px-[32px] pt-[32px];
     }
   }
 }

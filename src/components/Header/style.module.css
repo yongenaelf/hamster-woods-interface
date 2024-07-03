@@ -1,6 +1,29 @@
 .headerContainer {
-  @apply flex h-[62px] w-full items-end border-b-2 border-solid border-[#003A90] bg-[var(--color-main)];
+  @apply flex flex-col h-[100px] w-full items-end border-b-2 border-solid;
+
+  background-image: url('../../assets/images/headerMenu/top-menu-bg-m.png');
+  background-size: cover;
+
   .header__menu {
     @apply flex h-14 w-full items-center px-4;
+  }
+}
+
+.board__acorn {
+  @apply mb-[12px] h-[40px] w-[175px] pl-[6px] flex items-center;
+
+  background-image: url('../../assets/images/button-menu-default-s.png');
+  background-size: cover;
+
+  .board__acorn__number {
+    @apply pl-[12px] flex flex-1 text-[#953D22] text-[16px] leading-[16px] font-fonarto;
+  }
+}
+
+.board__tooltip {
+  :global {
+    .ant-tooltip-inner {
+      @apply rounded-[32px];
+    }
   }
 }

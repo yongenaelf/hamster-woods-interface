@@ -6,6 +6,7 @@ import GlobalComponentsInfoReducer, { globalComponentsInfoSlice } from './reduce
 import ConfigInfoReducer, { configInfoSlice } from './reducer/configInfo';
 import ChessboardDataReducer, { chessboardDataSlice } from './reducer/chessboardData';
 import NoticeModalReducer, { noticeModalSlice } from './reducer/noticeModal';
+import ServerConfigInfoReducer, { serverConfigInfoSlice } from './reducer/serverConfigInfo';
 
 export const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   [configInfoSlice.name]: ConfigInfoReducer,
   [chessboardDataSlice.name]: ChessboardDataReducer,
   [noticeModalSlice.name]: NoticeModalReducer,
+  [serverConfigInfoSlice.name]: ServerConfigInfoReducer,
 });
 
 const makeStore = () =>

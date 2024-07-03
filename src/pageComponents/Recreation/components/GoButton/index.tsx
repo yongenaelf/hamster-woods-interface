@@ -18,19 +18,26 @@ export interface IGoButton {
   status?: Status;
   hasNft?: boolean;
   playableCount?: number;
+  dailyPlayableCount?: number;
   sumScore?: number;
+  purchasedChancesCount?: number;
   curDiceCount?: number;
   changeCurDiceCount?: (num: number) => void;
   go?: () => void;
+  getChance?: () => void;
+  getMoreAcorns?: () => void;
+  showLockedAcorns?: () => void;
 }
 
 function GoButton({
   go,
   status = Status.NONE,
   playableCount = 0,
-  sumScore = 5,
+  dailyPlayableCount = 5,
+  purchasedChancesCount = 0,
   curDiceCount,
   changeCurDiceCount,
+  getChance,
 }: IGoButton) {
   const { isMobile, btnImageResources } = useGetState();
 
@@ -44,6 +51,9 @@ function GoButton({
 
   const [curPress, setCurPress] = useState<number | null>(null);
   const [curTouch, setCurTouch] = useState<number | null>(null);
+
+  const [chanceBtnPress, setChanceBtnPress] = useState<boolean>(false);
+  const [chanceBtnTouch, setChanceBtnTouch] = useState<boolean>(false);
 
   const [curPressM, setCurPressM] = useState<number | null>(null);
 
@@ -72,13 +82,13 @@ function GoButton({
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
             isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
-          Go
+          Hop
         </span>
         <span
           className={`${
-            isMobile ? 'text-[14px] leading-[14px]' : 'text-[21px] leading-[21px]'
+            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
           } font-bold text-[#52300B]`}>
-          {playableCount}/{sumScore}
+          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),
@@ -94,13 +104,13 @@ function GoButton({
           className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
             isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
           }`}>
-          Go
+          Hop
         </span>
         <span
           className={`${
-            isMobile ? 'text-[14px] leading-[14px]' : 'text-[21px] leading-[21px]'
+            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
           } font-bold text-[#8E8E8E]`}>
-          {playableCount}/{sumScore}
+          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),
@@ -223,9 +233,8 @@ function GoButton({
           </div>
         )}
         {isMobile ? (
-          <div className={styles['button__border']}>
+          <div className={`${styles['button__border']} flex justify-center`}>
             <div
-              ref={mobileGoButtonRef}
               style={{
                 backgroundImage: `url(${
                   btnImageResources?.mobile[
@@ -233,12 +242,31 @@ function GoButton({
                   ]
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex`}>
+              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex left-[-20px]`}>
               {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
 
               <div
+                style={{
+                  backgroundImage: `url(${
+                    btnImageResources?.mobile[chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                  })`,
+                }}
+                onMouseDown={() => {
+                  setChanceBtnPress(true);
+                }}
+                onMouseUp={() => {
+                  setChanceBtnPress(false);
+                  getChance && getChance();
+                }}
+                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPress ? 'top-[5px]' : ''}`}>
+                {chanceBtnPress && <div className={styles['dice-content-mobile-mask']}></div>}
+
+                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center `}>Get Chance</div>
+              </div>
+              <div
+                ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : 'left-[54px] top-0'
+                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[40px]' : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
                 {statusCom[status]}
               </div>
@@ -263,40 +291,73 @@ function GoButton({
             </div>
           </div>
         ) : (
-          <div
-            onMouseEnter={() => {
-              setPcBtnMouseOn(true);
-            }}
-            onMouseLeave={() => {
-              setPcBtnMouseOn(false);
-            }}
-            onMouseDown={() => {
-              setPcBtnPress(true);
-            }}
-            onMouseUp={() => {
-              setPcBtnPress(false);
-              go && go();
-            }}
-            style={{
-              backgroundImage: `url(${
-                btnImageResources?.pc[
-                  pcBtnMouseOn && status === Status.NONE
-                    ? 'bg-go-hover-pc'
-                    : pcBtnPress && status === Status.NONE
-                    ? 'bg-go-press-pc'
-                    : status === Status.DISABLED
-                    ? 'bg-go-disabled-pc'
-                    : 'bg-go-default-pc'
-                ]
-              })`,
-            }}
-            className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
-            {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
+          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
             <div
-              className={`${
-                pcBtnPress ? 'mt-[5px]' : ''
-              } absolute top-[10px] flex ml-[12px] flex-col items-center justify-center`}>
-              {statusCom[status]}
+              onMouseEnter={() => {
+                setPcBtnMouseOn(true);
+              }}
+              onMouseLeave={() => {
+                setPcBtnMouseOn(false);
+              }}
+              onMouseDown={() => {
+                setPcBtnPress(true);
+              }}
+              onMouseUp={() => {
+                setPcBtnPress(false);
+                go && go();
+              }}
+              style={{
+                backgroundImage: `url(${
+                  btnImageResources?.pc[
+                    pcBtnMouseOn && status === Status.NONE
+                      ? 'bg-go-hover-pc'
+                      : pcBtnPress && status === Status.NONE
+                      ? 'bg-go-press-pc'
+                      : status === Status.DISABLED
+                      ? 'bg-go-disabled-pc'
+                      : 'bg-go-default-pc'
+                  ]
+                })`,
+              }}
+              className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
+              {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
+              <div
+                className={`${
+                  pcBtnPress ? 'mt-[5px]' : ''
+                } absolute top-[10px] flex ml-[12px] flex-col items-center justify-center`}>
+                {statusCom[status]}
+              </div>
+            </div>
+            <div
+              onMouseEnter={() => {
+                setChanceBtnTouch(true);
+              }}
+              onMouseLeave={() => {
+                setChanceBtnTouch(false);
+              }}
+              onMouseDown={() => {
+                setChanceBtnPress(true);
+              }}
+              onMouseUp={() => {
+                setChanceBtnPress(false);
+                getChance && getChance();
+              }}
+              style={{
+                backgroundImage: `url(${
+                  btnImageResources?.pc[
+                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-dice-default'
+                  ]
+                })`,
+              }}
+              className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
+              <span
+                className={`font-fonarto tracking-tight text-[#fff] text-stroke-[#52300B] text-center ml-[14px] ${
+                  isMobile
+                    ? 'text-[48px] leading-[48px] mt-[10px]'
+                    : 'text-[24px] leading-[24px] mt-[33px] text-white w-[110px]'
+                }`}>
+                Get Chance
+              </span>
             </div>
           </div>
         )}

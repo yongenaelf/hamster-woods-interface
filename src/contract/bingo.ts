@@ -4,6 +4,7 @@ import {
   IGameSetting,
   IPlayerInformation,
   IPlayerProps,
+  IPurchaseProps,
   ITransactionResult,
 } from 'types';
 import contractRequest from './contractRequest';
@@ -24,6 +25,7 @@ export enum ContractMethodType {
 const bingoContract = async <T, R>(methodName: string, params: T, type: ContractMethodType) => {
   const contract = contractRequest.get();
   const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
+  console.log('===configInfo', configInfo);
   const method = type === ContractMethodType.SEND ? 'callSendMethod' : 'callViewMethod';
   try {
     const res = await contract[method]({
@@ -130,8 +132,60 @@ export const Play = async ({
   }
 };
 
+export const PurchaseChance = async ({
+  value,
+}: IPurchaseProps): Promise<{ TransactionId: string; TxResult: ITransactionResult }> => {
+  const contract = contractRequest.get();
+  const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
+  console.log('PurchaseChance===', value);
+  try {
+    const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
+      methodName: 'PurchaseChance',
+      contractAddress,
+      args: {
+        value,
+      },
+    });
+
+    let result;
+
+    await sleep(1000);
+    const { status, txResult } = await getTxResultOnce(transactionId, rpcUrl!);
+    result = txResult;
+    if (['pending', 'notexisted'].includes(status)) {
+      await sleep(500);
+      const finalTxRes = await getTxResultRetry({
+        TransactionId: transactionId!,
+        chainId: chainId as ChainId,
+        rpcUrl: rpcUrl!,
+        rePendingEnd: new Date().getTime() + SECONDS_60,
+      });
+      result = finalTxRes.txResult;
+    }
+
+    return {
+      TransactionId: transactionId,
+      TxResult: result,
+    };
+  } catch (error) {
+    const resError = error as IContractError;
+    const res = await checkSynchronization(resError?.Error || '');
+    if (!res) {
+      return Promise.reject(
+        formatErrorMsg({
+          ...resError,
+          message: 'Syncing on-chain account info',
+        }),
+      );
+    }
+
+    return Promise.reject(formatErrorMsg(resError));
+  }
+};
+
 export const GetBingoReward = async (params: IPlayerProps): Promise<IBoutInformation> => {
   try {
+    console.log('===play GetBingoReward');
     const { TransactionId } = await Play(params);
     const rewardRes = await GetBoutInformation(TransactionId);
     if (rewardRes) {

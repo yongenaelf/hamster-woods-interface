@@ -1,50 +1,88 @@
 import { useIsMobile } from 'redux/selector/mobile';
+import Image from 'next/image';
+
 import { useConditionalRank } from '../hooks/useConditionalRank';
-import { Bean } from './Bean';
-import { LeaderBoardItemAddress } from './LeaderBoardItemAddress';
-import { LeaderBoardItemScore } from './LeaderBoardItemScore';
-import { LeaderboardTextColors } from './LeaderBoardItemText';
 import { Rank } from './Rank';
 import useGetState from 'redux/state/useGetState';
 import { DEFAULT_SYMBOL, Avatar } from 'constants/role';
+import { MAX_LEADERBOARD_ITEMS } from 'constants/platform';
+import { useWeeklyRank } from '../data/useWeeklyRank';
+import MeIcon from 'assets/images/me.png';
+import { middleEllipsis } from 'utils/middleEllipsis';
+import { LeaderboardTextColors } from '../data/constant';
+import { useCallback, useMemo } from 'react';
+import { useClaim } from '../data/useClaim';
+import showMessage from 'utils/setGlobalComponentsInfo';
+import useInitLeaderBoard from '../hooks/useInitLeaderBoard';
 
-interface ITabContentUser {
-  showMeIcon?: boolean;
-  rank?: number;
-  address?: string;
-  score?: number;
+export interface ITabContentUserProps {
+  className?: string;
 }
-export const TabContentUser = ({ showMeIcon, rank, address, score }: ITabContentUser) => {
-  const isMobile = useIsMobile();
-  const { curBeanPass } = useGetState();
-  const color: LeaderboardTextColors = LeaderboardTextColors.White;
 
-  const wrapperClassName = useConditionalRank({
-    rank,
-    first: 'bg-[#F5BF49]',
-    second: 'bg-[#CEDFF7]',
-    third: 'bg-[#E47B3D]',
-    ranked: 'bg-gradient-to-b from-[#FFD304] to-[#FFF4C1]',
-    unranked: 'bg-blue-700',
-    missing: 'bg-[#D7D7D7]',
-  });
+export const TabContentUser = ({ className }: ITabContentUserProps) => {
+  const isMobile = useIsMobile();
+  const { data } = useWeeklyRank();
+  const { curBeanPass } = useGetState();
+  const claimAward = useClaim();
+  const { initialize } = useInitLeaderBoard();
+
+  const showClaimBtn = useMemo(
+    () => !!data?.settleDaySelfRank?.rewardNftInfo,
+    [data?.settleDaySelfRank?.rewardNftInfo],
+  );
+
+  const onClaim = useCallback(async () => {
+    showMessage.loading();
+    try {
+      await claimAward();
+      await initialize();
+    } catch (error) {
+      console.log('err', error);
+      showMessage.error('claim failed');
+    } finally {
+      showMessage.hideLoading();
+    }
+  }, [claimAward, initialize]);
 
   return (
-    <div
-      className={`${wrapperClassName} ${
-        isMobile ? 'h-16 p-2' : 'h-20 pl-2'
-      } flex items-center rounded-bl-2xl rounded-br-2xl`}>
+    <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
       <img
         className={`${isMobile ? 'w-8' : 'w-16'}`}
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
         alt="avatar"
       />
-      <Rank rank={rank} />
-      <LeaderBoardItemAddress address={address} color={color} />
-      {showMeIcon ? <img className="ml-2 w-16" src={require('assets/images/me.png').default.src} alt="me" /> : null}
+      <Rank rank={data?.selfRank.rank} />
+      <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
+        {middleEllipsis(data?.selfRank.caAddress)}
+      </div>
+      {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
+        <Image className="ml-2 w-16" src={MeIcon} alt="me" />
+      ) : null}
       <div className="flex-grow mr-2"></div>
-      <LeaderBoardItemScore score={score} color={color} />
-      <Bean />
+      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
+        {data?.selfRank.score?.toLocaleString() ?? '-'}
+      </div>
+      <img
+        className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
+        src={require('assets/images/neat.png').default.src}
+        alt="bean"
+      />
+      {showClaimBtn && (
+        <div onClick={onClaim}>
+          <div className="flex-grow mr-2"></div>
+          <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
+            <span className="font-bold">Claim NFT Rewards</span>
+            <img
+              src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
+              className={`z-10 w-[24px] h-[24px]`}
+              width={24}
+              height={24}
+              alt="avatar"
+            />
+            <span className="font-black">`*{data?.settleDaySelfRank?.rewardNftInfo?.balance}`</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

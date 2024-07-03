@@ -1,4 +1,4 @@
-import { getBeanPassClaimClaimable } from 'api/request';
+import { getHamsterPassClaimClaimable } from 'api/request';
 import { useAddress } from 'hooks/useAddress';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ export default function Wallet() {
     showMessage.loading();
     let checkAccountInitStatusRes;
     try {
-      checkAccountInitStatusRes = await getBeanPassClaimClaimable({
+      checkAccountInitStatusRes = await getHamsterPassClaimClaimable({
         caAddress: address,
       });
       console.log('checkAccountInitStatus', checkAccountInitStatusRes);

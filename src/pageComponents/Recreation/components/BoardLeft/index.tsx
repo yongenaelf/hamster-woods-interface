@@ -8,15 +8,9 @@ import { WalletType } from 'types';
 import styles from './index.module.css';
 
 function BoardLeft() {
-  const { walletType, imageResources, configInfo } = useGetState();
+  const { walletType } = useGetState();
   return (
     <div className={styles['game__pc__side']}>
-      <div
-        className={styles['game__pc__blur']}
-        style={{
-          backgroundImage: `url(${imageResources?.aloginBgPc})`,
-        }}></div>
-      {configInfo?.isHalloween && <div className={styles['game__pc__mask']}></div>}
       <div className="relative z-[30] flex h-full w-full min-w-[140px] flex-col items-end pr-[60px] pt-[60px]">
         {walletType !== WalletType.discover && (
           <div className="mb-[32px]">

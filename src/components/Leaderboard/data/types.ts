@@ -1,13 +1,48 @@
 export interface IRankItem {
-  rank: number;
-  score: number;
+  rank?: number;
+  score?: number;
+  caAddress?: string;
+}
+
+interface ISettleDayRankItem {
   caAddress: string;
+  score: number;
+  rank: number;
+  fromRank?: number;
+  toRank?: number;
+  fromScore?: number;
+  toScore?: number;
+  rewardNftInfo: {
+    symbol: string;
+    chainId: string;
+    tokenName: string;
+    imageUrl: string;
+    balance: number;
+  };
 }
 
 interface IRankResult {
-  rankingList: IRankItem[] | null;
-  selfRank: IRankItem;
+  rankingList?: IRankItem[] | null;
+  selfRank?: IRankItem | null;
+  settleDayRankingList?: ISettleDayRankItem[] | null;
+  settleDaySelfRank?: ISettleDayRankItem | null;
 }
+
+interface IPastRecordItem {
+  time: string;
+  caAddress: string;
+  score: number;
+  rank: number;
+  rewardNftInfo: {
+    symbol: string;
+    chainId: string;
+    tokenName: string;
+    imageUrl: string;
+    balance: number;
+  };
+}
+
+export type TPastRecordResult = IPastRecordItem[];
 
 interface IWeekItem extends IRankItem {
   week: string;

@@ -1,4 +1,4 @@
-import { GetBingoReward, Play } from 'contract/bingo';
+import { GetBingoReward, GetBoutInformation, Play } from 'contract/bingo';
 import { IBoutInformation, IPlayerProps } from 'types';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { deserializeLog } from 'utils/deserializeLog';
@@ -7,7 +7,7 @@ import { Proto } from 'utils/proto';
 const play = async (params: IPlayerProps) => {
   const proto = Proto.getInstance().getProto();
   if (proto) {
-    const { TxResult } = await Play(params);
+    const { TxResult, TransactionId } = await Play(params);
     const log = TxResult?.Logs?.filter((item) => {
       return item.Name === 'Bingoed';
     })?.[0];
@@ -36,7 +36,8 @@ const play = async (params: IPlayerProps) => {
           },
         },
       });
-      const bingoRes = await GetBingoReward(params);
+
+      const bingoRes = await GetBoutInformation(TransactionId);
       return bingoRes;
     }
   } else {
