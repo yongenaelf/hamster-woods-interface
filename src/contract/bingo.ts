@@ -133,17 +133,17 @@ export const Play = async ({
 };
 
 export const PurchaseChance = async ({
-  input,
+  value,
 }: IPurchaseProps): Promise<{ TransactionId: string; TxResult: ITransactionResult }> => {
   const contract = contractRequest.get();
   const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
-
+  console.log('PurchaseChance===', value);
   try {
     const { transactionId, chainId, rpcUrl } = await contract.callSendMethodNoResult({
       methodName: 'PurchaseChance',
       contractAddress,
       args: {
-        input,
+        value,
       },
     });
 
@@ -185,6 +185,7 @@ export const PurchaseChance = async ({
 
 export const GetBingoReward = async (params: IPlayerProps): Promise<IBoutInformation> => {
   try {
+    console.log('===play GetBingoReward');
     const { TransactionId } = await Play(params);
     const rewardRes = await GetBoutInformation(TransactionId);
     if (rewardRes) {

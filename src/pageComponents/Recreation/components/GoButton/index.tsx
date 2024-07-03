@@ -18,6 +18,7 @@ export interface IGoButton {
   status?: Status;
   hasNft?: boolean;
   playableCount?: number;
+  dailyPlayableCount?: number;
   sumScore?: number;
   purchasedChancesCount?: number;
   curDiceCount?: number;
@@ -32,7 +33,7 @@ function GoButton({
   go,
   status = Status.NONE,
   playableCount = 0,
-  sumScore = 5,
+  dailyPlayableCount = 5,
   purchasedChancesCount = 0,
   curDiceCount,
   changeCurDiceCount,
@@ -87,7 +88,7 @@ function GoButton({
           className={`${
             isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
           } font-bold text-[#52300B]`}>
-          {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
+          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),
@@ -109,7 +110,7 @@ function GoButton({
           className={`${
             isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
           } font-bold text-[#8E8E8E]`}>
-          {`free: ${playableCount}/${sumScore} Paid: ${purchasedChancesCount}`}
+          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
         </span>
       </>
     ),
@@ -232,7 +233,7 @@ function GoButton({
           </div>
         )}
         {isMobile ? (
-          <div className={styles['button__border']}>
+          <div className={`${styles['button__border']} flex justify-center`}>
             <div
               style={{
                 backgroundImage: `url(${
@@ -241,7 +242,7 @@ function GoButton({
                   ]
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex`}>
+              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex left-[-20px]`}>
               {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
 
               <div

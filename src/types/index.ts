@@ -127,7 +127,7 @@ export interface IPlayerProps {
 }
 
 export interface IPurchaseProps {
-  input: number;
+  value: string | number;
 }
 
 export interface IPlayerInformation {
@@ -142,6 +142,7 @@ export interface IPlayerInformation {
   lockedAcorns: number;
   purchasedChancesCount: number;
   weeklyPurchasedChancesCount: number;
+  acornsDecimals: number;
 }
 export enum WalletType {
   unknown = 'unknown',
@@ -233,6 +234,8 @@ export interface IConfigItems {
   forestNftDetailUrl: string;
   isShowRampBuy?: boolean;
   isShowRampSell?: boolean;
+  awakenUrl: string;
+  awakenTutorialUrl: string;
 }
 
 export interface IChessboardData {

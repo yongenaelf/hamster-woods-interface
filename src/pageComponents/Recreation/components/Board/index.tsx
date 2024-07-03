@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Menu from '../Menu';
 import RankingImage from 'assets/images/recreation/ranking.png';
 import NftImage from 'assets/images/recreation/nft.png';
 import GoButton, { IGoButton, Status } from '../GoButton';
@@ -17,6 +16,8 @@ import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard'
 import showMessage from 'utils/setGlobalComponentsInfo';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { Tooltip } from 'antd';
+import { allAcornsTip } from 'constants/tip';
+import { divDecimals } from 'utils/calculate';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -27,13 +28,14 @@ function Board({
   go,
   status = Status.NONE,
   playableCount = 0,
-  sumScore = 5,
+  dailyPlayableCount = 5,
   onNftClick,
   curDiceCount,
   changeCurDiceCount,
   getChance,
   getMoreAcorns,
   showLockedAcorns,
+  purchasedChancesCount,
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -80,12 +82,13 @@ function Board({
         <div className="relative z-40 flex-1">
           <div className={styles['board__acorn']}>
             <Image src={AcornGetImage} alt="bean" className="h-[60px] w-[60px]" onClick={getMoreAcorns} />
-            <span className={styles['board__acorn__number']}>{playerInfo?.totalAcorns || 0}</span>
+            <span className={styles['board__acorn__number']}>
+              {divDecimals(playerInfo?.totalAcorns, playerInfo?.acornsDecimals).toFixed() || 0}
+            </span>
             <Tooltip
               title={
                 <div className="px-[24px] py-[16px]">
-                  <div className="text-[18px] leading-[28px]">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
-In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
+                  <div className="text-[18px] leading-[28px]">{allAcornsTip}</div>
                   <div className="text-right text-[24px] leading-[28px]" onClick={() => setTooltipOpen(false)}>
                     OK
                   </div>
@@ -107,11 +110,15 @@ In the upcoming version, staking will be introduced, allowing token holders to s
           </div>
           <div className={styles['board__acorn']}>
             <Image src={AcornWeeklyImage} alt="bean" className="h-[60px] w-[60px]" />
-            <span className={styles['board__acorn__number']}>{playerInfo?.weeklyAcorns || 0}</span>
+            <span className={styles['board__acorn__number']}>
+              {divDecimals(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals).toFixed() || 0}
+            </span>
           </div>
           <div className={styles['board__acorn']}>
             <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" onClick={showLockedAcorns} />
-            <span className={styles['board__acorn__number']}>{playerInfo?.lockedAcorns || 0}</span>
+            <span className={styles['board__acorn__number']}>
+              {divDecimals(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals).toFixed() || 0}
+            </span>
           </div>
           <div className={styles['board__feature']} onClick={handleShowLeaderboard}>
             <Image src={RankingImage} alt="bean" className="h-[72px] w-[72px]" />
@@ -126,12 +133,13 @@ In the upcoming version, staking will be introduced, allowing token holders to s
         </div>
         <GoButton
           playableCount={playableCount}
-          sumScore={sumScore}
+          dailyPlayableCount={dailyPlayableCount}
           status={status}
           curDiceCount={curDiceCount}
           changeCurDiceCount={changeCurDiceCount}
           go={() => go && go()}
           getChance={getChance}
+          purchasedChancesCount={purchasedChancesCount}
         />
       </div>
     );

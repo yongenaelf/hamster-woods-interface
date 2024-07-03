@@ -3,6 +3,9 @@ import NeatImageIcon from 'assets/images/neat.png';
 import CommonBtn from 'components/CommonBtn';
 import { useIsMobile } from 'redux/selector/mobile';
 import { useMemo } from 'react';
+import openPage from 'utils/openPage';
+import { store } from 'redux/store';
+const { configInfo } = store.getState();
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const isMobile = useIsMobile();
@@ -30,8 +33,15 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
           textClassName
         }>{`To acquire more $ACORNS, it's recommended to use AwakenSwap where trading pairs like ACORNS/ELF or ACORNS/USDT are supported.`}</div>
       <div className={textClassName}>
-        If you need help using <span className="underline text-[#3989FF] font-[600]">AwakenSwap</span>, feel free to
-        check out the tutorial.
+        If you need help using{' '}
+        <span
+          onClick={() => {
+            openPage(configInfo?.configInfo?.awakenTutorialUrl ?? '');
+          }}
+          className="underline text-[#3989FF] font-[600]">
+          AwakenSwap
+        </span>
+        , feel free to check out the tutorial.
       </div>
       <CommonBtn
         className={`${
@@ -41,7 +51,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         } flex justify-center items-center font-fonarto`}
         title="Trade on AwakenSwap"
         onClick={() => {
-          // go to swap
+          openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
         }}
       />
     </CustomModal>

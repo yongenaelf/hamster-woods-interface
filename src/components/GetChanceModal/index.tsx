@@ -14,10 +14,11 @@ import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 import { store } from 'redux/store';
 import { IBalance } from 'types';
-const { serverConfigInfo } = store.getState();
+import openPage from 'utils/openPage';
+const { serverConfigInfo, configInfo } = store.getState();
 
 export type GetChanceModalPropsType = {
-  onConfirm?: (n: number) => void;
+  onConfirm?: (n: number, chancePrice: number) => void;
   acornsInElf: number;
   elfInUsd: number;
   assetBalance: IBalance[];
@@ -36,8 +37,8 @@ export default function GetChanceModal({
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
-  const changePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 15, []);
-  const fee = useMemo(() => serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee || 0.0035, []);
+  const chancePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 1, []);
+  const fee = useMemo(() => serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee || 0, []);
   const acornsToken = useMemo(() => assetBalance.find((item) => item.symbol === 'ACORNS'), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance.find((item) => item.symbol === 'ELF'), [assetBalance]);
 
@@ -73,7 +74,7 @@ export default function GetChanceModal({
           <div className="flex justify-center items-center flex-wrap text-[20px]">
             Do you want to pay
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
-              <span>{changePrice}</span>
+              <span>{chancePrice}</span>
               <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
               <span>ACORNS</span>
             </span>
@@ -107,7 +108,7 @@ export default function GetChanceModal({
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * changePrice} ACORNS</span>
+                <span>{inputVal * chancePrice} ACORNS</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -128,7 +129,7 @@ export default function GetChanceModal({
             <div className="flex items-center space-x-[8px] text-right font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * changePrice} ACORNS</span>
+                <span>{inputVal * chancePrice} ACORNS</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -162,8 +163,8 @@ export default function GetChanceModal({
               }`}>
               <div>Buy Game Chance</div>
               <div className="text-right flex flex-col space-y-[12px]">
-                <div className="font-bold">{`${inputVal * changePrice * acornsInElf} ELF`}</div>
-                <div>{`$ ${inputVal * changePrice * acornsInElf * elfInUsd}`}</div>
+                <div className="font-bold">{`${inputVal * chancePrice * acornsInElf} ELF`}</div>
+                <div>{`$ ${inputVal * chancePrice * acornsInElf * elfInUsd}`}</div>
               </div>
             </div>
           </>
@@ -178,7 +179,11 @@ export default function GetChanceModal({
             <div className="flex font-black">balance</div>
             <div className="flex justify-between items-center">
               <div className="font-bold text-left">{`${acornsToken?.symbol}: ${acornsToken?.balance}`}</div>
-              <div className="flex items-center justify-center px-[16px] py-[9px] rounded-[8px] bg-[#A15A1C] text-[14px] font-black text-[#FFFFFF]">
+              <div
+                onClick={() => {
+                  openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
+                }}
+                className="flex items-center justify-center px-[16px] py-[9px] rounded-[8px] bg-[#A15A1C] text-[14px] font-black text-[#FFFFFF]">
                 Deposit
               </div>
             </div>
@@ -187,7 +192,7 @@ export default function GetChanceModal({
         ) : null}
         <CommonBtn
           title={'Purchase'}
-          onClick={() => onConfirm?.(inputVal * changePrice)}
+          onClick={() => onConfirm?.(inputVal, chancePrice)}
           className={`flex justify-center items-center font-fonarto ${
             isMobile
               ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-2'

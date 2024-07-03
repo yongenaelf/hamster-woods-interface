@@ -47,7 +47,8 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
-
+import { timesDecimals } from 'utils/calculate';
+import { message } from 'antd';
 const { serverConfigInfo } = store.getState();
 
 const mockHamsterPass = {
@@ -283,30 +284,29 @@ export default function Game() {
     updateAssetBalance();
     setGetChanceModalVisible(true);
   }, [playerInfo?.weeklyPurchasedChancesCount, updateAssetBalance, updatePrice]);
-  const changePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 15, []);
 
   const handlePurchase = useCallback(
-    async (n: number) => {
-      // TODO approve
-
+    async (n: number, chancePrice: number) => {
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
-          approveTargetAddress: 'm39bMdjpA74Pv7pyA4zn8w6mhz182KpcrtFAnwWCiFmcihNYE',
-          amount: n,
-          symbol: 'ELF',
+          approveTargetAddress: configInfo?.beanGoTownContractAddress ?? '',
+          amount: n * chancePrice,
+          symbol: 'TSCRIPT',
         });
         if (!isApproved) return;
-        await PurchaseChance({ input: n });
+        await PurchaseChance({ value: n });
+        message.success('Buy $ACORNS Success');
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
       } catch (error) {
         console.log('===PurchaseChance error', error);
+        message.error('Buy $ACORNS Failed');
       } finally {
         showMessage.hideLoading();
       }
     },
-    [address, changePrice, updatePlayerInformation],
+    [address, configInfo?.beanGoTownContractAddress, updatePlayerInformation],
   );
 
   const go = async () => {
@@ -493,6 +493,7 @@ export default function Game() {
         setOpacity(1);
       }, 25);
     }
+    updateAssetBalance();
     showMessage.hideLoading();
   });
 
@@ -626,7 +627,7 @@ export default function Game() {
               hasNft={hasNft}
               onNftClick={onNftClick}
               playableCount={playableCount}
-              sumScore={hasNft ? sumScore : 0}
+              dailyPlayableCount={hasNft ? playerInfo?.dailyPlayableCount : 0}
               status={goStatus}
               curDiceCount={curDiceCount}
               changeCurDiceCount={changeCurDiceCount}
@@ -634,6 +635,7 @@ export default function Game() {
               getChance={getChance}
               getMoreAcorns={() => setMoreAcornsVisible(true)}
               showLockedAcorns={() => setLockedAcornsVisible(true)}
+              purchasedChancesCount={playerInfo?.purchasedChancesCount}
             />
           </BoardRight>
         )}
@@ -641,12 +643,13 @@ export default function Game() {
         {isMobile && (
           <GoButton
             playableCount={playableCount}
-            sumScore={hasNft ? sumScore : 0}
+            dailyPlayableCount={hasNft ? playerInfo?.dailyPlayableCount : 0}
             status={goStatus}
             curDiceCount={curDiceCount}
             changeCurDiceCount={changeCurDiceCount}
             go={go}
             getChance={getChance}
+            purchasedChancesCount={playerInfo?.purchasedChancesCount}
           />
         )}
 

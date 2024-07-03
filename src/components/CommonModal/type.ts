@@ -2,7 +2,7 @@ import { MouseEvent } from 'react';
 
 export type BeanPassModalPropsType = {
   onConfirm?: (e: MouseEvent<any>) => void;
-  onCancel: (e: MouseEvent<any>) => void;
+  onCancel: () => void;
   open: boolean;
   type: GetBeanPassStatus;
 };
