@@ -1,7 +1,8 @@
 name: Build and Push Image
 on:
   push:
-    branches: ['dev']
+    tags:
+      - 'v*.*.*'
 jobs:
   build-and-push-image:
     runs-on: beangotown-runner
@@ -38,7 +39,3 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             ENVIRONMENT=mainnet
-
-
-
-
