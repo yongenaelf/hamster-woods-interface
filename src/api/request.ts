@@ -12,6 +12,10 @@ import {
   IServerConfig,
   IPrice,
   IBalance,
+  IClaimAwardBody,
+  ILockInfoQuery,
+  TLockInfosResponse,
+  TUnlockInfo,
 } from 'types';
 import request, { cmsRequest } from './axios';
 import {
@@ -19,6 +23,7 @@ import {
   IRankingSeasonListResult,
   ISeasonRankResult,
   IWeeklyRankResult,
+  TPastRecordResult,
 } from 'components/Leaderboard/data/types';
 
 export const getHamsterPassClaimClaimable = async (
@@ -37,6 +42,14 @@ export const blockHeight = async (): Promise<number> => {
 
 export const getWeekRank = async (query: IGetRankQuery): Promise<IWeeklyRankResult> => {
   return request.get('/app/rank/week-rank', { params: query });
+};
+
+export const getPastRecord = async (query: IGetRankQuery): Promise<TPastRecordResult> => {
+  return request.get('/app/rank/history', { params: query });
+};
+
+export const claimAward = async (body: IClaimAwardBody): Promise<TPastRecordResult> => {
+  return request.post('/app/reward/claim', body);
 };
 
 export const getSeasonRank = async (query: IGetRankQuery): Promise<ISeasonRankResult> => {
@@ -92,4 +105,11 @@ export const fetchPrice = async (): Promise<IPrice> => {
 
 export const fetchBalance = async (): Promise<IBalance[]> => {
   return request.get('app/hamster-pass/asset');
+};
+export const getLockInfos = async (query: ILockInfoQuery): Promise<TLockInfosResponse> => {
+  return request.get('/app/lock/locked-infos', { params: query });
+};
+
+export const getUnlockRecords = async (query: ILockInfoQuery): Promise<TUnlockInfo[]> => {
+  return request.get('/app/lock/unlock-records', { params: query });
 };

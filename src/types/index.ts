@@ -263,6 +263,10 @@ export interface IGetRankQuery {
   MaxResultCount?: number | string;
 }
 
+export interface IClaimAwardBody {
+  caAddress: string;
+}
+
 export interface IRankHistoryQuery {
   CaAddress?: string;
   SeasonId?: string;
@@ -311,3 +315,30 @@ export interface IBalance {
   decimals: number;
   balance: number;
 }
+export interface ILockInfoQuery {
+  CaAddress?: string;
+  SkipCount?: number;
+  MaxResultCount?: number | string;
+}
+
+export type LockedInfo = {
+  lockedTime: string;
+  unLockTime: string;
+  symbol: string;
+  decimals: number;
+  amount: number;
+};
+
+export type TLockInfosResponse = {
+  totalLockedAmount: number;
+  decimals: number;
+  lockedInfoList: LockedInfo[];
+};
+
+export type TUnlockInfo = {
+  unLockTime: string;
+  symbol: string;
+  decimal: number;
+  amount: number;
+  transactionId: string;
+};

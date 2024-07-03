@@ -1,6 +1,6 @@
 import { parseISO, format } from 'date-fns';
 import { useWeeklyRank } from '../data/useWeeklyRank';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ChallengeStatus } from '../data/types';
 import { AppState, useSelector } from 'redux/store';
 import WeeklyPrizes from './WeeklyPrizes';
@@ -16,6 +16,10 @@ export const WeeklyTabContent = () => {
   const { data } = useWeeklyRank();
   const [weeklyPrizeOpen, setWeeklyPrizeOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  const isSettled = useMemo<boolean>(() => {
+    return !!data?.settleDaySelfRank && !!data.settleDayRankingList;
+  }, [data?.settleDayRankingList, data?.settleDaySelfRank]);
 
   return (
     <>
@@ -33,12 +37,18 @@ export const WeeklyTabContent = () => {
             to learn more about the event and its prizes.
           </div>
         </div>
-        {data?.rankingList.length ? (
-          <LeaderBoardNoRecord>{`Leaderboards will be display at the end of the first week of rankings.`}</LeaderBoardNoRecord>
-        ) : (
-          <LeaderBoardSettleList data={data} />
-          // <LeaderBoardItemList data={data} />
-        )}
+        {isSettled &&
+          (data?.settleDayRankingList?.length ? (
+            <LeaderBoardSettleList data={data} />
+          ) : (
+            <LeaderBoardNoRecord>{`Leaderboards will be display at the end of the first week of rankings.`}</LeaderBoardNoRecord>
+          ))}
+        {!isSettled &&
+          (data?.rankingList?.length ? (
+            <LeaderBoardItemList data={data} />
+          ) : (
+            <LeaderBoardNoRecord>{`Leaderboards will be display at the end of the first week of rankings.`}</LeaderBoardNoRecord>
+          ))}
       </div>
       <WeeklyPrizes open={weeklyPrizeOpen} onCancel={() => setWeeklyPrizeOpen(false)} />
     </>
