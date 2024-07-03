@@ -82,13 +82,8 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
         <RankItem rank={RankEnum.Second} />
         <RankItem rank={RankEnum.Third} />
         <DefaultItem
-          topText="Top 4-15"
-          avatarIcon={require('assets/images/prize-4.png').default.src}
-          getNFTDetail="KINGHAMSTER NFT Prize *1"
-        />
-        <DefaultItem
-          topText="Top 15-30"
-          avatarIcon={require('assets/images/prize-5.png').default.src}
+          topText="Top 4-10"
+          avatarIcon={require('assets/images/king-hamster.png').default.src}
           getNFTDetail="KINGHAMSTER NFT Prize *1"
         />
       </div>

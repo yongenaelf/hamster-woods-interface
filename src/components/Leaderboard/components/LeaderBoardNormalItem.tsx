@@ -10,7 +10,7 @@ export const LeaderBoardNormalItem = ({
 }: {
   rank: number;
   address: string;
-  beans: number;
+  beans: number | string;
   isCurrentUserRank?: boolean;
 }) => {
   const isMobile = useIsMobile();

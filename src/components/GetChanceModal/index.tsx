@@ -8,7 +8,7 @@ import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import NeatIcon from 'assets/images/neat.png';
 import PlusIcon from 'assets/images/plus.png';
 import MinusIcon from 'assets/images/minus.png';
-import ArrowIcon from 'assets/images/Arrow.png';
+import ArrowIcon from 'assets/images/arrow.png';
 import AddIcon from 'assets/images/add.png';
 import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';

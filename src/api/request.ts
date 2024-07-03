@@ -19,6 +19,7 @@ import {
 } from 'types';
 import request, { cmsRequest } from './axios';
 import {
+  IClaimableInfoResult,
   IRankingHistoryResult,
   IRankingSeasonListResult,
   ISeasonRankResult,
@@ -48,7 +49,7 @@ export const getPastRecord = async (query: IGetRankQuery): Promise<TPastRecordRe
   return request.get('/app/rank/history', { params: query });
 };
 
-export const claimAward = async (body: IClaimAwardBody): Promise<TPastRecordResult> => {
+export const claimAward = async (body: IClaimAwardBody): Promise<IClaimableInfoResult> => {
   return request.post('/app/reward/claim', body);
 };
 
