@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CheckerboardNode, CheckerboardType, IJumpCallbackParams } from './checkerboard';
 import { CheckerboardList } from './checkerboard';
@@ -47,16 +47,6 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
-import { timesDecimals } from 'utils/calculate';
-import { message } from 'antd';
-const { serverConfigInfo } = store.getState();
-
-const mockHamsterPass = {
-  symbol: 'TTZZ-1',
-  tokenName: 'TTZZ',
-  nftImageUrl: 'https://forest-testnet.s3.ap-northeast-1.amazonaws.com/1008xAUTO/1718204222065-Activity%20Icon.png',
-  tokenId: 111,
-};
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -87,7 +77,7 @@ export default function Game() {
     imageResources,
   } = useGetState();
 
-  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>(mockHamsterPass);
+  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>();
 
   const firstNode = checkerboardData![5][4];
   const firstNodePosition: [number, number] = [5, 4];
@@ -296,12 +286,12 @@ export default function Game() {
         });
         if (!isApproved) return;
         await PurchaseChance({ value: n });
-        message.success('Buy $ACORNS Success');
+        showMessage.success('Buy $ACORNS Success');
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
       } catch (error) {
         console.log('===PurchaseChance error', error);
-        message.error('Buy $ACORNS Failed');
+        showMessage.error('Buy $ACORNS Failed');
       } finally {
         showMessage.hideLoading();
       }

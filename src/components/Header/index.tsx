@@ -1,5 +1,4 @@
 import Wallet from './components/Wallet';
-import Award from './components/Award';
 import Intro from './components/Intro';
 import Setting from './components/Setting';
 import styles from './style.module.css';
@@ -14,7 +13,7 @@ import HeaderLockImage from 'assets/images/headerMenu/header-locked.png';
 import { useState } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
-import { divDecimals } from 'utils/calculate';
+import { divDecimalsStr } from 'utils/calculate';
 
 export default function Header() {
   const { walletType } = useGetState();
@@ -42,7 +41,7 @@ export default function Header() {
             onClick={() => setMoreAcornsVisible(true)}
           />
           <span className={styles['board__acorn__number']}>
-            {divDecimals(playerInfo?.totalAcorns, playerInfo?.acornsDecimals).toFixed() || 0}
+            {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
           </span>
           <Tooltip
             title={
@@ -71,7 +70,7 @@ In the upcoming version, staking will be introduced, allowing token holders to s
         <div className={styles['board__acorn']}>
           <Image src={AcornWeeklyImage} alt="bean" className="h-[30px] w-[30px]" />
           <span className={styles['board__acorn__number']}>
-            {divDecimals(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals).toFixed() || 0}
+            {divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
           </span>
         </div>
         <div className="flex-grow"></div>
