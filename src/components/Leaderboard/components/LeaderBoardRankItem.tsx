@@ -16,7 +16,7 @@ export const LeaderBoardRankItem = ({
   textClassName: LeaderboardTextColors;
   shadowInsetColor: string;
   address: string;
-  beans: number;
+  beans: number | string;
   isCurrentUserRank?: boolean;
 }) => {
   const isMobile = useIsMobile();

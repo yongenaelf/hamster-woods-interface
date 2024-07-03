@@ -3,6 +3,7 @@ import { LeaderBoardItem } from './LeaderBoardItem';
 import { MAX_LEADERBOARD_EMPTY } from 'constants/platform';
 import styles from './style.module.css';
 import { useIsMobile } from 'redux/selector/mobile';
+import { divDecimalsStr } from 'utils/calculate';
 
 const EmptyItem = () => {
   const isMobile = useIsMobile();
@@ -36,7 +37,7 @@ export const LeaderBoardItemList = ({ data }: ILeaderBoardItemList) => {
               key={i.rank}
               rank={i.rank || 0}
               address={i?.caAddress || ''}
-              beans={i?.score || 0}
+              beans={divDecimalsStr(i?.score, i?.decimals)}
               isCurrentUserRank={i?.rank === data?.selfRank?.rank}
             />
           ))}

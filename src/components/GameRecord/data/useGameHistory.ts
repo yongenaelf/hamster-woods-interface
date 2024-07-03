@@ -14,6 +14,7 @@ export interface IGameItem {
   id: string;
   gridNum: number;
   score: number;
+  decimals: number;
   transcationFee: number;
   playTransactionInfo: ITransactionInfo | null;
   bingoTransactionInfo: ITransactionInfo | null;
@@ -61,6 +62,7 @@ export const useGameHistory = () => {
             id
             gridNum
             score
+            decimals
             transcationFee
             playTransactionInfo {
               transactionId
@@ -102,6 +104,7 @@ export const useBuyHistory = () => {
             id
             cost
             chance
+            decimals
             transcationFee
             transactionInfo {
               transactionId

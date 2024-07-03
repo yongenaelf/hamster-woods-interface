@@ -10,10 +10,14 @@ import { useWeeklyRank } from '../data/useWeeklyRank';
 import MeIcon from 'assets/images/me.png';
 import { middleEllipsis } from 'utils/middleEllipsis';
 import { LeaderboardTextColors } from '../data/constant';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useClaim } from '../data/useClaim';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import useInitLeaderBoard from '../hooks/useInitLeaderBoard';
+import { divDecimalsStr } from 'utils/calculate';
+import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
+import { ShowBeanPassType } from 'components/CommonModal/type';
+import { IClaimableInfoResult } from '../data/types';
 
 export interface ITabContentUserProps {
   className?: string;
@@ -25,6 +29,8 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const { curBeanPass } = useGetState();
   const claimAward = useClaim();
   const { initialize } = useInitLeaderBoard();
+  const [isShowNFT, setIsShowNFT] = useState(false);
+  const [claimInfo, setClaimInfo] = useState<IClaimableInfoResult>();
 
   const showClaimBtn = useMemo(
     () => !!data?.settleDaySelfRank?.rewardNftInfo,
@@ -34,7 +40,10 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const onClaim = useCallback(async () => {
     showMessage.loading();
     try {
-      await claimAward();
+      const result = await claimAward();
+      setClaimInfo(result);
+      setIsShowNFT(true);
+
       await initialize();
     } catch (error) {
       console.log('err', error);
@@ -46,6 +55,12 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
 
   return (
     <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
+      <ShowNFTModal
+        open={isShowNFT}
+        beanPassItem={claimInfo?.kingHamsterInfo}
+        onCancel={() => setIsShowNFT(false)}
+        type={ShowBeanPassType.Success}
+      />
       <img
         className={`${isMobile ? 'w-8' : 'w-16'}`}
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
@@ -60,7 +75,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
       ) : null}
       <div className="flex-grow mr-2"></div>
       <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
-        {data?.selfRank.score?.toLocaleString() ?? '-'}
+        {divDecimalsStr(data?.selfRank.score, data?.selfRank.decimals) ?? '-'}
       </div>
       <img
         className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
