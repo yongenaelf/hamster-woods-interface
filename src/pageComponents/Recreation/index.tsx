@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { CheckerboardNode, CheckerboardType, IJumpCallbackParams } from './checkerboard';
 import { CheckerboardList } from './checkerboard';
@@ -46,6 +46,9 @@ import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
+import contractRequest from 'contract/contractRequest';
+
+const { serverConfigInfo } = store.getState();
 
 const mockHamsterPass = {
   symbol: 'TTZZ-1',
@@ -280,6 +283,7 @@ export default function Game() {
     updateAssetBalance();
     setGetChanceModalVisible(true);
   }, [playerInfo?.weeklyPurchasedChancesCount, updateAssetBalance, updatePrice]);
+  const changePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 15, []);
 
   const handlePurchase = useCallback(
     async (n: number) => {
@@ -287,6 +291,12 @@ export default function Game() {
 
       try {
         showMessage.loading();
+        const isApproved = await contractRequest.get().checkAllowanceAndApprove({
+          approveTargetAddress: 'm39bMdjpA74Pv7pyA4zn8w6mhz182KpcrtFAnwWCiFmcihNYE',
+          amount: n,
+          symbol: 'ELF',
+        });
+        if (!isApproved) return;
         await PurchaseChance({ input: n });
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
@@ -296,7 +306,7 @@ export default function Game() {
         showMessage.hideLoading();
       }
     },
-    [address, updatePlayerInformation],
+    [address, changePrice, updatePlayerInformation],
   );
 
   const go = async () => {
