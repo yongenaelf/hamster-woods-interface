@@ -2,325 +2,8 @@ import { ModalProps } from 'antd';
 import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
-
-// TODO
-const mockPending = {
-  totalLockedAmount: 123445566,
-  lockedInfoList: [
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-    {
-      lockedTime: '2024-06-28',
-      unLockTime: '2024-06-28',
-      symbol: 'ACORNS',
-      decimal: 8,
-      amount: 100,
-    },
-  ],
-};
-
-// TODO
-const mockUnlock = [
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-  {
-    unLockTime: '2024-06-28',
-    symbol: 'ACORNS',
-    decimal: 8,
-    amount: 100,
-    transactionId: 'xxx',
-  },
-];
+import { useLockInfos, useUnlockRecords } from './hook';
+import { divDecimalsStr } from 'utils/calculate';
 
 export enum LockedAcornsTabEnum {
   Pending = 'Pending Unlock',
@@ -331,7 +14,11 @@ const _tabClassName =
 
 export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomModalProps) {
   const isMobile = useIsMobile();
+  const { data: lockInfos } = useLockInfos();
+  const { data: unlockInfos } = useUnlockRecords();
   const [tab, setTab] = useState(LockedAcornsTabEnum.Pending);
+
+  console.log('lockInfos', lockInfos, unlockInfos);
 
   const tabClassName = useMemo(
     () =>
@@ -349,7 +36,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
             src={require('assets/images/lock.png').default.src}
             alt="lock"
           />
-          {`Locked Amount ${mockPending.totalLockedAmount.toLocaleString()}`}
+          {`Locked Amount ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
           <img
             width={20}
             className="w-[20px] h-[20px]"
@@ -364,19 +51,19 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           <div className="flex-1 text-right">$ACORNS amount</div>
         </div>
         <div className="overflow-y-auto h-full">
-          {mockPending.lockedInfoList.map((item, i) => (
+          {lockInfos?.lockedInfoList.map((item, i) => (
             <div
               key={i}
               className="flex text-[16px] leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]">
               <div className="flex-1">{item.lockedTime}</div>
               <div className="flex-1">{item.unLockTime}</div>
-              <div className="flex-1 text-right">{`${item.amount.toLocaleString()} $ACORNS`}</div>
+              <div className="flex-1 text-right">{`${divDecimalsStr(item.amount, item.decimals)} $${item.symbol}`}</div>
             </div>
           ))}
         </div>
       </>
     );
-  }, []);
+  }, [lockInfos?.decimals, lockInfos?.lockedInfoList, lockInfos?.totalLockedAmount]);
 
   const renderUnlock = useCallback(() => {
     return (
@@ -386,13 +73,13 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           <div className="flex-1 text-right">Unlock amount</div>
         </div>
         <div className="overflow-y-auto h-full">
-          {mockUnlock.map((item, i) => (
+          {unlockInfos?.map((item, i) => (
             <div
               key={i}
               className="flex text-[16px] leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]">
               <div className="flex-1">{item.unLockTime}</div>
               <div className="flex-1 flex justify-end items-center gap-2 text-right">
-                {`${item.amount.toLocaleString()} $ACORNS`}{' '}
+                {`${divDecimalsStr(item.amount, item.decimal)} $${item.symbol}`}{' '}
                 <img
                   width={20}
                   className="w-[20px] h-[20px]"
@@ -405,7 +92,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
         </div>
       </>
     );
-  }, []);
+  }, [unlockInfos]);
 
   const handleClose = useCallback(() => {
     setTab(LockedAcornsTabEnum.Pending);

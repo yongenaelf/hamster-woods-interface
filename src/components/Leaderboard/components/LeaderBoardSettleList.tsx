@@ -2,11 +2,11 @@ import { IWeeklyRankResult, ISeasonRankResult } from '../data/types';
 import styles from './style.module.css';
 import useGetState from 'redux/state/useGetState';
 import { useIsMobile } from 'redux/selector/mobile';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { LeaderboardTextColors, RankEnum } from '../data/constant';
 import { middleEllipsis } from 'utils/middleEllipsis';
 
-type IData = IWeeklyRankResult | ISeasonRankResult;
+type IData = IWeeklyRankResult;
 interface ILeaderBoardItemList {
   data?: IData;
 }
@@ -129,90 +129,90 @@ const SettleNormalItem = ({
   );
 };
 
-const mockData = {
-  settleDayRankingList: [
-    {
-      caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 100,
-      rank: 1,
-      fromRank: 0,
-      toRank: 0,
-      fromScore: 0,
-      toScore: 0,
-      rewardNftInfo: {
-        symbol: 'xxx-1',
-        chainId: 'tDVW',
-        tokenName: 'TTZZ',
-        imageUrl: 'xxx',
-        balance: 1,
-      },
-    },
-    {
-      caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 100,
-      rank: 2,
-      fromRank: 0,
-      toRank: 0,
-      fromScore: 0,
-      toScore: 0,
-      rewardNftInfo: {
-        symbol: 'xxx-1',
-        chainId: 'tDVW',
-        tokenName: 'TTZZ',
-        imageUrl: 'xxx',
-        balance: 1,
-      },
-    },
-    {
-      caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 100,
-      rank: 3,
-      fromRank: 0,
-      toRank: 0,
-      fromScore: 0,
-      toScore: 0,
-      rewardNftInfo: {
-        symbol: 'xxx-1',
-        chainId: 'tDVW',
-        tokenName: 'TTZZ',
-        imageUrl: 'xxx',
-        balance: 1,
-      },
-    },
-    {
-      caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 100,
-      rank: 1,
-      fromRank: 4,
-      toRank: 15,
-      fromScore: 1111,
-      toScore: 2222,
-      rewardNftInfo: {
-        symbol: 'xxx-1',
-        chainId: 'tDVW',
-        tokenName: 'TTZZ',
-        imageUrl: 'xxx',
-        balance: 1,
-      },
-    },
-    {
-      caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-      score: 100,
-      rank: 1,
-      fromRank: 16,
-      toRank: 30,
-      fromScore: 3333,
-      toScore: 4444,
-      rewardNftInfo: {
-        symbol: 'xxx-1',
-        chainId: 'tDVW',
-        tokenName: 'TTZZ',
-        imageUrl: 'xxx',
-        balance: 1,
-      },
-    },
-  ],
-};
+// const mockData = {
+//   settleDayRankingList: [
+//     {
+//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
+//       score: 100,
+//       rank: 1,
+//       fromRank: 0,
+//       toRank: 0,
+//       fromScore: 0,
+//       toScore: 0,
+//       rewardNftInfo: {
+//         symbol: 'xxx-1',
+//         chainId: 'tDVW',
+//         tokenName: 'TTZZ',
+//         imageUrl: 'xxx',
+//         balance: 1,
+//       },
+//     },
+//     {
+//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
+//       score: 100,
+//       rank: 2,
+//       fromRank: 0,
+//       toRank: 0,
+//       fromScore: 0,
+//       toScore: 0,
+//       rewardNftInfo: {
+//         symbol: 'xxx-1',
+//         chainId: 'tDVW',
+//         tokenName: 'TTZZ',
+//         imageUrl: 'xxx',
+//         balance: 1,
+//       },
+//     },
+//     {
+//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
+//       score: 100,
+//       rank: 3,
+//       fromRank: 0,
+//       toRank: 0,
+//       fromScore: 0,
+//       toScore: 0,
+//       rewardNftInfo: {
+//         symbol: 'xxx-1',
+//         chainId: 'tDVW',
+//         tokenName: 'TTZZ',
+//         imageUrl: 'xxx',
+//         balance: 1,
+//       },
+//     },
+//     {
+//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
+//       score: 100,
+//       rank: 1,
+//       fromRank: 4,
+//       toRank: 15,
+//       fromScore: 1111,
+//       toScore: 2222,
+//       rewardNftInfo: {
+//         symbol: 'xxx-1',
+//         chainId: 'tDVW',
+//         tokenName: 'TTZZ',
+//         imageUrl: 'xxx',
+//         balance: 1,
+//       },
+//     },
+//     {
+//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
+//       score: 100,
+//       rank: 1,
+//       fromRank: 16,
+//       toRank: 30,
+//       fromScore: 3333,
+//       toScore: 4444,
+//       rewardNftInfo: {
+//         symbol: 'xxx-1',
+//         chainId: 'tDVW',
+//         tokenName: 'TTZZ',
+//         imageUrl: 'xxx',
+//         balance: 1,
+//       },
+//     },
+//   ],
+// };
 
 export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
   const renderSettleItem = useCallback((item: any) => {
@@ -281,11 +281,16 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
       );
     }
   }, []);
+
+  const list = useMemo(() => {
+    return data?.settleDayRankingList ? data?.settleDayRankingList : data?.rankingList;
+  }, [data?.rankingList, data?.settleDayRankingList]);
+
   return (
     <div className={`flex flex-grow w-full flex-col`}>
       <div className="h-[4px] flex-grow overflow-y-hidden">
         <div className={`${styles.scrollbar} h-full overflow-y-auto`}>
-          {mockData?.settleDayRankingList?.map((item, i) => (
+          {list?.map((item, i) => (
             <div key={i}>{renderSettleItem(item)}</div>
           ))}
         </div>

@@ -10,17 +10,39 @@ import { useWeeklyRank } from '../data/useWeeklyRank';
 import MeIcon from 'assets/images/me.png';
 import { middleEllipsis } from 'utils/middleEllipsis';
 import { LeaderboardTextColors } from '../data/constant';
+import { useCallback, useMemo } from 'react';
+import { useClaim } from '../data/useClaim';
+import showMessage from 'utils/setGlobalComponentsInfo';
+import useInitLeaderBoard from '../hooks/useInitLeaderBoard';
 
 export interface ITabContentUserProps {
   className?: string;
 }
 
-const showClaimBtn = true;
-
 export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const isMobile = useIsMobile();
   const { data } = useWeeklyRank();
   const { curBeanPass } = useGetState();
+  const claimAward = useClaim();
+  const { initialize } = useInitLeaderBoard();
+
+  const showClaimBtn = useMemo(
+    () => !!data?.settleDaySelfRank?.rewardNftInfo,
+    [data?.settleDaySelfRank?.rewardNftInfo],
+  );
+
+  const onClaim = useCallback(async () => {
+    showMessage.loading();
+    try {
+      await claimAward();
+      await initialize();
+    } catch (error) {
+      console.log('err', error);
+      showMessage.error('claim failed');
+    } finally {
+      showMessage.hideLoading();
+    }
+  }, [claimAward, initialize]);
 
   return (
     <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
@@ -33,7 +55,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
       <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
         {middleEllipsis(data?.selfRank.caAddress)}
       </div>
-      {data && data.selfRank.rank >= MAX_LEADERBOARD_ITEMS ? (
+      {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
         <Image className="ml-2 w-16" src={MeIcon} alt="me" />
       ) : null}
       <div className="flex-grow mr-2"></div>
@@ -46,20 +68,20 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         alt="bean"
       />
       {showClaimBtn && (
-        <>
+        <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
           <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
             <span className="font-bold">Claim NFT Rewards</span>
             <img
-              src={require('assets/images/prize-5.png').default.src}
+              src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
               className={`z-10 w-[24px] h-[24px]`}
               width={24}
               height={24}
               alt="avatar"
             />
-            <span className="font-black">*2</span>
+            <span className="font-black">`*{data?.settleDaySelfRank?.rewardNftInfo?.balance}`</span>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
