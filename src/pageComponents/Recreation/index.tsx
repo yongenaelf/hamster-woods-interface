@@ -13,16 +13,16 @@ import { ANIMATION_DURATION } from 'constants/animation';
 import useGetState from 'redux/state/useGetState';
 import RecreationModal, { RecreationModalType } from './components/RecreationModal';
 import { useDebounce, useDeepCompareEffect, useEffectOnce, useWindowSize } from 'react-use';
-import { BeanPassItemType, GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
+import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type';
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
-import { fetchBalance, fetchPrice, receiveHamsterPassNFT } from 'api/request';
+import { fetchBalance, fetchBeanPassList, fetchPrice, receiveHamsterPassNFT } from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
 import { setCurBeanPass, setPlayerInfo } from 'redux/reducer/info';
-import { IBalance, IContractError, WalletType } from 'types';
+import { IBalance, IBeanPassListItem, IContractError, WalletType } from 'types';
 import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
 import { dispatch, store } from 'redux/store';
 import { TargetErrorType, formatErrorMsg } from 'utils/formattError';
@@ -75,9 +75,10 @@ export default function Game() {
     needSync,
     checkerboardCounts,
     imageResources,
+    curBeanPass,
   } = useGetState();
 
-  const [beanPassInfoDto, setBeanPassInfoDto] = useState<BeanPassItemType>();
+  const [beanPassInfoDto, setBeanPassInfoDto] = useState<IBeanPassListItem | undefined>(curBeanPass);
 
   const firstNode = checkerboardData![5][4];
   const firstNodePosition: [number, number] = [5, 4];
@@ -282,7 +283,7 @@ export default function Game() {
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
           approveTargetAddress: configInfo?.beanGoTownContractAddress ?? '',
           amount: n * chancePrice,
-          symbol: 'TSCRIPT',
+          symbol: 'ACORNS',
         });
         if (!isApproved) return;
         await PurchaseChance({ value: n });
@@ -395,7 +396,7 @@ export default function Game() {
         return;
       }
       setBeanPassModalVisible(false);
-      setBeanPassInfoDto(hamsterPassInfo);
+      setBeanPassInfoDto({ ...hamsterPassInfo, owned: true, usingBeanPass: true });
       setNFTModalType(ShowBeanPassType.Success);
 
       await sleep(configInfo?.stepUpdateDelay || 3000);
@@ -408,7 +409,7 @@ export default function Game() {
           reNotexistedCount: 5,
         });
         updatePlayerInformation(address);
-        setBeanPassInfoDto(hamsterPassInfo);
+        setBeanPassInfoDto({ ...hamsterPassInfo, owned: true, usingBeanPass: true });
         setIsShowNFT(true);
         dispatch(
           setCurBeanPass({
@@ -546,11 +547,19 @@ export default function Game() {
     setCurDiceCount(num);
   };
 
+  const getHamsterPass = useCallback(async () => {
+    const beanPassList = await fetchBeanPassList({ caAddress: address });
+    setBeanPassInfoDto(beanPassList?.[0]);
+  }, [address]);
+
   useEffect(() => {
     if (playerInfo?.hamsterPassOwned !== undefined) {
       handleHasNft(playerInfo?.hamsterPassOwned || false);
+      if (playerInfo?.hamsterPassOwned) {
+        getHamsterPass();
+      }
     }
-  }, [playerInfo?.hamsterPassOwned, address, handleHasNft]);
+  }, [playerInfo?.hamsterPassOwned, address, handleHasNft, getHamsterPass]);
 
   return (
     <>

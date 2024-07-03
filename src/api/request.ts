@@ -85,7 +85,7 @@ export const fetchNoticeModal = async (): Promise<INoticeModalResponse> => {
   return cmsRequest.get<INoticeModalResponse>('items/notice_modal');
 };
 export const fetchBeanPassList = async (query: { caAddress: string }): Promise<Array<IBeanPassListItem>> => {
-  return request.get('/app/bean-pass/nft-list', { params: query });
+  return request.get('/app/hamster-pass/nft-list', { params: query });
 };
 
 export const setCurUsingBeanPass = async (body: ISetCurBeanBody): Promise<IBeanPassListItem> => {

@@ -59,17 +59,14 @@
   }
 }
 
-.loginBtnBlueIcon {
-  path {
-    @apply fill-[var(--color-blue-icon)];
-  }
-}
-
 .loginMethodModal {
   @apply !w-[750px] rounded-[32px];
   :global {
+    .ant-modal-content {
+      @apply !rounded-[32px];
+    }
     .ant-modal-body {
-      @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
+        @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
@@ -104,7 +101,7 @@
       @apply rounded-tl-2xl rounded-tr-2xl;
     }
     .ant-modal-content {
-      @apply overflow-auto rounded-2xl bg-[var(--color-main)] bg-[var(--color-main)] text-base  text-white;
+      @apply overflow-auto rounded-2xl bg-[var(--color-main)] text-base  text-white;
     }
     .ant-drawer-wrapper-body {
       @apply overflow-auto bg-[var(--color-main)] text-base  text-white;
@@ -117,14 +114,14 @@
       @apply min-h-[392px];
     }
   }
-  .loginBtn {
-    @apply relative mb-4 flex h-14 items-center justify-center rounded-[36px] border-2 border-solid bg-[var(--confirm-btn-bg)] mx-[97px] font-fonarto text-white;
-  }
+.loginBtn {
+  @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] border-2 border-solid bg-[var(--confirm-btn-bg)] mx-[97px] font-fonarto text-white;
+}
   .drawerHeader {
-    @apply mb-8 text-center font-fonarto text-2xl leading-6;
+    @apply mb-8 text-center font-fonarto text-2xl leading-6 text-[#953D22];
   }
   .drawer__close {
-    @apply absolute right-6 top-6;
+    @apply absolute right-3 top-3;
     svg {
       @apply w-6 h-6;
     }

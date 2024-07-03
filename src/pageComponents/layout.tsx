@@ -141,7 +141,8 @@ const Layout = dynamic(
           });
 
           serverConfigPromise.then((res) => {
-            store.dispatch(setServerConfigInfo(res.data));
+            console.log('===serverConfig', res);
+            store.dispatch(setServerConfigInfo(res));
           });
 
           Promise.all([chessBoardPromise, configPromise, serverConfigPromise]).then((res) => {
