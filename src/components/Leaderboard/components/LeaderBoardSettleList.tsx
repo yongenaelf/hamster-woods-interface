@@ -5,6 +5,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { useCallback, useMemo } from 'react';
 import { LeaderboardTextColors, RankEnum } from '../data/constant';
 import { middleEllipsis } from 'utils/middleEllipsis';
+import { divDecimalsStr } from 'utils/calculate';
 
 type IData = IWeeklyRankResult;
 interface ILeaderBoardItemList {
@@ -18,6 +19,7 @@ const SettleRankItem = ({
   shadowInsetColor,
   address = '-',
   score = 0,
+  decimals = 0,
   isCurrentUserRank,
   imageUrl,
   balance,
@@ -28,6 +30,7 @@ const SettleRankItem = ({
   shadowInsetColor: string;
   address: string;
   score: number;
+  decimals: number;
   imageUrl: string;
   balance: number;
   isCurrentUserRank?: boolean;
@@ -67,7 +70,7 @@ const SettleRankItem = ({
       </div>
       <div className="flex-1 flex justify-end items-center text-right ">
         <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto ${textClassName}`}>
-          {score?.toLocaleString() ?? '-'}
+          {divDecimalsStr(score, decimals) ?? '-'}
         </div>
         <img width={20} className="z-10 ml-[5px] mr-4" src={require('assets/images/neat.png').default.src} alt="neat" />
       </div>
@@ -75,7 +78,7 @@ const SettleRankItem = ({
         <img
           width={30}
           className="w-[30px] h-[30px]"
-          src={require('assets/images/prize-4.png').default.src}
+          src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
         <div className="text-[20px] text-white font-black">{`*${balance}`}</div>
@@ -89,11 +92,13 @@ const SettleNormalItem = ({
   centerText,
   imageUrl,
   balance,
+  decimals,
 }: {
   leftText: string;
   centerText: string;
   imageUrl: string;
   balance: number;
+  decimals: number;
 }) => {
   const isMobile = useIsMobile();
   return (
@@ -120,99 +125,14 @@ const SettleNormalItem = ({
         <img
           width={24}
           className="w-[24px] h-[24px]"
-          src={require('assets/images/prize-4.png').default.src}
+          src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
-        <div className="text-[16px] text-white font-black">{`*${balance}`}</div>
+        <div className="text-[16px] text-white font-black">{`*${divDecimalsStr(balance, decimals)}`}</div>
       </div>
     </div>
   );
 };
-
-// const mockData = {
-//   settleDayRankingList: [
-//     {
-//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-//       score: 100,
-//       rank: 1,
-//       fromRank: 0,
-//       toRank: 0,
-//       fromScore: 0,
-//       toScore: 0,
-//       rewardNftInfo: {
-//         symbol: 'xxx-1',
-//         chainId: 'tDVW',
-//         tokenName: 'TTZZ',
-//         imageUrl: 'xxx',
-//         balance: 1,
-//       },
-//     },
-//     {
-//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-//       score: 100,
-//       rank: 2,
-//       fromRank: 0,
-//       toRank: 0,
-//       fromScore: 0,
-//       toScore: 0,
-//       rewardNftInfo: {
-//         symbol: 'xxx-1',
-//         chainId: 'tDVW',
-//         tokenName: 'TTZZ',
-//         imageUrl: 'xxx',
-//         balance: 1,
-//       },
-//     },
-//     {
-//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-//       score: 100,
-//       rank: 3,
-//       fromRank: 0,
-//       toRank: 0,
-//       fromScore: 0,
-//       toScore: 0,
-//       rewardNftInfo: {
-//         symbol: 'xxx-1',
-//         chainId: 'tDVW',
-//         tokenName: 'TTZZ',
-//         imageUrl: 'xxx',
-//         balance: 1,
-//       },
-//     },
-//     {
-//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-//       score: 100,
-//       rank: 1,
-//       fromRank: 4,
-//       toRank: 15,
-//       fromScore: 1111,
-//       toScore: 2222,
-//       rewardNftInfo: {
-//         symbol: 'xxx-1',
-//         chainId: 'tDVW',
-//         tokenName: 'TTZZ',
-//         imageUrl: 'xxx',
-//         balance: 1,
-//       },
-//     },
-//     {
-//       caAddress: 'ELF_LEwNefrRAcYtQWFvTZTXykPca7QrijatqgbmAqB5M4Ud2yJGL_AELF',
-//       score: 100,
-//       rank: 1,
-//       fromRank: 16,
-//       toRank: 30,
-//       fromScore: 3333,
-//       toScore: 4444,
-//       rewardNftInfo: {
-//         symbol: 'xxx-1',
-//         chainId: 'tDVW',
-//         tokenName: 'TTZZ',
-//         imageUrl: 'xxx',
-//         balance: 1,
-//       },
-//     },
-//   ],
-// };
 
 export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
   const renderSettleItem = useCallback((item: any) => {
@@ -221,8 +141,9 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
         <SettleNormalItem
           leftText={`Top ${item.fromRank}-${item.toRank}`}
           centerText={`${item.fromScore.toLocaleString()}-${item.toScore.toLocaleString()}`}
-          balance={item.rewardNftInfo.balance}
-          imageUrl={item.rewardNftInfo.imageUrl}
+          balance={item?.rewardNftInfo?.balance}
+          decimals={item?.rewardNftInfo?.decimals}
+          imageUrl={item.rewardNftInfo?.imageUrl}
         />
       );
     } else {
@@ -235,6 +156,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
             shadowInsetColor="#DE7B3D"
             address={item.caAddress}
             score={item.score}
+            decimals={item.decimals}
             balance={item.rewardNftInfo.balance}
             imageUrl={item.rewardNftInfo.imageUrl}
             isCurrentUserRank={true}
@@ -250,6 +172,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
             shadowInsetColor="#B8B8EB"
             address={item.caAddress}
             score={item.score}
+            decimals={item.decimals}
             balance={item.rewardNftInfo.balance}
             imageUrl={item.rewardNftInfo.imageUrl}
             isCurrentUserRank={false}
@@ -265,6 +188,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
             shadowInsetColor="#B5412C"
             address={item.caAddress}
             score={item.score}
+            decimals={item.decimals}
             balance={item.rewardNftInfo.balance}
             imageUrl={item.rewardNftInfo.imageUrl}
             isCurrentUserRank={false}
@@ -276,6 +200,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
           leftText={item.rank}
           centerText={item.score.toLocaleString()}
           balance={item.rewardNftInfo.balance}
+          decimals={item.rewardNftInfo.decimals}
           imageUrl={item.rewardNftInfo.imageUrl}
         />
       );

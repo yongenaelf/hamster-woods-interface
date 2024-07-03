@@ -72,7 +72,7 @@ const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
 
 export const GameRecordItem = ({ data }: { data: IGameItem }) => {
   const isMobile = useIsMobile();
-  const { gridNum, score, transcationFee, playTransactionInfo, bingoTransactionInfo } = data;
+  const { gridNum, score, transcationFee, playTransactionInfo, bingoTransactionInfo, decimals } = data;
 
   const triggerTime = playTransactionInfo?.triggerTime || bingoTransactionInfo?.triggerTime;
 
@@ -106,7 +106,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <tbody>
               <tr className="font-bold text-[#AE694C]">
                 <td>{gridNum}</td>
-                <td>{score}</td>
+                <td>{divDecimalsStr(score, decimals)}</td>
                 <td className="text-right">{formatElfValue(transcationFee)} ELF</td>
               </tr>
             </tbody>

@@ -16,7 +16,7 @@ export const LeaderBoardItem = ({
 }: {
   rank: number;
   address: string;
-  beans: number;
+  beans: number | string;
   isCurrentUserRank?: boolean;
 }) => {
   switch (rank) {

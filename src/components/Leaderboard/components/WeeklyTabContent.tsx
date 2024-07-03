@@ -1,10 +1,10 @@
 import { parseISO, format } from 'date-fns';
 import { useWeeklyRank } from '../data/useWeeklyRank';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ChallengeStatus } from '../data/types';
-import { AppState, useSelector } from 'redux/store';
+import { AppState } from 'redux/store';
 import WeeklyPrizes from './WeeklyPrizes';
-import TipIcon from 'assets/images/Tip.png';
+import TipIcon from 'assets/images/tip.png';
 import { LeaderBoardNoRecord } from './LeaderBoardNoRecord';
 import { LeaderBoardItemList } from './LeaderBoardItemList';
 import { useIsMobile } from 'redux/selector/mobile';
