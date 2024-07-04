@@ -47,6 +47,7 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
+import { ZERO, divDecimals } from 'utils/calculate';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -278,6 +279,14 @@ export default function Game() {
 
   const handlePurchase = useCallback(
     async (n: number, chancePrice: number) => {
+      const acornsToken = assetBalance?.find((item) => item.symbol === 'ACORNS');
+      if (
+        !acornsToken?.balance ||
+        ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(n * chancePrice)
+      ) {
+        showMessage.error('Acorns is not enough');
+        return;
+      }
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
@@ -308,7 +317,7 @@ export default function Game() {
       }
       return;
     }
-    if (hasNft && playableCount === 0) {
+    if (hasNft && playableCount === 0 && playerInfo?.purchasedChancesCount === 0) {
       if (!playerInfo?.weeklyPurchasedChancesCount) {
         purchaseNoticeTypeRef.current = PurchaseNoticeEnum.hop;
         setPurchaseNoticeVisible(true);

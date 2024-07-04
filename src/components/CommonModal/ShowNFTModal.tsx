@@ -3,6 +3,9 @@ import CustomModal from 'components/CustomModal';
 import LinkImageIcon from 'assets/images/link-icon.png';
 import useGetState from 'redux/state/useGetState';
 import { useMemo } from 'react';
+import openPage from 'utils/openPage';
+import { store } from 'redux/store';
+const { configInfo } = store.getState();
 
 export default function ShowNftModal({ type, onCancel, open, beanPassItem }: ShowNFTModalPropsType) {
   const { curBeanPass } = useGetState();
@@ -20,7 +23,15 @@ export default function ShowNftModal({ type, onCancel, open, beanPassItem }: Sho
         </div>
         <div className="w-[160px] md:w-[271px] mx-auto flex justify-between items-center md:text-[24px] text-base md:leading-[32px] leading-[24px] font-bold md:mt-[35px] mt-[24px] md:mb-[28px]">
           <span className="py-1">{`${hamsterPassInfo?.tokenName} #${hamsterPassInfo?.tokenId}`}</span>
-          <img src={LinkImageIcon.src} alt="link" width={32} className="w-[32px] h-[32px]" />
+          <img
+            src={LinkImageIcon.src}
+            alt="link"
+            onClick={() => {
+              openPage(configInfo?.configInfo?.explorerBeanPassUrl ?? '');
+            }}
+            width={32}
+            className="w-[32px] h-[32px]"
+          />
         </div>
       </>
     </CustomModal>

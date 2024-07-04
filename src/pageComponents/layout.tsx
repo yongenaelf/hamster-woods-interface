@@ -198,7 +198,7 @@ const Layout = dynamic(
               className="marketplace-content flex-1 overflow-hidden relative"
               id="marketplace-content">
               {children}
-              <div className="absolute top-0 w-full h-full bg-gradient-to-t from-[#1D628B] to-[#14436E]"></div>
+              <div className="absolute top-0 w-full h-full bg-[#8FBC30]"></div>
             </AntdLayout.Content>
           </AntdLayout>
         );
@@ -209,7 +209,7 @@ const Layout = dynamic(
           {children}
           <div
             className={`absolute top-0 w-full h-full ${
-              pathname === '/login' ? 'bg-[#2D20E1]' : 'bg-gray-100'
+              pathname === '/login' ? 'bg-[#8FBC30]' : 'bg-gray-100'
             } z-[-1]`}></div>
         </>
       );
