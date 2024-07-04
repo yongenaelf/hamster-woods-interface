@@ -39,8 +39,8 @@ export default function GetChanceModal({
   const [expand, setExpand] = useState(false);
   const chancePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 1, []);
   const fee = useMemo(() => serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee || 0, []);
-  const acornsToken = useMemo(() => assetBalance.find((item) => item.symbol === 'ACORNS'), [assetBalance]);
-  const ElfToken = useMemo(() => assetBalance.find((item) => item.symbol === 'ELF'), [assetBalance]);
+  const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ACORNS'), [assetBalance]);
+  const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
 
   const handleMinus = useCallback(() => {
     if (inputVal < 2) return;
