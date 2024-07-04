@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './index.module.css';
 import Lottie from 'lottie-react';
 
-import loadingAnimation from 'assets/images/page-loading-animation.json';
+import loadingAnimation from 'assets/images/loading-animation.json';
 import { useSelector } from 'redux/store';
 import { getPageLoading } from 'redux/reducer/globalComponentsInfo';
 import useGetState from 'redux/state/useGetState';
