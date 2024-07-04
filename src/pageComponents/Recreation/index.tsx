@@ -344,7 +344,6 @@ export default function Game() {
         setStep(bingoStep);
         setDiceNumbers(bingoRes.diceNumbers);
         setDiceType(RecreationModalType.DICE);
-        updatePlayerInformation(address);
       }
     } catch (error) {
       console.error('=====error', error);
