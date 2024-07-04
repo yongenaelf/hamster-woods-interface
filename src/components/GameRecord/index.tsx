@@ -82,7 +82,7 @@ export const GameRecord = () => {
             </div>
           </div>
         ) : (
-          <NoData />
+          <NoData tips="No record yet" />
         )}
       </div>
     );
@@ -91,9 +91,9 @@ export const GameRecord = () => {
   const BuyRecordDom = useMemo(() => {
     return (
       <div className="flex w-full flex-grow flex-col m-0">
-        {buyHistoryData?.BuyChanceList?.length ? (
+        {buyHistoryData?.buyChanceList?.length ? (
           <div className={`h-full overflow-auto h-[500px] [&::-webkit-scrollbar]:hidden`}>
-            {buyHistoryData?.BuyChanceList.map((i) => (
+            {buyHistoryData?.buyChanceList.map((i) => (
               <BuyRecordItem data={i} key={i.id} />
             ))}
             <div className="flex items-center py-8">
@@ -105,14 +105,15 @@ export const GameRecord = () => {
             </div>
           </div>
         ) : (
-          <NoData />
+          <NoData tips="No record yet" />
         )}
       </div>
     );
-  }, [buyHistoryData?.BuyChanceList, isMobile]);
+  }, [buyHistoryData?.buyChanceList, isMobile]);
 
   return (
     <GameRecordModal
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
       open={open}
       title="Game Records"
       onCancel={() => {
@@ -133,7 +134,7 @@ export const GameRecord = () => {
             </button>
           </div>
           <div
-            className={`flex flex-col space-x-[8px] rounded-[8px] flex-1 overflow-y-auto  ${
+            className={`flex flex-col space-x-[8px] rounded-[8px] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden ${
               isMobile ? 'mb-[8px]' : 'mb-[24px]'
             }`}>
             {tab === Tabs.PlayRecords ? PlayRecordDom : null}

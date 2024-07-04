@@ -40,7 +40,7 @@ export type BuyChanceItem = {
 };
 
 export interface IBuyHistoryResult {
-  BuyChanceList: BuyChanceItem[];
+  buyChanceList: BuyChanceItem[];
 }
 
 export const useGameHistory = () => {

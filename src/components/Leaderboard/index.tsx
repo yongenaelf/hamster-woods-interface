@@ -19,7 +19,7 @@ const _tabClassName =
   'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-fonarto font-bold';
 
 export const Leaderboard = () => {
-  const open = useSelector((state) => state.info.showLeaderboard);
+  const open = useSelector((state) => state?.info?.showLeaderboard);
   const started = useLeaderboardStarted();
   const [tab, setTab] = useState<Tabs>(Tabs.Weekly);
   const isMobile = useIsMobile();
@@ -27,10 +27,11 @@ export const Leaderboard = () => {
   const tabClassName = `${_tabClassName} ${
     isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
   }`;
+  const onCancel = () => {
+    dispatch(toggleShowLeaderboard());
+  };
 
-  const onCancel = () => dispatch(toggleShowLeaderboard());
-
-  // if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
+  if (!started) return <LeaderBoardNotStartedModal open={open} onCancel={onCancel} />;
 
   return (
     <>
@@ -39,8 +40,7 @@ export const Leaderboard = () => {
         open={open}
         title="Leader Board"
         onCancel={onCancel}
-        weeklyModal={tab === Tabs.Weekly}
-        destroyOnClose>
+        weeklyModal={tab === Tabs.Weekly}>
         <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
           <div className="flex flex-col h-full overflow-hidden">
             <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
