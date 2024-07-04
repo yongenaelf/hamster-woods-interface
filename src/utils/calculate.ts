@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-const ZERO = new BigNumber(0);
+export const ZERO = new BigNumber(0);
 
 export const isEffectiveNumber = (v: any) => {
   const val = new BigNumber(v);
