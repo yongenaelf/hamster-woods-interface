@@ -26,7 +26,7 @@ export const GameRecord = () => {
   const [buyHistoryData, setBuyHistoryData] = useState<IBuyHistoryResult>();
 
   const tabClassName = `${_tabClassName} ${
-    isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
+    isMobile ? 'text-[12px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
   }`;
 
   const { gameHistory } = useGameHistory();
