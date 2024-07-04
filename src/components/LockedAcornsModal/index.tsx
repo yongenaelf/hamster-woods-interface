@@ -108,7 +108,13 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   }, [onCancel]);
 
   return (
-    <CustomModal open={open} onCancel={handleClose} {...props} title={`Locked Details`} destroyOnClose>
+    <CustomModal
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
+      open={open}
+      onCancel={handleClose}
+      {...props}
+      title={`Locked Details`}
+      destroyOnClose>
       <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} flex flex-col`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
