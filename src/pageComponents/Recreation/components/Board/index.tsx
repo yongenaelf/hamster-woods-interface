@@ -43,7 +43,7 @@ function Board({
   const { initialize } = useInitLeaderBoard();
 
   const handleShowLeaderboard = useCallback(async () => {
-    showMessage.loading();
+    // showMessage.loading();
     try {
       await initialize();
     } catch (err) {
@@ -56,7 +56,7 @@ function Board({
         },
       });
     } finally {
-      showMessage.hideLoading();
+      // showMessage.hideLoading();
       dispatch(toggleShowLeaderboard());
     }
   }, [initialize]);

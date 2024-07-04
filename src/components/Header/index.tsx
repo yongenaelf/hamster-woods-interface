@@ -14,6 +14,7 @@ import { useState } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import { divDecimalsStr } from 'utils/calculate';
+import { useIsMobile } from 'redux/selector/mobile';
 
 export default function Header() {
   const { walletType } = useGetState();
@@ -21,6 +22,7 @@ export default function Header() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
   const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <div className={styles.headerContainer}>
@@ -45,16 +47,21 @@ export default function Header() {
           </span>
           <Tooltip
             title={
-              <div className="px-[24px] py-[16px]">
-                <div className="text-[18px] leading-[28px]">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
+              <div
+                className={`${
+                  isMobile ? 'px-[12px] py-[8px] text-[12px]' : 'px-[24px] py-[16px] text-[18px] leading-[28px]'
+                }`}>
+                <div className="">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
 In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
-                <div className="text-right text-[24px] leading-[28px]" onClick={() => setTooltipOpen(false)}>
+                <div
+                  className={`text-right ${isMobile ? 'text-[16px]' : 'text-[24px]'}   leading-[28px]`}
+                  onClick={() => setTooltipOpen(false)}>
                   OK
                 </div>
               </div>
             }
             open={tooltipOpen}
-            overlayStyle={{ maxWidth: 480, borderRadius: 32 }}
+            overlayStyle={{ maxWidth: isMobile ? 320 : 480, borderRadius: isMobile ? 16 : 32 }}
             overlayClassName={styles.board__tooltip}
             trigger="click"
             placement="bottom"
