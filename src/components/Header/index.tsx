@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <div className={styles.headerContainer}>
-      <div className={`${styles.header__menu} mt-2`}>
+      <div className={`${styles.header__menu}`}>
         {walletType !== WalletType.discover && <Wallet />}
         <div className="flex-grow"></div>
         <div className="mx-3">
@@ -34,7 +34,7 @@ export default function Header() {
         </div>
         <Setting />
       </div>
-      <div className={`${styles.header__menu} flex items-center gap-2 mt-2`}>
+      <div className={`${styles.header__menu} flex items-center gap-1`}>
         <div className={styles['board__acorn']}>
           <Image
             src={AcornGetImage}
@@ -82,10 +82,11 @@ In the upcoming version, staking will be introduced, allowing token holders to s
         </div>
         <div className="flex-grow"></div>
         <Image
+          height={40}
           onClick={() => setLockedAcornsVisible(true)}
           src={HeaderLockImage}
           alt="bean"
-          className="h-[40px] w-[40px] mb-[12px]"
+          className="h-[40px]  w-[40px]"
         />
       </div>
       <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />

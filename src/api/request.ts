@@ -104,8 +104,8 @@ export const fetchPrice = async (): Promise<IPrice> => {
   return request.get('app/hamster-pass/price');
 };
 
-export const fetchBalance = async (): Promise<IBalance[]> => {
-  return request.get('app/hamster-pass/asset');
+export const fetchBalance = async (query: { caAddress: string }): Promise<IBalance[]> => {
+  return request.get('app/hamster-pass/asset', { params: query });
 };
 export const getLockInfos = async (query: ILockInfoQuery): Promise<TLockInfosResponse> => {
   return request.get('/app/lock/locked-infos', { params: query });

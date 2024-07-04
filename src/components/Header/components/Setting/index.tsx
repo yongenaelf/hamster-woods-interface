@@ -23,6 +23,7 @@ import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
+import CommonRedBtn from 'components/CommonRedBtn';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -106,7 +107,7 @@ export default function Setting() {
         className={`${isMobile ? '!w-[358px]' : '!w-[580px]'}`}>
         <div className="mt-2 px-4">
           <CommonBtn
-            title="Game Records"
+            title="Game Record"
             onClick={handleRecord}
             className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           {walletType !== WalletType.discover && !TelegramPlatform.isTelegramPlatform() && (
@@ -115,10 +116,10 @@ export default function Setting() {
               onClick={handleLock}
               className={`${isMobile ? styles.buttonMobile : styles.button} mb-4 mb-[24.5px]`}></CommonBtn>
           )}
-          <CommonBtn
-            title="Exit"
+          <CommonRedBtn
+            title="Exit Game"
             onClick={handleExit}
-            className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonBtn>
+            className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonRedBtn>
         </div>
       </CustomModal>
     </>

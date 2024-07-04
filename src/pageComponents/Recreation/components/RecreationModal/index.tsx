@@ -8,7 +8,6 @@ import useGetState from 'redux/state/useGetState';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import dataAnimation from 'assets/images/animation/treasureBox.json';
-import treasureBoxHalloween from 'assets/images/animation/treasureBoxHalloween.json';
 import diceLoading1 from 'assets/images/diceLoading/dice-loading1.json';
 import diceLoading2 from 'assets/images/diceLoading/dice-loading2.json';
 import diceLoading3 from 'assets/images/diceLoading/dice-loading3.json';
@@ -156,7 +155,7 @@ function RecreationModal(props: IRecreationModal) {
             lottieRef={treasureAnimationRef}
             loop={false}
             autoplay={false}
-            animationData={configInfo?.isHalloween ? treasureBoxHalloween : dataAnimation}
+            animationData={dataAnimation}
             onComplete={() => {
               setTreasureStatus(TreasureStatus.OPENED);
             }}
