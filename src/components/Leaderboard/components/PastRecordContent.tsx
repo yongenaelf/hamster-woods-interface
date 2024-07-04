@@ -34,10 +34,13 @@ export const PastRecordContent = () => {
 
   return (
     <div className="flex flex-col overflow-y-auto space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1">
-      <div className="flex text-[16px] leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]">
+      <div
+        className={`flex  ${
+          isMobile ? 'text-[12px]' : 'text-[16px]'
+        } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
         <div className="flex-1">Time</div>
-        <div className="flex-none w-[140px]">$ACORNS</div>
-        <div className="flex-1">Rank</div>
+        <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>$ACORNS</div>
+        <div className={`${isMobile ? 'w-[120px]' : 'flex-1'}`}>Rank</div>
       </div>
       <ShowNFTModal
         open={isShowNFT}
@@ -49,16 +52,22 @@ export const PastRecordContent = () => {
         {data?.map((item, i) => (
           <div
             key={i}
-            className="flex h-[52px] text-[16px] leading-[18px] text-[#953D22] pl-4 pr-4 text-left items-center border-b-[1px] border-[#D3B68A]">
+            className={`flex ${isMobile ? 'text-[12px] h-[36px] ' : 'text-[16px] items-center h-[52px]'} 
+                ${item?.rewardNftInfo ? 'h-[64px] py-[12px]' : 'items-center'}
+            leading-[18px] text-[#953D22] text-left  border-b-[1px] border-[#D3B68A]`}>
             <div className="flex-1">{item.time}</div>
-            <div className="flex-none w-[140px]">{divDecimalsStr(item.score, item.decimals) ?? 'N/A'}</div>
-            <div className="flex-1 flex justify-between items-center">
+            <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>
+              {divDecimalsStr(item.score, item.decimals) ?? 'N/A'}
+            </div>
+            <div className={`flex justify-between  ${isMobile ? 'flex-col w-[120px]' : 'items-center flex-1'}`}>
               <span>{item.rank === -1 ? '-' : item.rank.toLocaleString()}</span>
               {item.rewardNftInfo && (
                 <div
                   onClick={onClaim}
                   className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] ${
-                    isMobile ? 'px-1 py-[3px] text-[10px] leading-[10px]' : 'px-2 py-[5px] text-xs leading-[22px]'
+                    isMobile
+                      ? 'px-1 py-[3px] text-[10px] leading-[10px] w-[120px]'
+                      : 'px-2 py-[5px] text-xs leading-[22px]'
                   }`}>
                   Claim NFT Rewards
                 </div>

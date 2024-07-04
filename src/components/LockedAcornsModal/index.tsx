@@ -43,7 +43,10 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           />
           {`$ACORNS`}
         </div>
-        <div className="flex text-[16px] leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]">
+        <div
+          className={`flex ${
+            isMobile ? 'text-[12px]' : 'text-[16px]'
+          }  leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
           <div className="flex-1">Locked time</div>
           <div className="flex-1">Estimated unlock time</div>
           <div className="flex-1 text-right">$ACORNS amount</div>
@@ -52,7 +55,9 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           {lockInfos?.lockedInfoList.map((item, i) => (
             <div
               key={i}
-              className="flex text-[16px] leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]">
+              className={`flex  ${
+                isMobile ? 'text-[12px]' : 'text-[16px]'
+              } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
               <div className="flex-1">{item.lockedTime}</div>
               <div className="flex-1">{item.unLockTime}</div>
               <div className="flex-1 text-right">{`${divDecimalsStr(item.amount, item.decimals)} $${item.symbol}`}</div>
@@ -61,12 +66,15 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
         </div>
       </>
     );
-  }, [lockInfos?.decimals, lockInfos?.lockedInfoList, lockInfos?.totalLockedAmount]);
+  }, [isMobile, lockInfos?.decimals, lockInfos?.lockedInfoList, lockInfos?.totalLockedAmount]);
 
   const renderUnlock = useCallback(() => {
     return (
       <>
-        <div className="flex text-[16px] leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]">
+        <div
+          className={`flex  ${
+            isMobile ? 'text-[12px]' : 'text-[16px]'
+          } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
           <div className="flex-1">Unlocked time</div>
           <div className="flex-1 text-right">Unlock amount</div>
         </div>
@@ -74,7 +82,9 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           {unlockInfos?.map((item, i) => (
             <div
               key={i}
-              className="flex text-[16px] leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]">
+              className={`flex  ${
+                isMobile ? 'text-[12px]' : 'text-[16px]'
+              } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
               <div className="flex-1">{item.unLockTime}</div>
               <div className="flex-1 flex justify-end items-center gap-2 text-right">
                 {`${divDecimalsStr(item.amount, item.decimal)} $${item.symbol}`}{' '}
