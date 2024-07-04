@@ -15,6 +15,7 @@ import { isValidNumber } from 'utils/common';
 import { store } from 'redux/store';
 import { IBalance } from 'types';
 import openPage from 'utils/openPage';
+import { formatAmountUSDShow } from 'utils/calculate';
 const { serverConfigInfo, configInfo } = store.getState();
 
 export type GetChanceModalPropsType = {
@@ -154,7 +155,7 @@ export default function GetChanceModal({
               <div>Estimated Transaction Fee</div>
               <div className="text-right flex flex-col space-y-[12px]">
                 <div className="font-bold">{`${fee} ELF`}</div>
-                <div>{`$ ${fee * elfInUsd}`}</div>
+                <div>{`${formatAmountUSDShow(fee * elfInUsd)}`}</div>
               </div>
             </div>
             <div
@@ -164,7 +165,7 @@ export default function GetChanceModal({
               <div>Buy Game Chance</div>
               <div className="text-right flex flex-col space-y-[12px]">
                 <div className="font-bold">{`${inputVal * chancePrice * acornsInElf} ELF`}</div>
-                <div>{`$ ${inputVal * chancePrice * acornsInElf * elfInUsd}`}</div>
+                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInElf * elfInUsd)}`}</div>
               </div>
             </div>
           </>

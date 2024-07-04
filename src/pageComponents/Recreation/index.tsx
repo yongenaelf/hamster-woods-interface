@@ -287,6 +287,12 @@ export default function Game() {
         showMessage.error('Acorns is not enough');
         return;
       }
+
+      if (ZERO.plus(n).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
+        showMessage.error('Purchase chance is not enough');
+        return;
+      }
+
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
