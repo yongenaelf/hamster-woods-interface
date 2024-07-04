@@ -1,16 +1,16 @@
 .headerContainer {
-  @apply flex flex-col h-[100px] w-full items-end border-b-2 border-solid;
+  @apply flex flex-col h-[100px] w-full px-[12px] py-[8px] gap-[4px];
 
   background-image: url('../../assets/images/headerMenu/top-menu-bg-m.png');
   background-size: cover;
 
   .header__menu {
-    @apply flex h-14 w-full items-center px-4;
+    @apply flex w-full items-center;
   }
 }
 
 .board__acorn {
-  @apply mb-[12px] h-[40px] w-[175px] pl-[6px] flex items-center;
+  @apply pl-1 h-[38px] w-[158px] flex items-center;
 
   background-image: url('../../assets/images/button-menu-default-s.png');
   background-size: cover;

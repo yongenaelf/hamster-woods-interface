@@ -1,8 +1,8 @@
 .button-mobile {
-  @apply mt-0;
+  @apply mt-0 h-[106px];
 
   .button__border {
-    @apply w-full h-[106px] bg-[100%_100%] bg-no-repeat mt-[-41px];
+    @apply w-full h-[106px] bg-[100%_100%] bg-no-repeat;
 
     background-image: url('../../../../assets/images/goButton/go-btn-border.png');
     background-size: cover;
@@ -14,7 +14,7 @@
   }
 
   .get-chance-mobile {
-    @apply w-[71px] h-[71px] flex justify-center absolute left-[-58px] top-[24px] z-[51] bg-[100%_100%] bg-no-repeat;
+    @apply w-[71px] h-[71px] flex justify-center absolute left-[-56px] top-[24px] z-[51] bg-[100%_100%] bg-no-repeat;
 
     background-size: cover;
   }

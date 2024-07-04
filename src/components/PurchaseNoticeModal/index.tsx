@@ -32,7 +32,7 @@ export default function PurchaseNoticeModal({ onConfirm, type, ...props }: IPurc
   }, [serverConfigInfo?.chancePrice, type]);
 
   return (
-    <CustomModal {...props} title="Notice">
+    <CustomModal {...props} title="Notice" onCancel={onConfirm}>
       <div className={'text-[24px] leading-8'}>
         {noticeText}
         <span className="font-black">

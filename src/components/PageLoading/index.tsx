@@ -16,10 +16,7 @@ function PageLoading() {
   const getContent = () => {
     if (typeof content === 'string') {
       return (
-        <span
-          className={`text-[#fff] absolute left-0 right-0 m-auto text-center font-fonarto mt-[-40%] ${
-            isMobile ? 'text-[16px]' : 'text-[24px]'
-          }`}>
+        <span className={`text-[#fff] text-center font-fonarto ${isMobile ? 'text-[16px]' : 'text-[24px]'}`}>
           {content}
         </span>
       );
@@ -37,8 +34,10 @@ function PageLoading() {
       closable={false}
       destroyOnClose={true}
       className={styles['page-modal']}>
-      <div className="relative">
-        <Lottie animationData={loadingAnimation} />
+      <div className="relative flex flex-col justify-center">
+        <div className={`${isMobile ? 'w-[110px]' : 'w-[147px]'} m-auto`}>
+          <Lottie animationData={loadingAnimation} />
+        </div>
         {content && getContent()}
       </div>
     </Modal>

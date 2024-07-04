@@ -1,0 +1,6 @@
+.commonBtn {
+  @apply h-12 rounded-full bg-[#E74B44] text-center font-fonarto text-xl leading-[48px] text-white;
+
+  box-shadow: 0 3px 1px 0 #FC716B inset, 0 4px 0 0 rgb(205 23 8 / 60%);
+  text-shadow: 0 0 1px #C23B35;
+}
