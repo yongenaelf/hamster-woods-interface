@@ -488,14 +488,14 @@ export default function Game() {
     showMessage.hideLoading();
   });
 
-  useEffect(() => {
-    if (address) {
-      getModalInfo({
-        isHalloween: configInfo?.isHalloween,
-        caAddress: address,
-      });
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   if (address) {
+  //     getModalInfo({
+  //       isHalloween: configInfo?.isHalloween,
+  //       caAddress: address,
+  //     });
+  //   }
+  // }, [address]);
 
   useDeepCompareEffect(() => {
     setPlayableCount(playerInfo?.playableCount || 0);
