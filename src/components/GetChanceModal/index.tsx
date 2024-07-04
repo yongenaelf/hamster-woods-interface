@@ -12,10 +12,11 @@ import ArrowIcon from 'assets/images/arrow.png';
 import AddIcon from 'assets/images/add.png';
 import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
-import { store } from 'redux/store';
+import { useSelector } from 'redux/store';
 import { IBalance } from 'types';
 import openPage from 'utils/openPage';
-const { serverConfigInfo, configInfo } = store.getState();
+import { divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
+import { ACORNS_TOKEN } from 'constants/index';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -34,12 +35,19 @@ export default function GetChanceModal({
   onConfirm,
   ...params
 }: ICustomModalProps & GetChanceModalPropsType) {
+  const { serverConfigInfo, configInfo } = useSelector((state) => state);
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
-  const chancePrice = useMemo(() => serverConfigInfo.serverConfigInfo?.chancePrice || 1, []);
-  const fee = useMemo(() => serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee || 0, []);
-  const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ACORNS'), [assetBalance]);
+  const chancePrice = useMemo(
+    () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
+    [serverConfigInfo.serverConfigInfo?.chancePrice],
+  );
+  const fee = useMemo(
+    () => serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee || 0,
+    [serverConfigInfo.serverConfigInfo?.buyChanceTransactionFee],
+  );
+  const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
 
   const handleMinus = useCallback(() => {
@@ -154,7 +162,7 @@ export default function GetChanceModal({
               <div>Estimated Transaction Fee</div>
               <div className="text-right flex flex-col space-y-[12px]">
                 <div className="font-bold">{`${fee} ELF`}</div>
-                <div>{`$ ${fee * elfInUsd}`}</div>
+                <div>{`${formatAmountUSDShow(fee * elfInUsd)}`}</div>
               </div>
             </div>
             <div
@@ -164,7 +172,7 @@ export default function GetChanceModal({
               <div>Buy Game Chance</div>
               <div className="text-right flex flex-col space-y-[12px]">
                 <div className="font-bold">{`${inputVal * chancePrice * acornsInElf} ELF`}</div>
-                <div>{`$ ${inputVal * chancePrice * acornsInElf * elfInUsd}`}</div>
+                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInElf * elfInUsd)}`}</div>
               </div>
             </div>
           </>
@@ -178,7 +186,10 @@ export default function GetChanceModal({
             }`}>
             <div className="flex font-black">balance</div>
             <div className="flex justify-between items-center">
-              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${acornsToken?.balance}`}</div>
+              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStr(
+                acornsToken?.balance,
+                acornsToken?.decimals,
+              )}`}</div>
               <div
                 onClick={() => {
                   openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
@@ -187,7 +198,10 @@ export default function GetChanceModal({
                 Deposit
               </div>
             </div>
-            <div className="flex font-bold">{`${ElfToken?.symbol}: ${ElfToken?.balance}`}</div>
+            <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStr(
+              ElfToken?.balance,
+              ElfToken?.decimals,
+            )}`}</div>
           </div>
         ) : null}
         <CommonBtn

@@ -33,7 +33,6 @@ import { ChainId } from '@portkey/types';
 import { getList } from './utils/getList';
 import BoardRight from './components/BoardRight';
 import { SECONDS_60 } from 'constants/time';
-import { getModalInfo } from './utils/getModalInfo';
 import { DEFAULT_SYMBOL, RoleImg } from 'constants/role';
 import { getBeanPassModalType } from './utils/getBeanPassModalType';
 import { setNoticeModal } from 'redux/reducer/noticeModal';
@@ -47,6 +46,8 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
+import { ZERO, divDecimals } from 'utils/calculate';
+import { ACORNS_TOKEN } from 'constants/index';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -278,12 +279,31 @@ export default function Game() {
 
   const handlePurchase = useCallback(
     async (n: number, chancePrice: number) => {
+      if (!n) {
+        showMessage.error('Please input valid number.');
+        return;
+      }
+
+      const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
+      if (
+        !acornsToken?.balance ||
+        ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(n).times(chancePrice))
+      ) {
+        showMessage.error('Acorns is not enough');
+        return;
+      }
+
+      if (ZERO.plus(n).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
+        showMessage.error('Purchase chance is not enough');
+        return;
+      }
+
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
           approveTargetAddress: configInfo?.beanGoTownContractAddress ?? '',
           amount: n * chancePrice,
-          symbol: 'ACORNS',
+          symbol: ACORNS_TOKEN.symbol,
         });
         if (!isApproved) return;
         await PurchaseChance({ value: n });
@@ -297,7 +317,13 @@ export default function Game() {
         showMessage.hideLoading();
       }
     },
-    [address, configInfo?.beanGoTownContractAddress, updatePlayerInformation],
+    [
+      address,
+      assetBalance,
+      configInfo?.beanGoTownContractAddress,
+      playerInfo?.weeklyPurchasedChancesCount,
+      updatePlayerInformation,
+    ],
   );
 
   const go = async () => {
@@ -308,7 +334,7 @@ export default function Game() {
       }
       return;
     }
-    if (hasNft && playableCount === 0) {
+    if (hasNft && playableCount === 0 && playerInfo?.purchasedChancesCount === 0) {
       if (!playerInfo?.weeklyPurchasedChancesCount) {
         purchaseNoticeTypeRef.current = PurchaseNoticeEnum.hop;
         setPurchaseNoticeVisible(true);
@@ -344,7 +370,6 @@ export default function Game() {
         setStep(bingoStep);
         setDiceNumbers(bingoRes.diceNumbers);
         setDiceType(RecreationModalType.DICE);
-        updatePlayerInformation(address);
       }
     } catch (error) {
       console.error('=====error', error);

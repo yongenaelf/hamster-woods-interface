@@ -3,9 +3,8 @@ import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import useCountdown from 'hooks/useCountDown';
 import { useMemo } from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
-import { store } from 'redux/store';
+import { useSelector } from 'redux/store';
 import { formatTime } from 'utils/formatTime';
-const { serverConfigInfo } = store.getState();
 
 export enum PurchaseNoticeEnum {
   hop = 'hop',
@@ -20,16 +19,17 @@ export interface IPurchaseNoticeModalProps extends ICustomModalProps {
 export default function PurchaseNoticeModal({ onConfirm, type, ...props }: IPurchaseNoticeModalProps) {
   const { hours, minutes, seconds } = useCountdown();
   const isMobile = useIsMobile();
+  const { serverConfigInfo } = useSelector((state) => state.serverConfigInfo);
 
   const noticeText = useMemo(() => {
     if (type === PurchaseNoticeEnum.hop) {
       return `Your hamster has used all its HOPs for today and reached the weekly purchase limit of 15 hopping chances. Give it a rest and come back when new HOPs are available in `;
     }
     if (type === PurchaseNoticeEnum.getChance) {
-      return `Your hamster reached the weekly purchase limit of ${serverConfigInfo.serverConfigInfo?.chancePrice} hopping chances. Give it a rest and come back when new HOPs are available in `;
+      return `Your hamster reached the weekly purchase limit of ${serverConfigInfo?.chancePrice} hopping chances. Give it a rest and come back when new HOPs are available in `;
     }
     return '';
-  }, [type]);
+  }, [serverConfigInfo?.chancePrice, type]);
 
   return (
     <CustomModal {...props} title="Notice">

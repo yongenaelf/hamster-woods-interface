@@ -1,16 +1,16 @@
 import { useLottie } from 'lottie-react';
-import LoadingAnimation from 'assets/images/loading-animation.json';
+import LoadingAnimationJson from 'assets/images/loading-animation.json';
 import Image from 'next/image';
 import useGetState from 'redux/state/useGetState';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 
-export default function LoadingAni() {
+export default function LoadingAnimation() {
   const { isMobile } = useGetState();
   const { imageResources } = useGetState();
 
   const Animation = () => {
     const options = {
-      animationData: LoadingAnimation,
+      animationData: LoadingAnimationJson,
       loop: true,
       autoplay: true,
     };
@@ -24,8 +24,8 @@ export default function LoadingAni() {
     <div
       style={{
         backgroundImage: isMobile
-          ? `url(${imageResources.playgroundBgMobile})`
-          : `url(${imageResources.playgroundBgPc})`,
+          ? `url(${imageResources?.playgroundBgMobile})`
+          : `url(${imageResources?.playgroundBgPc})`,
       }}
       className={`h-full w-full overflow-hidden ${
         TelegramPlatform.isTelegramPlatform() ? 'pt-[100px]' : 'pt-[248px]'

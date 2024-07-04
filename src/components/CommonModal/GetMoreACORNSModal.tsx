@@ -4,10 +4,11 @@ import CommonBtn from 'components/CommonBtn';
 import { useIsMobile } from 'redux/selector/mobile';
 import { useMemo } from 'react';
 import openPage from 'utils/openPage';
-import { store } from 'redux/store';
-const { configInfo } = store.getState();
+import { AppState } from 'redux/store';
+import { useSelector } from 'react-redux';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
+  const { configInfo } = useSelector((state: AppState) => state.configInfo);
   const isMobile = useIsMobile();
   const textClassName = useMemo(
     () => (isMobile ? 'text-[16px] leading-[24px]' : 'text-[24px] leading-[32px]'),
@@ -36,7 +37,8 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         If you need help using{' '}
         <span
           onClick={() => {
-            openPage(configInfo?.configInfo?.awakenTutorialUrl ?? '');
+            openPage(configInfo?.awakenTutorialUrl ?? '');
+            onCancel?.();
           }}
           className="underline text-[#3989FF] font-[600]">
           AwakenSwap
@@ -51,7 +53,8 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         } flex justify-center items-center font-fonarto`}
         title="Trade on AwakenSwap"
         onClick={() => {
-          openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
+          openPage(`${configInfo?.awakenUrl}/trading/ELF_ACORNS_0.05`);
+          onCancel?.();
         }}
       />
     </CustomModal>

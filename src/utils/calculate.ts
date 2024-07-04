@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-const ZERO = new BigNumber(0);
+export const ZERO = new BigNumber(0);
 
 export const isEffectiveNumber = (v: any) => {
   const val = new BigNumber(v);
@@ -29,3 +29,17 @@ export function divDecimalsStr(a?: BigNumber.Value, decimals: string | number = 
   const n = divDecimals(a, decimals);
   return isEffectiveNumber(n) ? n.toFixed() : defaultVal;
 }
+
+export const formatAmountUSDShow = (
+  count: number | BigNumber | string | null | undefined,
+  decimal: string | number = 4,
+  roundingMode: BigNumber.RoundingMode = BigNumber.ROUND_DOWN,
+) => {
+  if (count === undefined || count === null || count === '') return '';
+
+  const min = divDecimals(1, decimal);
+  const bigCount = BigNumber.isBigNumber(count) ? count : new BigNumber(count || '');
+  if (bigCount.isNaN() || bigCount.eq(0)) return '$0';
+  if (min.gt(bigCount)) return `<$ ${min.toFixed()}`;
+  return '$' + bigCount.decimalPlaces(typeof decimal !== 'number' ? Number(decimal) : decimal, roundingMode).toFormat();
+};
