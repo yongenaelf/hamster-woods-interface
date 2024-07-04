@@ -18,8 +18,6 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   const { data: unlockInfos } = useUnlockRecords();
   const [tab, setTab] = useState(LockedAcornsTabEnum.Pending);
 
-  console.log('lockInfos', lockInfos, unlockInfos);
-
   const tabClassName = useMemo(
     () =>
       `${_tabClassName} ${isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'}`,
