@@ -6,8 +6,8 @@ import { useLockInfos, useUnlockRecords } from './hook';
 import { divDecimalsStr } from 'utils/calculate';
 
 export enum LockedAcornsTabEnum {
-  Pending = 'Pending Unlock',
-  Unlock = 'Unlock Record',
+  Pending = 'Locked',
+  Unlock = 'Unlocked',
 }
 const _tabClassName =
   'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-fonarto font-bold';
@@ -34,7 +34,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
             src={require('assets/images/lock.png').default.src}
             alt="lock"
           />
-          {`Locked Amount ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
+          {`Total Locked ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
           <img
             width={20}
             className="w-[20px] h-[20px]"
@@ -47,9 +47,9 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
           className={`flex ${
             isMobile ? 'text-[12px]' : 'text-[16px]'
           }  leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
-          <div className="flex-1">Locked time</div>
-          <div className="flex-1">Estimated unlock time</div>
-          <div className="flex-1 text-right">$ACORNS amount</div>
+          <div className="flex-1">Lock Time</div>
+          <div className="flex-1">Unlock Time</div>
+          <div className="flex-1 text-right">amount</div>
         </div>
         <div className="overflow-y-auto h-full">
           {lockInfos?.lockedInfoList.map((item, i) => (
@@ -76,7 +76,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
             isMobile ? 'text-[12px]' : 'text-[16px]'
           } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
           <div className="flex-1">Unlocked time</div>
-          <div className="flex-1 text-right">Unlock amount</div>
+          <div className="flex-1 text-right">Amount</div>
         </div>
         <div className="overflow-y-auto h-full">
           {unlockInfos?.map((item, i) => (
@@ -113,7 +113,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
       open={open}
       onCancel={handleClose}
       {...props}
-      title={`Locked Details`}
+      title={`$ACORNS Unlocks`}
       destroyOnClose>
       <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} flex flex-col`}>
         <div className="flex flex-col h-full">
