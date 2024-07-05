@@ -53,6 +53,7 @@ function GoButton({
   const [curTouch, setCurTouch] = useState<number | null>(null);
 
   const [chanceBtnPress, setChanceBtnPress] = useState<boolean>(false);
+  const [chanceBtnPressM, setChanceBtnPressM] = useState<boolean>(false);
   const [chanceBtnTouch, setChanceBtnTouch] = useState<boolean>(false);
 
   const [curPressM, setCurPressM] = useState<number | null>(null);
@@ -64,6 +65,7 @@ function GoButton({
 
   const mobileDiceButtonRef = useRef<HTMLDivElement | null>(null);
   const mobileGoButtonRef = useRef<HTMLDivElement | null>(null);
+  const mobileChanceButtonRef = useRef<HTMLDivElement | null>(null);
   const goFn = useRef(go);
   const changeCurDiceCountFn = useRef(changeCurDiceCount);
 
@@ -119,6 +121,23 @@ function GoButton({
   const chooseDiceCount = (number: number) => {
     changeCurDiceCount && changeCurDiceCount(number);
   };
+
+  const changeChance: EventListener = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    setChanceBtnPressM(true);
+  }, []);
+
+  const handleReleaseChance: EventListener = useCallback(
+    (event) => {
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      setChanceBtnPressM(false);
+      getChance && getChance();
+    },
+    [getChance],
+  );
 
   const changeDiceCount: EventListener = useCallback(
     (event) => {
@@ -182,8 +201,24 @@ function GoButton({
     };
   }, [changeDiceCount, handleReleaseDice]);
 
+  // Handle both touch and mouse events to support interaction in Telegram WebApp on PC
+  useEffect(() => {
+    const mobileChanceButton = mobileChanceButtonRef.current;
+    if (!mobileChanceButton) return;
+    mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
+    mobileChanceButton.addEventListener('mousedown', changeChance);
+    mobileChanceButton.addEventListener('touchend', handleReleaseChance);
+    mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
+    return () => {
+      mobileChanceButton.removeEventListener('touchstart', changeChance);
+      mobileChanceButton.removeEventListener('mousedown', changeChance);
+      mobileChanceButton.removeEventListener('touchend', handleReleaseChance);
+      mobileChanceButton.removeEventListener('mouseup', handleReleaseChance);
+    };
+  }, [changeChance, handleReleaseChance]);
+
   return (
-    <div className={`${styles['button-mobile']} ${!isMobile && styles.button} relative w-full items-center pb-[9px]`}>
+    <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
           <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
@@ -242,7 +277,7 @@ function GoButton({
                   ]
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex left-[-20px]`}>
+              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
 
               <div
@@ -251,22 +286,18 @@ function GoButton({
                     btnImageResources?.mobile[chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m']
                   })`,
                 }}
-                onMouseDown={() => {
-                  setChanceBtnPress(true);
-                }}
-                onMouseUp={() => {
-                  setChanceBtnPress(false);
-                  getChance && getChance();
-                }}
-                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPress ? 'top-[5px]' : ''}`}>
-                {chanceBtnPress && <div className={styles['dice-content-mobile-mask']}></div>}
+                ref={mobileChanceButtonRef}
+                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : ''}`}>
+                {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
-                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center `}>Get Chance</div>
+                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center text-[11px]`}>
+                  Get Chance
+                </div>
               </div>
               <div
                 ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[40px]' : 'left-[54px] top-0'
+                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[44px]' : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
                 {statusCom[status]}
               </div>

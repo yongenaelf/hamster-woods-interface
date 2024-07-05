@@ -48,6 +48,7 @@ import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
 import { ZERO, divDecimals } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
+import { addPrefixSuffix } from 'utils/addressFormatting';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -254,10 +255,10 @@ export default function Game() {
   }, [checkerboardContainerWidth]);
 
   const updateAssetBalance = useCallback(async () => {
-    fetchBalance().then((res) => {
+    fetchBalance({ caAddress: addPrefixSuffix(address) }).then((res) => {
       setAssetBalance(res);
     });
-  }, []);
+  }, [address]);
 
   const updatePrice = useCallback(async () => {
     fetchPrice().then((res) => {
