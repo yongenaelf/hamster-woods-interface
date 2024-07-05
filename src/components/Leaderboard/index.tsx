@@ -8,7 +8,6 @@ import { toggleShowLeaderboard } from 'redux/reducer/info';
 import LeaderBoardModal from './components/LeaderBoardModal';
 import { useLeaderboardStarted } from './hooks/useLeaderboardStarted';
 import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal';
-import { TabContentUser } from './components/TabContentUser';
 
 enum Tabs {
   Weekly = 'Weekly',

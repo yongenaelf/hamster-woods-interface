@@ -10,8 +10,8 @@ import { useAddress } from 'hooks/useAddress';
 import NoData from 'components/NoData';
 
 enum Tabs {
-  PlayRecords = 'Play Records',
-  BuyChanceRecords = 'Buy Chance Records',
+  PlayRecords = 'Play',
+  BuyChanceRecords = 'Hopping Chance Purchase',
 }
 
 const _tabClassName =
