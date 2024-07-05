@@ -13,7 +13,7 @@ module.exports = [
   },
   {
     source: '/cms/:path*',
-    destination: 'https://cms.beangotown.com/:path*',
+    destination: 'https://cms-hamster.beangotown.com/:path*',
   },
   {
     source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
