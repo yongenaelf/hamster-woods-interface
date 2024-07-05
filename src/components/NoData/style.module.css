@@ -1,0 +1,5 @@
+.wrap {
+  .NoDataSvg {
+    @apply mt-[166px];
+  }
+}

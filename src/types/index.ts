@@ -126,11 +126,23 @@ export interface IPlayerProps {
   diceCount: number;
 }
 
+export interface IPurchaseProps {
+  value: string | number;
+}
+
 export interface IPlayerInformation {
+  playerAddress: string;
   playableCount: number;
-  sumScore: number;
+  dailyPlayableCount: number;
   curGridNum: number;
-  beanPassOwned: boolean;
+  hamsterPassOwned: boolean;
+  sumScore: number;
+  totalAcorns: number;
+  weeklyAcorns: number;
+  lockedAcorns: number;
+  purchasedChancesCount: number;
+  weeklyPurchasedChancesCount: number;
+  acornsDecimals: number;
 }
 export enum WalletType {
   unknown = 'unknown',
@@ -160,7 +172,7 @@ export type WalletInfoType = {
   accountInfoSync?: Array<Manager>;
 };
 
-export enum BeanPassResons {
+export enum BeanPassReasons {
   Claimed = 'Claimed',
   InsufficientElfAmount = 'InsufficientElfAmount',
   DoubleClaim = 'DoubleClaim',
@@ -168,9 +180,9 @@ export enum BeanPassResons {
 
 export interface IBeanPassClaimRes {
   claimable: boolean;
-  reason: BeanPassResons;
+  reason: BeanPassReasons;
   transactionId: string;
-  beanPassInfoDto: BeanPassItemType;
+  hamsterPassInfo: BeanPassItemType;
 }
 
 export interface IBeanPassClaimReq {
@@ -222,6 +234,8 @@ export interface IConfigItems {
   forestNftDetailUrl: string;
   isShowRampBuy?: boolean;
   isShowRampSell?: boolean;
+  awakenUrl: string;
+  awakenTutorialUrl: string;
 }
 
 export interface IChessboardData {
@@ -252,6 +266,10 @@ export interface IGetRankQuery {
   MaxResultCount?: number | string;
 }
 
+export interface IClaimAwardBody {
+  caAddress: string;
+}
+
 export interface IRankHistoryQuery {
   CaAddress?: string;
   SeasonId?: string;
@@ -261,6 +279,7 @@ export interface IBeanPassListItem {
   symbol: string;
   tokenName: string;
   nftImageUrl: string;
+  tokenId: number;
   owned: boolean;
   usingBeanPass: boolean;
 }
@@ -283,3 +302,46 @@ export interface ITransactionResult {
   Logs: ITransactionLog[];
   [props: string]: any;
 }
+
+export interface IServerConfig {
+  chancePrice: number;
+  buyChanceTransactionFee: number;
+}
+
+export interface IPrice {
+  acornsInElf: number;
+  elfInUsd: number;
+}
+
+export interface IBalance {
+  symbol: string;
+  decimals: number;
+  balance: number;
+}
+export interface ILockInfoQuery {
+  CaAddress?: string;
+  SkipCount?: number;
+  MaxResultCount?: number | string;
+}
+
+export type LockedInfo = {
+  lockedTime: string;
+  unLockTime: string;
+  symbol: string;
+  decimals: number;
+  amount: number;
+};
+
+export type TLockInfosResponse = {
+  totalLockedAmount: number;
+  decimals: number;
+  lockedInfoList: LockedInfo[];
+};
+
+export type TUnlockInfo = {
+  unLockTime: string;
+  symbol: string;
+  decimal: number;
+  amount: number;
+  transactionId: string;
+};

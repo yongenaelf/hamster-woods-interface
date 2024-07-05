@@ -9,18 +9,14 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'https://test.beangotown.com/api/:path*',
+    destination: 'https://test-hamster.beangotown.com/api/:path*',
   },
   {
     source: '/cms/:path*',
-    destination: 'https://testv2.beangotown.com/cms/:path*',
+    destination: 'https://test-cms-hamster.beangotown.com/:path*',
   },
   {
-    source: '/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
-    destination: 'http://192.168.67.51:8083/AElfIndexer_DApp/PortKeyIndexerCASchema/:path*',
-  },
-  {
-    source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
-    destination: 'https://test.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+    source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
+    destination: 'https://test.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
   },
 ];

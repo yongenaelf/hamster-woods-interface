@@ -22,10 +22,10 @@ export const useWeeklyRank = () => {
 
         return {
           ...weekRank,
-          rankingList: rankingList?.map((i) => ({ ...i, caAddress: addPrefixSuffix(i.caAddress) })) ?? [],
+          rankingList: rankingList?.map((i) => ({ ...i, caAddress: addPrefixSuffix(i?.caAddress || '') })) ?? [],
           selfRank: {
             ...weekRank.selfRank,
-            caAddress: addPrefixSuffix(weekRank.selfRank.caAddress),
+            caAddress: addPrefixSuffix(weekRank?.selfRank?.caAddress || ''),
           },
         };
       } else return undefined;

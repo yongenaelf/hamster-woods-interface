@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --brand-base: #1b76e2;
   --color-main: #3989ff;
   --color-blue-bg-btn: #5197ff;
@@ -6,7 +6,24 @@
   --border-blue-btn: #244cbd;
   --color-blue-icon: #244cbd;
   --btn-bg-yellow: #f2c045;
+  --confirm-btn-bg: #A15A1C;
   --confirm-btn-bg: #feb800;
+} */
+
+:root {
+  --brand-base: #9a531f;
+  --color-main: #eee2c4;
+  --color-blue-bg-btn: #5197ff;
+  --bg-blue-btn: #5b8ef4;
+  --border-blue-btn: #244cbd;
+  --color-blue-icon: #244cbd;
+  --btn-bg-yellow: #f2c045;
+  --confirm-btn-bg: #A15A1C;
+  --background-color-primary: #9a531f;
+  --background-color-secondary: #d3b68a;
+  --background-color-tertiary: #dec49d;
+  --background-color-quaternary: #e8d1ae;
+  --background-color-quinary: #eee2c4;
 }
 
 .dark-theme {

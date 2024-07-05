@@ -1,0 +1,32 @@
+.customModal {
+  @apply relative !w-[358px] md:!w-[750px] border-[16px] rounded-[32px] p-[32px] bg-[#EEE2C4] border-[#9A531F] text-center text-[#953D22];
+  :global {
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-modal-content {
+      @apply h-full bg-inherit shadow-none;
+      .ant-modal-close {
+        @apply md:w-[48px] md:h-[48px] absolute right-[-18px] top-[-18px];
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+    .ant-modal-body {
+      @apply w-full p-0;
+    }
+  }
+}
+
+.mobileCustomModal {
+  @apply relative border-[8px] rounded-[20px] p-[16px];
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply !w-[28px] !h-[28px] absolute right-[-12px] top-[-12px];
+      }
+    }
+  }
+}

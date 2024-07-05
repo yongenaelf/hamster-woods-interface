@@ -14,6 +14,7 @@ export interface IGameItem {
   id: string;
   gridNum: number;
   score: number;
+  decimals: number;
   transcationFee: number;
   playTransactionInfo: ITransactionInfo | null;
   bingoTransactionInfo: ITransactionInfo | null;
@@ -21,6 +22,25 @@ export interface IGameItem {
 
 export interface IGameHistoryResult {
   gameList: IGameItem[];
+}
+export type TransactionInfo = {
+  transactionId: string;
+  transactionFee: number;
+  triggerTime: string;
+};
+
+export type BuyChanceItem = {
+  id: string;
+  cost: number;
+  chance: number;
+  symbol: string;
+  decimals: number;
+  transactionFee: number;
+  transactionInfo: TransactionInfo;
+};
+
+export interface IBuyHistoryResult {
+  buyChanceList: BuyChanceItem[];
 }
 
 export const useGameHistory = () => {
@@ -42,6 +62,7 @@ export const useGameHistory = () => {
             id
             gridNum
             score
+            decimals
             transcationFee
             playTransactionInfo {
               transactionId
@@ -62,4 +83,41 @@ export const useGameHistory = () => {
   }, [address]);
 
   return { gameHistory };
+};
+
+export const useBuyHistory = () => {
+  const address = addPrefixSuffix(useAddress());
+  const buyHistory = useCallback(async () => {
+    const { getBuyChanceRecords } =
+      (await graphQLRequest<{
+        getBuyChanceRecords: IBuyHistoryResult;
+      }>(`
+      query {
+        getBuyChanceRecords(
+          getBuyChanceRecordsDto: {
+            caAddress: "${address}"
+            skipCount: 0
+            maxResultCount: ${MAX_GAME_RECORD_ITEMS}
+          }
+        ) {
+          buyChanceList {
+            id
+            cost
+            chance
+            decimals
+            transcationFee
+            transactionInfo {
+              transactionId
+              transactionFee
+              triggerTime
+            }
+          }
+        }
+      }
+    `)) || {};
+
+    return getBuyChanceRecords;
+  }, [address]);
+
+  return { buyHistory };
 };

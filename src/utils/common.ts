@@ -5,3 +5,9 @@ export const sleep = (time: number) => {
     }, time);
   });
 };
+
+const P_N_REG = /^[0-9]+\.?[0-9]*$/;
+
+export function isValidNumber(n: string) {
+  return P_N_REG.test(n);
+}

@@ -50,6 +50,7 @@ import showMessage from 'utils/setGlobalComponentsInfo';
 import { Proto } from 'utils/proto';
 import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
+import CommonBtn from 'components/CommonBtn';
 
 const components = {
   phone: PhoneIcon,
@@ -225,18 +226,19 @@ export default function Login() {
     const allMethods = [
       { name: 'Login with Portkey', onclick: handlePortKey, iconName: 'portkey' },
       {
-        name: 'Login with Google',
-        onclick: handleGoogle,
-        yellowColor: !inModel ? true : undefined,
-        iconName: 'google',
-      },
-      { name: 'Login with Apple', onclick: handleApple, yellowColor: !inModel ? true : undefined, iconName: 'apple' },
-      { name: 'Login with Email', onclick: handleEmail, iconName: 'email' },
-      {
         name: 'Login with Telegram',
         onclick: handleTeleGram,
         iconName: 'telegram',
+        yellowColor: !inModel ? true : undefined,
       },
+      {
+        name: 'Login with Google',
+        onclick: handleGoogle,
+        iconName: 'google',
+        yellowColor: !inModel ? true : undefined,
+      },
+      { name: 'Login with Apple', onclick: handleApple, yellowColor: !inModel ? true : undefined, iconName: 'apple' },
+      { name: 'Login with Email', onclick: handleEmail, iconName: 'email' },
       { name: 'Login with QR code', onclick: handleQrcode, iconName: 'qrcode' },
     ];
     let filterMethods = allMethods;
@@ -252,7 +254,12 @@ export default function Login() {
         : [allMethods[0], allMethods[1]];
     }
     return filterMethods.map((item, index) => (
-      <div key={index} onClick={item.onclick} className={item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn}>
+      <div
+        key={index}
+        onClick={item.onclick}
+        className={`${item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn} ${
+          isMobileStore ? '' : 'mx-[96px]'
+        } `}>
         {getIconComponent(item.iconName as IconType, inModel)}
         <span className="flex-1 text-center font-fonarto">{item.name}</span>
       </div>
@@ -468,17 +475,16 @@ export default function Login() {
     <div
       className={`cursor-custom ${styles.loginContainer}`}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources?.aloginBgMobile : imageResources?.aloginBgPc})`,
+        backgroundImage: `url(${isMobileStore ? imageResources?.playgroundBgMobile : imageResources?.playgroundBgPc})`,
       }}>
       {!TelegramPlatform.isTelegramPlatform() &&
         (isLock ? (
-          <div
+          <CommonBtn
             onClick={() => {
               setIsUnlockShow(true);
             }}
-            className={styles.unlockBtn}>
-            unLock
-          </div>
+            className={`${styles.unlockBtn} !bg-[#A15A1C]`}
+            title="unLock"></CommonBtn>
         ) : isLogin ? null : (
           <>
             {renderLoginMethods(false)}

@@ -1,19 +1,21 @@
 import useSWR from 'swr';
 import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
-import { getRankHistory } from 'api/request';
+import { getPastRecord } from 'api/request';
 
-export const useRankingHistory = (seasonId: string) => {
+export const useRankingHistory = () => {
   const address = useAddressWithPrefixSuffix();
+
   return useSWR(
-    ['getRankingSeasonHis', seasonId, address],
+    ['getPastRecord', address],
     async () => {
-      if (!seasonId || !address) return;
-      const rankingHistory = await getRankHistory({
-        SeasonId: `${seasonId}`,
+      if (!address) return;
+      const pastRankList = await getPastRecord({
         CaAddress: `${address}`,
+        SkipCount: 0,
+        MaxResultCount: 200,
       });
 
-      return rankingHistory;
+      return pastRankList;
     },
     {
       dedupingInterval: 0,

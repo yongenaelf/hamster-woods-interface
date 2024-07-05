@@ -3,9 +3,9 @@ import { getNoticeModal } from 'redux/reducer/noticeModal';
 import { useSelector } from 'redux/store';
 import styles from './index.module.css';
 
-import Modal from 'components/CommonModal';
 import CommonBtn from 'components/CommonBtn';
 import useGetState from 'redux/state/useGetState';
+import CustomModal from 'components/CustomModal';
 
 export default function NoticeModal() {
   const modalInfo = useSelector(getNoticeModal);
@@ -29,7 +29,7 @@ export default function NoticeModal() {
   };
 
   return (
-    <Modal footer={null} {...modalInfo} className={styles.noticeModal}>
+    <CustomModal footer={null} {...modalInfo} className={styles.noticeModal}>
       <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px]">{renderContent()}</div>
       {modalInfo?.okText && (
         <div className="mx-2">
@@ -39,6 +39,6 @@ export default function NoticeModal() {
             className={`mx-[12px] mt-[24px] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonBtn>
         </div>
       )}
-    </Modal>
+    </CustomModal>
   );
 }

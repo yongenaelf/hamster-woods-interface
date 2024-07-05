@@ -19,11 +19,18 @@ import { useRouter, usePathname } from 'next/navigation';
 import useGetState from 'redux/state/useGetState';
 import { KEY_NAME, TELEGRAM_BOT_ID } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import { fetchChessboardConfig, fetchChessboardData, fetchConfigItems, fetchNoticeModal } from 'api/request';
+import {
+  fetchChessboardConfig,
+  fetchChessboardData,
+  fetchConfigItems,
+  fetchNoticeModal,
+  fetchServerConfig,
+} from 'api/request';
 import { setConfigInfo } from 'redux/reducer/configInfo';
 import { setChessboardData } from 'redux/reducer/chessboardData';
 import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
+import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
@@ -103,6 +110,7 @@ const Layout = dynamic(
             }
           });
 
+          const serverConfigPromise = fetchServerConfig();
           const configPromise = fetchConfigItems();
           const chessBoardPromise = fetchChessboardData(url).then((res) => {
             store.dispatch(setChessboardData(res.data));
@@ -132,7 +140,12 @@ const Layout = dynamic(
             });
           });
 
-          Promise.all([chessBoardPromise, configPromise]).then((res) => {
+          serverConfigPromise.then((res) => {
+            console.log('===serverConfig', res);
+            store.dispatch(setServerConfigInfo(res));
+          });
+
+          Promise.all([chessBoardPromise, configPromise, serverConfigPromise]).then((res) => {
             setIsFetchFinished(true);
           });
         });
@@ -185,7 +198,7 @@ const Layout = dynamic(
               className="marketplace-content flex-1 overflow-hidden relative"
               id="marketplace-content">
               {children}
-              <div className="absolute top-0 w-full h-full bg-gradient-to-t from-[#1D628B] to-[#14436E]"></div>
+              <div className="absolute top-0 w-full h-full bg-[#8FBC30]"></div>
             </AntdLayout.Content>
           </AntdLayout>
         );
@@ -196,7 +209,7 @@ const Layout = dynamic(
           {children}
           <div
             className={`absolute top-0 w-full h-full ${
-              pathname === '/login' ? 'bg-[#2D20E1]' : 'bg-gray-100'
+              pathname === '/login' ? 'bg-[#8FBC30]' : 'bg-gray-100'
             } z-[-1]`}></div>
         </>
       );

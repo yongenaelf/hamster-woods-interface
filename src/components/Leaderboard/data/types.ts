@@ -1,12 +1,64 @@
 export interface IRankItem {
-  rank: number;
-  score: number;
+  rank?: number;
+  score?: number;
+  caAddress?: string;
+  decimals?: number;
+}
+
+interface ISettleDayRankItem {
   caAddress: string;
+  score: number;
+  rank: number;
+  fromRank?: number;
+  toRank?: number;
+  fromScore?: number;
+  toScore?: number;
+  rewardNftInfo: {
+    symbol: string;
+    chainId: string;
+    tokenName: string;
+    imageUrl: string;
+    balance: number;
+    decimals: number;
+  };
 }
 
 interface IRankResult {
-  rankingList: IRankItem[] | null;
-  selfRank: IRankItem;
+  rankingList?: IRankItem[] | null;
+  selfRank?: IRankItem | null;
+  settleDayRankingList?: ISettleDayRankItem[] | null;
+  settleDaySelfRank?: ISettleDayRankItem | null;
+}
+
+interface IPastRecordItem {
+  time: string;
+  caAddress: string;
+  score: number;
+  decimals: number;
+  rank: number;
+  rewardNftInfo: {
+    symbol: string;
+    chainId: string;
+    tokenName: string;
+    imageUrl: string;
+    balance: number;
+  };
+}
+
+export type TPastRecordResult = IPastRecordItem[];
+
+export interface IKingHamsterInfo {
+  symbol: string;
+  tokenName: string;
+  tokenId: number;
+  nftImageUrl: string;
+}
+
+export interface IClaimableInfoResult {
+  claimable: boolean;
+  reason: string | null;
+  transactionId: string;
+  kingHamsterInfo: IKingHamsterInfo;
 }
 
 interface IWeekItem extends IRankItem {

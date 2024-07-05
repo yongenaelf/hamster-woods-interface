@@ -33,21 +33,27 @@
 .loginContainer {
   @apply flex h-full w-full flex-col items-center justify-end  !bg-cover bg-center bg-no-repeat px-10 text-base text-white  md:justify-start md:pt-[46.7vh];
   .more {
-    @apply z-20 pb-4 font-fonarto underline md:pb-0 md:text-2xl;
+    @apply z-20 pb-4 font-fonarto underline md:pb-0 text-[20px] md:text-[32px] text-white;
   }
   .loginBtn,
   .unlockBtn,
   .loginBtnYellow {
-    @apply relative flex items-center z-20 mb-6 flex h-14 w-full items-center justify-center rounded-[30px]  border-2 bg-[var(--bg-blue-btn)] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:!border-white md:px-8 md:text-[32px] md:leading-6;
+    @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-[30px] bg-[#5D42FF] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
 
-    border-color: rgb(0 0 0 / 10%);
-    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%);
+    box-shadow: 0 3px 1px 0 #6f6cff inset, 0 4px 0 0 #1d089b;
+    text-shadow: 0 0 1px #4b35d0;
   }
   .unlockBtn {
-    @apply mb-[94px] bg-[var(--color-main)] md:mb-0 md:mt-[3.7vh] md:justify-center;
+    @apply mb-[94px] bg-[#A15A1C] md:mb-0 md:mt-[3.7vh] md:justify-center;
+
+    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+    text-shadow: 0 0 1px #953d22;
   }
   .loginBtnYellow {
-    @apply bg-[var(--btn-bg-yellow)];
+    @apply bg-[#00A6EF];
+
+    box-shadow: 0 3px 1px 0 #29bdff inset, 0 4px 0 0 #005e88;
+    text-shadow: 0 0 1px #0090d0;
   }
 }
 
@@ -59,26 +65,21 @@
   }
 }
 
-.loginBtnBlueIcon {
-  path {
-    @apply fill-[var(--color-blue-icon)];
-  }
-}
-
 .loginMethodModal {
-  @apply !w-[750px];
+  @apply !w-[750px] rounded-[32px];
   :global {
+    .ant-modal-content {
+      @apply !rounded-[32px];
+    }
     .ant-modal-body {
-      @apply !px-[145px] !pb-[28px] text-[32px] leading-6;
+      @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
-    @apply !mb-5 !h-[77px] !justify-center !rounded-[39px] !px-10;
-
-    box-shadow: 0 6px 12px 0 rgb(14 16 26 / 12%) !important;
+    @apply relative !mb-5 mx-[97px] !h-[77px] flex items-center !justify-center !rounded-[39px] !px-10 bg-[var(--confirm-btn-bg)] font-fonarto text-white;
   }
   .drawerHeader {
-    @apply !mb-[44px] mt-[13px] text-center font-fonarto !text-[32px] leading-6;
+    @apply !mb-[40px] text-center font-fonarto !text-[32px] leading-6 text-[#953D22];
   }
   .drawer__close {
     @apply absolute !right-[26px] !top-[37px] !text-[30px];
@@ -88,6 +89,12 @@
     path {
       @apply fill-white;
     }
+  }
+}
+
+.loginMethodDrawer {
+  .loginBtn {
+    @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] bg-[var(--confirm-btn-bg)] font-fonarto text-white;
   }
 }
 
@@ -104,7 +111,7 @@
       @apply rounded-tl-2xl rounded-tr-2xl;
     }
     .ant-modal-content {
-      @apply overflow-auto rounded-2xl bg-[var(--color-main)] bg-[var(--color-main)] text-base  text-white;
+      @apply overflow-auto rounded-2xl bg-[var(--color-main)] text-base  text-white;
     }
     .ant-drawer-wrapper-body {
       @apply overflow-auto bg-[var(--color-main)] text-base  text-white;
@@ -117,14 +124,16 @@
       @apply min-h-[392px];
     }
   }
+
   .loginBtn {
-    @apply relative mb-4 flex h-14 w-full items-center justify-center rounded-[36px] border-2 border-solid border-[var(--border-blue-btn)] bg-[var(--color-blue-bg-btn)] px-5 font-fonarto text-white;
+    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+    text-shadow: 0 0 1px #953d22;
   }
   .drawerHeader {
-    @apply mb-8 text-center font-fonarto text-2xl leading-6;
+    @apply mb-8 text-center font-fonarto text-2xl leading-6 text-[#953D22];
   }
   .drawer__close {
-    @apply absolute right-6 top-6;
+    @apply absolute right-3 top-3;
     svg {
       @apply w-6 h-6;
     }

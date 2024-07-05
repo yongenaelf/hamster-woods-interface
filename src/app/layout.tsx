@@ -10,8 +10,8 @@ import 'styles/theme.css';
 import Layout from 'pageComponents/layout';
 
 export const metadata = {
-  title: 'BeanGoTown',
-  description: 'BeanGoTown',
+  title: 'Hamster Woods',
+  description: 'Hop and earn token/NFT rewards!',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

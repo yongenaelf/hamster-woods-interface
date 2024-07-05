@@ -1,5 +1,5 @@
 .game {
-  @apply w-full h-full flex items-center bg-[#3F4A5C];
+  @apply w-full h-full flex items-center bg-inherit;
 
   .game__pc__side {
     @apply relative flex-1 flex justify-center items-center h-full;
@@ -14,7 +14,7 @@
   }
 
   .game__content {
-    @apply bg-gradient-to-t from-[#1D628B] to-[#14436E];
+    @apply bg-inherit;
   }
 
   .scrollbar::-webkit-scrollbar {

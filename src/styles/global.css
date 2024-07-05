@@ -80,7 +80,8 @@ button {
   cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
 
-.ant-modal-root {
+.ant-modal-root,
+.ant-tooltip {
   cursor: pointer;
   cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
 }
@@ -91,10 +92,11 @@ button {
     cursor: url('../assets/images/recreation/cursor.png') 0 0, pointer !important;
   }
 
-  .bean-show-message-error {
-    @apply !bg-[#F65D5D] !rounded-[20px] !p-[15px];
+  .bean-show-message-error,
+  .bean-show-message-success {
+    @apply !bg-white !rounded-[20px] !p-[15px] !w-auto;
     .ant-notification-notice-message {
-      @apply !ml-[32Px] !min-h-[24Px] !text-[#fff] !text-[16Px] !leading-[24Px];
+      @apply !ml-[36Px] !text-[#303030] !font-[500] !text-[16Px] !leading-[24Px];
     }
   }
 }

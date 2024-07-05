@@ -9,23 +9,32 @@ import {
   IBeanPassListItem,
   ISetCurBeanBody,
   IErrorResponse,
+  IServerConfig,
+  IPrice,
+  IBalance,
+  IClaimAwardBody,
+  ILockInfoQuery,
+  TLockInfosResponse,
+  TUnlockInfo,
 } from 'types';
 import request, { cmsRequest } from './axios';
 import {
+  IClaimableInfoResult,
   IRankingHistoryResult,
   IRankingSeasonListResult,
   ISeasonRankResult,
   IWeeklyRankResult,
+  TPastRecordResult,
 } from 'components/Leaderboard/data/types';
 
-export const getBeanPassClaimClaimable = async (
+export const getHamsterPassClaimClaimable = async (
   query: IBeanPassClaimReq,
 ): Promise<IBeanPassClaimRes & IErrorResponse> => {
-  return request.get('app/bean-pass/claimable', { params: query });
+  return request.get('app/hamster-pass/claimable', { params: query });
 };
 
-export const receiveBeanPassNFT = async (body: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
-  return request.post('app/bean-pass/claim', body);
+export const receiveHamsterPassNFT = async (body: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
+  return request.post('app/hamster-pass/claim', body);
 };
 
 export const blockHeight = async (): Promise<number> => {
@@ -34,6 +43,14 @@ export const blockHeight = async (): Promise<number> => {
 
 export const getWeekRank = async (query: IGetRankQuery): Promise<IWeeklyRankResult> => {
   return request.get('/app/rank/week-rank', { params: query });
+};
+
+export const getPastRecord = async (query: IGetRankQuery): Promise<TPastRecordResult> => {
+  return request.get('/app/rank/history', { params: query });
+};
+
+export const claimAward = async (body: IClaimAwardBody): Promise<IClaimableInfoResult> => {
+  return request.post('/app/reward/claim', body);
 };
 
 export const getSeasonRank = async (query: IGetRankQuery): Promise<ISeasonRankResult> => {
@@ -68,7 +85,7 @@ export const fetchNoticeModal = async (): Promise<INoticeModalResponse> => {
   return cmsRequest.get<INoticeModalResponse>('items/notice_modal');
 };
 export const fetchBeanPassList = async (query: { caAddress: string }): Promise<Array<IBeanPassListItem>> => {
-  return request.get('/app/bean-pass/nft-list', { params: query });
+  return request.get('/app/hamster-pass/nft-list', { params: query });
 };
 
 export const setCurUsingBeanPass = async (body: ISetCurBeanBody): Promise<IBeanPassListItem> => {
@@ -77,4 +94,23 @@ export const setCurUsingBeanPass = async (body: ISetCurBeanBody): Promise<IBeanP
 
 export const trackUnlockInfo = async (body: { caAddress: string; caHash: string }) => {
   return request.post('/app/trace/user-action', body);
+};
+
+export const fetchServerConfig = async (): Promise<{ data: IServerConfig }> => {
+  return request.get('app/hamster-pass/config');
+};
+
+export const fetchPrice = async (): Promise<IPrice> => {
+  return request.get('app/hamster-pass/price');
+};
+
+export const fetchBalance = async (query: { caAddress: string }): Promise<IBalance[]> => {
+  return request.get('app/hamster-pass/asset', { params: query });
+};
+export const getLockInfos = async (query: ILockInfoQuery): Promise<TLockInfosResponse> => {
+  return request.get('/app/lock/locked-infos', { params: query });
+};
+
+export const getUnlockRecords = async (query: ILockInfoQuery): Promise<TUnlockInfo[]> => {
+  return request.get('/app/lock/unlock-records', { params: query });
 };

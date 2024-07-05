@@ -1,155 +1,81 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useRankingSeasonList } from '../data/useRankingSeasonList';
+import { useCallback, useState } from 'react';
 import { useRankingHistory } from '../data/useRankingHistory';
 import { useIsMobile } from 'redux/selector/mobile';
-import { getDateFormat } from 'utils/getDateFormat';
-import { IRankingHistoryResult } from '../data/types';
-
-const DiagonalContainer = ({ icon, leftText, value }: { icon: React.ReactNode; leftText: string; value?: number }) => {
-  const isMobile = useIsMobile();
-
-  return (
-    <div className="mb-4 flex rounded-[7px] border-[#00335C] bg-[#0538C9] shadow-[0px_0px_4px_rgba(0,0,0,0.25)_inset]">
-      <div className="flex items-center rounded-bl-[7px] rounded-tl-[7px] bg-white bg-opacity-10 w-1/2">
-        {icon}
-        <span className={`mr-4 font-roboto font-bold text-white ${isMobile ? 'text-sm' : 'text-lg'}`}>{leftText}</span>
-      </div>
-      <span className="w-8 diagonal-bg-[#0538C9]"></span>
-      <div className="ml-2 flex items-center justify-center text-xl font-bold text-[#FFD200]">
-        <div>{value === -1 ? '-' : value?.toLocaleString() ?? '-'}</div>
-      </div>
-    </div>
-  );
-};
-
-const formatDate = (dateStr: string) => getDateFormat(dateStr, 'yyyy.M.d');
+import showMessage from 'utils/setGlobalComponentsInfo';
+import { useClaim } from '../data/useClaim';
+import useInitLeaderBoard from '../hooks/useInitLeaderBoard';
+import { divDecimalsStr } from 'utils/calculate';
+import ShowNFTModal from 'components/CommonModal/ShowNFTModal';
+import { ShowBeanPassType } from 'components/CommonModal/type';
+import { IClaimableInfoResult } from '../data/types';
 
 export const PastRecordContent = () => {
-  const { data } = useRankingSeasonList();
-  const [selectedSeason, setSelectedSeason] = useState('');
-  const { data: his } = useRankingHistory(selectedSeason);
+  const { data } = useRankingHistory();
   const isMobile = useIsMobile();
+  const claimAward = useClaim();
+  const { initialize } = useInitLeaderBoard();
+  const [isShowNFT, setIsShowNFT] = useState(false);
+  const [claimInfo, setClaimInfo] = useState<IClaimableInfoResult>();
 
-  useEffect(() => {
-    const selected = data?.season?.[0];
-    if (selected) setSelectedSeason(selected.id);
-  }, [data]);
-
-  const dateString = useMemo(() => {
-    const selected = data?.season.find((i) => i.id === selectedSeason);
-
-    if (selected) return `${formatDate(selected.rankBeginTime)} - ${formatDate(selected.rankEndTime)}`;
-
-    return '-';
-  }, [selectedSeason, data]);
+  const onClaim = useCallback(async () => {
+    showMessage.loading();
+    try {
+      const result = await claimAward();
+      setClaimInfo(result);
+      setIsShowNFT(true);
+      initialize();
+    } catch (error) {
+      console.log('err', error);
+      showMessage.error('claim failed');
+    } finally {
+      showMessage.hideLoading();
+    }
+  }, [claimAward, initialize]);
 
   return (
-    <div className="mb-2 flex w-full flex-grow flex-col rounded-2xl bg-blue-400 p-2 shadow-inner">
-      <div className="mb-[1px] flex w-full flex-row items-center justify-between rounded-tl-2xl rounded-tr-2xl bg-[#0C40D4] p-2 shadow-inner">
-        <select
-          className={`bg-[#0C40D4] text-white cursor-custom ${isMobile ? 'p-2.5 text-lg' : 'p-2 text-3xl'}`}
-          onChange={(e) => setSelectedSeason(e.target.value)}>
-          {data?.season.map((i) => (
-            <option className="cursor-custom" key={i.id} value={i.id}>
-              {i.name}
-            </option>
-          ))}
-        </select>
-        <div className={`font-normal leading-none text-white text-opacity-60 ${isMobile ? 'text-md' : 'text-xl'}`}>
-          {dateString}
-        </div>
+    <div className="flex flex-col overflow-y-auto space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1">
+      <div
+        className={`flex  ${
+          isMobile ? 'text-[12px]' : 'text-[16px]'
+        } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
+        <div className="flex-1">Time</div>
+        <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>$ACORNS</div>
+        <div className={`${isMobile ? 'w-[120px]' : 'flex-1'}`}>Rank</div>
       </div>
-      <div className="text-md h-1 w-full flex-grow rounded-bl-2xl rounded-br-2xl bg-[#144CEA] p-4 shadow-inner">
-        {isMobile ? (
-          <>
-            <div className="mb-4 flex">
-              <PastRecordIcon />
-              <div className="flex-1">
-                <DiagonalContainers his={his} />
-              </div>
+      <ShowNFTModal
+        open={isShowNFT}
+        beanPassItem={claimInfo?.kingHamsterInfo}
+        onCancel={() => setIsShowNFT(false)}
+        type={ShowBeanPassType.Success}
+      />
+      <div className="overflow-y-auto h-full">
+        {data?.map((item, i) => (
+          <div
+            key={i}
+            className={`flex ${isMobile ? 'text-[12px] h-[36px] ' : 'text-[16px] items-center h-[52px]'} 
+                ${item?.rewardNftInfo ? 'h-[64px] py-[12px]' : 'items-center'}
+            leading-[18px] text-[#953D22] text-left  border-b-[1px] border-[#D3B68A]`}>
+            <div className="flex-1">{item.time}</div>
+            <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>
+              {divDecimalsStr(item.score, item.decimals) ?? 'N/A'}
             </div>
-            <Table his={his} />
-          </>
-        ) : (
-          <>
-            <div className="flex gap-32 p-4">
-              <div className="w-1/3">
-                <PastRecordIcon />
-                <div>
-                  <DiagonalContainers his={his} />
+            <div className={`flex justify-between  ${isMobile ? 'flex-col w-[120px]' : 'items-center flex-1'}`}>
+              <span>{item.rank === -1 ? '-' : item.rank.toLocaleString()}</span>
+              {item.rewardNftInfo && (
+                <div
+                  onClick={onClaim}
+                  className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] ${
+                    isMobile
+                      ? 'px-1 py-[3px] text-[10px] leading-[10px] w-[120px]'
+                      : 'px-2 py-[5px] text-xs leading-[22px]'
+                  }`}>
+                  Claim NFT Rewards
                 </div>
-              </div>
-              <div className="flex-grow">
-                <Table his={his} />
-              </div>
+              )}
             </div>
-          </>
-        )}
+          </div>
+        ))}
       </div>
     </div>
-  );
-};
-
-interface IData {
-  his?: IRankingHistoryResult;
-}
-
-const Table = ({ his }: IData) => {
-  const isMobile = useIsMobile();
-
-  return (
-    <table className={`${isMobile ? '' : 'text-lg'} w-full text-white`}>
-      <thead className="bg-white bg-opacity-20 text-white text-opacity-70">
-        <tr>
-          <th className={`${isMobile ? 'p-2' : 'p-4'} w-1/2 text-left`}>Time</th>
-          <th className={`${isMobile ? 'py-2' : 'py-4'} text-left`}>Beans</th>
-          <th className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>Rank</th>
-        </tr>
-      </thead>
-      <tbody>
-        {his?.weeks.map((i, idx) => (
-          <tr key={idx} className="border-b border-white border-opacity-40">
-            <td className={`${isMobile ? 'p-2' : 'p-4'}`}>Week-{i.week}</td>
-            <td className={`${isMobile ? 'py-2' : 'py-4'}`}>
-              {i.score ?? <div className="text-white text-opacity-60">N/A</div>}
-            </td>
-            <td className={`${isMobile ? 'p-2' : 'p-4'} text-right`}>{i.rank === -1 ? '-' : i.rank}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-const PastRecordIcon = () => {
-  const isMobile = useIsMobile();
-
-  return (
-    <img
-      src={require('assets/images/past-record-icon.png').default.src}
-      className={`h-auto ${isMobile ? 'mr-2 w-1/3' : 'mx-auto px-4 pb-8'}`}
-      alt="Past Records"
-    />
-  );
-};
-
-const DiagonalContainers = ({ his }: IData) => {
-  const isMobile = useIsMobile();
-
-  const className = `p-2 ${isMobile ? 'w-8' : 'w-12'}`;
-
-  return (
-    <>
-      <DiagonalContainer
-        icon={<img src={require('assets/images/crown.png').default.src} alt="crown" className={className} />}
-        leftText="Rank"
-        value={his?.season.rank}
-      />
-      <DiagonalContainer
-        icon={<img src={require('assets/images/bean.png').default.src} alt="crown" className={className} />}
-        leftText="Beans"
-        value={his?.season.score}
-      />
-    </>
   );
 };
