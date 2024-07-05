@@ -1,8 +1,5 @@
 import React from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
-import NoDataSvg from 'assets/images/no-data.svg';
-import styles from './style.module.css';
-import Icon from '@ant-design/icons';
 
 type TNoDataProps = {
   tips?: string;
@@ -11,11 +8,16 @@ type TNoDataProps = {
 const NoData: React.FC<TNoDataProps> = (props: TNoDataProps) => {
   const { tips = 'No Data' } = props;
   const isMobile = useIsMobile();
+
   return (
-    <div className={`${styles.wrap} h-full w-full flex flex-col flex-grow items-center justify-center`}>
-      <Icon component={() => <NoDataSvg />} height={80} width={80} className={`${styles.NoDataSvg}`} />
-      <div className={`${isMobile ? 'text-[2rem]' : 'text-[20px]'}  text-center mt-[24px] font-medium text-[#AE694C]`}>
-        {tips}
+    <div className="flex flex-grow items-center justify-center rounded-bl-xl rounded-br-xl">
+      <div className={`${isMobile ? 'px-8' : 'px-32'}`}>
+        <img
+          src={require('assets/images/no-record.png').default.src}
+          alt="No Record"
+          className={`mx-auto ${isMobile ? 'w-[40px] h-[40px] mb-[16px]' : 'w-[80px] h-[80px] mb-[24px]'}`}
+        />
+        <div className={`text-center font-roboto font-medium ${isMobile ? 'text-[14px]' : 'text-[20px]'}`}>{tips}</div>
       </div>
     </div>
   );

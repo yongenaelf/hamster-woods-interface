@@ -33,7 +33,7 @@
 .board__tooltip {
   :global {
     .ant-tooltip-inner {
-      @apply rounded-[32px];
+      @apply rounded-[16px];
     }
   }
 }

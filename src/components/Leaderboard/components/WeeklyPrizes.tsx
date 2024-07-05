@@ -28,10 +28,12 @@ export function RankItem({ rank }: IRankItemProps) {
         alt="rank"
       />
       <span className="flex-grow"></span>
-      <div className="text-xl leading-4 text-white font-fonarto">{RankItemDetail[rank].prizeDetail}</div>
+      <div className={`${isMobile ? 'text-[16px]' : 'text-xl '} leading-4 text-white font-fonarto`}>
+        {RankItemDetail[rank].prizeDetail}
+      </div>
       <img
         src={RankItemDetail[rank].avatarIcon.src}
-        className={`z-10 ${isMobile ? 'mx-2' : 'mx-4'}`}
+        className={`z-10 ${isMobile ? 'mx-2' : 'mx-4'} rounded-full`}
         width={30}
         height={30}
         alt="avatar"
@@ -52,13 +54,19 @@ export function DefaultItem({ topText, avatarIcon, getNFTDetail }: IDefaultItemP
     <div className={`mb-3 p-2 flex w-full items-center border bg-[#DEC49D] rounded-full `}>
       <div
         className={`${
-          isMobile ? 'px-3 py-[6px]' : 'px-[16px] py-2'
+          isMobile ? 'px-3 py-[6px] w-[90px]' : 'px-[16px] py-2'
         } bg-[#B26C27] text-base leading-6 text-white font-fonarto rounded-full`}>
         {topText}
       </div>
       <span className="flex-grow"></span>
-      <div className="text-xl leading-4 text-white font-fonarto">{getNFTDetail}</div>
-      <img src={avatarIcon} className={`z-10 ${isMobile ? 'mx-2' : 'mx-4'}`} width={24} height={24} alt="avatar" />
+      <div className={`${isMobile ? 'text-[12px]' : 'text-xl '} leading-4 text-white font-fonarto`}>{getNFTDetail}</div>
+      <img
+        src={avatarIcon}
+        className={`rounded-full z-10 ${isMobile ? 'mx-2' : 'mx-4'}`}
+        width={24}
+        height={24}
+        alt="avatar"
+      />
     </div>
   );
 }
@@ -72,20 +80,25 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
       open={open}
       onCancel={onCancel}
       title="Hop & Win Weekly Prizes">
-      <div className=" px-[24px] mt-[40px] flex flex-col space-y-[10px] text-[16px] leading-[24px] text-left">
-        {WeeklyPrizeTip.map((tip, index) => (
-          <div key={`tip_${index}`}>{tip}</div>
-        ))}
-      </div>
-      <div className="px-[24px] mt-[24px]">
-        <RankItem rank={RankEnum.First} />
-        <RankItem rank={RankEnum.Second} />
-        <RankItem rank={RankEnum.Third} />
-        <DefaultItem
-          topText="Top 4-10"
-          avatarIcon={require('assets/images/king-hamster.png').default.src}
-          getNFTDetail="KINGHAMSTER NFT Prize *1"
-        />
+      <div
+        className={`${
+          isMobile ? 'h-[33rem]' : 'h-[41rem]'
+        } text-[#AE694C] overflow-y-auto  [&::-webkit-scrollbar]:hidden`}>
+        <div className="flex flex-col space-y-[10px] text-[16px] leading-[24px] text-left">
+          {WeeklyPrizeTip.map((tip, index) => (
+            <div key={`tip_${index}`}>{tip}</div>
+          ))}
+        </div>
+        <div className="mt-[24px]">
+          <RankItem rank={RankEnum.First} />
+          <RankItem rank={RankEnum.Second} />
+          <RankItem rank={RankEnum.Third} />
+          <DefaultItem
+            topText="Top 4-10"
+            avatarIcon={require('assets/images/king-hamster.png').default.src}
+            getNFTDetail="KINGHAMSTER NFT Prize *1"
+          />
+        </div>
       </div>
     </CustomModal>
   );

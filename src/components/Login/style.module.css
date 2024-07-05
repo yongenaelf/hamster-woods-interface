@@ -40,21 +40,20 @@
   .loginBtnYellow {
     @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-[30px] bg-[#5D42FF] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
 
-    box-shadow: 0 3px 1px 0 #6F6CFF inset, 0 4px 0 0 #1D089B;
-    text-shadow: 0 0 1px #4B35D0;
+    box-shadow: 0 3px 1px 0 #6f6cff inset, 0 4px 0 0 #1d089b;
+    text-shadow: 0 0 1px #4b35d0;
   }
   .unlockBtn {
     @apply mb-[94px] bg-[#A15A1C] md:mb-0 md:mt-[3.7vh] md:justify-center;
-    
-    box-shadow: 0 3px 1px 0 #D18A4C inset, 0 4px 0 0 rgb(133 66 8 / 60%);
-    text-shadow: 0 0 1px #953D22;
 
+    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+    text-shadow: 0 0 1px #953d22;
   }
   .loginBtnYellow {
     @apply bg-[#00A6EF];
 
-    box-shadow: 0 3px 1px 0 #29BDFF inset, 0 4px 0 0 #005E88;
-    text-shadow: 0 0 1px #0090D0;
+    box-shadow: 0 3px 1px 0 #29bdff inset, 0 4px 0 0 #005e88;
+    text-shadow: 0 0 1px #0090d0;
   }
 }
 
@@ -73,7 +72,7 @@
       @apply !rounded-[32px];
     }
     .ant-modal-body {
-        @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
+      @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
@@ -127,8 +126,8 @@
   }
 
   .loginBtn {
-    box-shadow: 0 3px 1px 0 #D18A4C inset, 0 4px 0 0 rgb(133 66 8 / 60%);
-    text-shadow: 0 0 1px #953D22;
+    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+    text-shadow: 0 0 1px #953d22;
   }
   .drawerHeader {
     @apply mb-8 text-center font-fonarto text-2xl leading-6 text-[#953D22];

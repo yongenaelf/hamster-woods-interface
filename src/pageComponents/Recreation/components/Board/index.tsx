@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import RankingImage from 'assets/images/recreation/ranking.png';
 import NftImage from 'assets/images/recreation/nft.png';
 import GoButton, { IGoButton, Status } from '../GoButton';
@@ -42,8 +42,8 @@ function Board({
 
   const { initialize } = useInitLeaderBoard();
 
-  const handleShowLeaderboard = async () => {
-    showMessage.loading();
+  const handleShowLeaderboard = useCallback(async () => {
+    // showMessage.loading();
     try {
       await initialize();
     } catch (err) {
@@ -56,10 +56,10 @@ function Board({
         },
       });
     } finally {
-      showMessage.hideLoading();
+      // showMessage.hideLoading();
       dispatch(toggleShowLeaderboard());
     }
-  };
+  }, [initialize]);
 
   if (isMobile) {
     return (

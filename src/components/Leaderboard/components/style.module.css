@@ -1,26 +1,22 @@
 /* stylelint-disable number-max-precision */
 
 .WeeklyModal {
-  @apply relative  border-[16px] rounded-[32px] p-0;
+  @apply relative  rounded-[32px] p-0;
   :global {
     .ant-modal-footer {
       @apply block p-0 m-0 border-t-0;
-
     }
     .ant-modal-content {
       @apply h-full bg-inherit shadow-none rounded-[32px];
       .ant-modal-close {
-        @apply w-[48px] h-[48px] absolute top-1 right-1;
+        @apply absolute top-1 right-1;
         .ant-modal-close-x {
           @apply w-full h-full;
-          img {
-            @apply !w-full !h-full;
-          }
         }
       }
     }
     .ant-modal-body {
-      @apply w-full px-[32px] pt-[32px];
+      @apply w-full px-[16px] pt-[16px];
     }
   }
 }

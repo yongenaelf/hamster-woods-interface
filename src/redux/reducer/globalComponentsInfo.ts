@@ -15,6 +15,7 @@ export const globalComponentsInfoSlice = createSlice({
   initialState,
   reducers: {
     setPageLoading(state, action) {
+      console.log('setPageLoading', state, action);
       state.pageLoading = {
         ...action.payload,
       };
