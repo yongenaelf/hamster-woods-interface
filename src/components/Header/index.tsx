@@ -51,7 +51,7 @@ export default function Header() {
                 className={`${
                   isMobile ? 'px-[12px] py-[8px] text-[12px]' : 'px-[24px] py-[16px] text-[18px] leading-[28px]'
                 }`}>
-                <div className="">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
+                <div className="">{`$ACORNS won through gameplay has a vesting period of 30 days, starting at the end of each week. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
 In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
                 <div
                   className={`text-right ${isMobile ? 'text-[16px]' : 'text-[24px]'}   leading-[28px]`}

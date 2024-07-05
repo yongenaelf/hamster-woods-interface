@@ -80,13 +80,13 @@ export default function GetChanceModal({
       <div className={`overflow-auto`}>
         <div className="space-y-[28px]">
           <div className="flex justify-center items-center flex-wrap text-[20px]">
-            Do you want to pay
+            Exchange
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
               <span>{chancePrice}</span>
               <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
               <span>ACORNS</span>
             </span>
-            for <span className="font-bold mx-[10px]">1 number</span>of chances to play
+            for <span className="font-bold mx-[10px]">{inputVal}</span>hopping chance
           </div>
           <div className="flex items-center justify-center space-x-[16px]">
             <Image

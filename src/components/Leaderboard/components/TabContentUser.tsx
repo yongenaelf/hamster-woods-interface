@@ -86,7 +86,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
           <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
-            <span className="font-bold">Claim NFT Rewards</span>
+            <span className="font-bold">Claim NFT Prizes</span>
             <img
               src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
               className={`z-10 w-[24px] h-[24px]`}
