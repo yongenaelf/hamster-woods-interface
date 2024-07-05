@@ -60,7 +60,7 @@ export const PastRecordContent = () => {
               {divDecimalsStr(item.score, item.decimals) ?? 'N/A'}
             </div>
             <div className={`flex justify-between  ${isMobile ? 'flex-col w-[120px]' : 'items-center flex-1'}`}>
-              <span>{item.rank === -1 ? '-' : item.rank.toLocaleString()}</span>
+              <span>{item.rank === -1 ? '-' : item.rank?.toLocaleString()}</span>
               {item.rewardNftInfo && (
                 <div
                   onClick={onClaim}

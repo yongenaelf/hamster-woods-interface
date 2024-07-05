@@ -140,7 +140,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
       return (
         <SettleNormalItem
           leftText={`Top ${item.fromRank}-${item.toRank}`}
-          centerText={`${item.fromScore.toLocaleString()}-${item.toScore.toLocaleString()}`}
+          centerText={`${item.fromScore?.toLocaleString()}-${item.toScore?.toLocaleString()}`}
           balance={item?.rewardNftInfo?.balance}
           decimals={item?.rewardNftInfo?.decimals}
           imageUrl={item.rewardNftInfo?.imageUrl}
@@ -198,7 +198,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
       return (
         <SettleNormalItem
           leftText={item.rank}
-          centerText={item.score.toLocaleString()}
+          centerText={item.score?.toLocaleString()}
           balance={item.rewardNftInfo.balance}
           decimals={item.rewardNftInfo.decimals}
           imageUrl={item.rewardNftInfo.imageUrl}
