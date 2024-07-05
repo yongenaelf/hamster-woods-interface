@@ -119,7 +119,7 @@ export const GameRecord = () => {
       onCancel={() => {
         dispatch(toggleShowGameRecord());
       }}>
-      <div className={`${isMobile ? 'h-[33rem]' : 'h-[38rem]'} text-[#AE694C]`}>
+      <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[38rem]'} text-[#AE694C]`}>
         <div className="flex flex-col h-full overflow-hidden">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
             <button

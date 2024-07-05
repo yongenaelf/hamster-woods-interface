@@ -40,7 +40,7 @@ export const Leaderboard = () => {
         title="Leader Board"
         onCancel={onCancel}
         weeklyModal={tab === Tabs.Weekly}>
-        <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
+        <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
           <div className="flex flex-col h-full overflow-hidden">
             <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
               <button
