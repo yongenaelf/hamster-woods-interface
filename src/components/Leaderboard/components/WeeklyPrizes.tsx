@@ -82,7 +82,7 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
       title="Hop & Win Weekly Prizes">
       <div
         className={`${
-          isMobile ? 'h-[33rem]' : 'h-[41rem]'
+          isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[41rem]'
         } text-[#AE694C] overflow-y-auto  [&::-webkit-scrollbar]:hidden`}>
         <div className="flex flex-col space-y-[10px] text-[16px] leading-[24px] text-left">
           {WeeklyPrizeTip.map((tip, index) => (
