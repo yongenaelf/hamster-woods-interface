@@ -306,11 +306,13 @@ export interface ITransactionResult {
 export interface IServerConfig {
   chancePrice: number;
   buyChanceTransactionFee: number;
+  weeklyBuyChanceCount: number;
 }
 
 export interface IPrice {
   acornsInElf: number;
   elfInUsd: number;
+  acornsInUsd: number;
 }
 
 export interface IBalance {

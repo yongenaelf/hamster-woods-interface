@@ -20,7 +20,7 @@ import { ACORNS_TOKEN } from 'constants/index';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
-  acornsInElf: number;
+  acornsInUsd: number;
   elfInUsd: number;
   assetBalance: IBalance[];
 };
@@ -29,7 +29,7 @@ export default function GetChanceModal({
   title = 'Get More Hopping Chances',
   onCancel,
   closable = true,
-  acornsInElf,
+  acornsInUsd,
   elfInUsd,
   assetBalance,
   onConfirm,
@@ -84,7 +84,7 @@ export default function GetChanceModal({
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
               <span>{chancePrice}</span>
               <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-              <span>ACORNS</span>
+              <span>$ACORNS</span>
             </span>
             for <span className="font-bold mx-[10px]">{inputVal}</span>hopping chance
           </div>
@@ -116,7 +116,7 @@ export default function GetChanceModal({
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * chancePrice} ACORNS</span>
+                <span>{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -137,7 +137,7 @@ export default function GetChanceModal({
             <div className="flex items-center space-x-[8px] text-right font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * chancePrice} ACORNS</span>
+                <span>{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -171,8 +171,8 @@ export default function GetChanceModal({
               }`}>
               <div>Buy Game Chance</div>
               <div className="text-right flex flex-col space-y-[12px]">
-                <div className="font-bold">{`${inputVal * chancePrice * acornsInElf} ELF`}</div>
-                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInElf * elfInUsd)}`}</div>
+                <div className="font-bold">{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</div>
+                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInUsd)}`}</div>
               </div>
             </div>
           </>
@@ -184,7 +184,7 @@ export default function GetChanceModal({
                 ? 'text-[16px] space-y-[12px] p-[12px] mt-[24px]'
                 : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
             }`}>
-            <div className="flex font-black">balance</div>
+            <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center">
               <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStr(
                 acornsToken?.balance,
