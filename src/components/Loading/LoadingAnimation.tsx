@@ -1,6 +1,5 @@
 import { useLottie } from 'lottie-react';
 import LoadingAnimationJson from 'assets/images/loading-animation.json';
-import Image from 'next/image';
 import useGetState from 'redux/state/useGetState';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 
@@ -15,7 +14,7 @@ export default function LoadingAnimation() {
       autoplay: true,
     };
 
-    const { View } = useLottie(options, { margin: '0 auto', width: isMobile ? '30%' : '20%' });
+    const { View } = useLottie(options, { margin: '0 auto', width: isMobile ? '110px' : '148px' });
 
     return View;
   };
@@ -24,14 +23,24 @@ export default function LoadingAnimation() {
     <div
       style={{
         backgroundImage: isMobile
-          ? `url(${imageResources?.playgroundBgMobile})`
-          : `url(${imageResources?.playgroundBgPc})`,
+          ? `url(${imageResources?.['game-bg-mobile']})`
+          : `url(${imageResources?.['game-bg-pc']})`,
       }}
-      className={`h-full w-full overflow-hidden ${
-        TelegramPlatform.isTelegramPlatform() ? 'pt-[100px]' : 'pt-[248px]'
+      className={`h-full w-full overflow-hidden bg-cover ${
+        TelegramPlatform.isTelegramPlatform() ? 'pt-[18px]' : isMobile ? 'pt-[440px]' : 'pt-[7vh]'
       }`}>
-      <Image src={require('assets/images/loading-title.png')} alt="" className="mx-auto h-[400px] w-[400px]"></Image>
-      <Image src={require('assets/images/game-coming.png')} alt="" className="mx-auto w-[570px]"></Image>
+      {isMobile ? null : (
+        <img
+          src={imageResources?.['hamster-logo']}
+          width={isMobile ? 'w-[240px]' : 'w-[480px]'}
+          alt="logo"
+          className={`mx-auto ${isMobile ? 'h-[240px] w-[240px]' : 'h-[480px] w-[480px]'}`}></img>
+      )}
+      <img
+        width={isMobile ? 'w-[285px]' : 'w-[480px]'}
+        src={imageResources?.['game-coming']}
+        alt="coming"
+        className={`mx-auto ${isMobile ? 'w-[285px]' : 'w-[480px]'}`}></img>
       <Animation></Animation>
     </div>
   );
