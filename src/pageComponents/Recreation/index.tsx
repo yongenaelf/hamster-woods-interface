@@ -131,7 +131,7 @@ export default function Game() {
 
   const [getChanceModalVisible, setGetChanceModalVisible] = useState(false);
 
-  const [acornsInElf, setAcornsInElf] = useState(0.1);
+  const [acornsInUsd, setAcornsInUsd] = useState(0.1);
   const [elfInUsd, setElfInUsd] = useState(0.35);
   const [assetBalance, setAssetBalance] = useState<IBalance[]>([]);
 
@@ -262,7 +262,7 @@ export default function Game() {
 
   const updatePrice = useCallback(async () => {
     fetchPrice().then((res) => {
-      setAcornsInElf(res.acornsInElf);
+      setAcornsInUsd(res.acornsInUsd);
       setElfInUsd(res.elfInUsd);
     });
   }, []);
@@ -700,7 +700,7 @@ export default function Game() {
           onConfirm={handleConfirm}
         />
         <GetChanceModal
-          acornsInElf={acornsInElf}
+          acornsInUsd={acornsInUsd}
           elfInUsd={elfInUsd}
           assetBalance={assetBalance}
           open={getChanceModalVisible}
