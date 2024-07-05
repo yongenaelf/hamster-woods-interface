@@ -66,7 +66,7 @@
       @apply !rounded-[32px];
     }
     .ant-modal-body {
-        @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
+      @apply !px-[32px] !py-[82px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
@@ -114,9 +114,9 @@
       @apply min-h-[392px];
     }
   }
-.loginBtn {
-  @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] border-2 border-solid bg-[var(--confirm-btn-bg)] mx-[97px] font-fonarto text-white;
-}
+  .loginBtn {
+    @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] border-2 border-solid bg-[var(--confirm-btn-bg)] font-fonarto text-white;
+  }
   .drawerHeader {
     @apply mb-8 text-center font-fonarto text-2xl leading-6 text-[#953D22];
   }

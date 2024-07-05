@@ -253,7 +253,12 @@ export default function Login() {
         : [allMethods[0], allMethods[1]];
     }
     return filterMethods.map((item, index) => (
-      <div key={index} onClick={item.onclick} className={item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn}>
+      <div
+        key={index}
+        onClick={item.onclick}
+        className={`${item?.yellowColor ? styles.loginBtnYellow : styles.loginBtn} ${
+          isMobileStore ? '' : 'mx-[96px]'
+        } `}>
         {getIconComponent(item.iconName as IconType, inModel)}
         <span className="flex-1 text-center font-fonarto">{item.name}</span>
       </div>
