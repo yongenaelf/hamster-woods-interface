@@ -116,7 +116,7 @@ export default function GetChanceModal({
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
+                <span>{`${(inputVal * chancePrice)?.toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -137,7 +137,7 @@ export default function GetChanceModal({
             <div className="flex items-center space-x-[8px] text-right font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
+                <span>{`${(inputVal * chancePrice)?.toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -171,7 +171,9 @@ export default function GetChanceModal({
               }`}>
               <div>Buy Game Chance</div>
               <div className="text-right flex flex-col space-y-[12px]">
-                <div className="font-bold">{`${(inputVal * chancePrice).toLocaleString()} ${ACORNS_TOKEN.symbol}`}</div>
+                <div className="font-bold">{`${(inputVal * chancePrice)?.toLocaleString()} ${
+                  ACORNS_TOKEN.symbol
+                }`}</div>
                 <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInUsd)}`}</div>
               </div>
             </div>
