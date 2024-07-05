@@ -290,7 +290,8 @@ function GoButton({
                 className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : ''}`}>
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
-                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center text-[11px]`}>
+                <div
+                  className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
                   Get Chance
                 </div>
               </div>
@@ -376,17 +377,13 @@ function GoButton({
               style={{
                 backgroundImage: `url(${
                   btnImageResources?.pc[
-                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-dice-default'
+                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-chance-default'
                   ]
                 })`,
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-fonarto tracking-tight text-[#fff] text-stroke-[#52300B] text-center ml-[14px] ${
-                  isMobile
-                    ? 'text-[48px] leading-[48px] mt-[10px]'
-                    : 'text-[24px] leading-[24px] mt-[33px] text-white w-[110px]'
-                }`}>
+                className={`font-fonarto tracking-tight !drop-shadow-[0_1px_0_black] text-[24px] leading-[24px] mt-[33px] text-white w-[110px] text-center ml-[14px]`}>
                 Get Chance
               </span>
             </div>

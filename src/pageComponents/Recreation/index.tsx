@@ -592,8 +592,8 @@ export default function Game() {
       <div
         style={{
           backgroundImage: isMobile
-            ? `url(${imageResources?.playgroundBgMobile})`
-            : `url(${imageResources?.playgroundBgPc})`,
+            ? `url(${imageResources?.['playground-mobile']})`
+            : `url(${imageResources?.['playground-pc']})`,
         }}
         className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
         {!isMobile && <BoardLeft />}

@@ -473,17 +473,28 @@ export default function Login() {
 
   return (
     <div
-      className={`cursor-custom ${styles.loginContainer}`}
+      className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources?.playgroundBgMobile : imageResources?.playgroundBgPc})`,
+        backgroundImage: `url(${
+          isMobileStore ? imageResources?.['game-bg-mobile-mask'] : imageResources?.['game-bg-pc']
+        })`,
       }}>
+      {!isMobileStore ? (
+        <img
+          className="z-10 w-[400px] h-[400px]"
+          width={400}
+          height={400}
+          src={imageResources?.['hamster-logo']}
+          alt="logo"
+        />
+      ) : null}
       {!TelegramPlatform.isTelegramPlatform() &&
         (isLock ? (
           <CommonBtn
             onClick={() => {
               setIsUnlockShow(true);
             }}
-            className={`${styles.unlockBtn} !bg-[#A15A1C]`}
+            className={`${styles.unlockBtn} !bg-[#A15A1C] ${isMobileStore ? '' : '!mt-[80px]'}`}
             title="unLock"></CommonBtn>
         ) : isLogin ? null : (
           <>

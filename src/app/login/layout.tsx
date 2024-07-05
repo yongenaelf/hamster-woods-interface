@@ -96,8 +96,8 @@ const Layout = dynamic(
       useEffect(() => {
         if (!chessBoardInfo || !imageResources) return;
 
-        const bgPc = imageResources['playgroundBgPc'];
-        const bgM = imageResources['playgroundBgMobile'];
+        const bgPc = imageResources['game-bg-pc'];
+        const bgM = imageResources['game-bg-mobile-mask'];
         setBgImage(isMobileStore ? bgM : bgPc);
 
         let imageResourcesArray: Array<string> = [];
