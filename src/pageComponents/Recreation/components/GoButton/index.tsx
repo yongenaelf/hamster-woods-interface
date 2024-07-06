@@ -291,7 +291,7 @@ function GoButton({
                   })`,
                 }}
                 ref={mobileChanceButtonRef}
-                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : 'top-[5px]'}`}>
+                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : ''}`}>
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
