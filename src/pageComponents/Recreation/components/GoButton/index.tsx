@@ -165,10 +165,14 @@ function GoButton({
 
   const handlePressGoButton: EventListener = useCallback((event) => {
     event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     setMBtnPress(true);
   }, []);
 
-  const handleReleaseGoButton: EventListener = useCallback(() => {
+  const handleReleaseGoButton: EventListener = useCallback((event) => {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     setMBtnPress(false);
     goFn.current?.();
   }, []);
