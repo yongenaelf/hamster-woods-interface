@@ -168,7 +168,7 @@ function GoButton({
     setMBtnPress(true);
   }, []);
 
-  const handleReleaseGoButton: EventListener = useCallback((event) => {
+  const handleReleaseGoButton: EventListener = useCallback(() => {
     setMBtnPress(false);
     goFn.current?.();
   }, []);
