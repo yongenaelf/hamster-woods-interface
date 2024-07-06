@@ -55,7 +55,7 @@ const SettleRankItem = ({
           src={src}
           alt="rank"
         />
-        <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
+        <div className={`${isMobile ? 'text-[10px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
           {middleEllipsis(address)}
         </div>
         {isCurrentUserRank ? (
@@ -72,16 +72,22 @@ const SettleRankItem = ({
         <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto ${textClassName}`}>
           {divDecimalsStr(score, decimals) ?? '-'}
         </div>
-        <img width={20} className="z-10 ml-[5px] mr-4" src={require('assets/images/neat.png').default.src} alt="neat" />
+        <img
+          width={20}
+          height={20}
+          className={`z-10 ml-[5px] ${isMobile ? 'mr-2' : 'mr-4'}`}
+          src={require('assets/images/neat.png').default.src}
+          alt="neat"
+        />
       </div>
-      <div className="w-[96px] mr-[24px] flex items-center justify-end gap-2">
+      <div className={`${isMobile ? 'mr-[8px] gap-1' : 'w-[96px] mr-[24px] gap-2'}   flex items-center justify-end`}>
         <img
           width={30}
-          className="w-[30px] h-[30px]"
+          className="rounded-full"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
-        <div className="text-[20px] text-white font-black">{`*${balance}`}</div>
+        <div className={`${isMobile ? 'text-[14px]' : 'text-[16px]'} text-white font-black`}>{`*${balance}`}</div>
       </div>
     </div>
   );
@@ -112,100 +118,106 @@ const SettleNormalItem = ({
         </span>
       </div>
       <div className="flex-1 flex justify-end items-center gap-[5px]">
-        <div className="text-[20px] text-[#B26C27]">{centerText}</div>
+        <div className={` ${isMobile ? 'text-[16px]' : 'text-[20px]'} text-[#B26C27]`}>{centerText}</div>
         <img
           width={20}
           height={20}
-          className="ml-[5px] mr-4 w-[20px] h-[20px]"
+          className={`ml-[5px] ${isMobile ? 'mr-2' : 'mr-4'}`}
           src={require('assets/images/neat.png').default.src}
           alt="neat"
         />
       </div>
-      <div className="w-[96px] mr-[24px] flex items-center justify-end gap-2">
+      <div className={`${isMobile ? 'mr-[8px]' : 'mr-[24px] w-[96px]'} flex items-center justify-end gap-2`}>
         <img
           width={24}
-          className="w-[24px] h-[24px]"
+          className="w-[24px] h-[24px] rounded-full"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
-        <div className="text-[16px] text-white font-black">{`*${divDecimalsStr(balance, decimals)}`}</div>
+        <div className={`${isMobile ? 'text-[14px]' : 'text-[16px]'} text-white font-black`}>{`*${balance}`}</div>
       </div>
     </div>
   );
 };
 
 export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
-  const renderSettleItem = useCallback((item: any) => {
-    if (item.fromRank && item.toRank) {
-      return (
-        <SettleNormalItem
-          leftText={`Top ${item.fromRank}-${item.toRank}`}
-          centerText={`${item.fromScore?.toLocaleString()}-${item.toScore?.toLocaleString()}`}
-          balance={item?.rewardNftInfo?.balance}
-          decimals={item?.rewardNftInfo?.decimals}
-          imageUrl={item.rewardNftInfo?.imageUrl}
-        />
-      );
-    } else {
-      if (item.rank === RankEnum.First) {
+  const renderSettleItem = useCallback(
+    (item: any) => {
+      if (item.fromRank && item.toRank) {
         return (
-          <SettleRankItem
-            src={require('assets/images/gold.png').default.src}
-            bgClassName="bg-[#F5BF49]"
-            textClassName={LeaderboardTextColors.Gold}
-            shadowInsetColor="#DE7B3D"
-            address={item.caAddress}
-            score={item.score}
-            decimals={item.decimals}
+          <SettleNormalItem
+            leftText={`Top ${item.fromRank}-${item.toRank}`}
+            centerText={`${divDecimalsStr(item.fromScore, item.decimals)}-${divDecimalsStr(
+              item.toScore,
+              item.decimals,
+            )}`}
+            balance={item?.rewardNftInfo?.balance}
+            decimals={item?.rewardNftInfo?.decimals}
+            imageUrl={item.rewardNftInfo?.imageUrl}
+          />
+        );
+      } else {
+        if (item.rank === RankEnum.First) {
+          return (
+            <SettleRankItem
+              src={require('assets/images/gold.png').default.src}
+              bgClassName="bg-[#F5BF49]"
+              textClassName={LeaderboardTextColors.Gold}
+              shadowInsetColor="#DE7B3D"
+              address={item.caAddress}
+              score={item.score}
+              decimals={item.decimals}
+              balance={item.rewardNftInfo.balance}
+              imageUrl={item.rewardNftInfo.imageUrl}
+              isCurrentUserRank={item?.rank === data?.settleDaySelfRank?.rank}
+            />
+          );
+        }
+        if (item.rank === RankEnum.Second) {
+          return (
+            <SettleRankItem
+              src={require('assets/images/silver.png').default.src}
+              bgClassName="bg-[#CEDFF7]"
+              textClassName={LeaderboardTextColors.Silver}
+              shadowInsetColor="#B8B8EB"
+              address={item.caAddress}
+              score={item.score}
+              decimals={item.decimals}
+              balance={item.rewardNftInfo.balance}
+              imageUrl={item.rewardNftInfo.imageUrl}
+              isCurrentUserRank={item?.rank === data?.settleDaySelfRank?.rank}
+            />
+          );
+        }
+        if (item.rank === RankEnum.Third) {
+          return (
+            <SettleRankItem
+              src={require('assets/images/bronze.png').default.src}
+              bgClassName="bg-[#E97D3C]"
+              textClassName={LeaderboardTextColors.Bronze}
+              shadowInsetColor="#B5412C"
+              address={item.caAddress}
+              score={item.score}
+              decimals={item.decimals}
+              balance={item.rewardNftInfo.balance}
+              imageUrl={item.rewardNftInfo.imageUrl}
+              isCurrentUserRank={item?.rank === data?.settleDaySelfRank?.rank}
+            />
+          );
+        }
+        return (
+          <SettleNormalItem
+            leftText={item.rank}
+            centerText={item.score.toLocaleString()}
             balance={item.rewardNftInfo.balance}
+            decimals={item.rewardNftInfo.decimals}
             imageUrl={item.rewardNftInfo.imageUrl}
-            isCurrentUserRank={true}
           />
         );
       }
-      if (item.rank === RankEnum.Second) {
-        return (
-          <SettleRankItem
-            src={require('assets/images/silver.png').default.src}
-            bgClassName="bg-[#CEDFF7]"
-            textClassName={LeaderboardTextColors.Silver}
-            shadowInsetColor="#B8B8EB"
-            address={item.caAddress}
-            score={item.score}
-            decimals={item.decimals}
-            balance={item.rewardNftInfo.balance}
-            imageUrl={item.rewardNftInfo.imageUrl}
-            isCurrentUserRank={false}
-          />
-        );
-      }
-      if (item.rank === RankEnum.Third) {
-        return (
-          <SettleRankItem
-            src={require('assets/images/bronze.png').default.src}
-            bgClassName="bg-[#E97D3C]"
-            textClassName={LeaderboardTextColors.Bronze}
-            shadowInsetColor="#B5412C"
-            address={item.caAddress}
-            score={item.score}
-            decimals={item.decimals}
-            balance={item.rewardNftInfo.balance}
-            imageUrl={item.rewardNftInfo.imageUrl}
-            isCurrentUserRank={false}
-          />
-        );
-      }
-      return (
-        <SettleNormalItem
-          leftText={item.rank}
-          centerText={item.score?.toLocaleString()}
-          balance={item.rewardNftInfo.balance}
-          decimals={item.rewardNftInfo.decimals}
-          imageUrl={item.rewardNftInfo.imageUrl}
-        />
-      );
-    }
-  }, []);
+    },
+    [data?.settleDaySelfRank?.rank],
+  );
 
   const list = useMemo(() => {
     return data?.settleDayRankingList ? data?.settleDayRankingList : data?.rankingList;

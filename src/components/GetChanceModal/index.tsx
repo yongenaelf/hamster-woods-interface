@@ -75,9 +75,10 @@ export default function GetChanceModal({
       onCancel={handleClose}
       title={title}
       closable={closable}
+      centered
       destroyOnClose
       {...params}>
-      <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : ''} overflow-auto  [&::-webkit-scrollbar]:hidden`}>
+      <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : ''} overflow-auto`}>
         <div className="space-y-[28px]">
           <div className="flex justify-center items-center flex-wrap text-[20px]">
             Exchange

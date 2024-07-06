@@ -268,6 +268,7 @@ export interface IGetRankQuery {
 
 export interface IClaimAwardBody {
   caAddress: string;
+  weekNum?: number;
 }
 
 export interface IRankHistoryQuery {

@@ -5,7 +5,10 @@ import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 export const useClaim = () => {
   const address = useAddressWithPrefixSuffix();
 
-  return useCallback(() => {
-    return claimAward({ caAddress: address });
-  }, [address]);
+  return useCallback(
+    (weekNum?: number) => {
+      return claimAward({ caAddress: address, weekNum });
+    },
+    [address],
+  );
 };

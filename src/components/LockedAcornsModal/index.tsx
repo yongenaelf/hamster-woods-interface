@@ -123,6 +123,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
     <CustomModal
       className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
       open={open}
+      centered
       onCancel={handleClose}
       {...props}
       title={`$ACORNS Unlocks`}

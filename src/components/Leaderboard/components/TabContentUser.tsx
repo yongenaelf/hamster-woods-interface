@@ -31,30 +31,43 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const { initialize } = useInitLeaderBoard();
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [claimInfo, setClaimInfo] = useState<IClaimableInfoResult>();
+  const [finishedClaim, setFinishedClaim] = useState(false);
 
   const showClaimBtn = useMemo(
     () => !!data?.settleDaySelfRank?.rewardNftInfo,
     [data?.settleDaySelfRank?.rewardNftInfo],
   );
 
+  const refreshData = useCallback(async () => {
+    try {
+      await initialize();
+      setFinishedClaim(false);
+    } catch (error) {
+      console.log('err', error);
+    }
+  }, [initialize]);
+
   const onClaim = useCallback(async () => {
     showMessage.loading();
     try {
       const result = await claimAward();
+      setFinishedClaim(true);
       setClaimInfo(result);
       setIsShowNFT(true);
-
-      await initialize();
+      refreshData();
     } catch (error) {
       console.log('err', error);
       showMessage.error('claim failed');
     } finally {
       showMessage.hideLoading();
     }
-  }, [claimAward, initialize]);
+  }, [claimAward, refreshData]);
 
   return (
-    <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
+    <div
+      className={`${
+        isMobile ? 'p-2' : 'px-[32px] py-[12px]'
+      } flex items-center bg-[#9A531F] rounded-b-[8px] ${className}`}>
       <ShowNFTModal
         open={isShowNFT}
         beanPassItem={claimInfo?.kingHamsterInfo}
@@ -66,23 +79,26 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
         alt="avatar"
       />
-      <Rank rank={data?.selfRank.rank} />
+      <Rank rank={data?.selfRank.rank || data?.settleDaySelfRank?.rank} />
       <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
-        {middleEllipsis(data?.selfRank.caAddress)}
+        {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
       </div>
       {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
         <Image className="ml-2 w-16" src={MeIcon} alt="me" />
       ) : null}
       <div className="flex-grow mr-2"></div>
       <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
-        {divDecimalsStr(data?.selfRank.score, data?.selfRank.decimals) ?? '-'}
+        {divDecimalsStr(
+          data?.selfRank?.score || data?.settleDaySelfRank?.score,
+          data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
+        ) ?? '-'}
       </div>
       <img
         className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
         src={require('assets/images/neat.png').default.src}
         alt="bean"
       />
-      {showClaimBtn && (
+      {showClaimBtn && !finishedClaim && (
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
           <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
@@ -94,7 +110,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
               height={24}
               alt="avatar"
             />
-            <span className="font-black">`*{data?.settleDaySelfRank?.rewardNftInfo?.balance}`</span>
+            <span className="font-black">{`*${data?.settleDaySelfRank?.rewardNftInfo?.balance}`}</span>
           </div>
         </div>
       )}
