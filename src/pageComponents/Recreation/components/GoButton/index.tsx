@@ -2,7 +2,6 @@ import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState 
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
-import { hasTouchStartEvent } from 'utils/isMobile';
 
 export enum Status {
   LOADING = 'loading',
@@ -165,14 +164,10 @@ function GoButton({
 
   const handlePressGoButton: EventListener = useCallback((event) => {
     event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
     setMBtnPress(true);
   }, []);
 
   const handleReleaseGoButton: EventListener = useCallback((event) => {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
     setMBtnPress(false);
     goFn.current?.();
   }, []);
@@ -181,13 +176,10 @@ function GoButton({
   useEffect(() => {
     const mobileGoButton = mobileGoButtonRef.current;
     if (!mobileGoButton) return;
-    if (hasTouchStartEvent) {
-      mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
-      mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
-    } else {
-      mobileGoButton.addEventListener('mousedown', handlePressGoButton);
-      mobileGoButton.addEventListener('mouseup', handleReleaseGoButton);
-    }
+    mobileGoButton.addEventListener('mousedown', handlePressGoButton);
+    mobileGoButton.addEventListener('mouseup', handleReleaseGoButton);
+    mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
+    mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
 
     return () => {
       mobileGoButton.removeEventListener('touchstart', handlePressGoButton);
@@ -201,13 +193,10 @@ function GoButton({
   useEffect(() => {
     const mobileDiceButton = mobileDiceButtonRef.current;
     if (!mobileDiceButton) return;
-    if (hasTouchStartEvent) {
-      mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
-      mobileDiceButton.addEventListener('touchend', handleReleaseDice);
-    } else {
-      mobileDiceButton.addEventListener('mousedown', changeDiceCount);
-      mobileDiceButton.addEventListener('mouseup', handleReleaseDice);
-    }
+    mobileDiceButton.addEventListener('mousedown', changeDiceCount);
+    mobileDiceButton.addEventListener('mouseup', handleReleaseDice);
+    mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
+    mobileDiceButton.addEventListener('touchend', handleReleaseDice);
 
     return () => {
       mobileDiceButton.removeEventListener('touchstart', changeDiceCount);
@@ -221,13 +210,11 @@ function GoButton({
   useEffect(() => {
     const mobileChanceButton = mobileChanceButtonRef.current;
     if (!mobileChanceButton) return;
-    if (hasTouchStartEvent) {
-      mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
-      mobileChanceButton.addEventListener('touchend', handleReleaseChance);
-    } else {
-      mobileChanceButton.addEventListener('mousedown', changeChance);
-      mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
-    }
+    mobileChanceButton.addEventListener('mousedown', changeChance);
+    mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
+    mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
+    mobileChanceButton.addEventListener('touchend', handleReleaseChance);
+
     return () => {
       mobileChanceButton.removeEventListener('touchstart', changeChance);
       mobileChanceButton.removeEventListener('mousedown', changeChance);
@@ -297,8 +284,6 @@ function GoButton({
                 })`,
               }}
               className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
-              {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
-
               <div
                 style={{
                   backgroundImage: `url(${
@@ -306,7 +291,7 @@ function GoButton({
                   })`,
                 }}
                 ref={mobileChanceButtonRef}
-                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : ''}`}>
+                className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : 'top-[5px]'}`}>
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
@@ -319,6 +304,7 @@ function GoButton({
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
                   status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[44px]' : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
+                {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
                 {statusCom[status]}
               </div>
               <div
