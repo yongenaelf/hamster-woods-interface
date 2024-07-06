@@ -57,7 +57,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    showMessage.loading('Signing out of BeanGo Town');
+    showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);

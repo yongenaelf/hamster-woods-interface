@@ -1,1 +1,1 @@
-export const USER_REJECTED = 'Request rejected. BeanGo Town needs your permission to continue';
+export const USER_REJECTED = 'Request rejected. Hamster Woods needs your permission to continue';
