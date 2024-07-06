@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
@@ -77,46 +77,49 @@ function GoButton({
     changeCurDiceCountFn.current = changeCurDiceCount;
   }, [changeCurDiceCount]);
 
-  const statusCom: Record<Status, ReactElement> = {
-    [Status.NONE]: (
-      <>
-        <span
-          className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
-          }`}>
-          Hop
-        </span>
-        <span
-          className={`${
-            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
-          } font-bold text-[#52300B]`}>
-          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
-        </span>
-      </>
-    ),
-    [Status.LOADING]: (
-      <div className={`${styles['button__icon__loading']} ${isMobile ? 'mt-[10px] w-[45px]' : 'mt-[16px] w-[85px]'}`}>
-        <div className={styles['button__icon__loading__bounce1']}></div>
-        <div className={styles['button__icon__loading__bounce2']}></div>
-      </div>
-    ),
-    [Status.DISABLED]: (
-      <>
-        <span
-          className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
-          }`}>
-          Hop
-        </span>
-        <span
-          className={`${
-            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
-          } font-bold text-[#8E8E8E]`}>
-          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
-        </span>
-      </>
-    ),
-  };
+  const statusCom: Record<Status, ReactElement> = useMemo(
+    () => ({
+      [Status.NONE]: (
+        <>
+          <span
+            className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
+            }`}>
+            Hop
+          </span>
+          <span
+            className={`${
+              isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
+            } font-bold text-[#52300B]`}>
+            {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
+          </span>
+        </>
+      ),
+      [Status.LOADING]: (
+        <div className={`${styles['button__icon__loading']} ${isMobile ? 'mt-[10px] w-[45px]' : 'mt-[16px] w-[85px]'}`}>
+          <div className={styles['button__icon__loading__bounce1']}></div>
+          <div className={styles['button__icon__loading__bounce2']}></div>
+        </div>
+      ),
+      [Status.DISABLED]: (
+        <>
+          <span
+            className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
+            }`}>
+            Hop
+          </span>
+          <span
+            className={`${
+              isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
+            } font-bold text-[#8E8E8E]`}>
+            {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
+          </span>
+        </>
+      ),
+    }),
+    [dailyPlayableCount, isMobile, playableCount, purchasedChancesCount],
+  );
 
   const chooseDiceCount = (number: number) => {
     changeCurDiceCount && changeCurDiceCount(number);
@@ -173,49 +176,60 @@ function GoButton({
   useEffect(() => {
     const mobileGoButton = mobileGoButtonRef.current;
     if (!mobileGoButton) return;
-    mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
-    mobileGoButton.addEventListener('mousedown', handlePressGoButton);
-    mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
-    mobileGoButton.addEventListener('mouseup', handleReleaseGoButton);
+    if (isMobile) {
+      mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
+      mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
+    } else {
+      mobileGoButton.addEventListener('mousedown', handlePressGoButton);
+      mobileGoButton.addEventListener('mouseup', handleReleaseGoButton);
+    }
+
     return () => {
       mobileGoButton.removeEventListener('touchstart', handlePressGoButton);
       mobileGoButton.removeEventListener('mousedown', handlePressGoButton);
       mobileGoButton.removeEventListener('touchend', handleReleaseGoButton);
       mobileGoButton.removeEventListener('mouseup', handleReleaseGoButton);
     };
-  }, [handlePressGoButton, handleReleaseGoButton]);
+  }, [handlePressGoButton, handleReleaseGoButton, isMobile]);
 
   // Handle both touch and mouse events to support interaction in Telegram WebApp on PC
   useEffect(() => {
     const mobileDiceButton = mobileDiceButtonRef.current;
     if (!mobileDiceButton) return;
-    mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
-    mobileDiceButton.addEventListener('mousedown', changeDiceCount);
-    mobileDiceButton.addEventListener('touchend', handleReleaseDice);
-    mobileDiceButton.addEventListener('mouseup', handleReleaseDice);
+    if (isMobile) {
+      mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
+      mobileDiceButton.addEventListener('touchend', handleReleaseDice);
+    } else {
+      mobileDiceButton.addEventListener('mousedown', changeDiceCount);
+      mobileDiceButton.addEventListener('mouseup', handleReleaseDice);
+    }
+
     return () => {
       mobileDiceButton.removeEventListener('touchstart', changeDiceCount);
       mobileDiceButton.removeEventListener('mousedown', changeDiceCount);
       mobileDiceButton.removeEventListener('touchend', handleReleaseDice);
       mobileDiceButton.removeEventListener('mouseup', handleReleaseDice);
     };
-  }, [changeDiceCount, handleReleaseDice]);
+  }, [changeDiceCount, handleReleaseDice, isMobile]);
 
   // Handle both touch and mouse events to support interaction in Telegram WebApp on PC
   useEffect(() => {
     const mobileChanceButton = mobileChanceButtonRef.current;
     if (!mobileChanceButton) return;
-    mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
-    mobileChanceButton.addEventListener('mousedown', changeChance);
-    mobileChanceButton.addEventListener('touchend', handleReleaseChance);
-    mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
+    if (isMobile) {
+      mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
+      mobileChanceButton.addEventListener('touchend', handleReleaseChance);
+    } else {
+      mobileChanceButton.addEventListener('mousedown', changeChance);
+      mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
+    }
     return () => {
       mobileChanceButton.removeEventListener('touchstart', changeChance);
       mobileChanceButton.removeEventListener('mousedown', changeChance);
       mobileChanceButton.removeEventListener('touchend', handleReleaseChance);
       mobileChanceButton.removeEventListener('mouseup', handleReleaseChance);
     };
-  }, [changeChance, handleReleaseChance]);
+  }, [changeChance, handleReleaseChance, isMobile]);
 
   return (
     <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
