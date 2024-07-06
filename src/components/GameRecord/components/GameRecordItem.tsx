@@ -115,7 +115,6 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
           ) : null}
           <Disclosure.Panel>
-            <GameRecordItemChild data={playTransactionInfo} title="Play" />
             {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="HOP" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
