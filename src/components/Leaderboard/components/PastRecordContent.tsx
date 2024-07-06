@@ -36,11 +36,11 @@ export const PastRecordContent = () => {
     <div className="flex flex-col overflow-y-auto space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1">
       <div
         className={`flex  ${
-          isMobile ? 'text-[12px]' : 'text-[16px]'
+          isMobile ? 'text-[12px] pr-[0]' : 'text-[16px]'
         } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
         <div className="flex-1">Time</div>
         <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>$ACORNS</div>
-        <div className={`${isMobile ? 'w-[120px]' : 'flex-1'}`}>Rank</div>
+        <div className={`${isMobile ? 'w-[120px] text-center' : 'flex-1'}`}>Rank</div>
       </div>
       <ShowNFTModal
         open={isShowNFT}
@@ -59,9 +59,12 @@ export const PastRecordContent = () => {
             <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>
               {divDecimalsStr(item.score, item.decimals) ?? 'N/A'}
             </div>
-            <div className={`flex justify-between  ${isMobile ? 'flex-col w-[120px]' : 'items-center flex-1'}`}>
+            <div
+              className={`flex justify-between  ${
+                isMobile ? 'flex-col w-[120px] text-center' : 'items-center flex-1'
+              }`}>
               <span>{item.rank === -1 ? '-' : item.rank?.toLocaleString()}</span>
-              {item.rewardNftInfo && (
+              {!item.rewardNftInfo && (
                 <div
                   onClick={onClaim}
                   className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] ${
