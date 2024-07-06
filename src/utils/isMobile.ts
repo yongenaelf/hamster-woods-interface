@@ -182,3 +182,5 @@ export function isMobileDevices() {
   const isM = isMobile();
   return isM.apple.device || isM.android.device || TelegramPlatform.isTelegramPlatform();
 }
+
+export const hasTouchStartEvent = !!document?.documentElement?.ontouchstart;

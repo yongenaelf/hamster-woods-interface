@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState 
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
+import { hasTouchStartEvent } from 'utils/isMobile';
 
 export enum Status {
   LOADING = 'loading',
@@ -176,7 +177,7 @@ function GoButton({
   useEffect(() => {
     const mobileGoButton = mobileGoButtonRef.current;
     if (!mobileGoButton) return;
-    if (isMobile) {
+    if (hasTouchStartEvent) {
       mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
       mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
     } else {
@@ -196,7 +197,7 @@ function GoButton({
   useEffect(() => {
     const mobileDiceButton = mobileDiceButtonRef.current;
     if (!mobileDiceButton) return;
-    if (isMobile) {
+    if (hasTouchStartEvent) {
       mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
       mobileDiceButton.addEventListener('touchend', handleReleaseDice);
     } else {
@@ -216,7 +217,7 @@ function GoButton({
   useEffect(() => {
     const mobileChanceButton = mobileChanceButtonRef.current;
     if (!mobileChanceButton) return;
-    if (isMobile) {
+    if (hasTouchStartEvent) {
       mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
       mobileChanceButton.addEventListener('touchend', handleReleaseChance);
     } else {
