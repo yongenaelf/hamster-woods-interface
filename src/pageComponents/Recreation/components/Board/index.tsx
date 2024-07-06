@@ -18,6 +18,7 @@ import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { Tooltip } from 'antd';
 import { allAcornsTip } from 'constants/tip';
 import { divDecimalsStr } from 'utils/calculate';
+import { sleep } from '@portkey/utils';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -43,7 +44,6 @@ function Board({
   const { initialize } = useInitLeaderBoard();
 
   const handleShowLeaderboard = useCallback(async () => {
-    // showMessage.loading();
     try {
       await initialize();
     } catch (err) {
@@ -56,7 +56,6 @@ function Board({
         },
       });
     } finally {
-      // showMessage.hideLoading();
       dispatch(toggleShowLeaderboard());
     }
   }, [initialize]);

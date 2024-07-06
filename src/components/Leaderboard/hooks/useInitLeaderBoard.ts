@@ -54,8 +54,7 @@ export default function useInitLeaderBoard() {
 
   const initialize = useCallback(async () => {
     if (!address) return;
-    initWeekRankData(address);
-    initPastRankData(address);
+    return await Promise.all([initWeekRankData(address), initPastRankData(address)]);
   }, [address, initPastRankData, initWeekRankData]);
 
   return {

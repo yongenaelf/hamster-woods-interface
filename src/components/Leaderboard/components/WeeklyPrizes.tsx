@@ -78,6 +78,7 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
     <CustomModal
       className={isMobile ? '!w-[520px]' : '!w-[750px]'}
       open={open}
+      centered
       onCancel={onCancel}
       title="Hop & Win Weekly Prizes">
       <div

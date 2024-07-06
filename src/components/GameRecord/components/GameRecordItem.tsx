@@ -115,8 +115,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
             <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
           ) : null}
           <Disclosure.Panel>
-            <GameRecordItemChild data={playTransactionInfo} title="Play" />
-            {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="Bingo" /> : null}
+            {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="HOP" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
         </div>
@@ -170,8 +169,7 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
             <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
           ) : null}
           <Disclosure.Panel>
-            <GameRecordItemChild data={transactionInfo} title="Play" />
-            {transactionInfo ? <GameRecordItemChild data={transactionInfo} title="Bingo" /> : null}
+            {transactionInfo ? <GameRecordItemChild data={transactionInfo} title="Purchase Hopping Chance" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
         </div>
