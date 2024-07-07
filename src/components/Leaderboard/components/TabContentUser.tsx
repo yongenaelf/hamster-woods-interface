@@ -98,7 +98,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         src={require('assets/images/neat.png').default.src}
         alt="bean"
       />
-      {!showClaimBtn && !finishedClaim && (
+      {showClaimBtn && !finishedClaim && (
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
           <div
