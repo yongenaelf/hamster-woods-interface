@@ -53,7 +53,7 @@ export const PastRecordContent = () => {
           isMobile ? 'text-[12px] pl-[8px]' : 'text-[16px] px-[16px]'
         } leading-[18px] text-[#AE694C] bg-[#DEC49D]  py-[9px] text-left rounded-[5px]`}>
         <div className="flex-1">Time</div>
-        <div className={`${isMobile ? 'flex-grow-2' : 'w-[120px]'}`}>$ACORNS</div>
+        <div className={`${isMobile ? 'flex-grow-2' : 'w-[120px]'}`}>ACORNS</div>
         <div className={`${isMobile ? 'w-[120px] text-center' : 'flex-1'}`}>Rank</div>
       </div>
       <ShowNFTModal
@@ -70,8 +70,8 @@ export const PastRecordContent = () => {
                 ${item?.rewardNftInfo ? 'h-[64px] py-[12px]' : 'items-center'}
             leading-[18px] text-[#953D22] text-left  border-b-[1px] border-[#D3B68A]`}>
             <div className="flex-1">{item.time}</div>
-            <div className={`${isMobile ? 'flex-grow-2' : 'w-[120px]'}`}>
-              {divDecimalsStr(item.score, item.decimals) ?? 'N/A'}
+            <div className={`${isMobile ? 'text-center' : 'w-[120px]'}`}>
+              {`${divDecimalsStr(item.score, item.decimals) ?? 'N/A'}`}
             </div>
             <div
               className={`flex justify-between  ${
