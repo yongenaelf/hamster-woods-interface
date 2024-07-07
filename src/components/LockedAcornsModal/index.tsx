@@ -5,6 +5,8 @@ import { useIsMobile } from 'redux/selector/mobile';
 import { useLockInfos, useUnlockRecords } from './hook';
 import { divDecimalsStr } from 'utils/calculate';
 import NoData from 'components/NoData';
+import { useSelector } from 'redux/store';
+import openPage from 'utils/openPage';
 
 export enum LockedAcornsTabEnum {
   Pending = 'Locked',
@@ -18,6 +20,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   const { data: lockInfos } = useLockInfos();
   const { data: unlockInfos } = useUnlockRecords();
   const [tab, setTab] = useState(LockedAcornsTabEnum.Pending);
+  const { configInfo } = useSelector((state) => state.configInfo);
 
   const tabClassName = useMemo(
     () =>
@@ -95,7 +98,11 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
                   isMobile ? 'text-[12px]' : 'text-[16px]'
                 } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
                 <div className="flex-1">{item.unLockTime}</div>
-                <div className="flex-1 flex justify-end items-center gap-2 text-right">
+                <div
+                  className="flex-1 flex justify-end items-center gap-2 text-right"
+                  onClick={() => {
+                    openPage(`${configInfo?.explorerBaseUrl}${item.transactionId}`);
+                  }}>
                   {`${divDecimalsStr(item.amount, item.decimal)} $${item.symbol}`}{' '}
                   <img
                     width={20}

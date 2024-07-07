@@ -75,7 +75,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         type={ShowBeanPassType.Success}
       />
       <img
-        className={`${isMobile ? 'w-8' : 'w-16'}`}
+        className={`${isMobile ? 'w-8 h-8' : 'w-16 h-16'}`}
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
         alt="avatar"
       />
@@ -94,23 +94,28 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         ) ?? '-'}
       </div>
       <img
-        className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
+        className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
         src={require('assets/images/neat.png').default.src}
         alt="bean"
       />
-      {showClaimBtn && !finishedClaim && (
+      {!showClaimBtn && !finishedClaim && (
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
-          <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
-            <span className="font-bold">Claim NFT Prizes</span>
-            <img
-              src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
-              className={`z-10 w-[24px] h-[24px]`}
-              width={24}
-              height={24}
-              alt="avatar"
-            />
-            <span className="font-black">{`*${data?.settleDaySelfRank?.rewardNftInfo?.balance}`}</span>
+          <div
+            className={`bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white flex items-center space-x-2 ${
+              isMobile ? 'text-[10px] flex-col-reverse py-[3px] px-[6px]' : 'text-[16px]'
+            }`}>
+            <span className="font-bold whitespace-nowrap">Claim NFT Prizes</span>
+            <div className="flex items-center">
+              <img
+                src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
+                className={`z-10 rounded-full`}
+                width={isMobile ? 20 : 24}
+                height={isMobile ? 20 : 24}
+                alt="avatar"
+              />
+              <span className="font-black text-[14px]">{`*${data?.settleDaySelfRank?.rewardNftInfo?.balance}`}</span>
+            </div>
           </div>
         </div>
       )}

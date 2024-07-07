@@ -79,8 +79,8 @@ export default function GetChanceModal({
       destroyOnClose
       {...params}>
       <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : ''} overflow-auto`}>
-        <div className="space-y-[28px]">
-          <div className="flex justify-center items-center flex-wrap text-[20px]">
+        <div className={` ${isMobile ? 'space-y-[18px]' : 'space-y-[28px]'}`}>
+          <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
             Exchange
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
               <span>{chancePrice}</span>
@@ -112,7 +112,7 @@ export default function GetChanceModal({
           </div>
         </div>
         {isMobile ? (
-          <div className="flex flex-col space-y-[16px] items-center justify-between mt-[24px] w-full text-[14px]">
+          <div className="flex flex-col space-y-[16px] items-center justify-between mt-[12px] w-full text-[14px]">
             <div>You pay</div>
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
@@ -158,20 +158,20 @@ export default function GetChanceModal({
           <>
             <div
               className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
-                isMobile ? 'text-[14px]' : 'text-[16px]'
+                isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
               }`}>
               <div>Estimated Transaction Fee</div>
-              <div className="text-right flex flex-col space-y-[12px]">
+              <div className={`text-right flex flex-col ${isMobile ? 'space-y-[8px]' : 'space-y-[12px]'}`}>
                 <div className="font-bold">{`${fee} ELF`}</div>
                 <div>{`${formatAmountUSDShow(fee * elfInUsd)}`}</div>
               </div>
             </div>
             <div
-              className={`flex items-center justify-between mt-[12px] text-[#AE694C] ${
-                isMobile ? 'text-[14px]' : 'text-[16px]'
+              className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
+                isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
               }`}>
               <div>Buy Game Chance</div>
-              <div className="text-right flex flex-col space-y-[12px]">
+              <div className={`text-right flex flex-col  ${isMobile ? 'space-y-[8px]' : 'space-y-[12px]'}`}>
                 <div className="font-bold">{`${(inputVal * chancePrice)?.toLocaleString()} ${
                   ACORNS_TOKEN.symbol
                 }`}</div>
@@ -183,9 +183,7 @@ export default function GetChanceModal({
         {assetBalance?.length ? (
           <div
             className={`flex flex-col bg-[#E8D1AE] rounded-[12px] ${
-              isMobile
-                ? 'text-[16px] space-y-[12px] p-[12px] mt-[24px]'
-                : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
+              isMobile ? 'text-[16px] space-y-[8px] p-[8px] mt-[12px]' : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
             }`}>
             <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center">
