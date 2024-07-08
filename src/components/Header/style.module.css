@@ -16,7 +16,7 @@
   background-size: cover;
 
   .board__acorn__number {
-    @apply pl-[12px] flex flex-1 text-[#953D22] text-[16px] leading-[16px] font-fonarto;
+    @apply pl-[12px] flex flex-wrap break-all flex-1 text-[#953D22] text-[16px] leading-[16px] font-fonarto;
   }
 }
 

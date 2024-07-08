@@ -10,7 +10,7 @@ import AcornGetImage from 'assets/images/recreation/acorn-get.png';
 import AcornWeeklyImage from 'assets/images/recreation/acorn-weekly.png';
 import QuestionImage from 'assets/images/recreation/question.png';
 import HeaderLockImage from 'assets/images/headerMenu/header-locked.png';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import { divDecimalsStr } from 'utils/calculate';
@@ -23,6 +23,14 @@ export default function Header() {
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
   const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
   const isMobile = useIsMobile();
+  const allAcornsShow = useMemo(
+    () => divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals),
+    [playerInfo?.acornsDecimals, playerInfo?.totalAcorns],
+  );
+  const weeklyAcornsShow = useMemo(
+    () => divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals),
+    [playerInfo?.acornsDecimals, playerInfo?.weeklyAcorns],
+  );
 
   return (
     <div className={styles.headerContainer}>
@@ -42,9 +50,7 @@ export default function Header() {
             className="h-[30px] w-[30px]"
             onClick={() => setMoreAcornsVisible(true)}
           />
-          <span className={styles['board__acorn__number']}>
-            {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
-          </span>
+          <span className={`${styles['board__acorn__number']}`}>{allAcornsShow}</span>
           <Tooltip
             title={
               <div
@@ -76,9 +82,7 @@ In the upcoming version, staking will be introduced, allowing token holders to s
         </div>
         <div className={styles['board__acorn']}>
           <Image src={AcornWeeklyImage} alt="bean" className="h-[30px] w-[30px]" />
-          <span className={styles['board__acorn__number']}>
-            {divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
-          </span>
+          <span className={styles['board__acorn__number']}>{weeklyAcornsShow}</span>
         </div>
         <div className="flex-grow"></div>
         <Image
