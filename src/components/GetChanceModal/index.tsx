@@ -120,11 +120,12 @@ export default function GetChanceModal({
           <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
             Exchange
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
-              <span>{chancePrice}</span>
+              <span>{((inputVal || 1) * chancePrice)?.toLocaleString()}</span>
               <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
               <span>$ACORNS</span>
             </span>
-            for <span className="font-bold mx-[10px]">{inputVal}</span>hopping chance
+            for <span className="font-bold mx-[10px]">{inputVal || 1}</span>
+            {`hopping ${inputVal > 1 ? 'chances' : 'chance'}`}
           </div>
           <div className="flex items-center justify-center space-x-[16px]">
             <Image
