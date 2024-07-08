@@ -1,5 +1,5 @@
 import { Input } from 'antd';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import { useIsMobile } from 'redux/selector/mobile';
@@ -15,8 +15,10 @@ import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
 import { IBalance } from 'types';
 import openPage from 'utils/openPage';
-import { divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
+import { ZERO, divDecimals, divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
+import showMessage from 'utils/setGlobalComponentsInfo';
+import useGetState from 'redux/state/useGetState';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -39,6 +41,8 @@ export default function GetChanceModal({
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
+  const { playerInfo } = useGetState();
+  const [errMsgTip, setErrMsgTip] = useState('');
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
     [serverConfigInfo.serverConfigInfo?.chancePrice],
@@ -54,6 +58,10 @@ export default function GetChanceModal({
     if (inputVal < 2) return;
     setInputVal((pre) => pre - 1);
   }, [inputVal]);
+  const handlePlus = useCallback(() => {
+    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
+    setInputVal((pre) => pre + 1);
+  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
   const handleInput = useCallback((value: string) => {
     if (!value) {
       setInputVal(0);
@@ -68,6 +76,35 @@ export default function GetChanceModal({
     setInputVal(1);
     onCancel?.();
   }, [onCancel]);
+
+  useEffect(() => {
+    setErrMsgTip('');
+  }, [inputVal]);
+
+  const handleCheckPurchase = useCallback(() => {
+    if (!inputVal) {
+      showMessage.error('Please input valid number.');
+      return;
+    }
+
+    const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
+    if (
+      !acornsToken?.balance ||
+      ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
+    ) {
+      showMessage.error('Acorns is not enough');
+      return;
+    }
+
+    if (ZERO.plus(inputVal).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
+      setErrMsgTip(
+        `Purchase limit exceeded. Please try purchasing no more than ${playerInfo?.weeklyPurchasedChancesCount}.`,
+      );
+      return;
+    }
+
+    onConfirm?.(inputVal, chancePrice);
+  }, [assetBalance, chancePrice, inputVal, onConfirm, playerInfo?.weeklyPurchasedChancesCount]);
 
   return (
     <CustomModal
@@ -104,13 +141,16 @@ export default function GetChanceModal({
               onChange={(e) => handleInput(e.target.value)}
             />
             <Image
-              onClick={() => setInputVal((pre) => pre + 1)}
-              className="w-[40px] h-[40px]"
+              onClick={handlePlus}
+              className={`${
+                inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0) && 'opacity-30'
+              } w-[40px] h-[40px]`}
               src={PlusIcon}
               alt="plus"
             />
           </div>
         </div>
+        <div className="flex justify-center text-[14px] leading-[22px] text-[#FF4D4D] mt-2">{errMsgTip}</div>
         {isMobile ? (
           <div className="flex flex-col space-y-[16px] items-center justify-between mt-[12px] w-full text-[14px]">
             <div>You pay</div>
@@ -207,7 +247,7 @@ export default function GetChanceModal({
         ) : null}
         <CommonBtn
           title={'Purchase'}
-          onClick={() => onConfirm?.(inputVal, chancePrice)}
+          onClick={handleCheckPurchase}
           className={`flex justify-center items-center font-fonarto ${
             isMobile
               ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-2'

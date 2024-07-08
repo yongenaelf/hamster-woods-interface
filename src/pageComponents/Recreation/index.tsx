@@ -46,7 +46,6 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
-import { ZERO, divDecimals } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import { addPrefixSuffix } from 'utils/addressFormatting';
 
@@ -280,25 +279,6 @@ export default function Game() {
 
   const handlePurchase = useCallback(
     async (n: number, chancePrice: number) => {
-      if (!n) {
-        showMessage.error('Please input valid number.');
-        return;
-      }
-
-      const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
-      if (
-        !acornsToken?.balance ||
-        ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(n).times(chancePrice))
-      ) {
-        showMessage.error('Acorns is not enough');
-        return;
-      }
-
-      if (ZERO.plus(n).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
-        showMessage.error('Purchase chance is not enough');
-        return;
-      }
-
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
@@ -318,13 +298,7 @@ export default function Game() {
         showMessage.hideLoading();
       }
     },
-    [
-      address,
-      assetBalance,
-      configInfo?.beanGoTownContractAddress,
-      playerInfo?.weeklyPurchasedChancesCount,
-      updatePlayerInformation,
-    ],
+    [address, configInfo?.beanGoTownContractAddress, updatePlayerInformation],
   );
 
   const go = async () => {
