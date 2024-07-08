@@ -47,7 +47,7 @@ export default function useInitLeaderBoard() {
 
       const data = pastDataList ? pastDataList : [];
 
-      mutate(['getPastRank', address], data);
+      mutate(['getPastRecord', address], data);
     },
     [mutate],
   );
