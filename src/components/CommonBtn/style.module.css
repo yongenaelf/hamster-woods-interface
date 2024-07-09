@@ -1,6 +1,6 @@
 .commonBtn {
   @apply h-12 rounded-full bg-[var(--confirm-btn-bg)] text-center font-fonarto text-xl leading-[48px] text-white;
 
-  box-shadow: 0 3px 1px 0 #D18A4C inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+  box-shadow: 0 3px 1px 0 #D18A4C inset, 0 6px 0 0 #773E0C;
   text-shadow: 0 0 1px #953D22;
 }

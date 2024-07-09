@@ -68,14 +68,15 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
       open={props.open}
       title={displayText.title}
       onCancel={props.onCancel}
+      centered
       className={styles.getBeanPassModal}>
-      <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px]">
+      <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px] text-center">
         {displayText.contentArr.map((text, i) => {
           return <p key={i}>{text}</p>;
         })}
       </div>
       {displayText.btnText && (
-        <div className={`${isMobile ? '' : 'mx-[64px]'} h-[70px]`}>
+        <div className={`${isMobile ? '' : 'mx-[64px] mb-[32px]'} h-[70px] `}>
           <CommonBtn title={displayText.btnText} onClick={props.onConfirm} className={styles.confirmBtn}></CommonBtn>
         </div>
       )}

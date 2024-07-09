@@ -38,15 +38,15 @@
   .loginBtn,
   .unlockBtn,
   .loginBtnYellow {
-    @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-[30px] bg-[#5D42FF] px-5 font-fonarto md:h-[82px] md:w-[430px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
+    @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-full bg-[#5D42FF] px-5 font-fonarto md:h-[82px] md:w-[450px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
 
     box-shadow: 0 3px 1px 0 #6f6cff inset, 0 4px 0 0 #1d089b;
     text-shadow: 0 0 1px #4b35d0;
   }
   .unlockBtn {
-    @apply mb-[94px] bg-[#A15A1C] md:mb-0 md:mt-[3.7vh] md:justify-center;
+    @apply h-11 rounded-[22px] md:h-[70px] md:rounded-[35px] mb-[94px] bg-[#A15A1C] md:mb-0 md:mt-[3.7vh] md:justify-center;
 
-    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 4px 0 0 rgb(133 66 8 / 60%);
+    box-shadow: 0 3px 1px 0 #d18a4c inset, 0 6px 0 0 #773E0C;
     text-shadow: 0 0 1px #953d22;
   }
   .loginBtnYellow {

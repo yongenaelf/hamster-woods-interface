@@ -1,18 +1,20 @@
 .board__acorn {
-  @apply mb-[12px] h-[88px] w-[453px] pl-[16px] flex items-center;
+  @apply mb-[12px] h-[80px] w-[400px] pl-[16px] flex items-center;
 
   background-image: url('../../../../assets/images/button-menu-default.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 
   .board__acorn__number {
     @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-fonarto;
   }
 }
 .board__feature {
-  @apply mt-[24px] mb-[12px] h-[108px] w-[453px] pl-[16px] flex items-center;
+  @apply mt-[24px] mb-[12px] h-[6rem] w-[400px] pl-[16px] flex items-center;
   
   background-image: url('../../../../assets/images/button-menu-spec.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 
   .board__feature__text {
     @apply flex flex-1 text-white text-[26px] leading-[26px] font-fonarto;

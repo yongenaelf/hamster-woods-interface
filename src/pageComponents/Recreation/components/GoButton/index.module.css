@@ -67,13 +67,30 @@
 }
 
 .btn-pc {
-  @apply bg-[100%_100%] bg-no-repeat bg-cover w-[446px]  h-[170px] ml-[-30px];
+  @apply bg-[100%_100%] bg-no-repeat bg-cover w-[284px]  h-[158px];
 
   .btn-pc-mask {
-    @apply absolute w-[400px] h-[142px] top-[0px] left-[34px] rounded-[48px] z-[10];
+    @apply absolute w-[242px] h-[122px] top-[0px] left-[32px] rounded-[48px] z-[10];
 
     background-color: rgb(82 48 11 / 30%);
+    background-size: cover;
   }
+}
+
+.hop-btn-pc-default {
+  background-image: url('../../../../assets/images/goButton/hop-default.png');
+}
+
+.hop-btn-pc-pressed {
+  background-image: url('../../../../assets/images/goButton/hop-pressed.png');
+}
+
+.hop-btn-pc-hover {
+  background-image: url('../../../../assets/images/goButton/hop-hover.png');
+}
+
+.hop-btn-pc-disabled {
+  background-image: url('../../../../assets/images/goButton/hop-disable.png');
 }
 
 .button {

@@ -89,7 +89,7 @@ function GoButton({
           </span>
           <span
             className={`${
-              isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[18px] leading-[18px] mt-[6px]'
             } font-bold text-[#52300B]`}>
             {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
           </span>
@@ -111,7 +111,7 @@ function GoButton({
           </span>
           <span
             className={`${
-              isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[21px] leading-[21px] mt-[6px]'
             } font-bold text-[#8E8E8E]`}>
             {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
           </span>
@@ -227,7 +227,7 @@ function GoButton({
     <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
-          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
+          <div className="flex items-center mb-[16px] ml-[-24px]">
             {diceCount.map((item) => {
               return (
                 <div
@@ -302,7 +302,7 @@ function GoButton({
               <div
                 ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[44px]' : 'left-[54px] top-0'
+                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[40px]' : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
                 {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
                 {statusCom[status]}
@@ -328,7 +328,7 @@ function GoButton({
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
+          <div className="flex items-center mb-[16px] ml-[-24px]">
             <div
               onMouseEnter={() => {
                 setPcBtnMouseOn(true);
@@ -343,20 +343,17 @@ function GoButton({
                 setPcBtnPress(false);
                 go && go();
               }}
-              style={{
-                backgroundImage: `url(${
-                  btnImageResources?.pc[
-                    pcBtnMouseOn && status === Status.NONE
-                      ? 'bg-go-hover-pc'
-                      : pcBtnPress && status === Status.NONE
-                      ? 'bg-go-press-pc'
-                      : status === Status.DISABLED
-                      ? 'bg-go-disabled-pc'
-                      : 'bg-go-default-pc'
-                  ]
-                })`,
-              }}
-              className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
+              className={`${styles['btn-pc']} ${styles['button__icon']} ${
+                styles[
+                  pcBtnMouseOn && status === Status.NONE
+                    ? 'hop-btn-pc-hover'
+                    : pcBtnPress && status === Status.NONE
+                    ? 'hop-btn-pc-pressed'
+                    : status === Status.DISABLED
+                    ? 'hop-btn-pc-disabled'
+                    : 'hop-btn-pc-default'
+                ]
+              } cursor-custom relative flex items-center justify-center z-[11]  `}>
               {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
               <div
                 className={`${
