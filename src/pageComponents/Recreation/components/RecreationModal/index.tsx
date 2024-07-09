@@ -144,7 +144,7 @@ function RecreationModal(props: IRecreationModal) {
               )}
 
               <span
-                className={`absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
+                className={`font-paytone absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
                   isMobile ? 'text-[64px]' : 'text-[96px]'
                 }`}>
                 +{bean}

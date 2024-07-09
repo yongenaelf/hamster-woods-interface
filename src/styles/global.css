@@ -73,6 +73,11 @@ code {
   src: url('../assets/font/Fonarto-Regular.otf');
 }
 
+@font-face {
+  font-family: 'PaytoneOne';
+  src: url('../assets/font/PaytoneOne-Regular.ttf');
+}
+
 .anticon[tabindex],
 a,
 button {

@@ -16,6 +16,7 @@ export default function ShowNftModal({ type, onCancel, open, beanPassItem }: Sho
       className={`!w-[358px] md:!w-[580px]`}
       open={open}
       title={type === ShowBeanPassType.Display ? 'Your HamsterPass' : 'Congratulations!'}
+      centered
       onCancel={onCancel}>
       <>
         <div className="mx-auto h-[160px] w-[160px] md:mt-0 md:h-[240px] md:w-[240px] relative">

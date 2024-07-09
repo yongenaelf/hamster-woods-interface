@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        paytone: ['Paytone One', 'sans-serif'],
+        paytone: ['PaytoneOne', 'sans-serif'],
         fonarto: ['Fonarto'],
       },
       colors: {

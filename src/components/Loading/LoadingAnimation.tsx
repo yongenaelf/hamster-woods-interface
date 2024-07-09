@@ -2,6 +2,7 @@ import { useLottie } from 'lottie-react';
 import LoadingAnimationJson from 'assets/images/loading-animation.json';
 import useGetState from 'redux/state/useGetState';
 import { TelegramPlatform } from '@portkey/did-ui-react';
+import GameComing from 'assets/images/game-coming.png';
 
 export default function LoadingAnimation() {
   const { isMobile } = useGetState();
@@ -38,7 +39,7 @@ export default function LoadingAnimation() {
       )}
       <img
         width={isMobile ? 'w-[285px]' : 'w-[480px]'}
-        src={imageResources?.['game-coming']}
+        src={GameComing.src}
         alt="coming"
         className={`mx-auto ${isMobile ? 'w-[285px]' : 'w-[480px]'}`}></img>
       <Animation></Animation>

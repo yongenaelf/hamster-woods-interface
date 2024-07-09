@@ -13,12 +13,10 @@ import Image from 'next/image';
 import { dispatch } from 'redux/store';
 import { toggleShowLeaderboard } from 'redux/reducer/info';
 import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard';
-import showMessage from 'utils/setGlobalComponentsInfo';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { Tooltip } from 'antd';
 import { allAcornsTip } from 'constants/tip';
 import { divDecimalsStr } from 'utils/calculate';
-import { sleep } from '@portkey/utils';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;

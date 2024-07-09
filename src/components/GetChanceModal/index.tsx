@@ -115,7 +115,7 @@ export default function GetChanceModal({
       centered
       destroyOnClose
       {...params}>
-      <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : ''} overflow-auto`}>
+      <div className={`${isMobile ? 'max-h-[60vh]' : ''} overflow-auto`}>
         <div className={` ${isMobile ? 'space-y-[18px]' : 'space-y-[28px]'}`}>
           <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
             Exchange
@@ -251,8 +251,8 @@ export default function GetChanceModal({
           onClick={handleCheckPurchase}
           className={`flex justify-center items-center font-fonarto ${
             isMobile
-              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-2'
-              : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[6px]'
+              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
+              : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
           }`}
         />
       </div>
