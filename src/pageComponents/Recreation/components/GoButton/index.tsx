@@ -83,13 +83,13 @@ function GoButton({
         <>
           <span
             className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
-              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px]'
             }`}>
-            Hop
+            HOP
           </span>
           <span
             className={`${
-              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[18px] leading-[18px] mt-[6px]'
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[18px] leading-[18px] mt-[4px]'
             } font-bold text-[#52300B]`}>
             {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
           </span>
@@ -105,13 +105,13 @@ function GoButton({
         <>
           <span
             className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
-              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px]'
             }`}>
-            Hop
+            HOP
           </span>
           <span
             className={`${
-              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[21px] leading-[21px] mt-[6px]'
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[21px] leading-[21px] mt-[4px]'
             } font-bold text-[#8E8E8E]`}>
             {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
           </span>
@@ -227,7 +227,7 @@ function GoButton({
     <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
-          <div className="flex items-center mb-[16px] ml-[-24px]">
+          <div className="flex items-center ml-[-24px]">
             {diceCount.map((item) => {
               return (
                 <div
@@ -385,7 +385,7 @@ function GoButton({
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-paytone tracking-tight !drop-shadow-[0_1px_0_black] text-[24px] leading-[24px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
+                className={`font-paytone tracking-tight !drop-shadow-[0_1px_0_black] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
                 Purchase chance
               </span>
             </div>

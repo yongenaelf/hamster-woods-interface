@@ -130,22 +130,22 @@ export default function GetChanceModal({
           <div className="flex items-center justify-center space-x-[16px]">
             <Image
               onClick={handleMinus}
-              className={`${inputVal < 2 && 'opacity-30'} w-[40px] h-[40px]`}
+              className={`${inputVal < 2 && 'opacity-30'} ${isMobile ? 'w-[32px] h-[32px]' : 'w-[40px] h-[40px]'}`}
               src={MinusIcon}
               alt="minus"
             />
             <Input
               className={`${
-                isMobile ? 'w-[222px]' : 'w-[340px]'
-              } h-[40px] text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-paytone`}
+                isMobile ? 'w-[222px] h-[32px]' : 'w-[340px] h-[40px]'
+              } text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-paytone`}
               value={inputVal}
               onChange={(e) => handleInput(e.target.value)}
             />
             <Image
               onClick={handlePlus}
-              className={`${
-                inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0) && 'opacity-30'
-              } w-[40px] h-[40px]`}
+              className={`${inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0) && 'opacity-30'} ${
+                isMobile ? 'w-[32px] h-[32px]' : 'w-[40px] h-[40px]'
+              }`}
               src={PlusIcon}
               alt="plus"
             />
@@ -236,7 +236,9 @@ export default function GetChanceModal({
                 onClick={() => {
                   openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
                 }}
-                className="flex items-center justify-center px-[16px] py-[9px] rounded-[8px] bg-[#A15A1C] text-[14px] font-black text-[#FFFFFF]">
+                className={`${
+                  isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
+                } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
                 Deposit
               </div>
             </div>

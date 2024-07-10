@@ -105,7 +105,7 @@ export default function Setting() {
         title="Settings"
         onCancel={handleCancel}
         className={`${isMobile ? '!w-[358px]' : '!w-[580px]'}`}>
-        <div className="mt-2 px-4">
+        <div className="my-2 px-4">
           <CommonBtn
             title="Game Record"
             onClick={handleRecord}
