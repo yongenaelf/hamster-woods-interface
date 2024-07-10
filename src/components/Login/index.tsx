@@ -495,7 +495,7 @@ export default function Login() {
               setIsUnlockShow(true);
             }}
             className={`${styles.unlockBtn} !bg-[#A15A1C] ${isMobileStore ? '' : '!mt-[80px]'}`}
-            title="unLock"></CommonBtn>
+            title="Unlock"></CommonBtn>
         ) : isLogin ? null : (
           <>
             {renderLoginMethods(false)}
