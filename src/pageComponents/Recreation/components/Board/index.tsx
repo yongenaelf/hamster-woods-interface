@@ -95,7 +95,7 @@ function Board({
               overlayStyle={isMobile ? { maxWidth: 280, borderRadius: 32 } : { maxWidth: 480, borderRadius: 32 }}
               overlayClassName={styles.board__tooltip}
               trigger="click"
-              placement="bottom"
+              placement="bottomLeft"
               color="#A15A1C">
               <Image
                 src={QuestionImage}

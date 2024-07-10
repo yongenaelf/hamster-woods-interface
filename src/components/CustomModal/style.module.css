@@ -1,5 +1,6 @@
 .customModal {
-  @apply relative !w-[358px] md:!w-[750px] border-[16px] rounded-[32px] p-[32px] bg-[#EEE2C4] border-[#9A531F] text-center text-[#953D22];
+  @apply relative !w-[358px] md:!w-[750px] border-[16px] rounded-[32px] p-[32px] bg-[#EEE2C4] border-[#9A531F] text-center text-[#953D22] max-h-[75vh];
+
   :global {
     .ant-modal-header,
     .ant-modal-footer {
@@ -8,7 +9,7 @@
     .ant-modal-content {
       @apply h-full bg-inherit shadow-none;
       .ant-modal-close {
-        @apply md:w-[48px] md:h-[48px] absolute right-[-18px] top-[-18px];
+        @apply md:w-[48Px] md:h-[48Px] absolute right-[-18Px] top-[-18Px];
         .ant-modal-close-x {
           @apply w-full h-full;
         }

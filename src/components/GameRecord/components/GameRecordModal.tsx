@@ -12,7 +12,7 @@ export default function GameRecordModal({
   const isMobile = useIsMobile();
   return (
     <CustomModal
-      className={`${styles.gameRecordModal} ${isMobile ? 'h-[33rem]' : 'h-[41rem'}  h-[756px]`}
+      className={`${styles.gameRecordModal} ${isMobile ? 'h-[22rem]' : 'h-[41rem'}  h-[756px]`}
       {...params}
       closable
       centered

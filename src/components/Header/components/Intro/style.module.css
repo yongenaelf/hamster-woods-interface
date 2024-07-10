@@ -1,3 +1,17 @@
+.rulesModal {
+  @apply px-0;
+
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply absolute top-0 right-1;
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+  }
+}
 
 .intro {
   @apply h-10 w-10;
@@ -9,7 +23,7 @@
 
 .content {
   &::-webkit-scrollbar {
-    @apply w-4;
+    @apply w-4 ml-[8px];
   }
   &::-webkit-scrollbar-thumb {
     @apply !rounded-lg;

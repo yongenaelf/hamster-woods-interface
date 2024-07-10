@@ -135,7 +135,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
       {...props}
       title={`$ACORNS Unlocks`}
       destroyOnClose>
-      <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[41rem]'} flex flex-col`}>
+      <div className={`${isMobile ? 'max-h-[60vh] h-[22rem]' : 'h-[41rem]'} flex flex-col`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
             <button

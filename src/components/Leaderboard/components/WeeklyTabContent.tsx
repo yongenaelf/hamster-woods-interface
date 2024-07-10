@@ -9,6 +9,7 @@ import { LeaderBoardNoRecord } from './LeaderBoardNoRecord';
 import { LeaderBoardItemList } from './LeaderBoardItemList';
 import { useIsMobile } from 'redux/selector/mobile';
 import { LeaderBoardSettleList } from './LeaderBoardSettleList';
+import { TabContentUser } from './TabContentUser';
 
 const rewardSelector = (state: AppState) => state.configInfo.configInfo?.leaderboardWeekAward;
 
@@ -25,7 +26,13 @@ export const WeeklyTabContent = () => {
     <>
       <div className="flex w-full flex-grow flex-col m-0">
         <div className={`flex items-center justify-start space-x-[8px] ${isMobile ? 'mb-2' : 'mb-4'}`}>
-          <img width={isMobile ? 20 : 24} height={isMobile ? 20 : 24} src={TipIcon.src} alt="tip" />
+          <img
+            width={isMobile ? 20 : 24}
+            height={isMobile ? 20 : 24}
+            className={`${isMobile ? 'w-[20px] h-[20px]' : 'w-[16Px] h-[16Px]'}`}
+            src={TipIcon.src}
+            alt="tip"
+          />
           <div className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold`}>
             {data?.status === ChallengeStatus.InProgress
               ? 'Hop & Win Week X will end on YY.'

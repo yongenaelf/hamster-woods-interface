@@ -24,6 +24,7 @@ export default function CustomModal({
       {...params}
       closable={closable}
       onCancel={onCancel}
+      maskClosable={false}
       closeIcon={
         <Image width={isMobile ? 28 : 48} className={isMobile ? 'w-[28]' : 'w-[48]'} src={closeImg} alt="closeImg" />
       }>

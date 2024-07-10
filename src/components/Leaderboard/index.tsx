@@ -8,6 +8,7 @@ import { toggleShowLeaderboard } from 'redux/reducer/info';
 import LeaderBoardModal from './components/LeaderBoardModal';
 import { useLeaderboardStarted } from './hooks/useLeaderboardStarted';
 import LeaderBoardNotStartedModal from './components/LeaderBoardNotStartedModal';
+import { TabContentUser } from './components/TabContentUser';
 
 enum Tabs {
   Weekly = 'Weekly',
@@ -38,11 +39,10 @@ export const Leaderboard = () => {
         className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
         open={open}
         title="Leader Board"
-        onCancel={onCancel}
-        weeklyModal={tab === Tabs.Weekly}>
-        <div className={`${isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[41rem]'} text-[#AE694C]`}>
-          <div className="flex flex-col h-full overflow-hidden">
-            <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
+        onCancel={onCancel}>
+        <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[30rem]'} text-[#AE694C] flex flex-col`}>
+          <div className={`flex flex-col flex-1 overflow-hidden ${isMobile ? 'px-[1rem]' : 'px-[2rem]'}`}>
+            <div className={`flex w-full ${isMobile ? 'px-[16px]' : 'px-[40px]'} `}>
               <button
                 className={`${tabClassName} ${tab === Tabs.Weekly ? 'bg-[#E8D1AE]' : 'bg-[#D3B68A]'}`}
                 onClick={() => setTab(Tabs.Weekly)}>
@@ -62,6 +62,7 @@ export const Leaderboard = () => {
               {tab === Tabs.PastRecord ? <PastRecordContent /> : null}
             </div>
           </div>
+          {tab === Tabs.Weekly && <TabContentUser />}
         </div>
       </LeaderBoardModal>
     </>
