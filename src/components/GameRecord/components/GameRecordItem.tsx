@@ -40,19 +40,19 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
         </thead>
         <tbody>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Time</td>
+            <td className="text-[#AE694C]">Time</td>
             <td className="text-right">{getDateFormat(data.triggerTime, 'MMM dd HH:mm:ss')}</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Status</td>
+            <td className="text-[#AE694C]">Status</td>
             <td className="text-right">Confirmed</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Transaction Fee</td>
+            <td className="text-[#AE694C]">Transaction Fee</td>
             <td className="text-right">{formatElfValue(data.transactionFee)} ELF</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Transaction ID</td>
+            <td className="text-[#AE694C]">Transaction ID</td>
             <td className="text-right">
               {middleEllipsis(data.transactionId)}{' '}
               <button onClick={() => copyText(data.transactionId)}>
@@ -90,14 +90,12 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
               </div>
             )}
             {triggerTime && (
-              <div className="text-md text-right text-[#AE694C] text-opacity-60">
-                {getDateFormat(triggerTime, 'HH:mm:ss')}
-              </div>
+              <div className="text-md text-right text-[#AE694C]">{getDateFormat(triggerTime, 'HH:mm:ss')}</div>
             )}
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+              <tr className={`text-[#AE694C] ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
                 <th>Random step result</th>
                 <th>$ACORNS earned</th>
                 <th className="text-right">Transaction fee</th>
@@ -144,14 +142,12 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
               </div>
             )}
             {triggerTime && (
-              <div className="text-md text-right text-[#AE694C] text-opacity-60">
-                {getDateFormat(triggerTime, 'HH:mm:ss')}
-              </div>
+              <div className="text-md text-right text-[#AE694C]">{getDateFormat(triggerTime, 'HH:mm:ss')}</div>
             )}
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+              <tr className={`text-[#AE694C] ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
                 <th>Hopping chance purchased</th>
                 <th>$ACORNS cost</th>
                 <th className="text-right">Transaction fee</th>

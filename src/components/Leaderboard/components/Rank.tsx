@@ -19,7 +19,7 @@ export const Rank = ({ rank }: IRank) => {
     third: '',
     ranked: `text-[#9A531F] ${textClassName}`,
     unranked: `text-[#9A531F] ${textClassName}`,
-    missing: `text-neutral-400 ${textClassName}`,
+    missing: `text-[#9A531F] text-neutral-400 ${textClassName}`,
   });
 
   const imgClassName = `${isMobile ? 'h-8 w-8' : 'h-16 w-16'}`;

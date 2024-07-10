@@ -12,7 +12,7 @@ export function RankItem({ rank }: IRankItemProps) {
   const isMobile = useIsMobile();
   return (
     <div
-      className={`relative mb-3 flex w-full items-center rounded-2xl border border-[#003658] p-1 shadow-inner before:absolute before:bg-white before:bg-opacity-30 ${
+      className={`relative mb-3 flex w-full items-center rounded-2xl border border-[#003658] p-1 shadow-inner before:absolute ${
         isMobile
           ? 'h-12 before:h-6 before:left-1 before:right-1 before:top-0 before:rounded-full'
           : 'h-16 before:h-8 before:left-1 before:right-1 before:top-1 before:rounded-2xl'
@@ -83,7 +83,7 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
       title="Hop & Win Weekly Prizes">
       <div
         className={`${
-          isMobile ? 'max-h-[60vh] h-[33rem]' : 'h-[41rem]'
+          isMobile ? 'max-h-[60vh] h-[22rem]' : 'h-[41rem]'
         } text-[#AE694C] overflow-y-auto  [&::-webkit-scrollbar]:hidden`}>
         <div className="flex flex-col space-y-[10px] text-[16px] leading-[24px] text-left">
           {WeeklyPrizeTip.map((tip, index) => (

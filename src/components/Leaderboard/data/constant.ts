@@ -18,21 +18,21 @@ export enum RankEnum {
 export const RankItemDetail = {
   [RankEnum.First]: {
     rankIcon: GoldIcon,
-    bgClassName: 'bg-[#F5BF49]',
+    bgClassName: 'bg-[#F3B328]',
     shadowInsetColor: '#DE7B3D',
     prizeDetail: 'KINGHAMSTER NFT Prize *3',
     avatarIcon: KingHamster,
   },
   [RankEnum.Second]: {
     rankIcon: SilverIcon,
-    bgClassName: 'bg-[#CEDFF7]',
+    bgClassName: 'bg-[#A0B1CB]',
     shadowInsetColor: '#B8B8EB',
     prizeDetail: 'KINGHAMSTER NFT Prize *2',
     avatarIcon: KingHamster,
   },
   [RankEnum.Third]: {
     rankIcon: BronzeIcon,
-    bgClassName: 'bg-[#E97D3C]',
+    bgClassName: 'bg-[#D77D3C]',
     shadowInsetColor: '#B5412C',
     prizeDetail: 'KINGHAMSTER NFT Prize *2',
     avatarIcon: KingHamster,

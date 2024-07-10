@@ -8,6 +8,8 @@ export default function Intro() {
   const [rulesVisible, setRulesVisible] = useState(false);
   const { isMobile, configInfo } = useGetState();
 
+  console.log('configInfo?.gameRules', configInfo?.gameRules);
+
   return (
     <>
       <Image
@@ -24,19 +26,25 @@ export default function Intro() {
         }}
         className={`${styles.rulesModal}`}>
         <div
-          className={`h-[312px] overflow-auto text-left text-base leading-6 md:h-[288px] md:text-[24px] md:leading-[32px] w-full ${
+          className={`${
+            isMobile ? 'h-[20rem] px-[16px]' : 'h-[312px] px-[32px]'
+          } max-h-[60vh] overflow-auto text-left text-base leading-6 px-[16px] md:h-[288px] md:text-[24px] md:leading-[32px] w-full ${
             isMobile ? 'text-base leading-6' : styles.content
           }`}>
           {configInfo?.gameRules.map((item, index) => {
-            return <p key={index}>{item}</p>;
+            return (
+              <p key={index} className="mb-[12px]">
+                {item}
+              </p>
+            );
           })}
         </div>
         <CommonBtn
           title="I know"
           className={`font-fonarto flex items-center justify-center ${
             isMobile
-              ? 'mt-[24px] text-[20px] leading-[20px]'
-              : 'mt-[40px] mx-[64px] !text-[32px] !leading-[40px] !h-[76px]'
+              ? 'mt-[24px] text-[20px] leading-[20px] mx-[16px]'
+              : 'mt-[40px] mx-[64px] !text-[32px] !leading-[40px] !h-[76px]  px-[32px]'
           }`}
           onClick={() => {
             setRulesVisible(false);

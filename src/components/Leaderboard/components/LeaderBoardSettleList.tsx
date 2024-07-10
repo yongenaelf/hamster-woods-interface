@@ -39,7 +39,7 @@ const SettleRankItem = ({
 
   return (
     <div
-      className={`relative flex w-full items-center justify-between rounded-2xl border border-[#003658] p-1 shadow-inner before:absolute before:bg-white before:bg-opacity-30 ${
+      className={`relative flex w-full items-center justify-between rounded-2xl border border-[#003658] p-1 shadow-inner before:absolute ${
         isMobile
           ? 'h-12 mb-2 before:h-6 before:left-1 before:right-1 before:top-0 before:rounded-full'
           : 'h-12 mb-3 before:h-8 before:left-1 before:right-1 before:top-1 before:rounded-2xl'
@@ -84,7 +84,7 @@ const SettleRankItem = ({
         <img
           width={30}
           height={30}
-          className="rounded-full w-[30px] h-[30px]"
+          className="rounded-full w-[30px] h-[30px] border-[2px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
@@ -131,7 +131,7 @@ const SettleNormalItem = ({
       <div className={`${isMobile ? 'mr-[8px]' : 'mr-[24px] w-[96px]'} flex items-center justify-end gap-2`}>
         <img
           width={30}
-          className="rounded-full w-[30px] h-[30px]"
+          className="rounded-full w-[30px] h-[30px]  border-[2px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
@@ -162,7 +162,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
           return (
             <SettleRankItem
               src={require('assets/images/gold.png').default.src}
-              bgClassName="bg-[#F5BF49]"
+              bgClassName="bg-[#F3B328]"
               textClassName={LeaderboardTextColors.Gold}
               shadowInsetColor="#DE7B3D"
               address={item.caAddress}
@@ -178,7 +178,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
           return (
             <SettleRankItem
               src={require('assets/images/silver.png').default.src}
-              bgClassName="bg-[#CEDFF7]"
+              bgClassName="bg-[#A0B1CB]"
               textClassName={LeaderboardTextColors.Silver}
               shadowInsetColor="#B8B8EB"
               address={item.caAddress}
@@ -194,7 +194,7 @@ export const LeaderBoardSettleList = ({ data }: ILeaderBoardItemList) => {
           return (
             <SettleRankItem
               src={require('assets/images/bronze.png').default.src}
-              bgClassName="bg-[#E97D3C]"
+              bgClassName="bg-[#D77D3C]"
               textClassName={LeaderboardTextColors.Bronze}
               shadowInsetColor="#B5412C"
               address={item.caAddress}
