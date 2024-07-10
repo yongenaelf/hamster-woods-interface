@@ -137,7 +137,7 @@ export default function GetChanceModal({
             <Input
               className={`${
                 isMobile ? 'w-[222px]' : 'w-[340px]'
-              } h-[40px] text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-fonarto`}
+              } h-[40px] text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-paytone`}
               value={inputVal}
               onChange={(e) => handleInput(e.target.value)}
             />
@@ -249,7 +249,7 @@ export default function GetChanceModal({
         <CommonBtn
           title={'Purchase'}
           onClick={handleCheckPurchase}
-          className={`flex justify-center items-center font-fonarto ${
+          className={`flex justify-center items-center font-paytone ${
             isMobile
               ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
               : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'

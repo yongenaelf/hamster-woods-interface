@@ -46,7 +46,7 @@ export default function PurchaseNoticeModal({ onConfirm, type, ...props }: IPurc
       </div>
       <CommonBtn
         title={'OK'}
-        className={`flex justify-center items-center font-fonarto ${
+        className={`flex justify-center items-center font-paytone ${
           isMobile
             ? 'text-[20px] leading-[20px] mt-[24px] h-[48px]'
             : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px]'

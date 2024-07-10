@@ -28,7 +28,7 @@ export default function CustomModal({
       closeIcon={
         <Image width={isMobile ? 28 : 48} className={isMobile ? 'w-[28]' : 'w-[48]'} src={closeImg} alt="closeImg" />
       }>
-      <div className={`${isMobile ? '!text-[20px]' : '!text-[32px]'} font-fonarto text-[#953D22] text-center`}>
+      <div className={`${isMobile ? '!text-[20px]' : '!text-[32px]'} font-paytone text-[#953D22] text-center`}>
         {title}
       </div>
       <div className={`${isMobile ? 'mt-[24px]' : 'mt-[40px]'} w-full`}>{children}</div>

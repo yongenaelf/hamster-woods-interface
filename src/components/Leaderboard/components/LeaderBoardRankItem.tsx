@@ -39,7 +39,7 @@ export const LeaderBoardRankItem = ({
           src={src}
           alt="rank"
         />
-        <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
+        <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
           {middleEllipsis(address)}
         </div>
         {isCurrentUserRank ? (
@@ -53,7 +53,7 @@ export const LeaderBoardRankItem = ({
         ) : null}
       </div>
       <div className="basis-2 flex justify-end items-center text-right ">
-        <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto ${textClassName}`}>
+        <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone ${textClassName}`}>
           {beans?.toLocaleString() ?? '-'}
         </div>
         <img width={20} className="z-10 ml-[5px] mr-4" src={require('assets/images/neat.png').default.src} alt="neat" />

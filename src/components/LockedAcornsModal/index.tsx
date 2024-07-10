@@ -13,7 +13,7 @@ export enum LockedAcornsTabEnum {
   Unlock = 'Unlocked',
 }
 const _tabClassName =
-  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-fonarto font-bold';
+  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-paytone font-bold';
 
 export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomModalProps) {
   const isMobile = useIsMobile();
@@ -31,7 +31,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   const renderPending = useCallback(() => {
     return (
       <>
-        <div className="flex items-center gap-2 text-[16px] leading-[16px] font-fonarto mb-4">
+        <div className="flex items-center gap-2 text-[16px] leading-[16px] font-paytone mb-4">
           <img
             width={24}
             className="w-[24px] h-[24px]"

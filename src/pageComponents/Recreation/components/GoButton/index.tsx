@@ -82,7 +82,7 @@ function GoButton({
       [Status.NONE]: (
         <>
           <span
-            className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
+            className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
               isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
             }`}>
             Hop
@@ -104,7 +104,7 @@ function GoButton({
       [Status.DISABLED]: (
         <>
           <span
-            className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
+            className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
               isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
             }`}>
             Hop
@@ -295,7 +295,7 @@ function GoButton({
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
-                  className={`text-white font-fonarto w-[48px] mt-[12px] ml-[9px] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
+                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[9px] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
                   Purchase chance
                 </div>
               </div>
@@ -385,7 +385,7 @@ function GoButton({
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-fonarto tracking-tight !drop-shadow-[0_1px_0_black] text-[24px] leading-[24px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
+                className={`font-paytone tracking-tight !drop-shadow-[0_1px_0_black] text-[24px] leading-[24px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
                 Purchase chance
               </span>
             </div>

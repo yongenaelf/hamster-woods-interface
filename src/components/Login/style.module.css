@@ -33,12 +33,12 @@
 .loginContainer {
   @apply flex h-full w-full flex-col items-center justify-end  !bg-cover bg-center bg-no-repeat px-10 text-base text-white  md:justify-start md:pt-[46.7vh];
   .more {
-    @apply z-20 pb-4 font-fonarto underline md:pb-0 text-[20px] md:text-[32px] text-white;
+    @apply z-20 pb-4 font-paytone underline md:pb-0 text-[20px] md:text-[32px] text-white;
   }
   .loginBtn,
   .unlockBtn,
   .loginBtnYellow {
-    @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-full bg-[#5D42FF] px-5 font-fonarto md:h-[82px] md:w-[450px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
+    @apply relative flex items-center z-20 mb-6 h-14 w-full justify-center rounded-full bg-[#5D42FF] px-5 font-paytone md:h-[82px] md:w-[450px] md:justify-end md:rounded-[38px] md:px-8 md:text-[32px] md:leading-6;
 
     box-shadow: 0 3px 1px 0 #6f6cff inset, 0 4px 0 0 #1d089b;
     text-shadow: 0 0 1px #4b35d0;
@@ -76,10 +76,10 @@
     }
   }
   .loginBtn {
-    @apply relative !mb-5 mx-[97px] !h-[77px] flex items-center !justify-center !rounded-[39px] !px-10 bg-[var(--confirm-btn-bg)] font-fonarto text-white;
+    @apply relative !mb-5 mx-[97px] !h-[77px] flex items-center !justify-center !rounded-[39px] !px-10 bg-[var(--confirm-btn-bg)] font-paytone text-white;
   }
   .drawerHeader {
-    @apply !mb-[40px] text-center font-fonarto !text-[32px] leading-6 text-[#953D22];
+    @apply !mb-[40px] text-center font-paytone !text-[32px] leading-6 text-[#953D22];
   }
   .drawer__close {
     @apply absolute !right-[8Px] !top-[8Px] !text-[30px];
@@ -94,7 +94,7 @@
 
 .loginMethodDrawer {
   .loginBtn {
-    @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] bg-[var(--confirm-btn-bg)] font-fonarto text-white;
+    @apply relative pl-4 mb-4 flex h-14 items-center justify-center rounded-[36px] bg-[var(--confirm-btn-bg)] font-paytone text-white;
   }
 }
 
@@ -130,7 +130,7 @@
     text-shadow: 0 0 1px #953d22;
   }
   .drawerHeader {
-    @apply mb-8 text-center font-fonarto text-2xl leading-6 text-[#953D22];
+    @apply mb-8 text-center font-paytone text-2xl leading-6 text-[#953D22];
   }
   .drawer__close {
     @apply absolute right-3 top-3;

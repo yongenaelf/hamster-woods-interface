@@ -6,7 +6,7 @@
   background-repeat: no-repeat;
 
   .board__acorn__number {
-    @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-fonarto;
+    @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-paytone;
   }
 }
 .board__feature {
@@ -17,7 +17,7 @@
   background-repeat: no-repeat;
 
   .board__feature__text {
-    @apply flex flex-1 text-white text-[26px] leading-[26px] font-fonarto;
+    @apply flex flex-1 text-white text-[26px] leading-[26px] font-paytone;
   }
 }
 
@@ -28,7 +28,7 @@
   background-size: cover;
 
   .board__feature__text {
-    @apply w-[50px] ml-[5px] text-white text-[13px] leading-[13px] font-fonarto;
+    @apply w-[50px] ml-[5px] text-white text-[13px] leading-[13px] font-paytone;
   }
 }
 

@@ -261,7 +261,7 @@ export default function Login() {
           isMobileStore ? '' : 'mx-[96px]'
         } `}>
         {getIconComponent(item.iconName as IconType, inModel)}
-        <span className="flex-1 text-center font-fonarto">{item.name}</span>
+        <span className="flex-1 text-center font-paytone">{item.name}</span>
       </div>
     ));
   };

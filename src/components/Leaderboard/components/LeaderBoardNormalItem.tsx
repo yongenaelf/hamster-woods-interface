@@ -23,7 +23,7 @@ export const LeaderBoardNormalItem = ({
         <div
           className={`${
             isMobile ? '!w-[32px] mr-2' : '!w-[40px] mr-3'
-          } shrink-0 flex items-center justify-center ml-2 text-white text-[16px] font-fonarto bg-[#B26C27] rounded-full`}>
+          } shrink-0 flex items-center justify-center ml-2 text-white text-[16px] font-paytone bg-[#B26C27] rounded-full`}>
           {rank}
         </div>
         <div className={`font-bold ${isMobile ? 'text-xs' : 'text-[16px]'} ${LeaderboardTextColors.Brown}`}>
@@ -40,7 +40,7 @@ export const LeaderBoardNormalItem = ({
         ) : null}
       </div>
       <div className="basis-2 flex justify-end items-center text-right ">
-        <div className={`${isMobile ? 'text-[14px]' : 'text-[20px]'} font-fonarto text-[#AE694C] `}>
+        <div className={`${isMobile ? 'text-[14px]' : 'text-[20px]'} font-paytone text-[#AE694C] `}>
           {beans?.toLocaleString() ?? '-'}
         </div>
         <img
