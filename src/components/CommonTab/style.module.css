@@ -16,7 +16,7 @@
 
             .ant-tabs-tab-btn {
               color: var(--brand-base);
-              @apply font-fonarto w-full border-8 border-0 text-[24px];
+              @apply font-paytone w-full border-8 border-0 text-[24px];
             }
           }
           .ant-tabs-tab-active {
@@ -43,7 +43,7 @@
               @apply rounded-t;
 
               .ant-tabs-tab-btn {
-                @apply font-fonarto w-full border-8 border-0 text-sm;
+                @apply font-paytone w-full border-8 border-0 text-sm;
               }
             }
           }

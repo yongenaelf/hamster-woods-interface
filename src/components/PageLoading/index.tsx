@@ -16,7 +16,7 @@ function PageLoading() {
   const getContent = () => {
     if (typeof content === 'string') {
       return (
-        <span className={`text-[#fff] text-center font-fonarto ${isMobile ? 'text-[16px]' : 'text-[24px]'}`}>
+        <span className={`text-[#fff] text-center font-paytone ${isMobile ? 'text-[16px]' : 'text-[24px]'}`}>
           {content}
         </span>
       );

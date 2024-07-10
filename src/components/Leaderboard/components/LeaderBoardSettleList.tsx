@@ -55,7 +55,7 @@ const SettleRankItem = ({
           src={src}
           alt="rank"
         />
-        <div className={`${isMobile ? 'text-[10px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
+        <div className={`${isMobile ? 'text-[10px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
           {middleEllipsis(address)}
         </div>
         {isCurrentUserRank ? (
@@ -69,7 +69,7 @@ const SettleRankItem = ({
         ) : null}
       </div>
       <div className="flex-1 flex justify-end items-center text-right ">
-        <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto ${textClassName}`}>
+        <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone ${textClassName}`}>
           {divDecimalsStr(score, decimals) ?? '-'}
         </div>
         <img
@@ -110,11 +110,11 @@ const SettleNormalItem = ({
   const isMobile = useIsMobile();
   return (
     <div
-      className={`flex w-full items-center rounded-full p-1 h-10 bg-[#DEC49D] font-fonarto ${
+      className={`flex w-full items-center rounded-full p-1 h-10 bg-[#DEC49D] font-paytone ${
         isMobile ? 'mb-2' : 'mb-3'
       }`}>
       <div className="flex-1 ml-2 my-2">
-        <span className="max-w-fit flex justify-center items-center px-[16px] py-[2px] bg-[#B26C27] rounded-full text-[16px] text-white font-fonarto">
+        <span className="max-w-fit flex justify-center items-center px-[16px] py-[2px] bg-[#B26C27] rounded-full text-[16px] text-white font-paytone">
           {leftText}
         </span>
       </div>

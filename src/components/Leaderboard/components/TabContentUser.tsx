@@ -80,14 +80,14 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         alt="avatar"
       />
       <Rank rank={data?.selfRank.rank || data?.settleDaySelfRank?.rank} />
-      <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
+      <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
         {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
       </div>
       {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
         <Image className="ml-2 w-16" src={MeIcon} alt="me" />
       ) : null}
       <div className="flex-grow mr-2"></div>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
+      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone text-white`}>
         {divDecimalsStr(
           data?.selfRank?.score || data?.settleDaySelfRank?.score,
           data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,

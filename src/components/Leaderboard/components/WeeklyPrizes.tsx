@@ -28,7 +28,7 @@ export function RankItem({ rank }: IRankItemProps) {
         alt="rank"
       />
       <span className="flex-grow"></span>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-xl '} leading-4 text-white font-fonarto`}>
+      <div className={`${isMobile ? 'text-[16px]' : 'text-xl '} leading-4 text-white font-paytone`}>
         {RankItemDetail[rank].prizeDetail}
       </div>
       <img
@@ -55,11 +55,11 @@ export function DefaultItem({ topText, avatarIcon, getNFTDetail }: IDefaultItemP
       <div
         className={`${
           isMobile ? 'px-3 py-[6px] w-[90px]' : 'px-[16px] py-2'
-        } bg-[#B26C27] text-base leading-6 text-white font-fonarto rounded-full`}>
+        } bg-[#B26C27] text-base leading-6 text-white font-paytone rounded-full`}>
         {topText}
       </div>
       <span className="flex-grow"></span>
-      <div className={`${isMobile ? 'text-[12px]' : 'text-xl '} leading-4 text-white font-fonarto`}>{getNFTDetail}</div>
+      <div className={`${isMobile ? 'text-[12px]' : 'text-xl '} leading-4 text-white font-paytone`}>{getNFTDetail}</div>
       <img
         src={avatarIcon}
         className={`rounded-full z-10 ${isMobile ? 'mx-2' : 'mx-4'}`}

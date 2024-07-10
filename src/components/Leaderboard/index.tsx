@@ -16,7 +16,7 @@ enum Tabs {
 }
 
 const _tabClassName =
-  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-fonarto font-bold';
+  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-paytone font-bold';
 
 export const Leaderboard = () => {
   const open = useSelector((state) => state?.info?.showLeaderboard);

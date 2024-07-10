@@ -21,7 +21,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
       onCancel={onCancel}
       {...props}
       title={
-        <div className="flex items-center justify-center gap-[10px] font-fonarto">
+        <div className="flex items-center justify-center gap-[10px] font-paytone">
           Acquire <img width={26} className="w-[26px] h-[26px]" src={NeatImageIcon.src} alt="neat" /> $ACORNS
         </div>
       }>
@@ -49,7 +49,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
           isMobile
             ? '!h-[44px] !text-[20px] !leading-[20px] mt-[24px]'
             : '!h-[76px] !text-[32px] !leading-[40px] mx-[64px] mt-[40px]'
-        } flex justify-center items-center font-fonarto`}
+        } flex justify-center items-center font-paytone`}
         title="Trade on AwakenSwap"
         onClick={() => {
           openPage(`${configInfo?.awakenUrl}/trading/ELF_ACORNS_0.05`);
