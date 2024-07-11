@@ -26,6 +26,7 @@ interface ISettleDayRankItem {
 
 interface IRankResult {
   weekNum?: number;
+  endDate?: string;
   rankingList?: IRankItem[] | null;
   selfRank?: IRankItem | null;
   settleDayRankingList?: ISettleDayRankItem[] | null;
