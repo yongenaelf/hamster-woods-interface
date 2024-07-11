@@ -26,7 +26,7 @@ export default function Intro() {
           setRulesVisible(false);
         }}
         className={`${styles.rulesModal}`}>
-        <div className={`${isMobile ? 'flex flex-col max-h-[50vh] h-[20rem]' : 'h-[550px]'}`}>
+        <div className={`flex flex-col ${isMobile ? 'max-h-[50vh] h-[20rem]' : 'h-[550px]'}`}>
           <div
             className={`flex-1 overflow-auto text-left text-base leading-6   md:text-[24px] md:leading-[32px] w-full ${
               isMobile ? 'text-base leading-6 px-[16px]' : styles.content
