@@ -15,7 +15,7 @@ import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
 import { IBalance } from 'types';
 import openPage from 'utils/openPage';
-import { ZERO, divDecimals, divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
+import { ZERO, divDecimals, divDecimalsStrShow, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import useGetState from 'redux/state/useGetState';
 import CommonDisabledBtn from 'components/CommonDisabledBtn';
@@ -235,7 +235,7 @@ export default function GetChanceModal({
             }`}>
             <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center">
-              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStr(
+              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStrShow(
                 acornsToken?.balance,
                 acornsToken?.decimals,
               )}`}</div>
@@ -249,7 +249,7 @@ export default function GetChanceModal({
                 Deposit
               </div>
             </div>
-            <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStr(
+            <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
               ElfToken?.balance,
               ElfToken?.decimals,
             )}`}</div>

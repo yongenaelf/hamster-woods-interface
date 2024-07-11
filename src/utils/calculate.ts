@@ -30,6 +30,11 @@ export function divDecimalsStr(a?: BigNumber.Value, decimals: string | number = 
   return isEffectiveNumber(n) ? n.toFixed() : defaultVal;
 }
 
+export function divDecimalsStrShow(a?: BigNumber.Value, decimals: string | number = 8, defaultVal = '0') {
+  const n = divDecimals(a, decimals);
+  return isEffectiveNumber(n) ? n.toFormat() : defaultVal;
+}
+
 export const formatAmountUSDShow = (
   count: number | BigNumber | string | null | undefined,
   decimal: string | number = 4,
