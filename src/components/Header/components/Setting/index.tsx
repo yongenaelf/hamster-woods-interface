@@ -103,6 +103,7 @@ export default function Setting() {
       <CustomModal
         open={settingModalVisible}
         title="Settings"
+        centered={isMobile}
         onCancel={handleCancel}
         className={`${isMobile ? '!w-[358px]' : '!w-[580px]'}`}>
         <div className="my-2 px-4">

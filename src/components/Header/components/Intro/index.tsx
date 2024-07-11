@@ -25,7 +25,7 @@ export default function Intro() {
         onCancel={() => {
           setRulesVisible(false);
         }}
-        className={`${styles.rulesModal}`}>
+        className={`${styles.rulesModal} ${isMobile && styles.mobileRulesModal}`}>
         <div className={`flex flex-col ${isMobile ? 'max-h-[50vh] h-[20rem]' : 'h-[550px]'}`}>
           <div
             className={`flex-1 overflow-auto text-left text-base leading-6   md:text-[24px] md:leading-[32px] w-full ${
