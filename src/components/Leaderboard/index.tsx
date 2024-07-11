@@ -40,7 +40,7 @@ export const Leaderboard = () => {
         open={open}
         title="Leader Board"
         onCancel={onCancel}>
-        <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[30rem]'} text-[#AE694C] flex flex-col`}>
+        <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>
           <div className={`flex flex-col flex-1 overflow-hidden ${isMobile ? 'px-[1rem]' : 'px-[2rem]'}`}>
             <div className={`flex w-full ${isMobile ? 'px-[16px]' : 'px-[40px]'} `}>
               <button

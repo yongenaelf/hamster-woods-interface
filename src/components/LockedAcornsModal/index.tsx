@@ -31,17 +31,20 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   const renderPending = useCallback(() => {
     return (
       <>
-        <div className="flex items-center gap-2 text-[16px] leading-[16px] font-paytone mb-4">
+        <div
+          className={`flex items-center gap-2 ${
+            isMobile ? 'text-[12px]' : 'text-[16px]'
+          } leading-[16px] font-paytone mb-4`}>
           <img
             width={24}
-            className="w-[24px] h-[24px]"
+            className={`${isMobile ? 'w-[16px] h-[16px]' : 'w-[24px] h-[24px]'}`}
             src={require('assets/images/lock.png').default.src}
             alt="lock"
           />
           {`Total Locked ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
           <img
             width={20}
-            className="w-[20px] h-[20px]"
+            className={`${isMobile ? 'w-[16px] h-[16px]' : 'w-[20px] h-[20px]'}`}
             src={require('assets/images/neat.png').default.src}
             alt="lock"
           />
@@ -50,7 +53,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
         <div
           className={`flex ${
             isMobile ? 'text-[12px]' : 'text-[16px]'
-          }  leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
+          } !mx-0 leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
           <div className="flex-1">Lock Time</div>
           <div className="flex-1">Unlock Time</div>
           <div className="flex-1 text-right">amount</div>
@@ -135,7 +138,7 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
       {...props}
       title={`$ACORNS Unlocks`}
       destroyOnClose>
-      <div className={`${isMobile ? 'max-h-[60vh] h-[22rem]' : 'h-[41rem]'} flex flex-col`}>
+      <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[41rem]'} flex flex-col`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
             <button

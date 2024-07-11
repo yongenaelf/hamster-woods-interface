@@ -109,7 +109,7 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
             <div className="flex items-center">
               <img
                 src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
-                className={`z-10 rounded-full border-[2px] border-[#ffffff] border-solid`}
+                className={`z-10 rounded-full border-[4px] border-[#ffffff] border-solid`}
                 width={isMobile ? 20 : 24}
                 height={isMobile ? 20 : 24}
                 alt="avatar"

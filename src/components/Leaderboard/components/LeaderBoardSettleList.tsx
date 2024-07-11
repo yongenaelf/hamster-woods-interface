@@ -84,7 +84,7 @@ const SettleRankItem = ({
         <img
           width={30}
           height={30}
-          className="rounded-full w-[30px] h-[30px] border-[2px] border-[#ffffff] border-solid"
+          className="rounded-full w-[30px] h-[30px] border-[4px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
@@ -110,7 +110,7 @@ const SettleNormalItem = ({
   const isMobile = useIsMobile();
   return (
     <div
-      className={`flex w-full items-center rounded-full p-1 h-10 bg-[#DEC49D] font-paytone ${
+      className={`flex w-full items-center rounded-full p-1 h-10 bg-[rgb(222,196,157)] font-paytone ${
         isMobile ? 'mb-2' : 'mb-3'
       }`}>
       <div className="flex-1 ml-2 my-2">
@@ -119,7 +119,7 @@ const SettleNormalItem = ({
         </span>
       </div>
       <div className="flex-1 flex justify-end items-center gap-[5px]">
-        <div className={` ${isMobile ? 'text-[16px]' : 'text-[20px]'} text-[#B26C27]`}>{centerText}</div>
+        <div className={` ${isMobile ? 'text-[16px]' : 'text-[20px]'} text-[#B26C27] font-paytone`}>{centerText}</div>
         <img
           width={20}
           height={20}
@@ -131,7 +131,7 @@ const SettleNormalItem = ({
       <div className={`${isMobile ? 'mr-[8px]' : 'mr-[24px] w-[96px]'} flex items-center justify-end gap-2`}>
         <img
           width={30}
-          className="rounded-full w-[30px] h-[30px]  border-[2px] border-[#ffffff] border-solid"
+          className="rounded-full w-[30px] h-[30px]  border-[4px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />

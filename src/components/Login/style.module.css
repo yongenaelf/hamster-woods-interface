@@ -72,7 +72,7 @@
       @apply !rounded-[32px];
     }
     .ant-modal-body {
-      @apply !px-[32px] !py-[82Px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
+      @apply !px-[32px] !py-[48px] text-[32px] leading-6 border-[16px] border-[#9A531F] rounded-[32px];
     }
   }
   .loginBtn {
@@ -82,7 +82,7 @@
     @apply !mb-[40px] text-center font-paytone !text-[32px] leading-6 text-[#953D22];
   }
   .drawer__close {
-    @apply absolute !right-[8Px] !top-[8Px] !text-[30px];
+    @apply absolute !right-[8Px] !top-[8Px] !text-[30px] w-[48px] h-[48px];
   }
   .loginBtnBlueIcon {
     @apply left-[44.7px];
