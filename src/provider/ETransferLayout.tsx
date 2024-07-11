@@ -33,7 +33,7 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <ETransferProvider networkType={configInfo?.network as NetworkType}>
+    <ETransferProvider>
       <ETransferStyleProvider>{children}</ETransferStyleProvider>
     </ETransferProvider>
   );

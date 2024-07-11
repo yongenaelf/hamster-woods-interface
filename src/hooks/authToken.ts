@@ -193,30 +193,32 @@ export function useQueryAuthToken() {
 
       const managerAddress = await getManagerAddress();
       const { caHash, originChainId } = await getCaInfo();
-
+      let authToken;
       const jwtData = await getETransferJWT(asyncStorage, `${caHash}${managerAddress}`);
       console.log(jwtData, 'jwtData====');
       if (jwtData) {
-        ETransferConfig.setConfig({
-          authorization: {
-            jwt: jwtData.access_token,
-          },
+        authToken = `${jwtData.token_type} ${jwtData.access_token}`;
+      } else {
+        const { pubkey, signature, plainText } = await getUserInfo({ managerAddress, caHash, originChainId });
+        authToken = await eTransferCore.getAuthToken({
+          pubkey,
+          signature,
+          plainText,
+          caHash,
+          chainId: originChainId,
+          managerAddress,
+          version: PortkeyVersion.v2,
+          source: AuthTokenSource.Portkey,
+          recaptchaToken: undefined,
         });
-        return jwtData.access_token;
       }
 
-      const { pubkey, signature, plainText } = await getUserInfo({ managerAddress, caHash, originChainId });
-      return await eTransferCore.getAuthToken({
-        pubkey,
-        signature,
-        plainText,
-        caHash,
-        chainId: originChainId,
-        managerAddress,
-        version: PortkeyVersion.v2,
-        source: AuthTokenSource.Portkey,
-        recaptchaToken: undefined,
+      ETransferConfig.setConfig({
+        authorization: {
+          jwt: authToken,
+        },
       });
+      return authToken;
     } catch (error) {
       message.error(handleErrorMessage(error, 'Failed to obtain etransfer authorization.'));
       return;
