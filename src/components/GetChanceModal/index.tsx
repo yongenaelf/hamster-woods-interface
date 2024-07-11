@@ -20,6 +20,7 @@ import useGetState from 'redux/state/useGetState';
 import CommonDisabledBtn from 'components/CommonDisabledBtn';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
+import { useQueryAuthToken } from 'hooks/authToken';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -113,6 +114,8 @@ export default function GetChanceModal({
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
   }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
+
+  const { getETransferAuthToken } = useQueryAuthToken();
 
   return (
     <CustomModal
@@ -242,7 +245,9 @@ export default function GetChanceModal({
                 acornsToken?.decimals,
               )}`}</div>
               <div
-                onClick={() => {
+                onClick={async () => {
+                  await getETransferAuthToken();
+
                   router.push('/deposit');
                 }}
                 className={`${
