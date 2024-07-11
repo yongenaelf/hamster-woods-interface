@@ -52,7 +52,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         } flex justify-center items-center font-paytone`}
         title="Trade on AwakenSwap"
         onClick={() => {
-          openPage(`${configInfo?.awakenUrl}/trading/ELF_ACORNS_0.05`);
+          openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
           onCancel?.();
         }}
       />

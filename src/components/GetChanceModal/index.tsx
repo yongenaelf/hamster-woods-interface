@@ -17,8 +17,8 @@ import { IBalance } from 'types';
 import openPage from 'utils/openPage';
 import { ZERO, divDecimals, divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
-import showMessage from 'utils/setGlobalComponentsInfo';
 import useGetState from 'redux/state/useGetState';
+import CommonDisabledBtn from 'components/CommonDisabledBtn';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -83,8 +83,8 @@ export default function GetChanceModal({
 
   const handleCheckPurchase = useCallback(() => {
     if (!inputVal) {
-      showMessage.error('Please input valid number.');
-      return;
+      setErrMsgTip('Please input valid number.');
+      return false;
     }
 
     const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
@@ -92,19 +92,24 @@ export default function GetChanceModal({
       !acornsToken?.balance ||
       ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
     ) {
-      showMessage.error('Acorns is not enough');
-      return;
+      setErrMsgTip('Acorns is not enough');
+      return false;
     }
 
     if (ZERO.plus(inputVal).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
       setErrMsgTip(
         `Purchase limit exceeded. Please try purchasing no more than ${playerInfo?.weeklyPurchasedChancesCount}.`,
       );
-      return;
+      return false;
     }
+    return true;
+  }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
+  const handleConfirm = useCallback(() => {
+    if (errMsgTip) return;
+    if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
-  }, [assetBalance, chancePrice, inputVal, onConfirm, playerInfo?.weeklyPurchasedChancesCount]);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
 
   return (
     <CustomModal
@@ -140,6 +145,7 @@ export default function GetChanceModal({
               } text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-paytone`}
               value={inputVal}
               onChange={(e) => handleInput(e.target.value)}
+              onBlur={handleCheckPurchase}
             />
             <Image
               onClick={handlePlus}
@@ -234,7 +240,7 @@ export default function GetChanceModal({
               )}`}</div>
               <div
                 onClick={() => {
-                  openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
+                  openPage(`${configInfo?.configInfo?.awakenUrl}/ACORNS_ELF_0.3`);
                 }}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
@@ -248,15 +254,27 @@ export default function GetChanceModal({
             )}`}</div>
           </div>
         ) : null}
-        <CommonBtn
-          title={'Purchase'}
-          onClick={handleCheckPurchase}
-          className={`flex justify-center items-center font-paytone ${
-            isMobile
-              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
-              : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
-          }`}
-        />
+        {errMsgTip ? (
+          <CommonDisabledBtn
+            title={'Purchase'}
+            onClick={undefined}
+            className={`flex justify-center items-center ${
+              isMobile
+                ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
+                : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
+            }`}
+          />
+        ) : (
+          <CommonBtn
+            title={'Purchase'}
+            onClick={handleConfirm}
+            className={`flex justify-center items-center font-paytone ${
+              isMobile
+                ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
+                : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
+            }`}
+          />
+        )}
       </div>
     </CustomModal>
   );
