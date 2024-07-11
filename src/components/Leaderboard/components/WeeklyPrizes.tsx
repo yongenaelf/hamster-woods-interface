@@ -55,11 +55,13 @@ export function DefaultItem({ topText, avatarIcon, getNFTDetail }: IDefaultItemP
   return (
     <div className={`mb-3 h-12 flex w-full items-center border bg-[#DEC49D] rounded-full `}>
       <div className="flex-1 ml-2 my-2">
-        <span className="max-w-fit flex justify-center items-center px-[16px] py-[2px] bg-[#B26C27] rounded-full text-[16px] text-white font-paytone">
+        <span
+          className={`max-w-fit flex justify-center items-center px-[16px] py-[2px] bg-[#B26C27] rounded-full !h-[32px] ${
+            isMobile ? 'text-[12px]' : 'text-[16px] '
+          } leading-4  text-white font-paytone`}>
           {topText}
         </span>
       </div>
-      <span className="flex-grow"></span>
       <div className={`${isMobile ? 'text-[12px]' : 'text-xl '} leading-4 text-white font-paytone`}>{getNFTDetail}</div>
       <img
         src={avatarIcon}

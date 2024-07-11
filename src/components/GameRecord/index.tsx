@@ -109,7 +109,7 @@ export const GameRecord = () => {
 
   return (
     <GameRecordModal
-      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} !px-2`}
       open={open}
       title="Game Records"
       onCancel={() => {

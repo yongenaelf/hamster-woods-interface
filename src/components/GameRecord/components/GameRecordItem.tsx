@@ -67,7 +67,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
 };
 
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
-  <div {...props} className="mb-2 w-full rounded-2xl bg-[#E8D1AE] p-4" />
+  <div {...props} className="mb-2 w-full rounded-2xl bg-[#E8D1AE] p-2" />
 );
 
 export const GameRecordItem = ({ data }: { data: IGameItem }) => {
@@ -95,7 +95,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+              <tr className={`text-[#AE694C] ${isMobile ? ' text-[14px] leading-[16px]' : 'text-md'}`}>
                 <th>Random step result</th>
                 <th>$ACORNS earned</th>
                 <th className="text-right">Transaction fee</th>
@@ -109,9 +109,7 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
               </tr>
             </tbody>
           </table>
-          {!open ? (
-            <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
-          ) : null}
+          {!open ? <Disclosure.Button className="pt-2 text-[#953D22]">More &#x25BC;</Disclosure.Button> : null}
           <Disclosure.Panel>
             {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="HOP" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
@@ -147,7 +145,7 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+              <tr className={`text-[#AE694C] ${isMobile ? 'text-[14px] leading-[16px]' : 'text-md'}`}>
                 <th>Hopping chance purchased</th>
                 <th>$ACORNS cost</th>
                 <th className="text-right">Transaction fee</th>
@@ -161,9 +159,7 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
               </tr>
             </tbody>
           </table>
-          {!open ? (
-            <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
-          ) : null}
+          {!open ? <Disclosure.Button className="pt-2  text-[#953D22]">More &#x25BC;</Disclosure.Button> : null}
           <Disclosure.Panel>
             {transactionInfo ? <GameRecordItemChild data={transactionInfo} title="Purchase Hopping Chance" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}

@@ -80,24 +80,54 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         alt="avatar"
       />
       <Rank rank={data?.selfRank.rank || data?.settleDaySelfRank?.rank} />
-      <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
-        {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
-      </div>
-      {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
-        <Image className="ml-2 w-16" src={MeIcon} alt="me" />
-      ) : null}
-      <div className="flex-grow mr-2"></div>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone text-white`}>
-        {divDecimalsStr(
-          data?.selfRank?.score || data?.settleDaySelfRank?.score,
-          data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
-        ) ?? '-'}
-      </div>
-      <img
-        className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
-        src={require('assets/images/neat.png').default.src}
-        alt="bean"
-      />
+
+      {showClaimBtn && !finishedClaim && isMobile ? (
+        <div className="flex-1">
+          <>
+            <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
+              {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
+            </div>
+            {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
+              <Image className="ml-2 w-16" src={MeIcon} alt="me" />
+            ) : null}
+          </>
+          <div className="flex flex-row justify-start items-center">
+            <div className={`text-[16px] font-paytone text-white`}>
+              {divDecimalsStr(
+                data?.selfRank?.score || data?.settleDaySelfRank?.score,
+                data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
+              ) ?? '-'}
+            </div>
+            <img
+              className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
+              src={require('assets/images/neat.png').default.src}
+              alt="bean"
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
+            {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
+          </div>
+          {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
+            <Image className="ml-2 w-16" src={MeIcon} alt="me" />
+          ) : null}
+          <div className="flex-grow mr-2"></div>
+          <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone text-white`}>
+            {divDecimalsStr(
+              data?.selfRank?.score || data?.settleDaySelfRank?.score,
+              data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
+            ) ?? '-'}
+          </div>
+          <img
+            className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
+            src={require('assets/images/neat.png').default.src}
+            alt="bean"
+          />
+        </>
+      )}
+
       {showClaimBtn && !finishedClaim && (
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
@@ -114,7 +144,9 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
                 height={isMobile ? 20 : 24}
                 alt="avatar"
               />
-              <span className="font-black text-[14px]">{`*${data?.settleDaySelfRank?.rewardNftInfo?.balance}`}</span>
+              <span className="font-black text-[14px]">{`*${
+                data?.settleDaySelfRank?.rewardNftInfo?.balance || ''
+              }`}</span>
             </div>
           </div>
         </div>
