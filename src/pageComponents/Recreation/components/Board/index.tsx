@@ -98,7 +98,8 @@ function Board({
                 divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals).length > 16
                   ? '!text-[24px]'
                   : ''
-              } px-[2px]`}>
+              } px-[2px]`}
+              onClick={getMoreAcorns}>
               {divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
             </span>
             <Tooltip
@@ -134,8 +135,8 @@ function Board({
               {divDecimalsStrShow(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
             </span>
           </div>
-          <div className={`${styles['board__acorn']} pr-[38px]`}>
-            <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" onClick={showLockedAcorns} />
+          <div className={`${styles['board__acorn']} pr-[38px]`} onClick={showLockedAcorns}>
+            <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" />
             <span className={styles['board__acorn__number']}>
               {divDecimalsStrShow(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals)}
             </span>

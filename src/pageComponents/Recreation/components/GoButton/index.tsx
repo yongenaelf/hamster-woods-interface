@@ -290,7 +290,7 @@ function GoButton({
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
-                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
+                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !text-stroke-[#52300B]`}>
                   Purchase chance
                 </div>
               </div>
@@ -386,7 +386,7 @@ function GoButton({
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-paytone tracking-tight !drop-shadow-[0_1px_0_black] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
+                className={`font-paytone tracking-tight !text-stroke-[#52300B] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
                 Purchase chance
               </span>
             </div>
