@@ -1,5 +1,5 @@
 .rulesModal {
-  @apply px-0 rounded-[16px] overflow-hidden;
+  @apply px-0 overflow-hidden;
 
   :global {
     .ant-modal-content {
@@ -26,7 +26,7 @@
 
 .content {
   @apply px-[32px];
-  
+
   &::-webkit-scrollbar {
     @apply w-4 ml-[8px];
   }

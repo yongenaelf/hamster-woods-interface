@@ -116,7 +116,7 @@ export default function GetChanceModal({
       centered
       destroyOnClose
       {...params}>
-      <div className={`${isMobile ? 'max-h-[50vh] px-[16px]' : 'h-[41rem]px-[32px]'} overflow-auto`}>
+      <div className={`${isMobile ? 'max-h-[50vh] px-[16px]' : 'h-[41rem] px-[32px]'} overflow-auto`}>
         <div className={` ${isMobile ? 'space-y-[18px] ' : 'space-y-[28px] '}`}>
           <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
             Exchange
