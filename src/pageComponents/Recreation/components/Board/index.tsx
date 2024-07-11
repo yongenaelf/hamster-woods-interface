@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import RankingImage from 'assets/images/recreation/ranking.png';
 import NftImage from 'assets/images/recreation/nft.png';
 import GoButton, { IGoButton, Status } from '../GoButton';
@@ -38,8 +38,22 @@ function Board({
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const tooltipRef = useRef<any>(null);
 
   const { initialize } = useInitLeaderBoard();
+
+  useEffect(() => {
+    const handleDocumentClick = (event: any) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setTooltipOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
 
   const handleShowLeaderboard = useCallback(async () => {
     try {
@@ -77,7 +91,7 @@ function Board({
     return (
       <div className="flex h-full w-full flex-col px-[47px] pt-[56px]">
         <div className="relative z-40 flex-1">
-          <div className={styles['board__acorn']}>
+          <div ref={tooltipRef} className={styles['board__acorn']}>
             <Image src={AcornGetImage} alt="bean" className="h-[60px] w-[60px]" onClick={getMoreAcorns} />
             <span className={styles['board__acorn__number']}>
               {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
@@ -85,7 +99,11 @@ function Board({
             <Tooltip
               title={
                 <div className="px-[24px] py-[16px]">
-                  <div className="text-[18px] leading-[28px]">{allAcornsTip}</div>
+                  {allAcornsTip.map((ele, index) => (
+                    <div key={index} className="text-[18px] leading-[28px] mb-[12px]">
+                      {ele}
+                    </div>
+                  ))}
                   <div className="text-right text-[24px] leading-[28px]" onClick={() => setTooltipOpen(false)}>
                     OK
                   </div>

@@ -22,7 +22,7 @@ export const Rank = ({ rank }: IRank) => {
     missing: `text-[#9A531F] text-neutral-400 ${textClassName}`,
   });
 
-  const imgClassName = `${isMobile ? 'h-8 w-8' : 'h-16 w-16'}`;
+  const imgClassName = `w-[40px] h-[40px]`;
 
   const el = useConditionalRank({
     rank,

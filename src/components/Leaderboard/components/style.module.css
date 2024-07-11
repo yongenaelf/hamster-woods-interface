@@ -1,9 +1,8 @@
 /* stylelint-disable number-max-precision */
 
 .leaderBoardModal {
-  @apply relative  rounded-[32px] p-0;
+  @apply relative  p-0;
   :global {
- 
     .ant-modal-content {
       @apply h-full bg-inherit shadow-none rounded-[32px];
       .ant-modal-close {
@@ -14,7 +13,7 @@
       }
 
       .ant-modal-body {
-        @apply !pt-[32px]
+        @apply !pt-[2rem];
       }
     }
 

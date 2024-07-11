@@ -84,7 +84,7 @@ export const PastRecordContent = () => {
                   className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] ${
                     isMobile ? 'px-1 py-[3px] text-[10px] leading-[10px] ' : 'px-2 py-[5px] text-xs leading-[22px]'
                   }`}>
-                  Claim NFT Rewards
+                  Claim NFT Prizes
                 </div>
               )}
             </div>

@@ -21,34 +21,35 @@ export default function Intro() {
       <CustomModal
         open={rulesVisible}
         title="Game Rules"
+        centered={true}
         onCancel={() => {
           setRulesVisible(false);
         }}
         className={`${styles.rulesModal}`}>
-        <div
-          className={`${
-            isMobile ? 'h-[20rem] px-[16px]' : 'h-[312px] px-[32px]'
-          } max-h-[60vh] overflow-auto text-left text-base leading-6 px-[16px] md:h-[288px] md:text-[24px] md:leading-[32px] w-full ${
-            isMobile ? 'text-base leading-6' : styles.content
-          }`}>
-          {configInfo?.gameRules.map((item, index) => {
-            return (
-              <p key={index} className="mb-[12px]">
-                {item}
-              </p>
-            );
-          })}
+        <div className={`${isMobile ? 'flex flex-col max-h-[50vh] h-[20rem]' : 'h-[550px]'}`}>
+          <div
+            className={`flex-1 overflow-auto text-left text-base leading-6   md:text-[24px] md:leading-[32px] w-full ${
+              isMobile ? 'text-base leading-6 px-[16px]' : styles.content
+            }`}>
+            {configInfo?.gameRules.map((item, index) => {
+              return (
+                <p key={index} className="mb-[12px]">
+                  {item}
+                </p>
+              );
+            })}
+          </div>
+          <CommonBtn
+            title="I know"
+            className={`font-fonarto flex items-center justify-center ${
+              isMobile
+                ? 'mt-[24px] text-[20px] leading-[20px] mx-[16px]'
+                : 'mt-[40px] mx-[64px] !text-[32px] !leading-[40px] !h-[76px]  px-[32px]'
+            }`}
+            onClick={() => {
+              setRulesVisible(false);
+            }}></CommonBtn>
         </div>
-        <CommonBtn
-          title="I know"
-          className={`font-paytone flex items-center justify-center ${
-            isMobile
-              ? 'mt-[24px] text-[20px] leading-[20px] mx-[16px]'
-              : 'mt-[40px] mx-[64px] !text-[32px] !leading-[40px] !h-[76px]  px-[32px]'
-          }`}
-          onClick={() => {
-            setRulesVisible(false);
-          }}></CommonBtn>
       </CustomModal>
     </>
   );
