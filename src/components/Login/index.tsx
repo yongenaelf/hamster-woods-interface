@@ -77,7 +77,7 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
-  const { configInfo, imageResources } = useGetState();
+  const { configInfo } = useGetState();
   const { curChain } = configInfo!;
 
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
@@ -476,7 +476,8 @@ export default function Login() {
       className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
       style={{
         backgroundImage: `url(${
-          isMobileStore ? imageResources?.['game-bg-mobile-mask'] : imageResources?.['game-bg-pc']
+          require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+            .default.src
         })`,
       }}>
       {!isMobileStore ? (
@@ -484,7 +485,7 @@ export default function Login() {
           className="z-10 w-[400px] h-[400px]"
           width={400}
           height={400}
-          src={imageResources?.['hamster-logo']}
+          src={require('assets/images/bg/hamster-logo.png').default.src}
           alt="logo"
         />
       ) : null}

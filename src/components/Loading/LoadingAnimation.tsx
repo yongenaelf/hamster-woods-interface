@@ -6,7 +6,6 @@ import GameComing from 'assets/images/game-coming.png';
 
 export default function LoadingAnimation() {
   const { isMobile } = useGetState();
-  const { imageResources } = useGetState();
 
   const Animation = () => {
     const options = {
@@ -23,16 +22,16 @@ export default function LoadingAnimation() {
   return (
     <div
       style={{
-        backgroundImage: isMobile
-          ? `url(${imageResources?.['game-bg-mobile']})`
-          : `url(${imageResources?.['game-bg-pc']})`,
+        backgroundImage: `url(${
+          require(isMobile ? 'assets/images/bg/game-bg-mobile.png' : 'assets/images/bg/game-bg-pc.png').default.src
+        })`,
       }}
       className={`h-full w-full overflow-hidden bg-cover ${
         TelegramPlatform.isTelegramPlatform() ? 'pt-[18px]' : isMobile ? 'pt-[440px]' : 'pt-[7vh]'
       }`}>
       {isMobile ? null : (
         <img
-          src={imageResources?.['hamster-logo']}
+          src={require('assets/images/bg/hamster-logo.png').default.src}
           width={isMobile ? 'w-[240px]' : 'w-[480px]'}
           alt="logo"
           className={`mx-auto ${isMobile ? 'h-[240px] w-[240px]' : 'h-[480px] w-[480px]'}`}></img>

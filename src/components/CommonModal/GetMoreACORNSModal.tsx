@@ -18,6 +18,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
   return (
     <CustomModal
       open={open}
+      centered
       onCancel={onCancel}
       {...props}
       title={
@@ -47,8 +48,8 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
       <CommonBtn
         className={`${
           isMobile
-            ? '!h-[44px] !text-[20px] !leading-[20px] mt-[24px]'
-            : '!h-[76px] !text-[32px] !leading-[40px] mx-[64px] mt-[40px]'
+            ? '!h-[44px] !text-[20px] !leading-[20px] my-[24px]'
+            : '!h-[76px] !text-[32px] !leading-[40px] mx-[64px] my-[40px]'
         } flex justify-center items-center font-paytone`}
         title="Trade on AwakenSwap"
         onClick={() => {
