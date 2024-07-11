@@ -380,13 +380,13 @@ function GoButton({
               style={{
                 backgroundImage: `url(${
                   require(`assets/images/btn/${
-                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'get-chance-default'
+                    chanceBtnPress ? 'get-chance-hover' : chanceBtnTouch ? 'get-chance-hover' : 'get-chance-default'
                   }.png`).default.src
                 })`,
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-paytone tracking-tight !text-stroke-[#52300B] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
+                className={`font-paytone tracking-tight !text-stroke-[#52300B] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[15px]`}>
                 Purchase chance
               </span>
             </div>
