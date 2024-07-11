@@ -48,6 +48,7 @@ import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
 import { ACORNS_TOKEN } from 'constants/index';
 import { addPrefixSuffix } from 'utils/addressFormatting';
+import { checkerboardData } from 'constants/checkerboardData';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -69,13 +70,12 @@ export default function Game() {
     walletType,
     walletInfo,
     configInfo,
-    chessBoardInfo: checkerboardData,
+    // chessBoardInfo: checkerboardData,
     resetStart: chessboardResetStart,
     chessboardTotalStep,
     curChessboardNode,
     needSync,
     checkerboardCounts,
-    imageResources,
     curBeanPass,
   } = useGetState();
 
@@ -565,9 +565,10 @@ export default function Game() {
     <>
       <div
         style={{
-          backgroundImage: isMobile
-            ? `url(${imageResources?.['playground-mobile']})`
-            : `url(${imageResources?.['playground-pc']})`,
+          backgroundImage: `url(${
+            require(isMobile ? 'assets/images/bg/playground-mobile.png' : 'assets/images/bg/playground-pc.png').default
+              .src
+          })`,
         }}
         className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
         {!isMobile && <BoardLeft />}
