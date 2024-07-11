@@ -11,14 +11,7 @@ export default function GameRecordModal({
 }: ModalProps & { onCancel: () => void }) {
   const isMobile = useIsMobile();
   return (
-    <CustomModal
-      className={`${styles.gameRecordModal} ${isMobile ? 'h-[22rem]' : 'h-[41rem'}  h-[756px]`}
-      {...params}
-      closable
-      centered
-      title={title}
-      onCancel={onCancel}
-      {...params}>
+    <CustomModal {...params} closable centered title={title} onCancel={onCancel} {...params}>
       {children}
     </CustomModal>
   );
