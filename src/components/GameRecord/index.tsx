@@ -74,9 +74,9 @@ export const GameRecord = () => {
               <GameRecordItem data={i} key={i.id} />
             ))}
             <div className="flex items-center py-8">
-              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
               <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
-              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
             </div>
           </div>
         ) : (
@@ -95,9 +95,9 @@ export const GameRecord = () => {
               <BuyRecordItem data={i} key={i.id} />
             ))}
             <div className="flex items-center py-8">
-              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
               <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
-              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-white bg-opacity-40`}></div>
+              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
             </div>
           </div>
         ) : (
@@ -109,13 +109,13 @@ export const GameRecord = () => {
 
   return (
     <GameRecordModal
-      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} !px-2`}
       open={open}
       title="Game Records"
       onCancel={() => {
         dispatch(toggleShowGameRecord());
       }}>
-      <div className={`${isMobile ? 'max-h-[60vh] h-[20rem]' : 'h-[38rem]'} text-[#AE694C]`}>
+      <div className={`${isMobile ? 'max-h-[50vh] h-[20rem]' : 'h-[38rem]'} text-[#AE694C]`}>
         <div className="flex flex-col h-full overflow-hidden">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
             <button

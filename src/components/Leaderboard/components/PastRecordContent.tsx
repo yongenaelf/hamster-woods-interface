@@ -49,11 +49,11 @@ export const PastRecordContent = () => {
   return (
     <div className="flex flex-col overflow-y-auto space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1">
       <div
-        className={`flex  ${
-          isMobile ? 'text-[12px] pl-[8px]' : 'text-[16px] px-[16px]'
+        className={`flex ${
+          isMobile ? 'text-[12px] px-[8px]' : 'text-[16px] px-[16px]'
         } leading-[18px] text-[#AE694C] bg-[#DEC49D]  py-[9px] text-left rounded-[5px]`}>
         <div className="flex-1">Time</div>
-        <div className={`${isMobile ? 'flex-grow-2' : 'w-[120px]'}`}>ACORNS</div>
+        <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>ACORNS</div>
         <div className={`${isMobile ? 'w-[120px] text-center' : 'flex-1'}`}>Rank</div>
       </div>
       <ShowNFTModal
@@ -62,15 +62,17 @@ export const PastRecordContent = () => {
         onCancel={() => setIsShowNFT(false)}
         type={ShowBeanPassType.Success}
       />
-      <div className="overflow-y-auto h-full">
+      <div className="overflow-y-auto h-full !mx-0">
         {data?.map((item, i) => (
           <div
             key={i}
-            className={`flex ${isMobile ? 'text-[12px] h-[36px] ' : 'text-[16px] items-center h-[52px]'} 
+            className={`flex px-[8px] ${
+              isMobile ? 'text-[12px] leading-[12px] h-[36px] ' : 'text-[16px] items-center h-[52px]'
+            } 
                 ${item?.rewardNftInfo ? 'h-[64px] py-[12px]' : 'items-center'}
             leading-[18px] text-[#953D22] text-left  border-b-[1px] border-[#D3B68A]`}>
             <div className="flex-1">{item.time}</div>
-            <div className={`${isMobile ? 'text-center' : 'w-[120px]'}`}>
+            <div className={`${isMobile ? 'flex-1' : 'w-[120px]'}`}>
               {`${divDecimalsStr(item.score, item.decimals) ?? 'N/A'}`}
             </div>
             <div
@@ -81,10 +83,10 @@ export const PastRecordContent = () => {
               {item.rewardNftInfo && !claimedWeekMap[item.weekNum] && (
                 <div
                   onClick={() => onClaim(item.weekNum)}
-                  className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] ${
+                  className={`font-black text-white bg-[#A15A1C] text-center rounded-[6px] px-1 ${
                     isMobile ? 'px-1 py-[3px] text-[10px] leading-[10px] ' : 'px-2 py-[5px] text-xs leading-[22px]'
                   }`}>
-                  Claim NFT Rewards
+                  Claim NFT Prizes
                 </div>
               )}
             </div>

@@ -1,6 +1,6 @@
 /* stylelint-disable number-max-precision */
 
-.leaderBoardModal {
+.getChanceModal {
   @apply relative  p-0;
   :global {
     .ant-modal-content {
@@ -21,8 +21,4 @@
       @apply w-full px-[16px] pt-[16px];
     } */
   }
-}
-
-.scrollbar::-webkit-scrollbar {
-  @apply !w-0;
 }

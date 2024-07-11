@@ -19,6 +19,7 @@ import { ZERO, divDecimals, divDecimalsStr, formatAmountUSDShow } from 'utils/ca
 import { ACORNS_TOKEN } from 'constants/index';
 import useGetState from 'redux/state/useGetState';
 import CommonDisabledBtn from 'components/CommonDisabledBtn';
+import styles from './style.module.css';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -113,15 +114,15 @@ export default function GetChanceModal({
 
   return (
     <CustomModal
-      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} ${styles.getChanceModal}`}
       onCancel={handleClose}
       title={title}
       closable={closable}
       centered
       destroyOnClose
       {...params}>
-      <div className={`${isMobile ? 'max-h-[60vh]' : ''} overflow-auto`}>
-        <div className={` ${isMobile ? 'space-y-[18px]' : 'space-y-[28px]'}`}>
+      <div className={`${isMobile ? 'max-h-[50vh] px-[16px]' : 'h-[41rem]px-[32px]'} overflow-auto`}>
+        <div className={` ${isMobile ? 'space-y-[18px] ' : 'space-y-[28px] '}`}>
           <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
             Exchange
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">

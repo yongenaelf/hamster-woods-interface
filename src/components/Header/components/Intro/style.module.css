@@ -1,10 +1,13 @@
 .rulesModal {
-  @apply px-0;
+  @apply px-0 rounded-[16px] overflow-hidden;
 
   :global {
     .ant-modal-content {
+      .ant-modal-body {
+        @apply pb-[16px] rounded-[16px];
+      }
       .ant-modal-close {
-        @apply absolute top-0 right-1;
+        @apply absolute top-[-8px] right-[8px];
         .ant-modal-close-x {
           @apply w-full h-full;
         }
@@ -22,6 +25,8 @@
 }
 
 .content {
+  @apply px-[32px];
+  
   &::-webkit-scrollbar {
     @apply w-4 ml-[8px];
   }
