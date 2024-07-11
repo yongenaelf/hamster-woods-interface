@@ -1903,6 +1903,67 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.46.0.tgz"
   integrity sha512-a8TLtmPi8xzPkCbp/OGFUo5yhRkHM2Ko9kOWP4znJr0WAhWyThaw3PnwX4vOTWOAMsV2uRt32PPDcEz63esSaA==
 
+"@etransfer/core@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/core/-/core-1.2.0-alpha.0.tgz#328700521dfdf4368c92cee6e3ab569201c256a4"
+  integrity sha512-2kypnh/rVzh9JQ4sWncMD5yYL2TzHoLk0u52JQmMfHgDt/kP56V9vD+jPMvI3WKCAzFbODZ5R7u8uDy1RtiikA==
+  dependencies:
+    "@etransfer/services" "^1.2.0-alpha.0"
+    "@etransfer/types" "^1.2.0-alpha.0"
+    "@etransfer/utils" "^1.2.0-alpha.0"
+
+"@etransfer/request@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/request/-/request-1.2.0-alpha.0.tgz#55fc502b87bf5b54add08165077f686adf423afc"
+  integrity sha512-Dkaxhv08Tf95vvUkiUZwofVBr7AK3W04fj5d75TeRCwaeNtiBlw+gCVjLJit5i13fhLICIX/RI6HqjsZ7BgfcA==
+  dependencies:
+    "@etransfer/types" "^1.2.0-alpha.0"
+    "@etransfer/utils" "^1.2.0-alpha.0"
+    axios "^0.24.0"
+
+"@etransfer/services@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/services/-/services-1.2.0-alpha.0.tgz#11b45e8994bbaf931b7cc032e853fe0c2d5233d4"
+  integrity sha512-UZOfVDyQ07PZRQ6JYODcIOgRzU8JGmmgoTSvv2R9u0WckiYy9ojYnc5CSTROZH/Dzxjd59cRgaOSN2MPYoIO3Q==
+  dependencies:
+    "@etransfer/request" "^1.2.0-alpha.0"
+    "@etransfer/types" "^1.2.0-alpha.0"
+    "@etransfer/utils" "^1.2.0-alpha.0"
+    "@portkey/types" "2.6.6"
+
+"@etransfer/types@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/types/-/types-1.2.0-alpha.0.tgz#fe91504f0280fabad203c290bf0b8a623f069d68"
+  integrity sha512-VUPL0DXvCJLG/ABDx56tkRi/R8BqsZNcKwzPbExSgDuhagYWhapBqpv2dWpDZmOivKwkQdREmmnf9BojE6oDjA==
+
+"@etransfer/ui-react@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/ui-react/-/ui-react-1.2.0-alpha.0.tgz#bdda02c2c38793969c6b70328efc91a0388de223"
+  integrity sha512-hakSAAlc03EPYl+Pi4RFqlR1QMl+lqUwfXLeI81yL+ikcQxzXYE6mMh5903uu+DBz/xr8/Cy+GwuDbuUEqBo7g==
+  dependencies:
+    "@etransfer/core" "^1.2.0-alpha.0"
+    "@etransfer/types" "^1.2.0-alpha.0"
+    "@etransfer/utils" "^1.2.0-alpha.0"
+    "@portkey/types" "2.6.6"
+    "@portkey/utils" "2.6.6"
+    antd "4.24.14"
+    bignumber.js "^9.1.0"
+    clsx "^1.2.1"
+    lottie-web "5.9.6"
+    moment "^2.29.4"
+    query-string "^7.1.1"
+    react-qrcode-logo "2.9.0"
+    react-use "^17.4.0"
+    uuid "^8.3.2"
+
+"@etransfer/utils@^1.2.0-alpha.0":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@etransfer/utils/-/utils-1.2.0-alpha.0.tgz#afd18cbad1e438bf61aef169e1f2f3137a691523"
+  integrity sha512-4shlJDNXyC/P4H7ovkHdjYbyI6+ZPPFaMLo8iMjssAEuXfl+BELWljiABlhI4QXbkWhoRQ3SnJXr9dF4sgyiZQ==
+  dependencies:
+    "@etransfer/services" "^1.2.0-alpha.0"
+    "@etransfer/types" "^1.2.0-alpha.0"
+
 "@fal-works/esbuild-plugin-global-externals@^2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@fal-works/esbuild-plugin-global-externals/-/esbuild-plugin-global-externals-2.1.2.tgz#c05ed35ad82df8e6ac616c68b92c2282bd083ba4"
@@ -2877,12 +2938,12 @@
     "@abp/signalr" "^7.0.0"
     "@portkey/utils" "^2.7.1-alpha.0"
 
-"@portkey/types@2.7.1-alpha.0", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.7.1-alpha.0":
+"@portkey/types@2.6.6", "@portkey/types@2.7.1-alpha.0", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.7.1-alpha.0":
   version "2.7.1-alpha.0"
   resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.7.1-alpha.0.tgz#0f769b12734dc892895131f5da3ab8cf9c3f2802"
   integrity sha512-2c04bZeBrZPssKt4U2jQpJMYv9OItnKuIrEjmtc5BQhbQxMTvi5N4CZjz/h140lUcCZoMrCSOnBkImc/1WGoAg==
 
-"@portkey/utils@2.7.1-alpha.0", "@portkey/utils@^2.7.1-alpha.0":
+"@portkey/utils@2.6.6", "@portkey/utils@2.7.1-alpha.0", "@portkey/utils@^2.7.1-alpha.0":
   version "2.7.1-alpha.0"
   resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.7.1-alpha.0.tgz#df8cb1458aff9759032a67edc6ec7c67bb283239"
   integrity sha512-PBvAxh6OgDzKLs5Nonl34/BBgGw1svgwvc7zW8eL5N2U4uRmO+QUa4A7W8XNyur9Nl5hgzLdM0qkScnFxpPFiA==

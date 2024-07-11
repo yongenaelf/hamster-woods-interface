@@ -14,12 +14,12 @@ import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
 import { IBalance } from 'types';
-import openPage from 'utils/openPage';
 import { ZERO, divDecimals, divDecimalsStrShow, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import useGetState from 'redux/state/useGetState';
 import CommonDisabledBtn from 'components/CommonDisabledBtn';
 import styles from './style.module.css';
+import { useRouter } from 'next/navigation';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -44,6 +44,8 @@ export default function GetChanceModal({
   const [expand, setExpand] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
+  const router = useRouter();
+
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
     [serverConfigInfo.serverConfigInfo?.chancePrice],
@@ -241,7 +243,7 @@ export default function GetChanceModal({
               )}`}</div>
               <div
                 onClick={() => {
-                  openPage(`${configInfo?.configInfo?.awakenUrl}/ACORNS_ELF_0.3`);
+                  router.push('/deposit');
                 }}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
