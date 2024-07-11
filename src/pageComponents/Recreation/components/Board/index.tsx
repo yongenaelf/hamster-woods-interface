@@ -16,7 +16,7 @@ import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard'
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { Tooltip } from 'antd';
 import { allAcornsTip } from 'constants/tip';
-import { divDecimalsStr } from 'utils/calculate';
+import { divDecimalsStrShow } from 'utils/calculate';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -93,8 +93,13 @@ function Board({
         <div className="relative z-40 flex-1">
           <div ref={tooltipRef} className={styles['board__acorn']}>
             <Image src={AcornGetImage} alt="bean" className="h-[60px] w-[60px]" onClick={getMoreAcorns} />
-            <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
+            <span
+              className={`${styles['board__acorn__number']} ${
+                divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals).length > 16
+                  ? '!text-[24px]'
+                  : ''
+              } px-[2px]`}>
+              {divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
             </span>
             <Tooltip
               title={
@@ -123,16 +128,16 @@ function Board({
               />
             </Tooltip>
           </div>
-          <div className={styles['board__acorn']}>
+          <div className={`${styles['board__acorn']} pr-[38px]`}>
             <Image src={AcornWeeklyImage} alt="bean" className="h-[60px] w-[60px]" />
             <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
+              {divDecimalsStrShow(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
             </span>
           </div>
-          <div className={styles['board__acorn']}>
+          <div className={`${styles['board__acorn']} pr-[38px]`}>
             <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" onClick={showLockedAcorns} />
             <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals)}
+              {divDecimalsStrShow(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals)}
             </span>
           </div>
           <div className={styles['board__feature']} onClick={handleShowLeaderboard}>

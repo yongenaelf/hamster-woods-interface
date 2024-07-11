@@ -13,7 +13,7 @@ import HeaderLockImage from 'assets/images/headerMenu/header-locked.png';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
-import { divDecimalsStr } from 'utils/calculate';
+import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
 
 export default function Header() {
@@ -24,11 +24,11 @@ export default function Header() {
   const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
   const isMobile = useIsMobile();
   const allAcornsShow = useMemo(
-    () => divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals),
+    () => divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals),
     [playerInfo?.acornsDecimals, playerInfo?.totalAcorns],
   );
   const weeklyAcornsShow = useMemo(
-    () => divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals),
+    () => divDecimalsStrShow(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals),
     [playerInfo?.acornsDecimals, playerInfo?.weeklyAcorns],
   );
   const tooltipRef = useRef<any>(null);
