@@ -295,14 +295,18 @@ function GoButton({
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
-                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[9px] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
+                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
                   Purchase chance
                 </div>
               </div>
               <div
                 ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[40px]' : 'left-[54px] top-0'
+                  status === Status.LOADING
+                    ? 'top-[12px] left-[64px]'
+                    : isMobile
+                    ? 'left-[2.2rem]'
+                    : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
                 {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
                 {statusCom[status]}
