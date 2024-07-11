@@ -67,42 +67,52 @@ export const GameRecord = () => {
 
   const PlayRecordDom = useMemo(() => {
     return (
-      <div className="flex w-full flex-grow flex-col m-0">
-        {gameHistoryData?.gameList?.length ? (
-          <div>
-            {gameHistoryData?.gameList.map((i) => (
-              <GameRecordItem data={i} key={i.id} />
-            ))}
-            <div className="flex items-center py-8">
-              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
-              <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
-              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
+      <div
+        className={`flex flex-col space-x-[8px] rounded-[8px] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden ${
+          isMobile ? 'mb-[8px]' : 'mb-[24px]'
+        }`}>
+        <div className="flex w-full flex-grow flex-col m-0">
+          {gameHistoryData?.gameList?.length ? (
+            <div>
+              {gameHistoryData?.gameList.map((i) => (
+                <GameRecordItem data={i} key={i.id} />
+              ))}
+              <div className="flex items-center py-8">
+                <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
+                <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
+                <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <NoData tips="No record yet" />
-        )}
+          ) : (
+            <NoData tips="No record yet" />
+          )}
+        </div>
       </div>
     );
   }, [gameHistoryData?.gameList, isMobile]);
 
   const BuyRecordDom = useMemo(() => {
     return (
-      <div className="flex w-full flex-grow flex-col m-0">
-        {buyHistoryData?.buyChanceList?.length ? (
-          <div className={`h-full overflow-auto h-[500px] [&::-webkit-scrollbar]:hidden`}>
-            {buyHistoryData?.buyChanceList.map((i) => (
-              <BuyRecordItem data={i} key={i.id} />
-            ))}
-            <div className="flex items-center py-8">
-              <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
-              <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
-              <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
+      <div
+        className={`flex flex-col space-x-[8px] rounded-[8px] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden ${
+          isMobile ? 'mb-[8px]' : 'mb-[24px]'
+        }`}>
+        <div className="flex w-full flex-grow flex-col m-0">
+          {buyHistoryData?.buyChanceList?.length ? (
+            <div className={`h-full overflow-auto h-[500px] [&::-webkit-scrollbar]:hidden`}>
+              {buyHistoryData?.buyChanceList.map((i) => (
+                <BuyRecordItem data={i} key={i.id} />
+              ))}
+              <div className="flex items-center py-8">
+                <div className={`${isMobile ? 'ml-8' : 'ml-32'} h-px flex-grow bg-[#AE694C]`}></div>
+                <span className="flex-shrink px-4 text-[#AE694C]">Recent {MAX_GAME_RECORD_ITEMS} records</span>
+                <div className={`${isMobile ? 'mr-8' : 'mr-32'} h-px flex-grow bg-[#AE694C]`}></div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <NoData tips="No record yet" />
-        )}
+          ) : (
+            <NoData tips="No record yet" />
+          )}
+        </div>
       </div>
     );
   }, [buyHistoryData?.buyChanceList, isMobile]);
@@ -129,13 +139,8 @@ export const GameRecord = () => {
               {Tabs.BuyChanceRecords}
             </button>
           </div>
-          <div
-            className={`flex flex-col space-x-[8px] rounded-[8px] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden ${
-              isMobile ? 'mb-[8px]' : 'mb-[24px]'
-            }`}>
-            {tab === Tabs.PlayRecords ? PlayRecordDom : null}
-            {tab === Tabs.BuyChanceRecords ? BuyRecordDom : null}
-          </div>
+          {tab === Tabs.PlayRecords && PlayRecordDom}
+          {tab === Tabs.BuyChanceRecords && BuyRecordDom}
         </div>
       </div>
     </GameRecordModal>

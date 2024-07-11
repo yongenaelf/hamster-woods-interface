@@ -24,7 +24,7 @@ export const LeaderBoardItem = ({
       return (
         <LeaderBoardRankItem
           src={require('assets/images/gold.png').default.src}
-          bgClassName="bg-[#F5BF49]"
+          bgClassName="bg-[#F3B328]"
           textClassName={LeaderboardTextColors.Gold}
           shadowInsetColor="#DE7B3D"
           address={address}
@@ -36,7 +36,7 @@ export const LeaderBoardItem = ({
       return (
         <LeaderBoardRankItem
           src={require('assets/images/silver.png').default.src}
-          bgClassName="bg-[#CEDFF7]"
+          bgClassName="bg-[#A0B1CB]"
           textClassName={LeaderboardTextColors.Silver}
           shadowInsetColor="#B8B8EB"
           address={address}
@@ -48,7 +48,7 @@ export const LeaderBoardItem = ({
       return (
         <LeaderBoardRankItem
           src={require('assets/images/bronze.png').default.src}
-          bgClassName="bg-[#E97D3C]"
+          bgClassName="bg-[#D77D3C]"
           textClassName={LeaderboardTextColors.Bronze}
           shadowInsetColor="#B5412C"
           address={address}
