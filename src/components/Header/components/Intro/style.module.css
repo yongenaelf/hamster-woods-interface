@@ -7,10 +7,20 @@
         @apply pb-[16px] rounded-[16px];
       }
       .ant-modal-close {
-        @apply absolute top-[-8px] right-[8px];
+        @apply absolute top-[-16px] right-[8px];
         .ant-modal-close-x {
           @apply w-full h-full;
         }
+      }
+    }
+  }
+}
+
+.mobileRulesModal {
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply top-[-8px]
       }
     }
   }

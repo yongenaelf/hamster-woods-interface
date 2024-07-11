@@ -96,9 +96,9 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
           <table className="mb-4 w-full">
             <thead>
               <tr className={`text-[#AE694C] ${isMobile ? ' text-[14px] leading-[16px]' : 'text-md'}`}>
-                <th>Random step result</th>
-                <th>$ACORNS earned</th>
-                <th className="text-right">Transaction fee</th>
+                <th className="font-medium">Random step result</th>
+                <th className="font-medium">$ACORNS earned</th>
+                <th className="text-right font-medium">Transaction fee</th>
               </tr>
             </thead>
             <tbody>

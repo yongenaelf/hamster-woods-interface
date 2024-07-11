@@ -84,7 +84,7 @@ const SettleRankItem = ({
         <img
           width={30}
           height={30}
-          className="rounded-full w-[30px] h-[30px] border-[4px] border-[#ffffff] border-solid"
+          className="rounded-full w-[30px] h-[30px] border-[3px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
@@ -131,7 +131,7 @@ const SettleNormalItem = ({
       <div className={`${isMobile ? 'mr-[8px]' : 'mr-[24px] w-[96px]'} flex items-center justify-end gap-2`}>
         <img
           width={30}
-          className="rounded-full w-[30px] h-[30px]  border-[4px] border-[#ffffff] border-solid"
+          className="rounded-full w-[30px] h-[30px]  border-[3px] border-[#ffffff] border-solid"
           src={require('assets/images/king-hamster.png').default.src}
           alt="neat"
         />
