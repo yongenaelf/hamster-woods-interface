@@ -26,7 +26,7 @@ export default function DepositModal(
       title="Deposit"
       {...props}>
       <div
-        className={`overflow-auto mb-[40px] [&::-webkit-scrollbar]:hidden ${
+        className={`overflow-auto mb-[8px] [&::-webkit-scrollbar]:hidden ${
           isMobile ? 'max-h-[55vh] h-[42rem]]' : 'h-[40rem]'
         }`}>
         <ETransferDepositProvider>
