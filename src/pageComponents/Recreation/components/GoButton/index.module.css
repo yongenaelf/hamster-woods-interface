@@ -19,6 +19,10 @@
     background-size: cover;
   }
 
+  .purchase-text-mobile {
+    -webkit-text-stroke: 0.5px #52300B !important;
+  }
+
   .dice-content-mobile-mask {
     @apply absolute w-[65px] h-[50px] ml-[8px] mt-[1px] rounded-[18px] z-[10];
 

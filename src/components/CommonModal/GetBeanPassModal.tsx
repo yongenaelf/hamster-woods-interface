@@ -70,9 +70,17 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
       onCancel={props.onCancel}
       centered
       className={styles.getBeanPassModal}>
-      <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px] text-center">
+      <div className="mb-6 md:mb-[37px] ">
         {displayText.contentArr.map((text, i) => {
-          return <p key={i}>{text}</p>;
+          return (
+            <p
+              key={i}
+              className={`${
+                isMobile ? 'mb-[12px]' : ''
+              } text-[16px] md:text-[24px] leading-[18px] md:leading-[32px] text-center`}>
+              {text}
+            </p>
+          );
         })}
       </div>
       {displayText.btnText && (

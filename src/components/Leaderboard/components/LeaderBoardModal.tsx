@@ -21,7 +21,9 @@ export default function LeaderBoardModal({
 
   return (
     <CustomModal
-      className={`${styles.leaderBoardModal} !pb-0 ${className}`}
+      className={`${styles.leaderBoardModal} ${
+        isMobile ? styles.leaderBoardMobileModal : styles.leaderBoardPcModal
+      } !pb-0 ${className}`}
       closable={closable}
       title={title}
       onCancel={onCancel}

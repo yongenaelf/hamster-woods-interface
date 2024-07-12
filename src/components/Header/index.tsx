@@ -64,7 +64,9 @@ export default function Header() {
             className="h-[30px] w-[30px]"
             onClick={() => setMoreAcornsVisible(true)}
           />
-          <span className={`${styles['board__acorn__number']}`}>{allAcornsShow}</span>
+          <span className={`${styles['board__acorn__number']}`} onClick={() => setMoreAcornsVisible(true)}>
+            {allAcornsShow}
+          </span>
           <Tooltip
             title={
               <div
