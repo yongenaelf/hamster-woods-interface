@@ -236,6 +236,11 @@ export interface IConfigItems {
   isShowRampSell?: boolean;
   awakenUrl: string;
   awakenTutorialUrl: string;
+  eTransferUrl: string;
+  eTransferDefaultChainId: string;
+  eTransferDefaultNetwork: string;
+  eTransferDefaultDepositToken: string;
+  eTransferDefaultReceiveToken: string;
 }
 
 export interface IChessboardData {

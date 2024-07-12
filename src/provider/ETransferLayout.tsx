@@ -13,18 +13,18 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
     // TODO use cms config
     ETransferConfig.setConfig({
       depositConfig: {
-        defaultDepositToken: 'USDT',
+        defaultDepositToken: configInfo?.eTransferDefaultDepositToken,
         // supportDepositTokens: ['ACORNS', 'ELF'],
-        defaultReceiveToken: 'ACORNS',
-        defaultChainId: configInfo.curChain,
-        defaultNetwork: 'SETH',
+        defaultReceiveToken: configInfo?.eTransferDefaultReceiveToken,
+        defaultChainId: configInfo?.eTransferDefaultChainId,
+        defaultNetwork: configInfo?.eTransferDefaultNetwork,
       },
       authorization: {
         jwt: '', // ETransfer Auth Token
       },
       networkType: configInfo?.network as NetworkType, // 'TESTNET' | 'MAINNET'
-      etransferAuthUrl: 'https://test.etransfer.exchange',
-      etransferUrl: 'https://test.etransfer.exchange',
+      etransferAuthUrl: configInfo?.eTransferUrl,
+      etransferUrl: configInfo?.eTransferUrl,
     });
   }, [configInfo]);
 
