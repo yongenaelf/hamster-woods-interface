@@ -1,10 +1,14 @@
 .pcDepositWrap {
+  @apply px-0 pb-0;
   :global {
     .etransfer-ui-deposit-title {
       @apply hidden;
     }
 
-    .etransfer-ui-selected-data-wrapper {
+    .etransfer-ui-selected-data-wrapper,
+    .calculator-header-title,
+    .receive-amount,
+    .deposit-address-label {
       @apply text-[#1A1A1A];
     }
 
@@ -39,6 +43,11 @@
   @apply !p-0;
 
   :global {
+    .calculator-header-title,
+    .receive-amount {
+      @apply text-[#1A1A1A];
+    }
+
     .etransfer-ui-deposit-select-token-network,
     .etransfer-ui-deposit-select-token-chain {
       @apply bg-[#fff] !border-[1px] !border-solid !border-[#A15A1C];

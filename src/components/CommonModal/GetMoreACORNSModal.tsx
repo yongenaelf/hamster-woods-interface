@@ -32,13 +32,12 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         </div>
       }>
       <div className={textClassName}>
-        {`$ACORNS is a crypto asset which can both be earned via Hamster Woods gameplay and traded on decentralised
-        exchange.`}
+        {`$ACORNS is a crypto asset which can both be earned via Hamster Woods gameplay and traded on decentralised exchange.`}
       </div>
       <div
         className={
           textClassName
-        }>{`To acquire more $ACORNS, it's recommended to use AwakenSwap where trading pairs like ACORNS/ELF or ACORNS/USDT are supported.`}</div>
+        }>{`To acquire more $ACORNS, it's recommended to use the cross-chain tool, ETransfer, which allows you to swap $USDT directly for $ACORNS.`}</div>
       <div className={textClassName}>
         If you need help using{' '}
         <span
@@ -46,7 +45,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             openPage(configInfo?.awakenTutorialUrl ?? '');
           }}
           className="underline text-[#3989FF] font-[600]">
-          AwakenSwap
+          ETransfer
         </span>
         , feel free to check out the tutorial.
       </div>
@@ -56,7 +55,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             ? '!h-[44px] !text-[20px] !leading-[20px] my-[24px]'
             : '!h-[76px] !text-[32px] !leading-[40px] mx-[64px] my-[40px]'
         } flex justify-center items-center font-paytone`}
-        title="Trade on AwakenSwap"
+        title="Go to ETransfer"
         onClick={async () => {
           // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
           // onCancel?.();
