@@ -393,6 +393,7 @@ export default function Game() {
       const { claimable, reason, transactionId, hamsterPassInfo } = getNFTRes;
       if (!claimable) {
         showMessage.error(reason);
+        showMessage.hideLoading();
         return;
       }
       setBeanPassModalVisible(false);
