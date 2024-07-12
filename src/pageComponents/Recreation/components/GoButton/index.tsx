@@ -290,7 +290,7 @@ function GoButton({
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
-                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !text-stroke-[#52300B]`}>
+                  className={`${styles['purchase-text-mobile']} text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !text-stroke-[#52300B]`}>
                   Purchase chance
                 </div>
               </div>
