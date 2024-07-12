@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { ETransferConfig, ETransferProvider, ETransferStyleProvider, NetworkType } from '@etransfer/ui-react';
+import { ETransferConfig, ETransferLayoutProvider, ETransferStyleProvider, NetworkType } from '@etransfer/ui-react';
 import useGetState from 'redux/state/useGetState';
 import '@etransfer/ui-react/dist/assets/index.css';
 
@@ -33,8 +33,8 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <ETransferProvider>
-      <ETransferStyleProvider>{children}</ETransferStyleProvider>
-    </ETransferProvider>
+    <ETransferStyleProvider>
+      <ETransferLayoutProvider>{children}</ETransferLayoutProvider>
+    </ETransferStyleProvider>
   );
 }
