@@ -4,19 +4,25 @@ import React, { useEffect } from 'react';
 import { ETransferConfig, ETransferLayoutProvider, ETransferStyleProvider, NetworkType } from '@etransfer/ui-react';
 import useGetState from 'redux/state/useGetState';
 import '@etransfer/ui-react/dist/assets/index.css';
+import { ChainId } from '@portkey/types';
 
 export default function ETransferLayout({ children }: { children: React.ReactNode }) {
   const { configInfo } = useGetState();
 
   useEffect(() => {
     if (!configInfo) return;
+
+    console.log(
+      'configInfoconfigInfo',
+      configInfo.eTransferDefaultDepositToken,
+      configInfo.eTransferDefaultReceiveToken,
+    );
     // TODO use cms config
     ETransferConfig.setConfig({
       depositConfig: {
         defaultDepositToken: configInfo?.eTransferDefaultDepositToken,
-        // supportDepositTokens: ['ACORNS', 'ELF'],
         defaultReceiveToken: configInfo?.eTransferDefaultReceiveToken,
-        defaultChainId: configInfo?.eTransferDefaultChainId,
+        defaultChainId: configInfo?.eTransferDefaultChainId as ChainId,
         defaultNetwork: configInfo?.eTransferDefaultNetwork,
       },
       authorization: {

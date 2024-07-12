@@ -2,13 +2,18 @@ import CustomModal, { ICustomModalProps } from 'components/CustomModal';
 import NeatImageIcon from 'assets/images/neat.png';
 import CommonBtn from 'components/CommonBtn';
 import { useIsMobile } from 'redux/selector/mobile';
-import { useMemo } from 'react';
-import openPage from 'utils/openPage';
-import { AppState } from 'redux/store';
+import { useMemo, useState } from 'react';
+import { AppState, dispatch } from 'redux/store';
 import { useSelector } from 'react-redux';
+import DepositModal from 'components/Deposit';
+import { useQueryAuthToken } from 'hooks/authToken';
+import openPage from 'utils/openPage';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
+  const { getETransferAuthToken } = useQueryAuthToken();
+
   const { configInfo } = useSelector((state: AppState) => state.configInfo);
+  const [showDeposit, setShowDeposit] = useState(false);
   const isMobile = useIsMobile();
   const textClassName = useMemo(
     () => `${isMobile ? 'text-[16px] leading-[24px]' : 'text-[24px] leading-[32px]'} mb-[12px]`,
@@ -52,11 +57,14 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             : '!h-[76px] !text-[32px] !leading-[40px] mx-[64px] my-[40px]'
         } flex justify-center items-center font-paytone`}
         title="Trade on AwakenSwap"
-        onClick={() => {
-          openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
-          onCancel?.();
+        onClick={async () => {
+          // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
+          // onCancel?.();
+          await getETransferAuthToken();
+          setShowDeposit(true);
         }}
       />
+      <DepositModal open={showDeposit} onCancel={() => setShowDeposit(false)} />
     </CustomModal>
   );
 }

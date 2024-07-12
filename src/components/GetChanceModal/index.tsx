@@ -22,6 +22,7 @@ import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
+import DepositModal from 'components/Deposit';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -44,6 +45,7 @@ export default function GetChanceModal({
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
   const router = useRouter();
@@ -276,8 +278,7 @@ export default function GetChanceModal({
               <div
                 onClick={async () => {
                   await getETransferAuthToken();
-
-                  router.push('/deposit');
+                  setShowDepositModal(true);
                 }}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
@@ -313,6 +314,7 @@ export default function GetChanceModal({
           />
         )}
       </div>
+      <DepositModal open={showDepositModal} onCancel={() => setShowDepositModal(false)} />
     </CustomModal>
   );
 }

@@ -113,3 +113,7 @@ button {
 #etransfer-ui-root {
   @apply h-full;
 }
+
+.etransfer-ant-drawer{
+  z-index: 10001 !important;
+}
