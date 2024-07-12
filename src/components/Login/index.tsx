@@ -51,6 +51,7 @@ import { Proto } from 'utils/proto';
 import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
 import CommonBtn from 'components/CommonBtn';
+import ShowPageLoading from 'components/ShowPageLoading';
 
 const components = {
   phone: PhoneIcon,
@@ -79,6 +80,8 @@ export default function Login() {
 
   const { configInfo } = useGetState();
   const { curChain } = configInfo!;
+
+  const [showPageLoading, setShowPageLoading] = useState(false);
 
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
@@ -310,12 +313,13 @@ export default function Login() {
       if (!originChainId) return;
       let caHash = caInfo?.caHash;
 
+      setShowPageLoading(true);
       if (!caInfo) {
         try {
           caHash = wallet.didWallet.caInfo[originChainId].caHash;
           const caAddress = wallet.didWallet.caInfo[originChainId].caAddress;
           setIsUnlockShow(false);
-          handleFinish(WalletType.portkey, {
+          await handleFinish(WalletType.portkey, {
             caInfo: { caHash, caAddress },
             walletInfo: wallet.didWallet.managementAccount,
             pin: v,
@@ -323,6 +327,7 @@ export default function Login() {
           });
         } catch (err) {
           showMessage.error();
+          setShowPageLoading(false);
           return;
         }
       } else {
@@ -333,7 +338,8 @@ export default function Login() {
           chainId: configInfo!.curChain,
           walletInfo: wallet.didWallet.managementAccount,
         };
-        handleFinish(WalletType.portkey, walletInfo);
+        await handleFinish(WalletType.portkey, walletInfo);
+        setShowPageLoading(false);
       }
     },
     [configInfo, handleFinish],
@@ -348,10 +354,12 @@ export default function Login() {
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
   const handlePortKeyLoginFinish = useCallback(
-    (wallet: DIDWalletInfo) => {
+    async (wallet: DIDWalletInfo) => {
       signInRef.current?.setOpen(false);
       localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
-      handleFinish(WalletType.portkey, wallet);
+      setShowPageLoading(true);
+      await handleFinish(WalletType.portkey, wallet);
+      setShowPageLoading(false);
     },
     [handleFinish],
   );
@@ -558,6 +566,8 @@ export default function Login() {
         }}
         isWrongPassword={isErrorTipShow}
       />
+
+      <ShowPageLoading open={showPageLoading} />
     </div>
   );
 }
