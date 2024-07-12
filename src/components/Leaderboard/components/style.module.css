@@ -1,5 +1,21 @@
 /* stylelint-disable number-max-precision */
 
+.leaderBoardMobileModal {
+  :global {
+    .ant-modal-body {
+      @apply !pt-[16px];
+    }
+  }
+}
+
+.leaderBoardPcModal {
+  :global {
+    .ant-modal-body {
+      @apply !pt-[2rem];
+    }
+  }
+}
+
 .leaderBoardModal {
   @apply relative  p-0;
   :global {
@@ -11,15 +27,7 @@
           @apply w-full h-full;
         }
       }
-
-      .ant-modal-body {
-        @apply !pt-[2rem];
-      }
     }
-
-    /* .ant-modal-body {
-      @apply w-full px-[16px] pt-[16px];
-    } */
   }
 }
 
