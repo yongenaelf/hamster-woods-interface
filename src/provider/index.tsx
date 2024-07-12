@@ -7,6 +7,7 @@ import enUS from 'antd/lib/locale/en_US';
 
 import WebLoginProvider from './webLoginProvider';
 import { useEffect, useState } from 'react';
+import ETransferLayout from './ETransferLayout';
 
 function Provider({ children }: { children: React.ReactNode }) {
   const [_loading, setLoading] = useState(true);
@@ -20,7 +21,9 @@ function Provider({ children }: { children: React.ReactNode }) {
     <>
       <StoreProvider>
         <ConfigProvider locale={enUS} autoInsertSpaceInButton={false} prefixCls={'ant'}>
-          <WebLoginProvider>{children}</WebLoginProvider>
+          <WebLoginProvider>
+            <ETransferLayout>{children}</ETransferLayout>
+          </WebLoginProvider>
         </ConfigProvider>
       </StoreProvider>
     </>

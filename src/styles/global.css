@@ -27,7 +27,7 @@ input[type='number'] {
 
 .email-input-wrapper .login-input.portkey-ant-input,
 .phone-number-input-wrapper .phone-number-input-content .portkey-ant-input {
-  font-size: 16Px !important;
+  font-size: 16px !important;
 }
 
 .portkey-ui-segmented-phone > .login-btn {
@@ -108,4 +108,12 @@ button {
 
 .portkey-ui-wrapper {
   @apply h-full;
+}
+
+#etransfer-ui-root {
+  @apply h-full;
+}
+
+.etransfer-ant-drawer{
+  z-index: 10001 !important;
 }

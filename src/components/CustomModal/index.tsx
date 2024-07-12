@@ -18,6 +18,11 @@ export default function CustomModal({
   ...params
 }: ICustomModalProps) {
   const { isMobile } = useGetState();
+
+  if (title === 'Deposit') {
+    console.log('className', className);
+  }
+
   return (
     <Modal
       className={`${isMobile ? styles.mobileCustomModal : styles.customPcModal} ${className}`}
