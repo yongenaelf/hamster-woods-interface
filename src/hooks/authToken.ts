@@ -189,7 +189,7 @@ export function useQueryAuthToken() {
 
     if (!isLogin) throw new Error('You are not logged in.');
     try {
-      showMessage.loading();
+      // showMessage.loading();
 
       const managerAddress = await getManagerAddress();
       const { caHash, originChainId } = await getCaInfo();
@@ -223,7 +223,7 @@ export function useQueryAuthToken() {
       message.error(handleErrorMessage(error, 'Failed to obtain etransfer authorization.'));
       return;
     } finally {
-      showMessage.hideLoading();
+      // showMessage.hideLoading();
     }
   }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
 
