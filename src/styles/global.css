@@ -114,6 +114,12 @@ button {
   @apply h-full;
 }
 
-.etransfer-ant-drawer{
+.etransfer-ant-drawer {
   z-index: 10001 !important;
+
+  .etransfer-ui-common-svg {
+    svg {
+      @apply !h-auto !w-auto;
+    }
+  }
 }
