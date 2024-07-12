@@ -1,4 +1,4 @@
-import { Input } from 'antd';
+import { Input, Tooltip } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
@@ -21,6 +21,7 @@ import CommonDisabledBtn from 'components/CommonDisabledBtn';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
+import QuestionImage from 'assets/images/recreation/question.png';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -116,11 +117,17 @@ export default function GetChanceModal({
   }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
 
   const { getETransferAuthToken } = useQueryAuthToken();
+  const handleCancel = useCallback(() => {
+    setInputVal(1);
+    setExpand(false);
+    setErrMsgTip('');
+    handleClose?.();
+  }, [handleClose]);
 
   return (
     <CustomModal
       className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} ${styles.getChanceModal}`}
-      onCancel={handleClose}
+      onCancel={handleCancel}
       title={title}
       closable={closable}
       centered
@@ -213,7 +220,29 @@ export default function GetChanceModal({
               className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
                 isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
               }`}>
-              <div>Estimated Transaction Fee</div>
+              <div className="flex items-center">
+                Estimated Transaction Fee{' '}
+                <Tooltip
+                  title={
+                    <div
+                      className={`${
+                        isMobile ? 'px-[10px] py-[6px] text-[12px] leading-[14px]' : 'px-[14px] py-[10px] text-[18px]'
+                      }`}>
+                      You may be exempt from the transaction fee if you qualify for fee exemption or payment delegation.
+                    </div>
+                  }
+                  overlayStyle={isMobile ? { maxWidth: 350, borderRadius: 18 } : { maxWidth: 480, borderRadius: 32 }}
+                  overlayClassName={`${isMobile ? styles.board__tooltip__mobile : styles.board__tooltip}`}
+                  trigger="click"
+                  placement="top"
+                  color="#A15A1C">
+                  <Image
+                    src={QuestionImage}
+                    alt="bean"
+                    className={`${isMobile ? 'h-[12px] w-[12px]' : 'h-[16px] w-[16px]'} ml-[4px]`}
+                  />
+                </Tooltip>
+              </div>
               <div className={`text-right flex flex-col ${isMobile ? 'space-y-[8px]' : 'space-y-[12px]'}`}>
                 <div className="font-bold">{`${fee} ELF`}</div>
                 <div>{`${formatAmountUSDShow(fee * elfInUsd)}`}</div>

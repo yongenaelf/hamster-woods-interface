@@ -39,15 +39,9 @@ function GoButton({
   changeCurDiceCount,
   getChance,
 }: IGoButton) {
-  const { isMobile, btnImageResources } = useGetState();
+  const { isMobile } = useGetState();
 
   const diceCount = [1, 2, 3];
-
-  const diceImages: Record<string, string> = {
-    1: btnImageResources!.pc['dice1'],
-    2: btnImageResources!.pc['dice2'],
-    3: btnImageResources!.pc['dice3'],
-  };
 
   const [curPress, setCurPress] = useState<number | null>(null);
   const [curTouch, setCurTouch] = useState<number | null>(null);
@@ -248,7 +242,7 @@ function GoButton({
                   key={item}
                   style={{
                     backgroundImage: `url(${
-                      btnImageResources?.pc[
+                      require(`assets/images/btn/${
                         curDiceCount === item && curPress !== item
                           ? 'bg-dice-selected'
                           : curPress === item
@@ -256,7 +250,7 @@ function GoButton({
                           : curTouch === item && curDiceCount !== item
                           ? 'bg-dice-hover'
                           : 'bg-dice-default'
-                      ]
+                      }.png`).default.src
                     })`,
                   }}
                   className={`${styles['dice-number']}`}
@@ -264,7 +258,7 @@ function GoButton({
                   {curPress && curPress === item && <div className={styles['dice-content-mask']}></div>}
 
                   <img
-                    src={diceImages[item]}
+                    src={require(`assets/images/btn/dice${item}.png`).default.src}
                     alt=""
                     className={`${styles['dice-content']} ${curPress === item && styles['dice-content-press']}`}
                   />
@@ -278,16 +272,17 @@ function GoButton({
             <div
               style={{
                 backgroundImage: `url(${
-                  btnImageResources?.mobile[
+                  require(`assets/images/btn/${
                     mBtnPress ? 'bg-go-press-m' : status === Status.DISABLED ? 'bg-go-disabled-m' : 'bg-go-default-m'
-                  ]
+                  }.png`).default.src
                 })`,
               }}
               className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{
                   backgroundImage: `url(${
-                    btnImageResources?.mobile[chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                    require(`assets/images/btn/${chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m'}.png`).default
+                      .src
                   })`,
                 }}
                 ref={mobileChanceButtonRef}
@@ -295,7 +290,7 @@ function GoButton({
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <div
-                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !drop-shadow-[0_1px_0_black]`}>
+                  className={`text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !text-stroke-[#52300B]`}>
                   Purchase chance
                 </div>
               </div>
@@ -314,7 +309,9 @@ function GoButton({
               <div
                 style={{
                   backgroundImage: `url(${
-                    btnImageResources?.mobile[curDiceCount === curPressM ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                    require(`assets/images/btn/${
+                      curDiceCount === curPressM ? 'bg-dice-press-m' : 'bg-dice-default-m'
+                    }.png`).default.src
                   })`,
                 }}
                 className={`relative ${styles['dice-number-mobile']}`}
@@ -322,7 +319,7 @@ function GoButton({
                 {curPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <img
-                  src={btnImageResources!.mobile[`dice${curDiceCount}-m`]}
+                  src={require(`assets/images/btn/dice${curDiceCount}-m.png`).default.src}
                   alt=""
                   className={`${styles['dice-content-mobile']} ${
                     curPressM === curDiceCount && styles['dice-content-mobile-press']
@@ -382,14 +379,14 @@ function GoButton({
               }}
               style={{
                 backgroundImage: `url(${
-                  btnImageResources?.pc[
-                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-chance-default'
-                  ]
+                  require(`assets/images/btn/${
+                    chanceBtnPress ? 'get-chance-hover' : chanceBtnTouch ? 'get-chance-hover' : 'get-chance-default'
+                  }.png`).default.src
                 })`,
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-paytone tracking-tight !drop-shadow-[0_1px_0_black] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[12px]`}>
+                className={`font-paytone tracking-tight !text-stroke-[#52300B] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[15px]`}>
                 Purchase chance
               </span>
             </div>

@@ -28,14 +28,14 @@ export function RankItem({ rank }: IRankItemProps) {
         alt="rank"
       />
       <span className="flex-grow"></span>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-xl '} leading-4 text-white font-paytone`}>
+      <div className={`${isMobile ? 'text-[12px]' : 'text-xl '} leading-4 text-white font-paytone`}>
         {RankItemDetail[rank].prizeDetail}
       </div>
       <img
         src={RankItemDetail[rank].avatarIcon.src}
         className={`z-10 w-[30px] h-[30px] ${
           isMobile ? 'mx-2' : 'mx-4'
-        } rounded-full   border-[4px] border-[#ffffff] border-solid`}
+        } rounded-full   border-[3px] border-[#ffffff] border-solid`}
         width={30}
         height={30}
         alt="avatar"
@@ -67,7 +67,7 @@ export function DefaultItem({ topText, avatarIcon, getNFTDetail }: IDefaultItemP
         src={avatarIcon}
         className={`rounded-full z-10 w-[30px] h-[30px] ${
           isMobile ? 'mx-2' : 'mx-4'
-        }   border-[4px] border-[#ffffff] border-solid`}
+        }   border-[3px] border-[#ffffff] border-solid`}
         width={30}
         height={30}
         alt="avatar"
@@ -92,7 +92,7 @@ export default function WeeklyPrizes(props: ICustomModalProps) {
         } text-[#AE694C] overflow-y-auto  [&::-webkit-scrollbar]:hidden`}>
         <div className="flex flex-col space-y-[10px] text-[16px] leading-[24px] text-left">
           {WeeklyPrizeTip.map((tip, index) => (
-            <div key={`tip_${index}`} className={isMobile ? 'text-[12px]' : ''}>
+            <div key={`tip_${index}`} className={isMobile ? 'text-[12px] leading-[18px]' : ''}>
               {tip}
             </div>
           ))}

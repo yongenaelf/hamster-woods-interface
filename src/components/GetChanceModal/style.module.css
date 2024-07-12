@@ -22,3 +22,18 @@
     } */
   }
 }
+
+.board__tooltip {
+  :global {
+    .ant-tooltip-inner {
+      @apply rounded-[32px] max-w-[480px] shadow-[0_6px_12px_0_rgba(0,0,0,0.60)];
+    }
+  }
+}
+.board__tooltip__mobile {
+  :global {
+    .ant-tooltip-inner {
+      @apply rounded-[18px] max-w-[350px] shadow-[0_6px_12px_0_rgba(0,0,0,0.60)];
+    }
+  }
+}

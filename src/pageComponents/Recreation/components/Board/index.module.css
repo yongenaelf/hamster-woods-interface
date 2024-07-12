@@ -28,7 +28,7 @@
   background-size: cover;
 
   .board__feature__text {
-    @apply w-[50px] ml-[5px] text-white text-[13px] leading-[13px] font-paytone;
+    @apply w-[50px] ml-[5px] text-white text-[12px] leading-[12px] font-paytone;
   }
 }
 
