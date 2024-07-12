@@ -12,11 +12,6 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (!configInfo) return;
 
-    console.log(
-      'configInfoconfigInfo',
-      configInfo.eTransferDefaultDepositToken,
-      configInfo.eTransferDefaultReceiveToken,
-    );
     // TODO use cms config
     ETransferConfig.setConfig({
       depositConfig: {
