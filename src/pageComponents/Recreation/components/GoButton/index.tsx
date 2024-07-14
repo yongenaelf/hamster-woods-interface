@@ -222,7 +222,10 @@ function GoButton({
   }, [changeChance, handleReleaseChance, isMobile]);
 
   return (
-    <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
+    <div
+      className={`${styles[isMobile ? 'button-mobile' : 'button']} ${
+        showBottom && styles['safe-area-bottom']
+      } relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
           <div className="flex items-center ml-[-24px]">
@@ -286,9 +289,7 @@ function GoButton({
                   }.png`).default.src
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']}
-              ${showBottom && styles['safe-area-bottom']}
-              cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
+              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{
                   backgroundImage: `url(${
