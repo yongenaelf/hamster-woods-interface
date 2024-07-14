@@ -43,7 +43,7 @@ function GoButton({
 }: IGoButton) {
   const { isMobile } = useGetState();
 
-  const isInIOS = isMobileDevice().apple.device;
+  const showBottom = TelegramPlatform.isTelegramPlatform() && isMobileDevice().apple.device;
 
   const diceCount = [1, 2, 3];
 
@@ -287,7 +287,7 @@ function GoButton({
                 })`,
               }}
               className={`${styles['btn-mobile']} ${styles['button__icon']}
-              ${TelegramPlatform.isTelegramPlatform() && isInIOS && styles['safe-area-bottom']}
+              ${showBottom && styles['safe-area-bottom']}
               cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{

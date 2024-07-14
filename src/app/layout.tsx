@@ -23,7 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
         <meta
           name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0 viewport-fit=cover"
         />
         <Script strategy="afterInteractive" id="rem-px" />
         <Script strategy="afterInteractive" src="/telegram-web-app.js" />
