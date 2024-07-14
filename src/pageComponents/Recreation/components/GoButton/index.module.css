@@ -153,5 +153,5 @@
 }
 
 .safe-area-bottom {
-  margin-bottom: env(safe-area-inset-bottom);
+  @apply mb-[32px]
 }
