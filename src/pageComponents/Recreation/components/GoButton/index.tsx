@@ -287,7 +287,7 @@ function GoButton({
                 })`,
               }}
               className={`${styles['btn-mobile']} ${styles['button__icon']}
-              ${TelegramPlatform.isTelegramPlatform() && isInIOS && 'mb-[8px]'}
+              ${TelegramPlatform.isTelegramPlatform() && isInIOS && 'mb-[24px]'}
               cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{
