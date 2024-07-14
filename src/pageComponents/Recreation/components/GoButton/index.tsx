@@ -46,6 +46,8 @@ function GoButton({
   const showBottom = TelegramPlatform.isTelegramPlatform() && isMobileDevice().apple.device;
 
   const diceCount = [1, 2, 3];
+  const timer = useRef<any>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const [curPress, setCurPress] = useState<number | null>(null);
   const [curTouch, setCurTouch] = useState<number | null>(null);
@@ -66,6 +68,14 @@ function GoButton({
   const mobileChanceButtonRef = useRef<HTMLDivElement | null>(null);
   const goFn = useRef(go);
   const changeCurDiceCountFn = useRef(changeCurDiceCount);
+
+  useEffect(() => {
+    if (!showBottom) return;
+    timer.current = setTimeout(() => {
+      setInitialized(true);
+    }, 1500);
+    return () => timer.current && clearTimeout(timer.current);
+  }, [showBottom]);
 
   useEffect(() => {
     goFn.current = go;
@@ -224,7 +234,7 @@ function GoButton({
   return (
     <div
       className={`${styles[isMobile ? 'button-mobile' : 'button']} ${
-        showBottom && styles['safe-area-bottom']
+        !initialized && showBottom && styles['safe-area-bottom']
       } relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
