@@ -17,7 +17,7 @@
   }
 
   .purchase-text-mobile {
-    -webkit-text-stroke: 0.5px #52300B !important;
+    -webkit-text-stroke: 0.5px #52300b !important;
   }
 
   .dice-content-mobile-mask {
@@ -150,4 +150,8 @@
       transform: scale(1);
     }
   }
+}
+
+.safe-area-bottom {
+  margin-bottom: env(safe-area-inset-bottom);
 }
