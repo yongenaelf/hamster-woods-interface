@@ -9,6 +9,8 @@ import DepositModal from 'components/Deposit';
 import { useQueryAuthToken } from 'hooks/authToken';
 import openPage from 'utils/openPage';
 import styles from './style.module.css';
+import { message } from 'antd';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const { getETransferAuthToken } = useQueryAuthToken();
@@ -62,10 +64,14 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
           } flex justify-center items-center font-paytone`}
           title="Go to ETransfer"
           onClick={async () => {
-            // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
-            // onCancel?.();
-            await getETransferAuthToken();
-            setShowDeposit(true);
+            try {
+              // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
+              // onCancel?.();
+              await getETransferAuthToken();
+              setShowDeposit(true);
+            } catch (error) {
+              message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+            }
           }}
         />
       </div>

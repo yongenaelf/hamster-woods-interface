@@ -22,6 +22,7 @@ export const handleSDKLogout = async () => {
       await did.logout({
         chainId: originChainId as ChainId,
       });
+      did.reset();
     } catch (error) {
       console.error('portkey: error', error);
     }

@@ -127,14 +127,16 @@ export function useQueryAuthToken() {
   const getCaInfo: () => Promise<{ caHash: string; originChainId: ChainId; caAddress: string }> =
     useCallback(async () => {
       if (walletType === WalletType.portkey) {
-        const caHash = did.didWallet.aaInfo.accountInfo?.caHash;
         const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '') as ChainId;
-        const caAddress = did.didWallet.aaInfo.accountInfo?.caAddress;
-        if (!caHash || !caAddress || !originChainId) throw new Error('You are not logged in.');
+
+        const caInfo = did.didWallet.aaInfo.accountInfo ?? did.didWallet.caInfo?.[originChainId];
+
+        console.log(caInfo, did.didWallet, ' did.didWallet.aaInfo==originChainId');
+
+        if (!caInfo.caHash || !caInfo.caAddress || !originChainId) throw new Error('You are not logged in.');
         return {
-          caHash,
+          ...caInfo,
           originChainId,
-          caAddress,
         };
       } else {
         const caAddress = walletInfo?.discoverInfo?.address;
@@ -220,8 +222,8 @@ export function useQueryAuthToken() {
       });
       return authToken;
     } catch (error) {
-      message.error(handleErrorMessage(error, 'Failed to obtain etransfer authorization.'));
-      return;
+      console.log(error);
+      throw error;
     } finally {
       // showMessage.hideLoading();
     }

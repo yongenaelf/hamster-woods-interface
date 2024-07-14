@@ -1,4 +1,4 @@
-import { Input, Tooltip } from 'antd';
+import { Input, message, Tooltip } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -277,8 +278,12 @@ export default function GetChanceModal({
               )}`}</div>
               <div
                 onClick={async () => {
-                  await getETransferAuthToken();
-                  setShowDepositModal(true);
+                  try {
+                    await getETransferAuthToken();
+                    setShowDepositModal(true);
+                  } catch (error) {
+                    message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+                  }
                 }}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
