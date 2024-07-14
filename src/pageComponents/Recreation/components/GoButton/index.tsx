@@ -2,6 +2,8 @@ import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState 
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+import isMobileDevice from 'utils/isMobile';
 
 export enum Status {
   LOADING = 'loading',
@@ -40,6 +42,8 @@ function GoButton({
   getChance,
 }: IGoButton) {
   const { isMobile } = useGetState();
+
+  const isInIOS = isMobileDevice().apple.device;
 
   const diceCount = [1, 2, 3];
 
@@ -282,7 +286,9 @@ function GoButton({
                   }.png`).default.src
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
+              className={`${styles['btn-mobile']} ${styles['button__icon']}
+              ${TelegramPlatform.isTelegramPlatform() && isInIOS && 'mb-[8px]'}
+              cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{
                   backgroundImage: `url(${
