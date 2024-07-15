@@ -153,5 +153,5 @@
 }
 
 .safe-area-bottom {
-  @apply mb-[40px];
+  @apply mb-[80px];
 }
