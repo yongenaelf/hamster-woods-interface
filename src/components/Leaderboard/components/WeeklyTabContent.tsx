@@ -34,9 +34,9 @@ export const WeeklyTabContent = () => {
             alt="tip"
           />
           <div className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold`}>
-            {data?.status === ChallengeStatus.InProgress
-              ? `Hop & Win Week ${data?.weekNum} will end on ${data?.endDate}.`
-              : `Hop & Win Week ${data?.weekNum} has ended.`}{' '}
+            {isSettled
+              ? `Hop & Win Week ${data?.weekNum} has ended.`
+              : `Hop & Win Week ${data?.weekNum} will end on ${data?.endDate}.`}{' '}
             Click{' '}
             <span className="underline font-black text-[#3989FF]" onClick={() => setWeeklyPrizeOpen(true)}>
               here
