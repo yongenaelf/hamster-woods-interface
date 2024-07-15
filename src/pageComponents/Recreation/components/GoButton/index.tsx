@@ -271,11 +271,6 @@ function GoButton({
         )}
         {isMobile ? (
           <div className={`${styles['button__border']} flex justify-center`}>
-            <img
-              className="absolute left-0 right-0 bottom-0 top-0"
-              src={require('assets/images/goButton/go-btn-border.png').default.src}
-              alt="border"
-            />
             <div
               style={{
                 backgroundImage: `url(${
