@@ -73,7 +73,7 @@ function GoButton({
     if (!showBottom) return;
     timer.current = setTimeout(() => {
       setInitialized(true);
-    }, 3000);
+    }, 1000);
     return () => timer.current && clearTimeout(timer.current);
   }, [showBottom]);
 
