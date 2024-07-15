@@ -3,6 +3,9 @@
 
   .button__border {
     @apply w-full h-[106px] bg-[100%_100%] bg-no-repeat;
+
+    background-image: url('../../../../assets/images/goButton/go-btn-border.png');
+    background-size: cover;
   }
   .dice-number-mobile {
     @apply w-[71px] h-[71px] flex justify-center absolute right-[-76px] top-[24px] z-[51] bg-[100%_100%] bg-no-repeat;
