@@ -79,9 +79,6 @@ export default function Game() {
     curBeanPass,
   } = useGetState();
 
-  const timer = useRef<any>(null);
-  const [initialized, setInitialized] = useState(false);
-
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<IBeanPassListItem | undefined>(curBeanPass);
 
   const firstNode = checkerboardData![5][4];
@@ -144,13 +141,6 @@ export default function Game() {
     x: 0,
     y: 0,
   });
-
-  useEffect(() => {
-    timer.current = setTimeout(() => {
-      setInitialized(true);
-    }, 1500);
-    return () => timer.current && clearTimeout(timer.current);
-  }, []);
 
   const updateStep = () => {
     store.dispatch(
@@ -585,7 +575,7 @@ export default function Game() {
         {!isMobile && <BoardLeft />}
         <div
           className={`${styles['game__content']} flex overflow-hidden ${
-            isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
+            isMobile ? 'w-full flex-1 h-[106px]' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
           }`}>
           {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
           <div
@@ -651,7 +641,7 @@ export default function Game() {
           </BoardRight>
         )}
 
-        {isMobile && initialized && (
+        {isMobile && (
           <GoButton
             playableCount={playableCount}
             dailyPlayableCount={hasNft ? playerInfo?.dailyPlayableCount : 0}
