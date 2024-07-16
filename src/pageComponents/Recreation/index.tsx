@@ -575,7 +575,7 @@ export default function Game() {
         {!isMobile && <BoardLeft />}
         <div
           className={`${styles['game__content']} flex overflow-hidden ${
-            isMobile ? 'w-full flex-1 h-[106px]' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
+            isMobile ? 'w-full flex-1 pb-[106px]' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
           }`}>
           {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
           <div
