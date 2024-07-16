@@ -16,6 +16,7 @@ import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
 import { message } from 'antd';
 import showMessage from 'utils/setGlobalComponentsInfo';
+import { isJWTExpired } from 'utils/common';
 
 export function useQueryAuthToken() {
   const { walletInfo, walletType, isLogin } = useGetState();
@@ -198,7 +199,7 @@ export function useQueryAuthToken() {
       let authToken;
       const jwtData = await getETransferJWT(asyncStorage, `${caHash}${managerAddress}`);
       console.log(jwtData, 'jwtData====');
-      if (jwtData) {
+      if (jwtData && !isJWTExpired(jwtData?.expiresTime || 0)) {
         authToken = `${jwtData.token_type} ${jwtData.access_token}`;
       } else {
         const { pubkey, signature, plainText } = await getUserInfo({ managerAddress, caHash, originChainId });
