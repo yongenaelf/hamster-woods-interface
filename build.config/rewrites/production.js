@@ -16,7 +16,8 @@ module.exports = [
     destination: 'https://cms-hamster.beangotown.com/:path*',
   },
   {
-    source: '/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
-    destination: 'https://dapp.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/:path*',
+    source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/:path*',
+    destination:
+      'https://dapp-hamster.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
   },
 ];
