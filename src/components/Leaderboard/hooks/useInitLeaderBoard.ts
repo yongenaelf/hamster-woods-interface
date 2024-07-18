@@ -47,15 +47,14 @@ export default function useInitLeaderBoard() {
 
       const data = pastDataList ? pastDataList : [];
 
-      mutate(['getPastRank', address], data);
+      mutate(['getPastRecord', address], data);
     },
     [mutate],
   );
 
   const initialize = useCallback(async () => {
     if (!address) return;
-    initWeekRankData(address);
-    initPastRankData(address);
+    return await Promise.all([initWeekRankData(address), initPastRankData(address)]);
   }, [address, initPastRankData, initWeekRankData]);
 
   return {

@@ -1,6 +1,6 @@
 /* stylelint-disable number-max-precision */
 .gameRecordModal {
-  @apply !w-[358px] md:!w-[50vw] rounded-[20px] text-center text-white;
+  @apply !w-[358px] md:!w-[50vw] rounded-[20px] text-center text-white !px-2;
 
   .scrollbar::-webkit-scrollbar {
     @apply !w-0;
@@ -18,14 +18,14 @@
         0 -1.1666667461395264px 2.3333334922790527px 0 #005ae1 inset,
         0 9.333333969116211px 9.333333969116211px 0 rgb(0 0 0 / 30%);
       .ant-modal-body {
-        @apply px-4 pb-8 pt-0 leading-6;
+        @apply px-2 pb-8 pt-0 leading-6;
       }
     }
   }
   .modal__title {
     @apply relative h-[72px]  text-2xl leading-6 text-white;
     span {
-      @apply font-fonarto;
+      @apply font-paytone;
     }
 
     text-shadow: 0 0 1px rgb(0 0 0 / 25%);

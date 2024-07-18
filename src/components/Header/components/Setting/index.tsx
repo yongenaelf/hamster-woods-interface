@@ -57,7 +57,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    showMessage.loading('Signing out of BeanGo Town');
+    showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
       const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
@@ -66,6 +66,7 @@ export default function Setting() {
           await did.logout({
             chainId: originChainId as ChainId,
           });
+          did.reset();
         } catch (error) {
           console.error('portkey: error', error);
         }
@@ -103,9 +104,10 @@ export default function Setting() {
       <CustomModal
         open={settingModalVisible}
         title="Settings"
+        centered={isMobile}
         onCancel={handleCancel}
         className={`${isMobile ? '!w-[358px]' : '!w-[580px]'}`}>
-        <div className="mt-2 px-4">
+        <div className="my-2 pt-4 pb-8">
           <CommonBtn
             title="Game Record"
             onClick={handleRecord}

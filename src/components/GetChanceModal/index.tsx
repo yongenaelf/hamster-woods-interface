@@ -1,5 +1,5 @@
-import { Input } from 'antd';
-import { useCallback, useMemo, useState } from 'react';
+import { Input, message, Tooltip } from 'antd';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import { useIsMobile } from 'redux/selector/mobile';
@@ -14,13 +14,20 @@ import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
 import { IBalance } from 'types';
-import openPage from 'utils/openPage';
-import { divDecimalsStr, formatAmountUSDShow } from 'utils/calculate';
+import { ZERO, divDecimals, divDecimalsStrShow, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
+import useGetState from 'redux/state/useGetState';
+import CommonDisabledBtn from 'components/CommonDisabledBtn';
+import styles from './style.module.css';
+import { useRouter } from 'next/navigation';
+import { useQueryAuthToken } from 'hooks/authToken';
+import QuestionImage from 'assets/images/recreation/question.png';
+import DepositModal from 'components/Deposit';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
-  acornsInElf: number;
+  acornsInUsd: number;
   elfInUsd: number;
   assetBalance: IBalance[];
 };
@@ -29,7 +36,7 @@ export default function GetChanceModal({
   title = 'Get More Hopping Chances',
   onCancel,
   closable = true,
-  acornsInElf,
+  acornsInUsd,
   elfInUsd,
   assetBalance,
   onConfirm,
@@ -39,6 +46,11 @@ export default function GetChanceModal({
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const { playerInfo } = useGetState();
+  const [errMsgTip, setErrMsgTip] = useState('');
+  const router = useRouter();
+
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
     [serverConfigInfo.serverConfigInfo?.chancePrice],
@@ -54,6 +66,10 @@ export default function GetChanceModal({
     if (inputVal < 2) return;
     setInputVal((pre) => pre - 1);
   }, [inputVal]);
+  const handlePlus = useCallback(() => {
+    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
+    setInputVal((pre) => pre + 1);
+  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
   const handleInput = useCallback((value: string) => {
     if (!value) {
       setInputVal(0);
@@ -69,54 +85,102 @@ export default function GetChanceModal({
     onCancel?.();
   }, [onCancel]);
 
+  useEffect(() => {
+    setErrMsgTip('');
+  }, [inputVal]);
+
+  const handleCheckPurchase = useCallback(() => {
+    if (!inputVal) {
+      setErrMsgTip('Please input valid number.');
+      return false;
+    }
+
+    const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
+    if (
+      !acornsToken?.balance ||
+      ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
+    ) {
+      setErrMsgTip('Acorns is not enough');
+      return false;
+    }
+
+    if (ZERO.plus(inputVal).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
+      setErrMsgTip(
+        `Purchase limit exceeded. Please try purchasing no more than ${playerInfo?.weeklyPurchasedChancesCount}.`,
+      );
+      return false;
+    }
+    return true;
+  }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
+
+  const handleConfirm = useCallback(() => {
+    if (errMsgTip) return;
+    if (!handleCheckPurchase()) return;
+    onConfirm?.(inputVal, chancePrice);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
+
+  const { getETransferAuthToken } = useQueryAuthToken();
+  const handleCancel = useCallback(() => {
+    setInputVal(1);
+    setExpand(false);
+    setErrMsgTip('');
+    handleClose?.();
+  }, [handleClose]);
+
   return (
     <CustomModal
-      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
-      onCancel={handleClose}
+      className={`${isMobile ? '!w-[358px]' : '!w-[750px]'} ${styles.getChanceModal}`}
+      onCancel={handleCancel}
       title={title}
       closable={closable}
+      centered
       destroyOnClose
       {...params}>
-      <div className={`overflow-auto`}>
-        <div className="space-y-[28px]">
-          <div className="flex justify-center items-center flex-wrap text-[20px]">
-            Do you want to pay
+      <div className={`${isMobile ? 'max-h-[50vh] px-[16px]' : 'h-[41rem] px-[32px]'} overflow-auto`}>
+        <div className={` ${isMobile ? 'space-y-[18px] ' : 'space-y-[28px] '}`}>
+          <div className={`flex justify-center items-center flex-wrap  ${isMobile ? 'text-[16px]' : 'text-[20px]'} `}>
+            Exchange
             <span className="font-bold flex items-center space-x-[6px] mx-[10px]">
-              <span>{chancePrice}</span>
+              <span>{((inputVal || 1) * chancePrice)?.toLocaleString()}</span>
               <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-              <span>ACORNS</span>
+              <span>$ACORNS</span>
             </span>
-            for <span className="font-bold mx-[10px]">1 number</span>of chances to play
+            for <span className="font-bold mx-[10px]">{inputVal || 1}</span>
+            {`hopping ${inputVal > 1 ? 'chances' : 'chance'}`}
           </div>
           <div className="flex items-center justify-center space-x-[16px]">
             <Image
               onClick={handleMinus}
-              className={`${inputVal < 2 && 'opacity-30'} w-[40px] h-[40px]`}
+              className={`${inputVal < 2 && 'opacity-30'} ${isMobile ? 'w-[32px] h-[32px]' : 'w-[40px] h-[40px]'}`}
               src={MinusIcon}
               alt="minus"
             />
             <Input
               className={`${
-                isMobile ? 'w-[222px]' : 'w-[340px]'
-              } h-[40px] text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-fonarto`}
+                isMobile ? 'w-[222px] h-[32px]' : 'w-[340px] h-[40px]'
+              } text-[24px] rounded-[8px] border-[#A15A1C] hover:border-[#A15A1C] focus:border-[#A15A1C] focus:shadow-none text-[#953D22] text-center font-paytone`}
               value={inputVal}
               onChange={(e) => handleInput(e.target.value)}
+              onBlur={handleCheckPurchase}
             />
             <Image
-              onClick={() => setInputVal((pre) => pre + 1)}
-              className="w-[40px] h-[40px]"
+              onClick={handlePlus}
+              className={`${inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0) && 'opacity-30'} ${
+                isMobile ? 'w-[32px] h-[32px]' : 'w-[40px] h-[40px]'
+              }`}
               src={PlusIcon}
               alt="plus"
             />
           </div>
         </div>
+        <div className="flex justify-center text-[14px] leading-[22px] text-[#FF4D4D] mt-2">{errMsgTip}</div>
         {isMobile ? (
-          <div className="flex flex-col space-y-[16px] items-center justify-between mt-[24px] w-full text-[14px]">
+          <div className="flex flex-col space-y-[16px] items-center justify-between mt-[12px] w-full text-[14px]">
             <div>You pay</div>
             <div className="w-full flex items-center justify-between font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * chancePrice} ACORNS</span>
+                <span>{`${(inputVal * chancePrice)?.toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -137,7 +201,7 @@ export default function GetChanceModal({
             <div className="flex items-center space-x-[8px] text-right font-bold">
               <div className="flex items-center space-x-[8px]">
                 <Image className="w-[20px] h-[20px]" src={NeatIcon} alt="neat" />
-                <span>{inputVal * chancePrice} ACORNS</span>
+                <span>{`${(inputVal * chancePrice)?.toLocaleString()} ${ACORNS_TOKEN.symbol}`}</span>
               </div>
               <Image src={AddIcon} alt="add" />
               <div className="flex items-center space-x-[8px]">
@@ -157,22 +221,46 @@ export default function GetChanceModal({
           <>
             <div
               className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
-                isMobile ? 'text-[14px]' : 'text-[16px]'
+                isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
               }`}>
-              <div>Estimated Transaction Fee</div>
-              <div className="text-right flex flex-col space-y-[12px]">
+              <div className="flex items-center">
+                Estimated Transaction Fee{' '}
+                <Tooltip
+                  title={
+                    <div
+                      className={`${
+                        isMobile ? 'px-[10px] py-[6px] text-[12px] leading-[14px]' : 'px-[14px] py-[10px] text-[18px]'
+                      }`}>
+                      You may be exempt from the transaction fee if you qualify for fee exemption or payment delegation.
+                    </div>
+                  }
+                  overlayStyle={isMobile ? { maxWidth: 350, borderRadius: 18 } : { maxWidth: 480, borderRadius: 32 }}
+                  overlayClassName={`${isMobile ? styles.board__tooltip__mobile : styles.board__tooltip}`}
+                  trigger="click"
+                  placement="top"
+                  color="#A15A1C">
+                  <Image
+                    src={QuestionImage}
+                    alt="bean"
+                    className={`${isMobile ? 'h-[12px] w-[12px]' : 'h-[16px] w-[16px]'} ml-[4px]`}
+                  />
+                </Tooltip>
+              </div>
+              <div className={`text-right flex flex-col ${isMobile ? 'space-y-[8px]' : 'space-y-[12px]'}`}>
                 <div className="font-bold">{`${fee} ELF`}</div>
                 <div>{`${formatAmountUSDShow(fee * elfInUsd)}`}</div>
               </div>
             </div>
             <div
-              className={`flex items-center justify-between mt-[12px] text-[#AE694C] ${
-                isMobile ? 'text-[14px]' : 'text-[16px]'
+              className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
+                isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
               }`}>
               <div>Buy Game Chance</div>
-              <div className="text-right flex flex-col space-y-[12px]">
-                <div className="font-bold">{`${inputVal * chancePrice * acornsInElf} ELF`}</div>
-                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInElf * elfInUsd)}`}</div>
+              <div className={`text-right flex flex-col  ${isMobile ? 'space-y-[8px]' : 'space-y-[12px]'}`}>
+                <div className="font-bold">{`${(inputVal * chancePrice)?.toLocaleString()} ${
+                  ACORNS_TOKEN.symbol
+                }`}</div>
+                <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInUsd)}`}</div>
               </div>
             </div>
           </>
@@ -180,40 +268,58 @@ export default function GetChanceModal({
         {assetBalance?.length ? (
           <div
             className={`flex flex-col bg-[#E8D1AE] rounded-[12px] ${
-              isMobile
-                ? 'text-[16px] space-y-[12px] p-[12px] mt-[24px]'
-                : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
+              isMobile ? 'text-[16px] space-y-[8px] p-[8px] mt-[12px]' : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
             }`}>
-            <div className="flex font-black">balance</div>
+            <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center">
-              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStr(
+              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStrShow(
                 acornsToken?.balance,
                 acornsToken?.decimals,
               )}`}</div>
               <div
-                onClick={() => {
-                  openPage(`${configInfo?.configInfo?.awakenUrl}/ELF_ACORNS_0.05`);
+                onClick={async () => {
+                  try {
+                    await getETransferAuthToken();
+                    setShowDepositModal(true);
+                  } catch (error) {
+                    message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+                  }
                 }}
-                className="flex items-center justify-center px-[16px] py-[9px] rounded-[8px] bg-[#A15A1C] text-[14px] font-black text-[#FFFFFF]">
+                className={`${
+                  isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
+                } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
                 Deposit
               </div>
             </div>
-            <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStr(
+            <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
               ElfToken?.balance,
               ElfToken?.decimals,
             )}`}</div>
           </div>
         ) : null}
-        <CommonBtn
-          title={'Purchase'}
-          onClick={() => onConfirm?.(inputVal, chancePrice)}
-          className={`flex justify-center items-center font-fonarto ${
-            isMobile
-              ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-2'
-              : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[6px]'
-          }`}
-        />
+        {errMsgTip ? (
+          <CommonDisabledBtn
+            title={'Purchase'}
+            onClick={undefined}
+            className={`flex justify-center items-center ${
+              isMobile
+                ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
+                : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
+            }`}
+          />
+        ) : (
+          <CommonBtn
+            title={'Purchase'}
+            onClick={handleConfirm}
+            className={`flex justify-center items-center font-paytone ${
+              isMobile
+                ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'
+                : '!text-[32px] !leading-[40px] mt-[40px] !h-[76px] mx-[64px] mb-[32px]'
+            }`}
+          />
+        )}
       </div>
+      <DepositModal open={showDepositModal} onCancel={() => setShowDepositModal(false)} />
     </CustomModal>
   );
 }

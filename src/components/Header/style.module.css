@@ -1,5 +1,5 @@
 .headerContainer {
-  @apply flex flex-col h-[100px] w-full px-[12px] py-[8px] gap-[4px];
+  @apply flex flex-col h-[100px] w-full  px-[12px] py-[8px] gap-[4px] bg-[#A15A1C];
 
   background-image: url('../../assets/images/headerMenu/top-menu-bg-m.png');
   background-size: cover;
@@ -16,7 +16,7 @@
   background-size: cover;
 
   .board__acorn__number {
-    @apply pl-[12px] flex flex-1 text-[#953D22] text-[16px] leading-[16px] font-fonarto;
+    @apply pl-[12px] flex flex-wrap break-all flex-1 text-[#953D22] text-[16px] leading-[16px] font-paytone;
   }
 }
 

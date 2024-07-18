@@ -3,10 +3,9 @@ import { ModalProps } from 'antd';
 import styles from './style.module.css';
 import { useIsMobile } from 'redux/selector/mobile';
 import CustomModal from 'components/CustomModal';
-import { TabContentUser } from './TabContentUser';
+import React from 'react';
 
 export interface ILeaderBoardModalProps extends ModalProps {
-  weeklyModal?: boolean;
   onCancel?: () => void;
 }
 
@@ -16,20 +15,20 @@ export default function LeaderBoardModal({
   onCancel,
   closable = true,
   className,
-  weeklyModal = false,
   ...params
 }: ILeaderBoardModalProps) {
   const isMobile = useIsMobile();
 
   return (
     <CustomModal
-      className={`${styles.leaderBoardModal} !pb-0 ${className} ${weeklyModal && styles.WeeklyModal}`}
+      className={`${styles.leaderBoardModal} ${
+        isMobile ? styles.leaderBoardMobileModal : styles.leaderBoardPcModal
+      } !pb-0 ${className}`}
       closable={closable}
       title={title}
       onCancel={onCancel}
       {...params}
-      centered
-      footer={<TabContentUser />}>
+      centered>
       {children}
     </CustomModal>
   );

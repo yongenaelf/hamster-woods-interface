@@ -40,19 +40,19 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
         </thead>
         <tbody>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Time</td>
+            <td className="text-[#AE694C]">Time</td>
             <td className="text-right">{getDateFormat(data.triggerTime, 'MMM dd HH:mm:ss')}</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Status</td>
+            <td className="text-[#AE694C]">Status</td>
             <td className="text-right">Confirmed</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Transaction Fee</td>
+            <td className="text-[#AE694C]">Transaction Fee</td>
             <td className="text-right">{formatElfValue(data.transactionFee)} ELF</td>
           </tr>
           <tr>
-            <td className="text-[#AE694C] text-opacity-60">Transaction ID</td>
+            <td className="text-[#AE694C]">Transaction ID</td>
             <td className="text-right">
               {middleEllipsis(data.transactionId)}{' '}
               <button onClick={() => copyText(data.transactionId)}>
@@ -67,7 +67,7 @@ const GameRecordItemChild = ({ data, title }: { data: ITransactionInfo | null; t
 };
 
 const Wrapper = (props: React.HTMLProps<HTMLDivElement>) => (
-  <div {...props} className="mb-2 w-full rounded-2xl bg-[#E8D1AE] p-4" />
+  <div {...props} className="mb-2 w-full rounded-2xl bg-[#E8D1AE] p-2" />
 );
 
 export const GameRecordItem = ({ data }: { data: IGameItem }) => {
@@ -90,17 +90,15 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
               </div>
             )}
             {triggerTime && (
-              <div className="text-md text-right text-[#AE694C] text-opacity-60">
-                {getDateFormat(triggerTime, 'HH:mm:ss')}
-              </div>
+              <div className="text-md text-right text-[#AE694C]">{getDateFormat(triggerTime, 'HH:mm:ss')}</div>
             )}
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
-                <th>Random step result</th>
-                <th>$ACORNS earned</th>
-                <th className="text-right">Transaction fee</th>
+              <tr className={`text-[#AE694C] ${isMobile ? ' text-[14px] leading-[16px]' : 'text-md'}`}>
+                <th className="font-medium">Random step result</th>
+                <th className="font-medium">$ACORNS earned</th>
+                <th className="text-right font-medium">Transaction fee</th>
               </tr>
             </thead>
             <tbody>
@@ -111,12 +109,9 @@ export const GameRecordItem = ({ data }: { data: IGameItem }) => {
               </tr>
             </tbody>
           </table>
-          {!open ? (
-            <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
-          ) : null}
+          {!open ? <Disclosure.Button className="pt-2 text-[#953D22]">More &#x25BC;</Disclosure.Button> : null}
           <Disclosure.Panel>
-            <GameRecordItemChild data={playTransactionInfo} title="Play" />
-            {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="Bingo" /> : null}
+            {bingoTransactionInfo ? <GameRecordItemChild data={bingoTransactionInfo} title="HOP" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
         </div>
@@ -145,14 +140,12 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
               </div>
             )}
             {triggerTime && (
-              <div className="text-md text-right text-[#AE694C] text-opacity-60">
-                {getDateFormat(triggerTime, 'HH:mm:ss')}
-              </div>
+              <div className="text-md text-right text-[#AE694C]">{getDateFormat(triggerTime, 'HH:mm:ss')}</div>
             )}
           </div>
           <table className="mb-4 w-full">
             <thead>
-              <tr className={`text-[#AE694C] text-opacity-60 ${isMobile ? 'text-[.7rem]' : 'text-md'}`}>
+              <tr className={`text-[#AE694C] ${isMobile ? 'text-[14px] leading-[16px]' : 'text-md'}`}>
                 <th>Hopping chance purchased</th>
                 <th>$ACORNS cost</th>
                 <th className="text-right">Transaction fee</th>
@@ -166,12 +159,9 @@ export const BuyRecordItem = ({ data }: { data: BuyChanceItem }) => {
               </tr>
             </tbody>
           </table>
-          {!open ? (
-            <Disclosure.Button className="py-2 font-bold text-[#953D22]">More &#x25BC;</Disclosure.Button>
-          ) : null}
+          {!open ? <Disclosure.Button className="pt-2  text-[#953D22]">More &#x25BC;</Disclosure.Button> : null}
           <Disclosure.Panel>
-            <GameRecordItemChild data={transactionInfo} title="Play" />
-            {transactionInfo ? <GameRecordItemChild data={transactionInfo} title="Bingo" /> : null}
+            {transactionInfo ? <GameRecordItemChild data={transactionInfo} title="Purchase Hopping Chance" /> : null}
             {open ? <Disclosure.Button className="py-2 text-[#953D22]">Pack up &#x25B2;</Disclosure.Button> : null}
           </Disclosure.Panel>
         </div>

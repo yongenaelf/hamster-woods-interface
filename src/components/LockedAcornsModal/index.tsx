@@ -4,19 +4,23 @@ import { useCallback, useMemo, useState } from 'react';
 import { useIsMobile } from 'redux/selector/mobile';
 import { useLockInfos, useUnlockRecords } from './hook';
 import { divDecimalsStr } from 'utils/calculate';
+import NoData from 'components/NoData';
+import { useSelector } from 'redux/store';
+import openPage from 'utils/openPage';
 
 export enum LockedAcornsTabEnum {
-  Pending = 'Pending Unlock',
-  Unlock = 'Unlock Record',
+  Pending = 'Locked',
+  Unlock = 'Unlocked',
 }
 const _tabClassName =
-  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-fonarto font-bold';
+  'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-paytone font-bold';
 
 export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomModalProps) {
   const isMobile = useIsMobile();
   const { data: lockInfos } = useLockInfos();
   const { data: unlockInfos } = useUnlockRecords();
   const [tab, setTab] = useState(LockedAcornsTabEnum.Pending);
+  const { configInfo } = useSelector((state) => state.configInfo);
 
   const tabClassName = useMemo(
     () =>
@@ -27,17 +31,20 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
   const renderPending = useCallback(() => {
     return (
       <>
-        <div className="flex items-center gap-2 text-[16px] leading-[16px] font-fonarto mb-4">
+        <div
+          className={`flex items-center gap-2 ${
+            isMobile ? 'text-[12px]' : 'text-[16px]'
+          } leading-[16px] font-paytone mb-4`}>
           <img
             width={24}
-            className="w-[24px] h-[24px]"
+            className={`${isMobile ? 'w-[16px] h-[16px]' : 'w-[24px] h-[24px]'}`}
             src={require('assets/images/lock.png').default.src}
             alt="lock"
           />
-          {`Locked Amount ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
+          {`Total Locked ${divDecimalsStr(lockInfos?.totalLockedAmount, lockInfos?.decimals)}`}
           <img
             width={20}
-            className="w-[20px] h-[20px]"
+            className={`${isMobile ? 'w-[16px] h-[16px]' : 'w-[20px] h-[20px]'}`}
             src={require('assets/images/neat.png').default.src}
             alt="lock"
           />
@@ -46,24 +53,30 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
         <div
           className={`flex ${
             isMobile ? 'text-[12px]' : 'text-[16px]'
-          }  leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
-          <div className="flex-1">Locked time</div>
-          <div className="flex-1">Estimated unlock time</div>
-          <div className="flex-1 text-right">$ACORNS amount</div>
+          } !mx-0 leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
+          <div className="flex-1">Lock Time</div>
+          <div className="flex-1">Unlock Time</div>
+          <div className="flex-1 text-right">amount</div>
         </div>
-        <div className="overflow-y-auto h-full">
-          {lockInfos?.lockedInfoList.map((item, i) => (
-            <div
-              key={i}
-              className={`flex  ${
-                isMobile ? 'text-[12px]' : 'text-[16px]'
-              } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
-              <div className="flex-1">{item.lockedTime}</div>
-              <div className="flex-1">{item.unLockTime}</div>
-              <div className="flex-1 text-right">{`${divDecimalsStr(item.amount, item.decimals)} $${item.symbol}`}</div>
-            </div>
-          ))}
-        </div>
+        {lockInfos?.lockedInfoList?.length ? (
+          <div className="overflow-y-auto h-full">
+            {lockInfos?.lockedInfoList.map((item, i) => (
+              <div
+                key={i}
+                className={`flex  ${
+                  isMobile ? 'text-[12px]' : 'text-[16px]'
+                } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
+                <div className="flex-1">{item.lockedTime}</div>
+                <div className="flex-1">{item.unLockTime}</div>
+                <div className="flex-1 text-right">{`${divDecimalsStr(item.amount, item.decimals)} $${
+                  item.symbol
+                }`}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <NoData />
+        )}
       </>
     );
   }, [isMobile, lockInfos?.decimals, lockInfos?.lockedInfoList, lockInfos?.totalLockedAmount]);
@@ -76,31 +89,40 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
             isMobile ? 'text-[12px]' : 'text-[16px]'
           } leading-[18px] text-[#AE694C] bg-[#DEC49D] px-[16px] py-[9px] text-left rounded-[5px]`}>
           <div className="flex-1">Unlocked time</div>
-          <div className="flex-1 text-right">Unlock amount</div>
+          <div className="flex-1 text-right">Amount</div>
         </div>
-        <div className="overflow-y-auto h-full">
-          {unlockInfos?.map((item, i) => (
-            <div
-              key={i}
-              className={`flex  ${
-                isMobile ? 'text-[12px]' : 'text-[16px]'
-              } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
-              <div className="flex-1">{item.unLockTime}</div>
-              <div className="flex-1 flex justify-end items-center gap-2 text-right">
-                {`${divDecimalsStr(item.amount, item.decimal)} $${item.symbol}`}{' '}
-                <img
-                  width={20}
-                  className="w-[20px] h-[20px]"
-                  src={require('assets/images/link-icon.png').default.src}
-                  alt="link"
-                />
+
+        {unlockInfos?.length ? (
+          <div className="overflow-y-auto h-full">
+            {unlockInfos?.map((item, i) => (
+              <div
+                key={i}
+                className={`flex  ${
+                  isMobile ? 'text-[12px]' : 'text-[16px]'
+                } leading-[18px] text-[#953D22] p-4 text-left border-b-[1px] border-[#D3B68A]`}>
+                <div className="flex-1">{item.unLockTime}</div>
+                <div
+                  className="flex-1 flex justify-end items-center gap-2 text-right"
+                  onClick={() => {
+                    openPage(`${configInfo?.explorerBaseUrl}${item.transactionId}`);
+                  }}>
+                  {`${divDecimalsStr(item.amount, item.decimal)} $${item.symbol}`}{' '}
+                  <img
+                    width={20}
+                    className="w-[20px] h-[20px]"
+                    src={require('assets/images/link-icon.png').default.src}
+                    alt="link"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <NoData />
+        )}
       </>
     );
-  }, [unlockInfos]);
+  }, [isMobile, unlockInfos]);
 
   const handleClose = useCallback(() => {
     setTab(LockedAcornsTabEnum.Pending);
@@ -111,11 +133,12 @@ export default function LockedAcornsModal({ open, onCancel, ...props }: ICustomM
     <CustomModal
       className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
       open={open}
+      centered
       onCancel={handleClose}
       {...props}
-      title={`Locked Details`}
+      title={`$ACORNS Unlocks`}
       destroyOnClose>
-      <div className={`${isMobile ? 'h-[33rem]' : 'h-[41rem]'} flex flex-col`}>
+      <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[41rem]'} flex flex-col`}>
         <div className="flex flex-col h-full">
           <div className={`${isMobile ? 'px-[16px]' : 'px-[40px]'} flex w-full`}>
             <button

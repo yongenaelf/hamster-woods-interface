@@ -31,30 +31,43 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
   const { initialize } = useInitLeaderBoard();
   const [isShowNFT, setIsShowNFT] = useState(false);
   const [claimInfo, setClaimInfo] = useState<IClaimableInfoResult>();
+  const [finishedClaim, setFinishedClaim] = useState(false);
 
   const showClaimBtn = useMemo(
     () => !!data?.settleDaySelfRank?.rewardNftInfo,
     [data?.settleDaySelfRank?.rewardNftInfo],
   );
 
+  const refreshData = useCallback(async () => {
+    try {
+      await initialize();
+      setFinishedClaim(false);
+    } catch (error) {
+      console.log('err', error);
+    }
+  }, [initialize]);
+
   const onClaim = useCallback(async () => {
     showMessage.loading();
     try {
       const result = await claimAward();
+      setFinishedClaim(true);
       setClaimInfo(result);
       setIsShowNFT(true);
-
-      await initialize();
+      refreshData();
     } catch (error) {
       console.log('err', error);
       showMessage.error('claim failed');
     } finally {
       showMessage.hideLoading();
     }
-  }, [claimAward, initialize]);
+  }, [claimAward, refreshData]);
 
   return (
-    <div className={`${isMobile ? 'p-2' : 'px-[32px] py-[12px]'} flex items-center bg-[#9A531F] ${className}`}>
+    <div
+      className={`${
+        isMobile ? 'p-2' : 'px-[32px] py-[12px]'
+      } flex items-center bg-[#9A531F] rounded-b-[8px] ${className}`}>
       <ShowNFTModal
         open={isShowNFT}
         beanPassItem={claimInfo?.kingHamsterInfo}
@@ -62,39 +75,79 @@ export const TabContentUser = ({ className }: ITabContentUserProps) => {
         type={ShowBeanPassType.Success}
       />
       <img
-        className={`${isMobile ? 'w-8' : 'w-16'}`}
+        className={`${isMobile ? 'w-8 h-8' : 'w-16 h-16'}`}
         src={Avatar[curBeanPass?.symbol || DEFAULT_SYMBOL]}
         alt="avatar"
       />
-      <Rank rank={data?.selfRank.rank} />
-      <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-fonarto`}>
-        {middleEllipsis(data?.selfRank.caAddress)}
-      </div>
-      {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
-        <Image className="ml-2 w-16" src={MeIcon} alt="me" />
-      ) : null}
-      <div className="flex-grow mr-2"></div>
-      <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-fonarto text-white`}>
-        {divDecimalsStr(data?.selfRank.score, data?.selfRank.decimals) ?? '-'}
-      </div>
-      <img
-        className={`${isMobile ? 'mx-2 h-6' : 'mx-8 h-8'}`}
-        src={require('assets/images/neat.png').default.src}
-        alt="bean"
-      />
-      {showClaimBtn && (
+      <Rank rank={data?.selfRank.rank || data?.settleDaySelfRank?.rank} />
+
+      {showClaimBtn && !finishedClaim && isMobile ? (
+        <div className="flex-1">
+          <>
+            <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
+              {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
+            </div>
+            {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
+              <Image className="ml-2 w-16" src={MeIcon} alt="me" />
+            ) : null}
+          </>
+          <div className="flex flex-row justify-start items-center">
+            <div className={`text-[16px] font-paytone text-white`}>
+              {divDecimalsStr(
+                data?.selfRank?.score || data?.settleDaySelfRank?.score,
+                data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
+              ) ?? '-'}
+            </div>
+            <img
+              className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
+              src={require('assets/images/neat.png').default.src}
+              alt="bean"
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className={`${isMobile ? 'text-[12px]' : 'text-[20px]'} ${LeaderboardTextColors.White} font-paytone`}>
+            {middleEllipsis(data?.selfRank.caAddress || data?.settleDaySelfRank?.caAddress)}
+          </div>
+          {data && Number(data?.selfRank?.rank) >= MAX_LEADERBOARD_ITEMS ? (
+            <Image className="ml-2 w-16" src={MeIcon} alt="me" />
+          ) : null}
+          <div className="flex-grow mr-2"></div>
+          <div className={`${isMobile ? 'text-[16px]' : 'text-[20px]'} font-paytone text-white`}>
+            {divDecimalsStr(
+              data?.selfRank?.score || data?.settleDaySelfRank?.score,
+              data?.selfRank?.decimals || data?.settleDaySelfRank?.decimals,
+            ) ?? '-'}
+          </div>
+          <img
+            className={`${isMobile ? 'mx-2 h-4' : 'mx-4 h-8'}`}
+            src={require('assets/images/neat.png').default.src}
+            alt="bean"
+          />
+        </>
+      )}
+
+      {showClaimBtn && !finishedClaim && (
         <div onClick={onClaim}>
           <div className="flex-grow mr-2"></div>
-          <div className="bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white text-[16px] flex items-center space-x-2">
-            <span className="font-bold">Claim NFT Rewards</span>
-            <img
-              src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
-              className={`z-10 w-[24px] h-[24px]`}
-              width={24}
-              height={24}
-              alt="avatar"
-            />
-            <span className="font-black">`*{data?.settleDaySelfRank?.rewardNftInfo?.balance}`</span>
+          <div
+            className={`bg-[#F78822] py-[6px] px-[12px] rounded-[8px] text-white flex items-center space-x-2 ${
+              isMobile ? 'text-[10px] flex-col-reverse py-[3px] px-[6px]' : 'text-[16px]'
+            }`}>
+            <span className="font-bold whitespace-nowrap">Claim NFT Prizes</span>
+            <div className="flex items-center">
+              <img
+                src={data?.settleDaySelfRank?.rewardNftInfo?.imageUrl}
+                className={`z-10 rounded-full border-[3px] border-[#ffffff] border-solid`}
+                width={isMobile ? 20 : 24}
+                height={isMobile ? 20 : 24}
+                alt="avatar"
+              />
+              <span className="font-black text-[14px]">{`*${
+                data?.settleDaySelfRank?.rewardNftInfo?.balance || ''
+              }`}</span>
+            </div>
           </div>
         </div>
       )}

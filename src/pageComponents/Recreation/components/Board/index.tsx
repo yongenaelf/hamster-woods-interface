@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import RankingImage from 'assets/images/recreation/ranking.png';
 import NftImage from 'assets/images/recreation/nft.png';
 import GoButton, { IGoButton, Status } from '../GoButton';
@@ -13,11 +13,10 @@ import Image from 'next/image';
 import { dispatch } from 'redux/store';
 import { toggleShowLeaderboard } from 'redux/reducer/info';
 import useInitLeaderBoard from 'components/Leaderboard/hooks/useInitLeaderBoard';
-import showMessage from 'utils/setGlobalComponentsInfo';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import { Tooltip } from 'antd';
 import { allAcornsTip } from 'constants/tip';
-import { divDecimalsStr } from 'utils/calculate';
+import { divDecimalsStrShow } from 'utils/calculate';
 
 interface IBoard extends IGoButton {
   onNftClick?: () => void;
@@ -39,11 +38,24 @@ function Board({
 }: IBoard) {
   const { isMobile, playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const tooltipRef = useRef<any>(null);
 
   const { initialize } = useInitLeaderBoard();
 
+  useEffect(() => {
+    const handleDocumentClick = (event: any) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setTooltipOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
+
   const handleShowLeaderboard = useCallback(async () => {
-    // showMessage.loading();
     try {
       await initialize();
     } catch (err) {
@@ -56,7 +68,6 @@ function Board({
         },
       });
     } finally {
-      // showMessage.hideLoading();
       dispatch(toggleShowLeaderboard());
     }
   }, [initialize]);
@@ -80,15 +91,25 @@ function Board({
     return (
       <div className="flex h-full w-full flex-col px-[47px] pt-[56px]">
         <div className="relative z-40 flex-1">
-          <div className={styles['board__acorn']}>
+          <div ref={tooltipRef} className={styles['board__acorn']}>
             <Image src={AcornGetImage} alt="bean" className="h-[60px] w-[60px]" onClick={getMoreAcorns} />
-            <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
+            <span
+              className={`${styles['board__acorn__number']} ${
+                divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals).length > 16
+                  ? '!text-[24px]'
+                  : ''
+              } px-[2px]`}
+              onClick={getMoreAcorns}>
+              {divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
             </span>
             <Tooltip
               title={
                 <div className="px-[24px] py-[16px]">
-                  <div className="text-[18px] leading-[28px]">{allAcornsTip}</div>
+                  {allAcornsTip.map((ele, index) => (
+                    <div key={index} className="text-[18px] leading-[28px] mb-[12px]">
+                      {ele}
+                    </div>
+                  ))}
                   <div className="text-right text-[24px] leading-[28px]" onClick={() => setTooltipOpen(false)}>
                     OK
                   </div>
@@ -98,7 +119,7 @@ function Board({
               overlayStyle={isMobile ? { maxWidth: 280, borderRadius: 32 } : { maxWidth: 480, borderRadius: 32 }}
               overlayClassName={styles.board__tooltip}
               trigger="click"
-              placement="bottom"
+              placement="bottomLeft"
               color="#A15A1C">
               <Image
                 src={QuestionImage}
@@ -108,16 +129,16 @@ function Board({
               />
             </Tooltip>
           </div>
-          <div className={styles['board__acorn']}>
+          <div className={`${styles['board__acorn']} pr-[38px]`}>
             <Image src={AcornWeeklyImage} alt="bean" className="h-[60px] w-[60px]" />
             <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
+              {divDecimalsStrShow(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
             </span>
           </div>
-          <div className={styles['board__acorn']}>
-            <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" onClick={showLockedAcorns} />
+          <div className={`${styles['board__acorn']} pr-[38px]`} onClick={showLockedAcorns}>
+            <Image src={AcornLockedImage} alt="bean" className="h-[60px] w-[60px]" />
             <span className={styles['board__acorn__number']}>
-              {divDecimalsStr(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals)}
+              {divDecimalsStrShow(playerInfo?.lockedAcorns, playerInfo?.acornsDecimals)}
             </span>
           </div>
           <div className={styles['board__feature']} onClick={handleShowLeaderboard}>

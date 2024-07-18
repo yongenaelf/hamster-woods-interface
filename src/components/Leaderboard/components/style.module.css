@@ -1,11 +1,24 @@
 /* stylelint-disable number-max-precision */
 
-.WeeklyModal {
-  @apply relative  rounded-[32px] p-0;
+.leaderBoardMobileModal {
   :global {
-    .ant-modal-footer {
-      @apply block p-0 m-0 border-t-0;
+    .ant-modal-body {
+      @apply !pt-[16px];
     }
+  }
+}
+
+.leaderBoardPcModal {
+  :global {
+    .ant-modal-body {
+      @apply !pt-[2rem];
+    }
+  }
+}
+
+.leaderBoardModal {
+  @apply relative  p-0;
+  :global {
     .ant-modal-content {
       @apply h-full bg-inherit shadow-none rounded-[32px];
       .ant-modal-close {
@@ -14,9 +27,6 @@
           @apply w-full h-full;
         }
       }
-    }
-    .ant-modal-body {
-      @apply w-full px-[16px] pt-[16px];
     }
   }
 }

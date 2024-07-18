@@ -8,6 +8,7 @@ export interface IRankItem {
 interface ISettleDayRankItem {
   caAddress: string;
   score: number;
+  decimals: number;
   rank: number;
   fromRank?: number;
   toRank?: number;
@@ -24,6 +25,8 @@ interface ISettleDayRankItem {
 }
 
 interface IRankResult {
+  weekNum?: number;
+  endDate?: string;
   rankingList?: IRankItem[] | null;
   selfRank?: IRankItem | null;
   settleDayRankingList?: ISettleDayRankItem[] | null;
@@ -36,6 +39,7 @@ interface IPastRecordItem {
   score: number;
   decimals: number;
   rank: number;
+  weekNum: number;
   rewardNftInfo: {
     symbol: string;
     chainId: string;

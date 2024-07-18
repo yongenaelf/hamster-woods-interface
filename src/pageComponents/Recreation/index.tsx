@@ -46,9 +46,9 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import PurchaseNoticeModal, { PurchaseNoticeEnum } from 'components/PurchaseNoticeModal';
 import { PurchaseChance } from 'contract/bingo';
 import contractRequest from 'contract/contractRequest';
-import { ZERO, divDecimals } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import { addPrefixSuffix } from 'utils/addressFormatting';
+import { checkerboardData } from 'constants/checkerboardData';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -70,13 +70,12 @@ export default function Game() {
     walletType,
     walletInfo,
     configInfo,
-    chessBoardInfo: checkerboardData,
+    // chessBoardInfo: checkerboardData,
     resetStart: chessboardResetStart,
     chessboardTotalStep,
     curChessboardNode,
     needSync,
     checkerboardCounts,
-    imageResources,
     curBeanPass,
   } = useGetState();
 
@@ -131,7 +130,7 @@ export default function Game() {
 
   const [getChanceModalVisible, setGetChanceModalVisible] = useState(false);
 
-  const [acornsInElf, setAcornsInElf] = useState(0.1);
+  const [acornsInUsd, setAcornsInUsd] = useState(0.1);
   const [elfInUsd, setElfInUsd] = useState(0.35);
   const [assetBalance, setAssetBalance] = useState<IBalance[]>([]);
 
@@ -262,7 +261,7 @@ export default function Game() {
 
   const updatePrice = useCallback(async () => {
     fetchPrice().then((res) => {
-      setAcornsInElf(res.acornsInElf);
+      setAcornsInUsd(res.acornsInUsd);
       setElfInUsd(res.elfInUsd);
     });
   }, []);
@@ -280,25 +279,6 @@ export default function Game() {
 
   const handlePurchase = useCallback(
     async (n: number, chancePrice: number) => {
-      if (!n) {
-        showMessage.error('Please input valid number.');
-        return;
-      }
-
-      const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
-      if (
-        !acornsToken?.balance ||
-        ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(n).times(chancePrice))
-      ) {
-        showMessage.error('Acorns is not enough');
-        return;
-      }
-
-      if (ZERO.plus(n).gt(ZERO.plus(playerInfo?.weeklyPurchasedChancesCount ?? 0))) {
-        showMessage.error('Purchase chance is not enough');
-        return;
-      }
-
       try {
         showMessage.loading();
         const isApproved = await contractRequest.get().checkAllowanceAndApprove({
@@ -318,13 +298,7 @@ export default function Game() {
         showMessage.hideLoading();
       }
     },
-    [
-      address,
-      assetBalance,
-      configInfo?.beanGoTownContractAddress,
-      playerInfo?.weeklyPurchasedChancesCount,
-      updatePlayerInformation,
-    ],
+    [address, configInfo?.beanGoTownContractAddress, updatePlayerInformation],
   );
 
   const go = async () => {
@@ -419,6 +393,7 @@ export default function Game() {
       const { claimable, reason, transactionId, hamsterPassInfo } = getNFTRes;
       if (!claimable) {
         showMessage.error(reason);
+        showMessage.hideLoading();
         return;
       }
       setBeanPassModalVisible(false);
@@ -591,15 +566,16 @@ export default function Game() {
     <>
       <div
         style={{
-          backgroundImage: isMobile
-            ? `url(${imageResources?.playgroundBgMobile})`
-            : `url(${imageResources?.playgroundBgPc})`,
+          backgroundImage: `url(${
+            require(isMobile ? 'assets/images/bg/playground-mobile.png' : 'assets/images/bg/playground-pc.png').default
+              .src
+          })`,
         }}
         className={`${styles.game} cursor-custom relative z-[1] ${isMobile && 'flex-col'}`}>
         {!isMobile && <BoardLeft />}
         <div
           className={`${styles['game__content']} flex overflow-hidden ${
-            isMobile ? 'w-full flex-1' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
+            isMobile ? 'w-full flex-1 pb-[106px]' : 'h-full w-[40%] min-w-[500Px] max-w-[784Px]'
           }`}>
           {isMobile && <Board hasNft={hasNft} onNftClick={onNftClick} />}
           <div
@@ -700,7 +676,7 @@ export default function Game() {
           onConfirm={handleConfirm}
         />
         <GetChanceModal
-          acornsInElf={acornsInElf}
+          acornsInUsd={acornsInUsd}
           elfInUsd={elfInUsd}
           assetBalance={assetBalance}
           open={getChanceModalVisible}

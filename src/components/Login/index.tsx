@@ -51,6 +51,7 @@ import { Proto } from 'utils/proto';
 import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
 import CommonBtn from 'components/CommonBtn';
+import ShowPageLoading from 'components/ShowPageLoading';
 
 const components = {
   phone: PhoneIcon,
@@ -77,8 +78,10 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
-  const { configInfo, imageResources } = useGetState();
+  const { configInfo } = useGetState();
   const { curChain } = configInfo!;
+
+  const [showPageLoading, setShowPageLoading] = useState(false);
 
   const [currentLifeCircle, setCurrentLifeCircle] = useState<
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
@@ -261,7 +264,7 @@ export default function Login() {
           isMobileStore ? '' : 'mx-[96px]'
         } `}>
         {getIconComponent(item.iconName as IconType, inModel)}
-        <span className="flex-1 text-center font-fonarto">{item.name}</span>
+        <span className="flex-1 text-center font-paytone">{item.name}</span>
       </div>
     ));
   };
@@ -310,12 +313,13 @@ export default function Login() {
       if (!originChainId) return;
       let caHash = caInfo?.caHash;
 
+      setShowPageLoading(true);
       if (!caInfo) {
         try {
           caHash = wallet.didWallet.caInfo[originChainId].caHash;
           const caAddress = wallet.didWallet.caInfo[originChainId].caAddress;
           setIsUnlockShow(false);
-          handleFinish(WalletType.portkey, {
+          await handleFinish(WalletType.portkey, {
             caInfo: { caHash, caAddress },
             walletInfo: wallet.didWallet.managementAccount,
             pin: v,
@@ -323,6 +327,7 @@ export default function Login() {
           });
         } catch (err) {
           showMessage.error();
+          setShowPageLoading(false);
           return;
         }
       } else {
@@ -333,7 +338,8 @@ export default function Login() {
           chainId: configInfo!.curChain,
           walletInfo: wallet.didWallet.managementAccount,
         };
-        handleFinish(WalletType.portkey, walletInfo);
+        await handleFinish(WalletType.portkey, walletInfo);
+        setShowPageLoading(false);
       }
     },
     [configInfo, handleFinish],
@@ -348,10 +354,12 @@ export default function Login() {
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
   const handlePortKeyLoginFinish = useCallback(
-    (wallet: DIDWalletInfo) => {
+    async (wallet: DIDWalletInfo) => {
       signInRef.current?.setOpen(false);
       localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
-      handleFinish(WalletType.portkey, wallet);
+      setShowPageLoading(true);
+      await handleFinish(WalletType.portkey, wallet);
+      setShowPageLoading(false);
     },
     [handleFinish],
   );
@@ -473,18 +481,30 @@ export default function Login() {
 
   return (
     <div
-      className={`cursor-custom ${styles.loginContainer}`}
+      className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
       style={{
-        backgroundImage: `url(${isMobileStore ? imageResources?.playgroundBgMobile : imageResources?.playgroundBgPc})`,
+        backgroundImage: `url(${
+          require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+            .default.src
+        })`,
       }}>
+      {!isMobileStore ? (
+        <img
+          className="z-10 w-[400px] h-[400px]"
+          width={400}
+          height={400}
+          src={require('assets/images/bg/hamster-logo.png').default.src}
+          alt="logo"
+        />
+      ) : null}
       {!TelegramPlatform.isTelegramPlatform() &&
         (isLock ? (
           <CommonBtn
             onClick={() => {
               setIsUnlockShow(true);
             }}
-            className={`${styles.unlockBtn} !bg-[#A15A1C]`}
-            title="unLock"></CommonBtn>
+            className={`${styles.unlockBtn} !bg-[#A15A1C] ${isMobileStore ? '' : '!mt-[80px]'}`}
+            title="Unlock"></CommonBtn>
         ) : isLogin ? null : (
           <>
             {renderLoginMethods(false)}
@@ -546,6 +566,8 @@ export default function Login() {
         }}
         isWrongPassword={isErrorTipShow}
       />
+
+      <ShowPageLoading open={showPageLoading} />
     </div>
   );
 }

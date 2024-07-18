@@ -1,13 +1,13 @@
 .appears-animation {
-  animation: appears-animation 1.5s;
+  animation: appears-animation 2.5s;
 }
 
 .appears-animation-right {
-  animation: appears-animation-right 1.5s;
+  animation: appears-animation-right 2.5s;
 }
 
 .appears-animation-left {
-  animation: appears-animation-left 1.5s;
+  animation: appears-animation-left 2.5s;
 }
 
 @keyframes appears-animation

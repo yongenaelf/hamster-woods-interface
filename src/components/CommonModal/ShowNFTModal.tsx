@@ -16,12 +16,13 @@ export default function ShowNftModal({ type, onCancel, open, beanPassItem }: Sho
       className={`!w-[358px] md:!w-[580px]`}
       open={open}
       title={type === ShowBeanPassType.Display ? 'Your HamsterPass' : 'Congratulations!'}
+      centered
       onCancel={onCancel}>
       <>
         <div className="mx-auto h-[160px] w-[160px] md:mt-0 md:h-[240px] md:w-[240px] relative">
           <img src={hamsterPassInfo?.nftImageUrl || ''} alt="" className="w-full h-full" />
         </div>
-        <div className="w-[177px] md:w-[271px] mx-auto flex justify-between items-center md:text-[24px] text-base md:leading-[32px] leading-[24px] font-bold md:mt-[35px] mt-[24px] md:mb-[28px]">
+        <div className="w-[190px] md:w-[271px] mx-auto flex justify-between items-center md:text-[24px] text-base md:leading-[32px] leading-[24px] font-bold md:mt-[28px] mt-[24px] md:mb-[28px] mb-[24px]">
           <span className="py-1">{`${hamsterPassInfo?.tokenName} #${hamsterPassInfo?.tokenId}`}</span>
           <img
             src={LinkImageIcon.src}

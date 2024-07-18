@@ -236,6 +236,11 @@ export interface IConfigItems {
   isShowRampSell?: boolean;
   awakenUrl: string;
   awakenTutorialUrl: string;
+  eTransferUrl: string;
+  eTransferDefaultChainId: string;
+  eTransferDefaultNetwork: string;
+  eTransferDefaultDepositToken: string;
+  eTransferDefaultReceiveToken: string;
 }
 
 export interface IChessboardData {
@@ -268,6 +273,7 @@ export interface IGetRankQuery {
 
 export interface IClaimAwardBody {
   caAddress: string;
+  weekNum?: number;
 }
 
 export interface IRankHistoryQuery {
@@ -306,11 +312,13 @@ export interface ITransactionResult {
 export interface IServerConfig {
   chancePrice: number;
   buyChanceTransactionFee: number;
+  weeklyBuyChanceCount: number;
 }
 
 export interface IPrice {
   acornsInElf: number;
   elfInUsd: number;
+  acornsInUsd: number;
 }
 
 export interface IBalance {

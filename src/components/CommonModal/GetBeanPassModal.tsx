@@ -18,29 +18,29 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
   const displayText = useMemo(() => {
     return {
       [GetBeanPassStatus.Recharge]: {
-        title: 'Acquire $ACORNS',
+        title: 'Acquire HamsterPass',
         btnText: walletType !== WalletType.discover ? 'Go to wallet' : '',
         contentArr: [
-          'You need to have a $ACORNS NFT to start the game.',
-          `To claim the free $ACORNS, please make sure your MainChain and SideChain balances combined to be no less than ${
+          'You need to have a HamsterPass NFT to start the game.',
+          `To claim the free HamsterPass, please make sure your MainChain and SideChain balances combined to be no less than ${
             configInfo!.minElfNum
           } ELF.`,
         ],
       },
       [GetBeanPassStatus.Abled]: {
-        title: 'Acquire $ACORNS',
-        btnText: 'Acquire $ACORNS',
+        title: 'Acquire HamsterPass',
+        btnText: 'Acquire HamsterPass',
         contentArr: [
-          'You need to have a $ACORNS NFT to start the game. ',
-          'Click the button below to claim your $ACORNS.',
+          'You need to have a HamsterPass NFT to start the game. ',
+          'Click the button below to claim your HamsterPass.',
         ],
       },
       [GetBeanPassStatus.Noneleft]: {
-        title: 'Acquire $ACORNS',
+        title: 'Acquire HamsterPass',
         btnText: 'I know',
         contentArr: [
-          'You need to have a $ACORNS NFT to start the game! ',
-          `Today's $ACORNS NFTs have all been claimed. Please come back tomorrow after ${formatTime({
+          'You need to have a HamsterPass NFT to start the game! ',
+          `Today's HamsterPass NFTs have all been claimed. Please come back tomorrow after ${formatTime({
             hours,
             minutes,
             seconds,
@@ -49,17 +49,17 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         ],
       },
       [GetBeanPassStatus.Notfound]: {
-        title: 'Get a $ACORNS',
+        title: 'Get a HamsterPass',
         btnText: 'I know',
         contentArr: [
-          'You need to have a $ACORNS NFT to start the game!',
-          `Since you have already claimed a $ACORNS but it's not in your current wallet address now, please transfer it back or obtain a new one via the Forest NFT marketplace.`,
+          'You need to have a HamsterPass NFT to start the game!',
+          `Since you have already claimed a HamsterPass but it's not in your current wallet address now, please transfer it back or obtain a new one via the Forest NFT marketplace.`,
         ],
       },
       [GetBeanPassStatus.Need]: {
         title: 'Notice',
         btnText: 'Confirm',
-        contentArr: [`You'll need a $ACORNS NFT to start the game.`],
+        contentArr: [`You'll need a HamsterPass NFT to start the game.`],
       },
     }[type];
   }, [configInfo, hours, minutes, seconds, type, walletType]);
@@ -68,14 +68,23 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
       open={props.open}
       title={displayText.title}
       onCancel={props.onCancel}
+      centered
       className={styles.getBeanPassModal}>
-      <div className="mb-6 md:mb-[37px] md:text-[24px] md:leading-[32px]">
+      <div className="mb-6 md:mb-[37px] ">
         {displayText.contentArr.map((text, i) => {
-          return <p key={i}>{text}</p>;
+          return (
+            <p
+              key={i}
+              className={`${
+                isMobile ? 'mb-[12px]' : ''
+              } text-[16px] md:text-[24px] leading-[18px] md:leading-[32px] text-center`}>
+              {text}
+            </p>
+          );
         })}
       </div>
       {displayText.btnText && (
-        <div className={`${isMobile ? '' : 'mx-[64px]'} h-[70px]`}>
+        <div className={`${isMobile ? '' : 'mx-[64px] mb-[32px]'} h-[70px] `}>
           <CommonBtn title={displayText.btnText} onClick={props.onConfirm} className={styles.confirmBtn}></CommonBtn>
         </div>
       )}

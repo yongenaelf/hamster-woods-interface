@@ -1,4 +1,21 @@
 /* stylelint-disable number-max-precision */
+.getMoreACORNSModal {
+  @apply !px-0 overflow-hidden relative;
+
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply absolute top--1 right-1;
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+      .ant-modal-body {
+        @apply pt-0 leading-6 rounded-[16px];
+      }
+    }
+  }
+}
 
 .showBeanPassModal {
   @apply !w-[358px] md:!w-[580px];

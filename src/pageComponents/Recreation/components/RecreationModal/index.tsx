@@ -82,14 +82,14 @@ function RecreationModal(props: IRecreationModal) {
           step &&
           (isMobile ? (
             <div className="absolute top-[-120px] flex flex-col items-center justify-center">
-              <span className={`text-[#fff] left-0 right-0 m-auto text-center font-fonarto text-[64px]`}>{step}</span>
-              <span className={`text-[#fff] left-0 right-0 m-auto text-center font-fonarto text-[40px]`}>
+              <span className={`text-[#fff] left-0 right-0 m-auto text-center font-paytone text-[64px]`}>{step}</span>
+              <span className={`text-[#fff] left-0 right-0 m-auto text-center font-paytone text-[40px]`}>
                 {step === 1 ? 'Step Forward' : 'Steps Forward'}
               </span>
             </div>
           ) : (
             <span
-              className={`absolute top-[-100px] text-[#fff] left-0 right-0 m-auto text-center font-fonarto text-[96px]`}>
+              className={`absolute top-[-100px] text-[#fff] left-0 right-0 m-auto text-center font-paytone text-[96px]`}>
               {step === 1 ? `${step} Step Forward` : `${step} Steps Forward`}
             </span>
           ))}
@@ -118,7 +118,7 @@ function RecreationModal(props: IRecreationModal) {
           className={`${isMobile ? 'h-auto w-full mt-[-40px]' : 'h-[720px] max-h-[640Px] w-[auto]'}`}
         />
         <span
-          className={`text-[#fff] absolute left-0 right-0 m-auto text-center font-fonarto ${
+          className={`text-[#fff] absolute left-0 right-0 m-auto text-center font-paytone ${
             isMobile ? 'text-[16px] bottom-0' : 'text-[42px] bottom-0'
           }`}>
           {RANDOM_STEP}
@@ -144,7 +144,7 @@ function RecreationModal(props: IRecreationModal) {
               )}
 
               <span
-                className={`absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
+                className={`font-paytone absolute bottom-0 left-0 right-0 font-[900] top-0 z-[30] m-auto flex items-center justify-center text-[#fff] ${
                   isMobile ? 'text-[64px]' : 'text-[96px]'
                 }`}>
                 +{bean}
@@ -170,7 +170,7 @@ function RecreationModal(props: IRecreationModal) {
             isMobile ? styles['treasure-btn-mobile'] : styles['treasure-btn-pc']
           }`}
           onClick={treasureStatus === TreasureStatus.OPENED ? onClose : openTreasure}>
-          <span className="mb-[6.5px] font-fonarto">
+          <span className="mb-[6.5px] font-paytone">
             {treasureStatus === TreasureStatus.OPENED ? 'Confirm' : 'OPEN'}
           </span>
         </button>

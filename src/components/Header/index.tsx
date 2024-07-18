@@ -10,10 +10,10 @@ import AcornGetImage from 'assets/images/recreation/acorn-get.png';
 import AcornWeeklyImage from 'assets/images/recreation/acorn-weekly.png';
 import QuestionImage from 'assets/images/recreation/question.png';
 import HeaderLockImage from 'assets/images/headerMenu/header-locked.png';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
-import { divDecimalsStr } from 'utils/calculate';
+import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
 
 export default function Header() {
@@ -23,6 +23,28 @@ export default function Header() {
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
   const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
   const isMobile = useIsMobile();
+  const allAcornsShow = useMemo(
+    () => divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals),
+    [playerInfo?.acornsDecimals, playerInfo?.totalAcorns],
+  );
+  const weeklyAcornsShow = useMemo(
+    () => divDecimalsStrShow(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals),
+    [playerInfo?.acornsDecimals, playerInfo?.weeklyAcorns],
+  );
+  const tooltipRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: any) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setTooltipOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
 
   return (
     <div className={styles.headerContainer}>
@@ -35,15 +57,15 @@ export default function Header() {
         <Setting />
       </div>
       <div className={`${styles.header__menu} flex items-center gap-1`}>
-        <div className={styles['board__acorn']}>
+        <div ref={tooltipRef} className={styles['board__acorn']}>
           <Image
             src={AcornGetImage}
             alt="bean"
             className="h-[30px] w-[30px]"
             onClick={() => setMoreAcornsVisible(true)}
           />
-          <span className={styles['board__acorn__number']}>
-            {divDecimalsStr(playerInfo?.totalAcorns, playerInfo?.acornsDecimals)}
+          <span className={`${styles['board__acorn__number']}`} onClick={() => setMoreAcornsVisible(true)}>
+            {allAcornsShow}
           </span>
           <Tooltip
             title={
@@ -51,8 +73,8 @@ export default function Header() {
                 className={`${
                   isMobile ? 'px-[12px] py-[8px] text-[12px]' : 'px-[24px] py-[16px] text-[18px] leading-[28px]'
                 }`}>
-                <div className="">{`$ACORNS won through gameplay has a vesting period of 30 days. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.
-In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
+                <div className="mb-[12px]">{`$ACORNS won through gameplay has a vesting period of 30 days, starting at the end of each week. Before unlocking, $ACORNS can't be used to purchase hopping chances, nor can it be transferred or traded.`}</div>
+                <div className="">{`In the upcoming version, staking will be introduced, allowing token holders to stake $ACORNS for rewards.`}</div>
                 <div
                   className={`text-right ${isMobile ? 'text-[16px]' : 'text-[24px]'}   leading-[28px]`}
                   onClick={() => setTooltipOpen(false)}>
@@ -63,22 +85,22 @@ In the upcoming version, staking will be introduced, allowing token holders to s
             open={tooltipOpen}
             overlayStyle={{ maxWidth: isMobile ? 320 : 480, borderRadius: isMobile ? 16 : 32 }}
             overlayClassName={styles.board__tooltip}
-            trigger="click"
+            trigger={['click']}
             placement="bottom"
             color="#A15A1C">
             <Image
               src={QuestionImage}
               alt="bean"
               className="h-[16px] w-[16px] mr-[6px]"
-              onClick={() => setTooltipOpen(true)}
+              onClick={() => {
+                setTooltipOpen(true);
+              }}
             />
           </Tooltip>
         </div>
         <div className={styles['board__acorn']}>
           <Image src={AcornWeeklyImage} alt="bean" className="h-[30px] w-[30px]" />
-          <span className={styles['board__acorn__number']}>
-            {divDecimalsStr(playerInfo?.weeklyAcorns, playerInfo?.acornsDecimals)}
-          </span>
+          <span className={styles['board__acorn__number']}>{weeklyAcornsShow}</span>
         </div>
         <div className="flex-grow"></div>
         <Image

@@ -1,39 +1,41 @@
 .board__acorn {
-  @apply mb-[12px] h-[88px] w-[453px] pl-[16px] flex items-center;
+  @apply mb-[12px] h-[80px] w-[400px] pl-[16px] flex items-center;
 
   background-image: url('../../../../assets/images/button-menu-default.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 
   .board__acorn__number {
-    @apply pl-[84px] flex flex-1 text-[#953D22] text-[32px] leading-[48px] font-fonarto;
+    @apply flex flex-1 justify-center text-[#953D22] text-[32px] leading-[48px] font-paytone;
   }
 }
 .board__feature {
-  @apply mt-[24px] mb-[12px] h-[108px] w-[453px] pl-[16px] flex items-center;
+  @apply mt-[24px] mb-[12px] h-[6rem] w-[400px] pl-[16px] flex items-center;
   
   background-image: url('../../../../assets/images/button-menu-spec.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 
   .board__feature__text {
-    @apply flex flex-1 text-white text-[26px] leading-[26px] font-fonarto;
+    @apply flex flex-1 text-white text-[26px] leading-[26px] font-paytone;
   }
 }
 
 .board__feature__mobile {
   @apply mb-[8px] h-[48px] w-[200px] pl-[6px] flex items-center;
-  
+
   background-image: url('../../../../assets/images/button-menu-spec.png');
   background-size: cover;
 
   .board__feature__text {
-    @apply w-[50px] ml-[5px] text-white text-[13px] leading-[13px] font-fonarto;
+    @apply w-[50px] ml-[5px] text-white text-[12px] leading-[12px] font-paytone;
   }
 }
 
 .board__tooltip {
   :global {
     .ant-tooltip-inner {
-      @apply rounded-[16px];
+      @apply rounded-[16px] max-w-[480px] shadow-[0_6px_12px_0_rgba(0,0,0,0.60)];
     }
   }
 }

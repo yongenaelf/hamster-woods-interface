@@ -1,7 +1,9 @@
-import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+import isMobileDevice from 'utils/isMobile';
 
 export enum Status {
   LOADING = 'loading',
@@ -39,15 +41,9 @@ function GoButton({
   changeCurDiceCount,
   getChance,
 }: IGoButton) {
-  const { isMobile, btnImageResources } = useGetState();
+  const { isMobile } = useGetState();
 
   const diceCount = [1, 2, 3];
-
-  const diceImages: Record<string, string> = {
-    1: btnImageResources!.pc['dice1'],
-    2: btnImageResources!.pc['dice2'],
-    3: btnImageResources!.pc['dice3'],
-  };
 
   const [curPress, setCurPress] = useState<number | null>(null);
   const [curTouch, setCurTouch] = useState<number | null>(null);
@@ -77,46 +73,49 @@ function GoButton({
     changeCurDiceCountFn.current = changeCurDiceCount;
   }, [changeCurDiceCount]);
 
-  const statusCom: Record<Status, ReactElement> = {
-    [Status.NONE]: (
-      <>
-        <span
-          className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
-          }`}>
-          Hop
-        </span>
-        <span
-          className={`${
-            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[18px] leading-[18px]'
-          } font-bold text-[#52300B]`}>
-          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
-        </span>
-      </>
-    ),
-    [Status.LOADING]: (
-      <div className={`${styles['button__icon__loading']} ${isMobile ? 'mt-[10px] w-[45px]' : 'mt-[16px] w-[85px]'}`}>
-        <div className={styles['button__icon__loading__bounce1']}></div>
-        <div className={styles['button__icon__loading__bounce2']}></div>
-      </div>
-    ),
-    [Status.DISABLED]: (
-      <>
-        <span
-          className={`font-fonarto font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
-            isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px] mt-[2px]'
-          }`}>
-          Hop
-        </span>
-        <span
-          className={`${
-            isMobile ? 'text-[10px] leading-[10px] mt-[4px]' : 'text-[21px] leading-[21px]'
-          } font-bold text-[#8E8E8E]`}>
-          {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
-        </span>
-      </>
-    ),
-  };
+  const statusCom: Record<Status, ReactElement> = useMemo(
+    () => ({
+      [Status.NONE]: (
+        <>
+          <span
+            className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#52300B] ${
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px]'
+            }`}>
+            HOP
+          </span>
+          <span
+            className={`${
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[18px] leading-[18px] mt-[4px]'
+            } font-bold text-[#52300B]`}>
+            {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
+          </span>
+        </>
+      ),
+      [Status.LOADING]: (
+        <div className={`${styles['button__icon__loading']} ${isMobile ? 'mt-[10px] w-[45px]' : 'mt-[16px] w-[85px]'}`}>
+          <div className={styles['button__icon__loading__bounce1']}></div>
+          <div className={styles['button__icon__loading__bounce2']}></div>
+        </div>
+      ),
+      [Status.DISABLED]: (
+        <>
+          <span
+            className={`font-paytone font-[500] tracking-tight text-[#fff] text-stroke-[#8E8E8E] ${
+              isMobile ? 'text-[48px] leading-[48px] mt-[10px]' : 'text-[72px] leading-[72px] mb-[4px]'
+            }`}>
+            HOP
+          </span>
+          <span
+            className={`${
+              isMobile ? 'text-[10px] leading-[10px] mt-[10px]' : 'text-[21px] leading-[21px] mt-[4px]'
+            } font-bold text-[#8E8E8E]`}>
+            {`free: ${playableCount}/${dailyPlayableCount} Paid: ${purchasedChancesCount}`}
+          </span>
+        </>
+      ),
+    }),
+    [dailyPlayableCount, isMobile, playableCount, purchasedChancesCount],
+  );
 
   const chooseDiceCount = (number: number) => {
     changeCurDiceCount && changeCurDiceCount(number);
@@ -173,55 +172,58 @@ function GoButton({
   useEffect(() => {
     const mobileGoButton = mobileGoButtonRef.current;
     if (!mobileGoButton) return;
-    mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
     mobileGoButton.addEventListener('mousedown', handlePressGoButton);
-    mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
     mobileGoButton.addEventListener('mouseup', handleReleaseGoButton);
+    mobileGoButton.addEventListener('touchstart', handlePressGoButton, { passive: false });
+    mobileGoButton.addEventListener('touchend', handleReleaseGoButton);
+
     return () => {
       mobileGoButton.removeEventListener('touchstart', handlePressGoButton);
       mobileGoButton.removeEventListener('mousedown', handlePressGoButton);
       mobileGoButton.removeEventListener('touchend', handleReleaseGoButton);
       mobileGoButton.removeEventListener('mouseup', handleReleaseGoButton);
     };
-  }, [handlePressGoButton, handleReleaseGoButton]);
+  }, [handlePressGoButton, handleReleaseGoButton, isMobile]);
 
   // Handle both touch and mouse events to support interaction in Telegram WebApp on PC
   useEffect(() => {
     const mobileDiceButton = mobileDiceButtonRef.current;
     if (!mobileDiceButton) return;
-    mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
     mobileDiceButton.addEventListener('mousedown', changeDiceCount);
-    mobileDiceButton.addEventListener('touchend', handleReleaseDice);
     mobileDiceButton.addEventListener('mouseup', handleReleaseDice);
+    mobileDiceButton.addEventListener('touchstart', changeDiceCount, { passive: false });
+    mobileDiceButton.addEventListener('touchend', handleReleaseDice);
+
     return () => {
       mobileDiceButton.removeEventListener('touchstart', changeDiceCount);
       mobileDiceButton.removeEventListener('mousedown', changeDiceCount);
       mobileDiceButton.removeEventListener('touchend', handleReleaseDice);
       mobileDiceButton.removeEventListener('mouseup', handleReleaseDice);
     };
-  }, [changeDiceCount, handleReleaseDice]);
+  }, [changeDiceCount, handleReleaseDice, isMobile]);
 
   // Handle both touch and mouse events to support interaction in Telegram WebApp on PC
   useEffect(() => {
     const mobileChanceButton = mobileChanceButtonRef.current;
     if (!mobileChanceButton) return;
-    mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
     mobileChanceButton.addEventListener('mousedown', changeChance);
-    mobileChanceButton.addEventListener('touchend', handleReleaseChance);
     mobileChanceButton.addEventListener('mouseup', handleReleaseChance);
+    mobileChanceButton.addEventListener('touchstart', changeChance, { passive: false });
+    mobileChanceButton.addEventListener('touchend', handleReleaseChance);
+
     return () => {
       mobileChanceButton.removeEventListener('touchstart', changeChance);
       mobileChanceButton.removeEventListener('mousedown', changeChance);
       mobileChanceButton.removeEventListener('touchend', handleReleaseChance);
       mobileChanceButton.removeEventListener('mouseup', handleReleaseChance);
     };
-  }, [changeChance, handleReleaseChance]);
+  }, [changeChance, handleReleaseChance, isMobile]);
 
   return (
-    <div className={`${styles[isMobile ? 'button-mobile' : 'button']} relative w-full items-center`}>
+    <div className={`${styles[isMobile ? 'button-mobile' : 'button']}  relative w-full items-center`}>
       <div className="relative">
         {!isMobile && (
-          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
+          <div className="flex items-center ml-[-24px]">
             {diceCount.map((item) => {
               return (
                 <div
@@ -242,7 +244,7 @@ function GoButton({
                   key={item}
                   style={{
                     backgroundImage: `url(${
-                      btnImageResources?.pc[
+                      require(`assets/images/btn/${
                         curDiceCount === item && curPress !== item
                           ? 'bg-dice-selected'
                           : curPress === item
@@ -250,7 +252,7 @@ function GoButton({
                           : curTouch === item && curDiceCount !== item
                           ? 'bg-dice-hover'
                           : 'bg-dice-default'
-                      ]
+                      }.png`).default.src
                     })`,
                   }}
                   className={`${styles['dice-number']}`}
@@ -258,7 +260,7 @@ function GoButton({
                   {curPress && curPress === item && <div className={styles['dice-content-mask']}></div>}
 
                   <img
-                    src={diceImages[item]}
+                    src={require(`assets/images/btn/dice${item}.png`).default.src}
                     alt=""
                     className={`${styles['dice-content']} ${curPress === item && styles['dice-content-press']}`}
                   />
@@ -272,39 +274,46 @@ function GoButton({
             <div
               style={{
                 backgroundImage: `url(${
-                  btnImageResources?.mobile[
+                  require(`assets/images/btn/${
                     mBtnPress ? 'bg-go-press-m' : status === Status.DISABLED ? 'bg-go-disabled-m' : 'bg-go-default-m'
-                  ]
+                  }.png`).default.src
                 })`,
               }}
-              className={`${styles['btn-mobile']} ${styles['button__icon']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
-              {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
-
+              className={`${styles['btn-mobile']} cursor-custom relative flex !left-[-22px] !bottom-[11px]`}>
               <div
                 style={{
                   backgroundImage: `url(${
-                    btnImageResources?.mobile[chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                    require(`assets/images/btn/${chanceBtnPress ? 'bg-dice-press-m' : 'bg-dice-default-m'}.png`).default
+                      .src
                   })`,
                 }}
                 ref={mobileChanceButtonRef}
                 className={`relative ${styles['get-chance-mobile']} ${chanceBtnPressM ? 'top-[5px]' : ''}`}>
                 {chanceBtnPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
-                <div className={`text-white font-fonarto w-[48px] mt-[8px] ml-[14px] text-center text-[11px]`}>
-                  Get Chance
+                <div
+                  className={`${styles['purchase-text-mobile']} text-white font-paytone w-[48px] mt-[12px] ml-[0.4rem] text-center text-[11px] !text-stroke-[#52300B]`}>
+                  Purchase chance
                 </div>
               </div>
               <div
                 ref={mobileGoButtonRef}
                 className={`${mBtnPress ? 'top-[4px]' : ''} ${
-                  status === Status.LOADING ? 'top-[12px] left-[64px]' : isMobile ? 'left-[44px]' : 'left-[54px] top-0'
+                  status === Status.LOADING
+                    ? 'top-[12px] left-[64px]'
+                    : isMobile
+                    ? 'left-[2.2rem]'
+                    : 'left-[54px] top-0'
                 } absolute flex flex-col w-fit h-fit items-center relative justify-center`}>
+                {mBtnPress && status === Status.NONE && <div className={styles['btn-mobile-mask']}></div>}
                 {statusCom[status]}
               </div>
               <div
                 style={{
                   backgroundImage: `url(${
-                    btnImageResources?.mobile[curDiceCount === curPressM ? 'bg-dice-press-m' : 'bg-dice-default-m']
+                    require(`assets/images/btn/${
+                      curDiceCount === curPressM ? 'bg-dice-press-m' : 'bg-dice-default-m'
+                    }.png`).default.src
                   })`,
                 }}
                 className={`relative ${styles['dice-number-mobile']}`}
@@ -312,7 +321,7 @@ function GoButton({
                 {curPressM && <div className={styles['dice-content-mobile-mask']}></div>}
 
                 <img
-                  src={btnImageResources!.mobile[`dice${curDiceCount}-m`]}
+                  src={require(`assets/images/btn/dice${curDiceCount}-m.png`).default.src}
                   alt=""
                   className={`${styles['dice-content-mobile']} ${
                     curPressM === curDiceCount && styles['dice-content-mobile-press']
@@ -322,7 +331,7 @@ function GoButton({
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between mb-[16px] ml-[-24px]">
+          <div className="flex items-center mb-[16px] ml-[-24px]">
             <div
               onMouseEnter={() => {
                 setPcBtnMouseOn(true);
@@ -337,20 +346,17 @@ function GoButton({
                 setPcBtnPress(false);
                 go && go();
               }}
-              style={{
-                backgroundImage: `url(${
-                  btnImageResources?.pc[
-                    pcBtnMouseOn && status === Status.NONE
-                      ? 'bg-go-hover-pc'
-                      : pcBtnPress && status === Status.NONE
-                      ? 'bg-go-press-pc'
-                      : status === Status.DISABLED
-                      ? 'bg-go-disabled-pc'
-                      : 'bg-go-default-pc'
-                  ]
-                })`,
-              }}
-              className={`${styles['btn-pc']} ${styles['button__icon']} cursor-custom relative flex items-center justify-center z-[11]  `}>
+              className={`${styles['btn-pc']} ${styles['button__icon']} ${
+                styles[
+                  pcBtnMouseOn && status === Status.NONE
+                    ? 'hop-btn-pc-hover'
+                    : pcBtnPress && status === Status.NONE
+                    ? 'hop-btn-pc-pressed'
+                    : status === Status.DISABLED
+                    ? 'hop-btn-pc-disabled'
+                    : 'hop-btn-pc-default'
+                ]
+              } cursor-custom relative flex items-center justify-center z-[11]  `}>
               {pcBtnPress && status === Status.NONE && <div className={styles['btn-pc-mask']}></div>}
               <div
                 className={`${
@@ -375,19 +381,15 @@ function GoButton({
               }}
               style={{
                 backgroundImage: `url(${
-                  btnImageResources?.pc[
-                    chanceBtnPress ? 'bg-dice-press' : chanceBtnTouch ? 'bg-dice-hover' : 'bg-dice-default'
-                  ]
+                  require(`assets/images/btn/${
+                    chanceBtnPress ? 'get-chance-hover' : chanceBtnTouch ? 'get-chance-hover' : 'get-chance-default'
+                  }.png`).default.src
                 })`,
               }}
               className={`${styles['dice-number']} flex justify-center ${chanceBtnPress ? 'top-[5px]' : ''}`}>
               <span
-                className={`font-fonarto tracking-tight text-[#fff] text-stroke-[#52300B] text-center ml-[14px] ${
-                  isMobile
-                    ? 'text-[48px] leading-[48px] mt-[10px]'
-                    : 'text-[24px] leading-[24px] mt-[33px] text-white w-[110px]'
-                }`}>
-                Get Chance
+                className={`font-paytone tracking-tight !text-stroke-[#52300B] text-[22px] leading-[22px] mt-[33px] text-white w-[110px] text-center ml-[15px]`}>
+                Purchase chance
               </span>
             </div>
           </div>

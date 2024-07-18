@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NEXT_PUBLIC_APP_ENV=development next dev",
     "dev:testnet": "NEXT_PUBLIC_APP_ENV=test next dev",
+    "dev:testnet-https": "NEXT_PUBLIC_APP_ENV=test next dev --experimental-https",
     "out": "SKIP_SSR=1 next build && next export",
     "build": "NEXT_PUBLIC_APP_ENV=production next build",
     "build-dev": "NEXT_PUBLIC_APP_ENV=development next build",
@@ -17,15 +18,16 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@etransfer/ui-react": "^1.2.0",
     "@headlessui/react": "^1.7.16",
-    "@portkey/contracts": "2.7.1-alpha.0",
+    "@portkey/contracts": "2.7.1-alpha.1",
     "@portkey/detect-provider": "2.2.0",
-    "@portkey/did-ui-react": "2.7.1-alpha.0",
+    "@portkey/did-ui-react": "2.7.1-alpha.1",
     "@portkey/provider-types": "2.2.0",
-    "@portkey/request": "2.7.1-alpha.0",
-    "@portkey/services": "2.7.1-alpha.0",
-    "@portkey/types": "2.7.1-alpha.0",
-    "@portkey/utils": "2.7.1-alpha.0",
+    "@portkey/request": "2.7.1-alpha.1",
+    "@portkey/services": "2.7.1-alpha.1",
+    "@portkey/types": "2.7.1-alpha.1",
+    "@portkey/utils": "2.7.1-alpha.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@sentry/nextjs": "^7.66.0",
     "@types/animejs": "^3.1.7",
@@ -49,7 +51,8 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.3.0",
     "react-use": "^17.4.0",
-    "swr": "^2.2.0"
+    "swr": "^2.2.0",
+    "vconsole": "^3.15.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
@@ -111,18 +114,18 @@
     ]
   },
   "resolutions": {
-    "@portkey/contracts": "2.5.6",
-    "@portkey/did-ui-react": "2.5.6",
-    "@portkey/ramp": "2.5.6",
-    "@portkey/socket": "2.5.6",
-    "@portkey/utils": "2.5.6",
-    "@portkey/did": "2.5.6",
-    "@portkey/graphql": "2.5.6",
-    "@portkey/onboarding": "2.5.6",
-    "@portkey/request": "2.5.6",
-    "@portkey/services": "2.5.6",
-    "@portkey/types": "2.5.6",
-    "@portkey/validator": "2.5.6",
-    "@portkey/accounts": "2.5.6"
+    "@portkey/contracts": "2.7.1-alpha.1",
+    "@portkey/did-ui-react": "2.7.1-alpha.1",
+    "@portkey/ramp": "2.7.1-alpha.1",
+    "@portkey/socket": "2.7.1-alpha.1",
+    "@portkey/utils": "2.7.1-alpha.1",
+    "@portkey/did": "2.7.1-alpha.1",
+    "@portkey/graphql": "2.7.1-alpha.1",
+    "@portkey/onboarding": "2.7.1-alpha.1",
+    "@portkey/request": "2.7.1-alpha.1",
+    "@portkey/services": "2.7.1-alpha.1",
+    "@portkey/types": "2.7.1-alpha.1",
+    "@portkey/validator": "2.7.1-alpha.1",
+    "@portkey/accounts": "2.7.1-alpha.1"
   }
 }
