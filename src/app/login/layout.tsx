@@ -38,6 +38,12 @@ const Layout = dynamic(
 
       const [bgImage, setBgImage] = useState('');
 
+      useEffect(() => {
+        setTimeout(() => {
+          setHasLoadedSource(true);
+        }, 1000);
+      }, []);
+
       const loadResourceList = () => {
         if (!chessMap.length && !resurceList.length) {
           setTimeout(() => {
@@ -89,41 +95,40 @@ const Layout = dynamic(
         }
       }, []);
 
-      useEffect(() => {
-        sourceLoded && loadResourceList();
-      }, [sourceLoded]);
+      // useEffect(() => {
+      //   sourceLoded && loadResourceList();
+      // }, [sourceLoded]);
 
-      useEffect(() => {
-        if (!chessBoardInfo || !imageResources) return;
+      // useEffect(() => {
+      //   if (!chessBoardInfo || !imageResources) return;
 
-        const bgPc = imageResources['game-bg-pc'];
-        const bgM = imageResources['game-bg-mobile-mask'];
-        setBgImage(isMobileStore ? bgM : bgPc);
+      //   const bgPc = imageResources['game-bg-pc'];
+      //   const bgM = imageResources['game-bg-mobile-mask'];
 
-        let imageResourcesArray: Array<string> = [];
-        for (const picName in imageResources) {
-          if (picName !== 'aloginBgPc' && picName !== 'aloginBgMobile') {
-            imageResourcesArray.push(imageResources[picName]);
-          }
-        }
-        const btnResources = isMobileStore ? btnImageResources!.mobile : btnImageResources!.pc;
-        for (const picName in btnResources) {
-          imageResourcesArray.push(btnResources[picName]);
-        }
-        imageResourcesArray = [isMobileStore ? bgM : bgPc, ...imageResourcesArray];
+      //   let imageResourcesArray: Array<string> = [];
+      //   for (const picName in imageResources) {
+      //     if (picName !== 'aloginBgPc' && picName !== 'aloginBgMobile') {
+      //       imageResourcesArray.push(imageResources[picName]);
+      //     }
+      //   }
+      //   const btnResources = isMobileStore ? btnImageResources!.mobile : btnImageResources!.pc;
+      //   for (const picName in btnResources) {
+      //     imageResourcesArray.push(btnResources[picName]);
+      //   }
+      //   imageResourcesArray = [isMobileStore ? bgM : bgPc, ...imageResourcesArray];
 
-        setResurceList(imageResourcesArray);
-        const chessMap: string[] = [];
-        if (chessBoardInfo.length) {
-          chessBoardInfo.forEach((item, index) => {
-            item.forEach((_, index1) => {
-              chessMap.push(chessBoardInfo[index][index1].image!);
-            });
-          });
-        }
-        setChessMap(chessMap);
-        setSourceLoded(true);
-      }, [chessBoardInfo]);
+      //   setResurceList(imageResourcesArray);
+      //   const chessMap: string[] = [];
+      //   if (chessBoardInfo.length) {
+      //     chessBoardInfo.forEach((item, index) => {
+      //       item.forEach((_, index1) => {
+      //         chessMap.push(chessBoardInfo[index][index1].image!);
+      //       });
+      //     });
+      //   }
+      //   setChessMap(chessMap);
+      //   setSourceLoded(true);
+      // }, [chessBoardInfo]);
 
       useEffect(() => {
         router.prefetch('/');
@@ -135,7 +140,10 @@ const Layout = dynamic(
           <div
             className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${bgImage})`,
+              backgroundImage: `url(${
+                require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+                  .default.src
+              })`,
             }}></div>
         </>
       ) : (
@@ -144,7 +152,10 @@ const Layout = dynamic(
           <div
             className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat z-[-1000]"
             style={{
-              backgroundImage: `url(${bgImage})`,
+              backgroundImage: `url(${
+                require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+                  .default.src
+              })`,
             }}></div>
         </>
       );
