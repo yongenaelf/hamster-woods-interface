@@ -9,14 +9,14 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'https://www.beangotown.com/api/:path*',
+    destination: 'https://hamster.beangotown.com/api/:path*',
   },
   {
     source: '/cms/:path*',
     destination: 'https://cms-hamster.beangotown.com/:path*',
   },
   {
-    source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/:path*',
+    source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
     destination:
       'https://dapp-hamster.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
   },
