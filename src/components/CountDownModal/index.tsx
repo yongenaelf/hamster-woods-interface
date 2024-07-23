@@ -30,7 +30,7 @@ export default function CountDownModal({ onCancel, open, onConfirm, btnText }: C
         </span>
       </p>
       <p className={isMobile ? 'text-[16px] leading-6' : 'text-[24px] leading-8'}>
-        {`If you want to help it hop some more, click the button below to get more chances.`}.
+        {`If you want to help it hop some more, click the button below to get more chances.`}
       </p>
       <CommonBtn
         title={btnText || 'Confirm'}
