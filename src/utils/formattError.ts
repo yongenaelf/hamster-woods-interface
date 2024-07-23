@@ -2,7 +2,7 @@ import { USER_REJECTED } from 'constants/errorMessage';
 import { IContractError } from 'types';
 
 enum SourceErrorType {
-  Error1 = 'BeanPass Balance is not enough',
+  Error1 = 'HamsterPass Balance is not enough',
   Error2 = 'PlayableCount is not enough',
   Error3 = 'Invalid input',
   Error4 = 'Bout not found',
@@ -15,8 +15,8 @@ enum SourceErrorType {
   Error11 = 'User close the prompt',
 }
 export enum TargetErrorType {
-  Error1 = "You don't have any BeanPass NFTs in your account.",
-  Error2 = 'Not enough GOs to start the game',
+  Error1 = "You don't have any HamsterPass NFTs in your account.",
+  Error2 = 'No HOPs available. Please purchase more hopping chances or come back tomorrow.',
   Error3 = 'Invalid operation',
   Error4 = 'Invalid operation',
   Error5 = 'You have tried too many times',
@@ -26,7 +26,7 @@ export enum TargetErrorType {
   Error9 = USER_REJECTED,
   Error10 = USER_REJECTED,
   Error11 = USER_REJECTED,
-  Error12 = 'This BeanPass NFT is currently not in your account.',
+  Error12 = 'This HamsterPass NFT is currently not in your account.',
   Default = 'Please check your internet connection and try again.',
 }
 
