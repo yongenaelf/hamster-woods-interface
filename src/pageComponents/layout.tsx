@@ -31,6 +31,14 @@ import { setChessboardData } from 'redux/reducer/chessboardData';
 import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
 import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
+import { HAMSTER_PROJECT_CODE } from 'constants/login';
+
+did.setConfig({
+  referralInfo: {
+    referralCode: '',
+    projectCode: HAMSTER_PROJECT_CODE,
+  },
+});
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
