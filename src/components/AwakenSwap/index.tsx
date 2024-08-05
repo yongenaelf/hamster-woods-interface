@@ -5,6 +5,8 @@ import CustomModal from 'components/CustomModal';
 import { ModalProps } from 'antd';
 import { ComponentType, Swap } from '@portkey/trader-react-ui';
 import { AwakenSwapper } from '@portkey/trader-core';
+import useWebLogin from 'hooks/useWebLogin';
+import '@portkey/trader-react-ui/dist/assets/index.css';
 
 const awakenInstance = new AwakenSwapper({
   contractConfig: {
@@ -16,12 +18,14 @@ const awakenInstance = new AwakenSwapper({
   },
 });
 
-export default function DepositModal(
+export default function AwakenSwapModal(
   props: ModalProps & {
     onCancel: () => void;
   },
 ) {
   const { open } = props;
+
+  const { getOptions } = useWebLogin({});
 
   const isMobile = useIsMobile();
 
@@ -41,6 +45,7 @@ export default function DepositModal(
           componentUiType={ComponentType.Web}
           awaken={{
             instance: awakenInstance,
+            getOptions,
           }}
         />
       </div>

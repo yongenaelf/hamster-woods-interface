@@ -15,6 +15,7 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
+import AwakenSwapModal from 'components/AwakenSwap';
 
 export default function Header() {
   const { walletType } = useGetState();
@@ -113,6 +114,7 @@ export default function Header() {
       </div>
       <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
       <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} />
+      <AwakenSwapModal open={true} onCancel={() => console.log('onCancel')} />
     </div>
   );
 }

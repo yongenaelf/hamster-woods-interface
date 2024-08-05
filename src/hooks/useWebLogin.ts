@@ -463,7 +463,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     [didWalletInfo],
   );
 
-  const getOptions = useCallback(async () => {
+  const getOptions: any = useCallback(async () => {
     if (WalletType.unknown === walletType) throw 'unknown';
 
     const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
@@ -484,9 +484,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         },
         address: wallet.didWallet.aaInfo.accountInfo?.caAddress || '',
       };
-    }
-
-    if (WalletType.portkey === walletType) {
+    } else {
       const provider = await detectProvider();
       if (!provider) return;
       // get chain provider
@@ -495,8 +493,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       const caAddress = accountsResult[originChainId]?.[0];
       return { contractOptions: { chainProvider }, address: caAddress };
     }
-
-    return null;
   }, [curChain, walletInfo?.portkeyInfo?.pin, walletType]);
 
   return {
