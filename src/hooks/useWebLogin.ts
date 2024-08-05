@@ -468,7 +468,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
     const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
 
-    if (WalletType.discover === walletType) {
+    if (WalletType.portkey === walletType) {
       // todo
       const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
