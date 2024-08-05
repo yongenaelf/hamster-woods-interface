@@ -4,24 +4,26 @@ import Setting from './components/Setting';
 import styles from './style.module.css';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
-import { Tooltip } from 'antd';
+import { message, Tooltip } from 'antd';
 import Image from 'next/image';
 import AcornGetImage from 'assets/images/recreation/acorn-get.png';
 import AcornWeeklyImage from 'assets/images/recreation/acorn-weekly.png';
 import QuestionImage from 'assets/images/recreation/question.png';
 import HeaderLockImage from 'assets/images/headerMenu/header-locked.png';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import LockedAcornsModal from 'components/LockedAcornsModal';
-import GetMoreACORNSModal from 'components/CommonModal/GetMoreACORNSModal';
 import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
+import DepositModal from 'components/Deposit';
+import { handleErrorMessage } from '@portkey/did-ui-react';
+import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function Header() {
   const { walletType } = useGetState();
   const { playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
-  const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
+  const [depositVisible, setDepositVisible] = useState(false);
   const isMobile = useIsMobile();
   const allAcornsShow = useMemo(
     () => divDecimalsStrShow(playerInfo?.totalAcorns, playerInfo?.acornsDecimals),
@@ -32,6 +34,7 @@ export default function Header() {
     [playerInfo?.acornsDecimals, playerInfo?.weeklyAcorns],
   );
   const tooltipRef = useRef<any>(null);
+  const { getETransferAuthToken } = useQueryAuthToken();
 
   useEffect(() => {
     const handleDocumentClick = (event: any) => {
@@ -46,6 +49,15 @@ export default function Header() {
     };
   }, []);
 
+  const showDepositModal = useCallback(async () => {
+    try {
+      await getETransferAuthToken();
+      setDepositVisible(true);
+    } catch (error) {
+      message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+    }
+  }, [getETransferAuthToken]);
+
   return (
     <div className={styles.headerContainer}>
       <div className={`${styles.header__menu}`}>
@@ -58,13 +70,8 @@ export default function Header() {
       </div>
       <div className={`${styles.header__menu} flex items-center gap-1`}>
         <div ref={tooltipRef} className={styles['board__acorn']}>
-          <Image
-            src={AcornGetImage}
-            alt="bean"
-            className="h-[30px] w-[30px]"
-            onClick={() => setMoreAcornsVisible(true)}
-          />
-          <span className={`${styles['board__acorn__number']}`} onClick={() => setMoreAcornsVisible(true)}>
+          <Image src={AcornGetImage} alt="bean" className="h-[30px] w-[30px]" onClick={showDepositModal} />
+          <span className={`${styles['board__acorn__number']}`} onClick={showDepositModal}>
             {allAcornsShow}
           </span>
           <Tooltip
@@ -112,7 +119,10 @@ export default function Header() {
         />
       </div>
       <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
-      <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} />
+
+      <DepositModal open={depositVisible} onCancel={() => setDepositVisible(false)} />
+
+      {/* <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} /> */}
     </div>
   );
 }
