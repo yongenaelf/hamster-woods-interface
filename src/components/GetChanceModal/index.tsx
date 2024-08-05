@@ -271,11 +271,10 @@ export default function GetChanceModal({
               isMobile ? 'text-[16px] space-y-[8px] p-[8px] mt-[12px]' : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
             }`}>
             <div className="flex font-black">Balance</div>
-            <div className="flex justify-between items-center">
-              <div className="font-bold text-left">{`${acornsToken?.symbol}: ${divDecimalsStrShow(
-                acornsToken?.balance,
-                acornsToken?.decimals,
-              )}`}</div>
+            <div className="flex justify-between items-center ">
+              <div className="font-bold text-left overflow-hidden flex-1">{`${
+                acornsToken?.symbol
+              }: ${divDecimalsStrShow(acornsToken?.balance, acornsToken?.decimals)}`}</div>
               <div
                 onClick={async () => {
                   try {
@@ -288,7 +287,7 @@ export default function GetChanceModal({
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Deposit
+                Buy with USDT
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
