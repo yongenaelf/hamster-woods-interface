@@ -288,7 +288,7 @@ export default function GetChanceModal({
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Deposit
+                Buy with USDT
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
