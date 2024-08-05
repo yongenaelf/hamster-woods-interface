@@ -16,7 +16,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, socialLoginAuth } from '@portkey/did-ui-react';
+import { DIDWalletInfo, did, getChainInfo, socialLoginAuth } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -33,6 +33,7 @@ import { sleep } from 'utils/common';
 import { getSyncHolder, trackLoginInfo } from 'utils/trackAddressInfo';
 import discoverUtils from 'utils/discoverUtils';
 import { KEY_NAME } from 'constants/platform';
+import { aelf } from '@portkey/utils';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -462,6 +463,42 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     [didWalletInfo],
   );
 
+  const getOptions = useCallback(async () => {
+    if (WalletType.unknown === walletType) throw 'unknown';
+
+    const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
+
+    if (WalletType.discover === walletType) {
+      // todo
+      const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
+      if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
+      const caHash = did.didWallet.caInfo[originChainId].caHash;
+      const chainInfo = await getChainInfo(originChainId);
+
+      return {
+        contractOptions: {
+          account: aelf.getWallet(wallet.didWallet.managementAccount.privateKey),
+          callType: 'ca' as any,
+          caHash,
+          caContractAddress: chainInfo.caContractAddress,
+        },
+        address: wallet.didWallet.aaInfo.accountInfo?.caAddress || '',
+      };
+    }
+
+    if (WalletType.portkey === walletType) {
+      const provider = await detectProvider();
+      if (!provider) return;
+      // get chain provider
+      const chainProvider = await provider.getChain(originChainId);
+      const accountsResult = await provider.request({ method: 'requestAccounts' });
+      const caAddress = accountsResult[originChainId]?.[0];
+      return { contractOptions: { chainProvider }, address: caAddress };
+    }
+
+    return null;
+  }, [curChain, walletInfo?.portkeyInfo?.pin, walletType]);
+
   return {
     isLogin,
     loading,
@@ -479,5 +516,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     getPortKeySignature,
     updatePlayerInformation,
     syncAccountInfo,
+    getOptions,
   };
 }
