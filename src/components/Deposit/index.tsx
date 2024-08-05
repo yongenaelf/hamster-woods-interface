@@ -23,7 +23,7 @@ export default function DepositModal(
       className={`${isMobile ? '!w-[358px]' : '!w-[1000px] md:!w-[1000px]'} `}
       open={open}
       centered
-      title="Deposit"
+      title="Deposit USDT"
       {...props}>
       <div
         className={`overflow-auto mb-[8px] [&::-webkit-scrollbar]:hidden ${
