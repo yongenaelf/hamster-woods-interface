@@ -16,7 +16,9 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
     ETransferConfig.setConfig({
       depositConfig: {
         defaultDepositToken: configInfo?.eTransferDefaultDepositToken,
+        supportDepositTokens: [configInfo?.eTransferDefaultDepositToken],
         defaultReceiveToken: configInfo?.eTransferDefaultReceiveToken,
+        supportReceiveTokens: [configInfo?.eTransferDefaultReceiveToken],
         defaultChainId: configInfo?.eTransferDefaultChainId as ChainId,
         defaultNetwork: configInfo?.eTransferDefaultNetwork,
       },
