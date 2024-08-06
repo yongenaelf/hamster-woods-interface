@@ -50,7 +50,6 @@ export default function DepositModal(
 
         <ETransferDepositProvider>
           <Deposit
-            // containerClassName={styles.depositWrap}
             className={isMobile ? styles.mobileDepositWrap : styles.pcDepositWrap}
             componentStyle={isMobile ? ComponentStyle.Mobile : ComponentStyle.Web}
           />
