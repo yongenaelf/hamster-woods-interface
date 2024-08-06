@@ -79,11 +79,6 @@ export default function GetChanceModal({
     onCancel?.();
   }, [onCancel]);
 
-  useEffect(() => {
-    setErrMsgTip('');
-    setNotEnoughAcorns(false);
-  }, [inputVal]);
-
   const onEnterTransfer = useCallback(async () => {
     try {
       await getETransferAuthToken();
@@ -144,16 +139,14 @@ export default function GetChanceModal({
   }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
   const handleMinus = useCallback(() => {
-    if (!handleCheckPurchase()) return;
     if (inputVal < 2) return;
     setInputVal((pre) => pre - 1);
-  }, [handleCheckPurchase, inputVal]);
+  }, [inputVal]);
 
   const handlePlus = useCallback(() => {
-    if (!handleCheckPurchase()) return;
     if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
     setInputVal((pre) => pre + 1);
-  }, [handleCheckPurchase, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
+  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
@@ -168,6 +161,11 @@ export default function GetChanceModal({
     setNotEnoughAcorns(false);
     handleClose?.();
   }, [handleClose]);
+
+  useEffect(() => {
+    setErrMsgTip('');
+    if (inputVal > 1) handleCheckPurchase();
+  }, [handleCheckPurchase, inputVal]);
 
   return (
     <CustomModal
