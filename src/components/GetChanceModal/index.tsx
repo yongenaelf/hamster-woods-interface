@@ -49,7 +49,9 @@ export default function GetChanceModal({
   const [showDepositModal, setShowDepositModal] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
+  const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
   const router = useRouter();
+  const { getETransferAuthToken } = useQueryAuthToken();
 
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
@@ -87,7 +89,44 @@ export default function GetChanceModal({
 
   useEffect(() => {
     setErrMsgTip('');
+    setNotEnoughAcorns(false);
   }, [inputVal]);
+
+  const onEnterTransfer = useCallback(async () => {
+    try {
+      await getETransferAuthToken();
+      setShowDepositModal(true);
+    } catch (error) {
+      message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+    }
+  }, [getETransferAuthToken]);
+
+  const errorMessageTipDom = useCallback(() => {
+    if (!errMsgTip)
+      return (
+        <>
+          {' '}
+          {`You can purchase $ACORNS by `}
+          <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
+            deposit USDT
+          </span>
+          {` from other chains`}
+        </>
+      );
+
+    if (errMsgTip && notEnoughAcorns)
+      return (
+        <>
+          {`$ACORNS is not enough.Try to purchase $ACORNS by `}
+          <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
+            deposit USDT
+          </span>
+          {` from other chains`}
+        </>
+      );
+
+    return <span className="text-[#FF4D4D]">{errMsgTip}</span>;
+  }, [errMsgTip, notEnoughAcorns, onEnterTransfer]);
 
   const handleCheckPurchase = useCallback(() => {
     if (!inputVal) {
@@ -101,6 +140,7 @@ export default function GetChanceModal({
       ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
     ) {
       setErrMsgTip('Acorns is not enough');
+      setNotEnoughAcorns(true);
       return false;
     }
 
@@ -114,16 +154,16 @@ export default function GetChanceModal({
   }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
   const handleConfirm = useCallback(() => {
-    if (errMsgTip) return;
-    if (!handleCheckPurchase()) return;
-    onConfirm?.(inputVal, chancePrice);
-  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
+    // if (errMsgTip) return;
+    // if (!handleCheckPurchase()) return;
+    // onConfirm?.(inputVal, chancePrice);
+  }, []);
 
-  const { getETransferAuthToken } = useQueryAuthToken();
   const handleCancel = useCallback(() => {
     setInputVal(1);
     setExpand(false);
     setErrMsgTip('');
+    setNotEnoughAcorns(false);
     handleClose?.();
   }, [handleClose]);
 
@@ -173,7 +213,10 @@ export default function GetChanceModal({
             />
           </div>
         </div>
-        <div className="flex justify-center text-[14px] leading-[22px] text-[#FF4D4D] mt-2">{errMsgTip}</div>
+        <div className={`${isMobile ? 'text-[10px] leading-[18px]' : 'text-[14px] leading-[24px]'}  text-center`}>
+          {errorMessageTipDom()}
+        </div>
+
         {isMobile ? (
           <div className="flex flex-col space-y-[16px] items-center justify-between mt-[12px] w-full text-[14px]">
             <div>You pay</div>
@@ -218,7 +261,7 @@ export default function GetChanceModal({
           </div>
         )}
         {expand && (
-          <>
+          <div className={`${isMobile ? 'mb-[12px]' : 'mb-[40px]'}`}>
             <div
               className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
                 isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
@@ -263,12 +306,12 @@ export default function GetChanceModal({
                 <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInUsd)}`}</div>
               </div>
             </div>
-          </>
+          </div>
         )}
         {assetBalance?.length ? (
           <div
             className={`flex flex-col bg-[#E8D1AE] rounded-[12px] ${
-              isMobile ? 'text-[16px] space-y-[8px] p-[8px] mt-[12px]' : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
+              isMobile ? 'text-[16px] space-y-[8px] p-[8px]' : 'text-[20px] space-y-[24px] p-[16px]'
             }`}>
             <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center ">
@@ -276,14 +319,7 @@ export default function GetChanceModal({
                 acornsToken?.symbol
               }: ${divDecimalsStrShow(acornsToken?.balance, acornsToken?.decimals)}`}</div>
               <div
-                onClick={async () => {
-                  try {
-                    await getETransferAuthToken();
-                    setShowDepositModal(true);
-                  } catch (error) {
-                    message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
-                  }
-                }}
+                onClick={onEnterTransfer}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
@@ -296,9 +332,9 @@ export default function GetChanceModal({
             )}`}</div>
           </div>
         ) : null}
-        {errMsgTip ? (
+        {errMsgTip && !notEnoughAcorns ? (
           <CommonDisabledBtn
-            title={'Purchase'}
+            title={notEnoughAcorns ? 'Deposit USDT to purchase' : 'Purchase'}
             onClick={undefined}
             className={`flex justify-center items-center ${
               isMobile
@@ -308,8 +344,8 @@ export default function GetChanceModal({
           />
         ) : (
           <CommonBtn
-            title={'Purchase'}
-            onClick={handleConfirm}
+            title={notEnoughAcorns ? 'Deposit USDT to purchase' : 'Purchase'}
+            onClick={notEnoughAcorns ? onEnterTransfer : handleConfirm}
             className={`flex justify-center items-center font-paytone ${
               isMobile
                 ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'

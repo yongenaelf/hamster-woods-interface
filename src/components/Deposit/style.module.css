@@ -36,6 +36,20 @@
     .etransfer-ui-calculator {
       @apply bg-[#E8D1AE];
     }
+
+    .etransfer-ui-selected-data-wrapper .etransfer-ui-selected-token-wrapper:not(:first-child),
+    .etransfer-ui-selected-data-wrapper .etransfer-ui-selected-chain-wrapper:not(:first-child),
+    .etransfer-ui-selected-data-wrapper .etransfer-ui-selected-token-wrapper .etransfer-ui-dynamic-arrow,
+    .etransfer-ui-selected-data-wrapper .space,
+    .etransfer-ui-row-center,
+    .etransfer-ui-description-wrapper {
+      display: none !important;
+    }
+
+    
+    .etransfer-ui-deposit-select-token {
+      pointer-events: none;
+    }
   }
 }
 
@@ -71,16 +85,19 @@
       @apply !border-[rgba(161,90,28,0.40)];
     }
 
-    .etransfer-ui-deposit-detail-for-mobile-next-button-wrapper {
-      @apply relative bg-transparent px-0 min-w-0;
+    #etransfer-ui-deposit-select-token-result .etransfer-ui-dynamic-arrow,
+    .etransfer-ui-deposit-select-token-chain,
+    .etransfer-ui-description-wrapper {
+      display: none !important;
+    }
 
-      .etransfer-ui-deposit-detail-for-mobile-next-button {
-        @apply rounded-[48px] border-0 bg-[#A15A1C] shadow-[0px_4px_0px_0px_#773E0C,0px_4px_12px_0px_rgba(133,66,8,0.60),0px_2px_1px_0px_#D18A4C_inset];
+    .etransfer-ui-deposit-select-token {
+      pointer-events: none;
+    }
 
-        span {
-          @apply font-paytone text-[20px];
-        }
-      }
+    .etransfer-ui-deposit-tip {
+      background-color: transparent;
+      border-color: #fff;
     }
   }
 }
