@@ -16,7 +16,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, getChainInfo, socialLoginAuth } from '@portkey/did-ui-react';
+import { DIDWalletInfo, did, getChainInfo, managerApprove, socialLoginAuth } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -34,6 +34,7 @@ import { getSyncHolder, trackLoginInfo } from 'utils/trackAddressInfo';
 import discoverUtils from 'utils/discoverUtils';
 import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
+import { getContractBasic } from '@portkey/contracts';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -500,6 +501,52 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     }
   }, [curChain, discoverProvider, walletInfo?.portkeyInfo?.pin, walletType]);
 
+  const tokenApprove: TTokenApproveHandler = useCallback(
+    async (params) => {
+      const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
+
+      // todo
+      // const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', walletInfo?.portkeyInfo?.pin);
+      // if (!wallet.didWallet.managementAccount) return signInRef.current?.setOpen(true);
+
+      const caHash = did.didWallet.caInfo[originChainId].caHash;
+      const chainInfo = await getChainInfo(originChainId);
+      const [portkeyContract, tokenContract] = await Promise.all(
+        [chainInfo.caContractAddress, chainInfo.defaultToken.address].map((ca) =>
+          getContractBasic({
+            contractAddress: ca,
+            account: aelf.getWallet(did.didWallet.managementAccount?.privateKey || ''),
+            rpcUrl: chainInfo.endPoint,
+          }),
+        ),
+      );
+
+      const result = await managerApprove({
+        originChainId: originChainId,
+        symbol: params.symbol,
+        caHash,
+        amount: params.amount,
+        spender: params.spender,
+        targetChainId: originChainId,
+        networkType: Network as NetworkType,
+        dappInfo: {
+          name: 'Hamster',
+        },
+      });
+      console.log(result, 'result===');
+
+      const approveResult = await portkeyContract.callSendMethod('ManagerApprove', '', {
+        caHash,
+        spender: params.spender,
+        symbol: result.symbol,
+        amount: result.amount,
+        guardiansApproved: result.guardiansApproved,
+      });
+      if (approveResult.error) throw approveResult.error;
+    },
+    [Network, curChain, walletInfo?.portkeyInfo?.pin],
+  );
+
   return {
     isLogin,
     loading,
@@ -518,5 +565,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     updatePlayerInformation,
     syncAccountInfo,
     getOptions,
+    tokenApprove,
   };
 }

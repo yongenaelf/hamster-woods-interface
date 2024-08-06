@@ -7,7 +7,9 @@ import { ComponentType, Swap } from '@portkey/trader-react-ui';
 import { AwakenSwapper } from '@portkey/trader-core';
 import useWebLogin from 'hooks/useWebLogin';
 import '@portkey/trader-react-ui/dist/assets/index.css';
+import { WalletType } from 'types';
 
+// TODO
 const awakenInstance = new AwakenSwapper({
   contractConfig: {
     swapContractAddress: '2vahJs5WeWVJruzd1DuTAu3TwK8jktpJ2NNeALJJWEbPQCUW4Y',
@@ -25,7 +27,7 @@ export default function AwakenSwapModal(
 ) {
   const { open } = props;
 
-  const { getOptions } = useWebLogin({});
+  const { getOptions, tokenApprove, walletType } = useWebLogin({});
 
   const isMobile = useIsMobile();
 
@@ -45,6 +47,7 @@ export default function AwakenSwapModal(
           componentUiType={ComponentType.Web}
           awaken={{
             instance: awakenInstance,
+            tokenApprove: walletType === WalletType.discover ? tokenApprove : undefined,
             getOptions,
           }}
         />
