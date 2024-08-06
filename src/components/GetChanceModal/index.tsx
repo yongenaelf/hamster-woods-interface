@@ -24,6 +24,7 @@ import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
 import { handleErrorMessage } from '@portkey/did-ui-react';
+import AwakenSwapModal from 'components/AwakenSwap';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -49,6 +50,7 @@ export default function GetChanceModal({
   const [showDepositModal, setShowDepositModal] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
+  const [swapOpen, setSwapOpen] = useState(false);
   const router = useRouter();
 
   const chancePrice = useMemo(
@@ -61,6 +63,7 @@ export default function GetChanceModal({
   );
   const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
+  const showSwap = useMemo(() => ZERO.plus(ElfToken?.balance ?? 0).gt(ZERO), [ElfToken?.balance]);
 
   const handleMinus = useCallback(() => {
     if (inputVal < 2) return;
@@ -276,19 +279,32 @@ export default function GetChanceModal({
                 acornsToken?.balance,
                 acornsToken?.decimals,
               )}`}</div>
-              <div
-                onClick={async () => {
-                  try {
-                    await getETransferAuthToken();
-                    setShowDepositModal(true);
-                  } catch (error) {
-                    message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
-                  }
-                }}
-                className={`${
-                  isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
-                } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Deposit
+              <div className="flex">
+                <div
+                  onClick={async () => {
+                    try {
+                      await getETransferAuthToken();
+                      setShowDepositModal(true);
+                    } catch (error) {
+                      message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+                    }
+                  }}
+                  className={`${
+                    isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
+                  } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
+                  Deposit
+                </div>
+                {showSwap && (
+                  <div
+                    onClick={() => {
+                      setSwapOpen(true);
+                    }}
+                    className={`${
+                      isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
+                    } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF] ml-[8px]`}>
+                    Swap
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
@@ -320,6 +336,14 @@ export default function GetChanceModal({
         )}
       </div>
       <DepositModal open={showDepositModal} onCancel={() => setShowDepositModal(false)} />
+      <AwakenSwapModal
+        open={swapOpen}
+        selectTokenInSymbol="ELF"
+        selectTokenOutSymbol="USDT"
+        onCancel={() => {
+          setSwapOpen(false);
+        }}
+      />
     </CustomModal>
   );
 }

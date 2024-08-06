@@ -1,5 +1,4 @@
 import styles from './style.module.css';
-import { ComponentStyle, Deposit, ETransferDepositProvider } from '@etransfer/ui-react';
 import { useIsMobile } from 'redux/selector/mobile';
 import CustomModal from 'components/CustomModal';
 import { ModalProps } from 'antd';
@@ -23,9 +22,11 @@ const awakenInstance = new AwakenSwapper({
 export default function AwakenSwapModal(
   props: ModalProps & {
     onCancel: () => void;
+    selectTokenInSymbol: string;
+    selectTokenOutSymbol: string;
   },
 ) {
-  const { open } = props;
+  const { open, selectTokenInSymbol, selectTokenOutSymbol } = props;
 
   const { getOptions, tokenApprove, walletType } = useWebLogin({});
 
@@ -43,8 +44,10 @@ export default function AwakenSwapModal(
           isMobile ? 'max-h-[50vh] h-[42rem]]' : 'h-[40rem]'
         }`}>
         <Swap
+          selectTokenInSymbol={selectTokenInSymbol}
+          selectTokenOutSymbol={selectTokenOutSymbol}
           containerClassName={styles.depositWrap}
-          componentUiType={ComponentType.Web}
+          componentUiType={ComponentType.Mobile}
           awaken={{
             instance: awakenInstance,
             tokenApprove: walletType === WalletType.discover ? tokenApprove : undefined,
