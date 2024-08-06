@@ -48,7 +48,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             If you need help using{' '}
             <span
               onClick={() => {
-                openPage(configInfo?.awakenTutorialUrl ?? '');
+                openPage(configInfo?.eTransferTutorialUrl ?? '');
               }}
               className="underline text-[#3989FF] font-[600]">
               ETransfer
