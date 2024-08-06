@@ -64,14 +64,6 @@ export default function GetChanceModal({
   const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
 
-  const handleMinus = useCallback(() => {
-    if (inputVal < 2) return;
-    setInputVal((pre) => pre - 1);
-  }, [inputVal]);
-  const handlePlus = useCallback(() => {
-    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
-    setInputVal((pre) => pre + 1);
-  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
   const handleInput = useCallback((value: string) => {
     if (!value) {
       setInputVal(0);
@@ -105,23 +97,21 @@ export default function GetChanceModal({
     if (!errMsgTip)
       return (
         <>
-          {' '}
-          {`You can purchase $ACORNS by `}
+          {`You can`}
           <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
-            deposit USDT
+            buy $ACORNS
           </span>
-          {` from other chains`}
+          {` with $USDT from other chains.`}
         </>
       );
 
     if (errMsgTip && notEnoughAcorns)
       return (
         <>
-          {`$ACORNS is not enough.Try to purchase $ACORNS by `}
+          {`Insufficient $ACORNS. You can use $USDT from other chains to`}
           <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
-            deposit USDT
+            buy $ACORNS
           </span>
-          {` from other chains`}
         </>
       );
 
@@ -153,11 +143,23 @@ export default function GetChanceModal({
     return true;
   }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
+  const handleMinus = useCallback(() => {
+    if (!handleCheckPurchase()) return;
+    if (inputVal < 2) return;
+    setInputVal((pre) => pre - 1);
+  }, [handleCheckPurchase, inputVal]);
+
+  const handlePlus = useCallback(() => {
+    if (!handleCheckPurchase()) return;
+    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
+    setInputVal((pre) => pre + 1);
+  }, [handleCheckPurchase, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
+
   const handleConfirm = useCallback(() => {
-    // if (errMsgTip) return;
-    // if (!handleCheckPurchase()) return;
-    // onConfirm?.(inputVal, chancePrice);
-  }, []);
+    if (errMsgTip) return;
+    if (!handleCheckPurchase()) return;
+    onConfirm?.(inputVal, chancePrice);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
 
   const handleCancel = useCallback(() => {
     setInputVal(1);
@@ -323,7 +325,7 @@ export default function GetChanceModal({
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Buy with USDT
+                Buy $ACORNS with $USDT
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
