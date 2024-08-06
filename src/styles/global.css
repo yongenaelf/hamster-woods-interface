@@ -1,3 +1,4 @@
+/* stylelint-disable color-function-notation */
 @tailwind components;
 @tailwind utilities;
 
@@ -120,6 +121,60 @@ button {
   .etransfer-ui-common-svg {
     svg {
       @apply !h-auto !w-auto;
+    }
+  }
+}
+
+.swap-confirm-modal,
+.select-token-modal,
+.transactions-settings-modal,
+.select-token-modal-m,
+.tips-modal-m {
+  background-color: #EEE2C4 !important;
+  .common-modal-header,
+  .content-wrap,
+  .select-token-box,
+  .tips-content,
+  .modal-content-wrap {
+    background-color: #EEE2C4 !important;
+  }
+  .common-modal-header {
+    margin-bottom: 0;
+    padding-bottom: 8px;
+    &.ant-modal-header .close-icon-btn {
+      &:hover {
+        background-color: #EEE2C4;
+      }
+    }
+  }
+  /* stylelint-disable-next-line comment-empty-line-before */
+  /* .select-token-box {
+    .ant-list-split .ant-list-item {
+      border-bottom-color: #9A531F; 
+    }
+  } */
+  .tips-content button,
+  .swap-confirm-modal-btn,
+  .confirm-modal-btn {
+    @apply !bg-[#A15A1C] text-center font-paytone text-xl leading-[48px] text-white border-none;
+
+    /* stylelint-disable-next-line no-descending-specificity */
+    span {
+      @apply font-paytone;
+    }
+  }
+  .fee-item, .fee-input {
+    color: #1A1A1A;
+    /* stylelint-disable-next-line alpha-value-notation */
+    border-color: rgba(161, 90, 28, 0.4) !important;
+  }
+  .fee-item-ative {
+    border-color: #A15A1C !important;
+    color: #953D22 !important;
+  }
+  .fee-input {
+    &:hover {
+      border-color: #953D22 !important;
     }
   }
 }

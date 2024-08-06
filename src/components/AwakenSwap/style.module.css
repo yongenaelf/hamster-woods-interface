@@ -1,84 +1,62 @@
-.pcDepositWrap {
-  @apply px-0 pb-0;
+.depositWrap {
+  margin-bottom: 24px;
   :global {
-    .etransfer-ui-deposit-title {
-      @apply hidden;
+    .swap-input-wrapper .swap-input-row2 .select-token-wrap {
+      background-color: #A15A1C;
     }
-
-    .etransfer-ui-selected-data-wrapper,
-    .calculator-header-title,
-    .receive-amount,
-    .deposit-address-label {
-      @apply text-[#1A1A1A];
+    .swap-input-wrapper .swap-input-row2 .show-token-wrap {
+      background-color: #F7EDD5;
     }
-
-    .selected-token,
-    .selected-chain {
-      @apply !bg-[#fff];
+    .swap-input-wrapper .swap-input-row3 .show-max {
+      border-color: #953D22;
+      color: #953D22;
     }
+    .swap-panel-wrapper .swap-btn-wrap .common-button {
+      @apply bg-[var(--confirm-btn-bg)] text-center font-paytone text-xl leading-[48px] text-white;
+      span {
+        @apply font-paytone;
+      }
 
-    .selected-token,
-    .selected-chain,
-    .you-pay-main,
-    .deposit-address-wrapper,
-    .etransfer-ui-deposit-retry {
-      @apply !border-[1px] !border-solid !border-[#A15A1C];
-    }
+      box-shadow: 0 3px 1px 0 #D18A4C inset, 0 6px 0 0 #773E0C;
+      text-shadow: 0 0 1px #953D22;
 
-    .etransfer-ui-deposit-tip {
-      @apply !bg-[#E8D1AE] !border-[#953D22];
-    }
-
-    .etransfer-ui-description-wrapper {
-      @apply bg-[#E8D1AE] border-0;
-    }
-
-    .etransfer-ui-calculator {
-      @apply bg-[#E8D1AE];
-    }
-  }
-}
-
-.mobileDepositWrap {
-  @apply !p-0;
-
-  :global {
-    .etransfer-ui-common-svg {
-      svg {
-        @apply !h-auto !w-auto;
+      &:hover {
+        @apply bg-[var(--confirm-btn-bg)] text-white;
+      }
+      &.btn-error {
+        @apply bg-[#E74B44];
+        &:hover {
+          @apply bg-[#E74B44] text-white;
+        }
+      }
+      &.btn-tip {
+        @apply bg-[#ACA9A0] opacity-100;
+        &:hover {
+          @apply bg-[#ACA9A0] text-white;
+        }
       }
     }
-
-    .calculator-header-title,
-    .receive-amount {
-      @apply text-[#1A1A1A];
-    }
-
-    .etransfer-ui-deposit-select-token-network,
-    .etransfer-ui-deposit-select-token-chain {
-      @apply bg-[#fff] !border-[1px] !border-solid !border-[#A15A1C];
-    }
-
-    .etransfer-ui-calculator {
-      @apply bg-[#E8D1AE];
-
-      .etransfer-ui-calculator-content {
-        @apply flex-col;
+    .swap-panel-wrapper .swap-price-swap-info .icon-edit-icon {
+      path {
+        fill: #773E0C;
+      }
+      .awk-common-tool-tip {
+        &.ant-tooltip-open {
+          .common-question {
+            background-image: none;
+          }
+        }
       }
     }
-
-    .you-pay-main {
-      @apply !border-[rgba(161,90,28,0.40)];
-    }
-
-    .etransfer-ui-deposit-detail-for-mobile-next-button-wrapper {
-      @apply relative bg-transparent px-0 min-w-0;
-
-      .etransfer-ui-deposit-detail-for-mobile-next-button {
-        @apply rounded-[48px] border-0 bg-[#A15A1C] shadow-[0px_4px_0px_0px_#773E0C,0px_4px_12px_0px_rgba(133,66,8,0.60),0px_2px_1px_0px_#D18A4C_inset];
-
-        span {
-          @apply font-paytone text-[20px];
+    .swap-price-swap-info {
+      .common-tooltip {
+        .ant-tooltip-arrow {
+          &::before {
+            background-color: #E8D1AE;
+          }
+        }
+        .ant-tooltip-inner {
+          background-color: #E8D1AE;
         }
       }
     }
