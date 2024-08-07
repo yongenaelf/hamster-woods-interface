@@ -7,6 +7,9 @@ import TipIcon from 'assets/images/tip.png';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import openPage from 'utils/openPage';
 import { AppState } from 'redux/store';
+import { useEffect } from 'react';
+import { etransferEvents } from '@etransfer/utils';
+import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function DepositModal(
   props: ModalProps & {
@@ -16,6 +19,15 @@ export default function DepositModal(
   const { open } = props;
   const isMobile = useIsMobile();
   const { configInfo } = useSelector((state: AppState) => state.configInfo);
+  const { getETransferAuthTokenFromApi } = useQueryAuthToken();
+
+  useEffect(() => {
+    const { remove } = etransferEvents.DeniedRequest.addListener(() => {
+      getETransferAuthTokenFromApi();
+    });
+    return () => remove();
+  }),
+    [];
 
   return (
     <CustomModal

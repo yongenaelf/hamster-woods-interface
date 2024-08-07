@@ -189,7 +189,6 @@ export function useQueryAuthToken() {
 
   const getETransferAuthToken = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-
     if (!isLogin) throw new Error('You are not logged in.');
     try {
       // showMessage.loading();
@@ -215,7 +214,6 @@ export function useQueryAuthToken() {
           recaptchaToken: undefined,
         });
       }
-
       ETransferConfig.setConfig({
         authorization: {
           jwt: authToken,
@@ -230,5 +228,36 @@ export function useQueryAuthToken() {
     }
   }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
 
-  return { getETransferAuthToken, getUserInfo };
+  const getETransferAuthTokenFromApi = useCallback(async () => {
+    if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
+    if (!isLogin) throw new Error('You are not logged in.');
+    try {
+      const managerAddress = await getManagerAddress();
+      const { caHash, originChainId } = await getCaInfo();
+      const { pubkey, signature, plainText } = await getUserInfo({ managerAddress, caHash, originChainId });
+      const authToken = await eTransferCore.getAuthTokenFromApi({
+        pubkey,
+        signature,
+        plain_text: plainText,
+        ca_hash: caHash,
+        chain_id: originChainId,
+        managerAddress,
+        version: PortkeyVersion.v2,
+        source: AuthTokenSource.Portkey,
+        recaptchaToken: undefined,
+      });
+
+      ETransferConfig.setConfig({
+        authorization: {
+          jwt: authToken,
+        },
+      });
+      return authToken;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
+
+  return { getETransferAuthToken, getETransferAuthTokenFromApi, getUserInfo };
 }

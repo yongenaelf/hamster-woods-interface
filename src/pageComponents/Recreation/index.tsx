@@ -66,6 +66,7 @@ export default function Game() {
   const address = useAddress();
   const router = useRouter();
   const { initializeContract, updatePlayerInformation, syncAccountInfo } = useWebLogin({});
+  const { getETransferAuthTokenFromApi } = useQueryAuthToken();
 
   const {
     isMobile,
@@ -488,7 +489,7 @@ export default function Game() {
 
   useEffectOnce(() => {
     showMessage.loading();
-
+    getETransferAuthTokenFromApi();
     setResetStart(chessboardResetStart);
     setTotalStep(chessboardTotalStep);
     currentNodeRef.current = curChessboardNode;
