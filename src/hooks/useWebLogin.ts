@@ -468,15 +468,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const getOptions: any = useCallback(async () => {
     if (WalletType.unknown === walletType) throw 'unknown';
 
-    const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
-
     if (WalletType.portkey === walletType) {
-      // todo
       const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
-      const caHash = did.didWallet.caInfo[originChainId].caHash;
-      const chainInfo = await getChainInfo(originChainId);
-
+      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const chainInfo = await getChainInfo(curChain);
       return {
         contractOptions: {
           account: aelf.getWallet(wallet.didWallet.managementAccount.privateKey),
@@ -495,9 +491,10 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       }
       if (!provider) return;
       // get chain provider
-      const chainProvider = await provider.getChain(originChainId);
+      const chainProvider = await provider.getChain(curChain);
       const accountsResult = await provider.request({ method: 'requestAccounts' });
-      const caAddress = accountsResult[originChainId]?.[0];
+      const caAddress = accountsResult[curChain]?.[0];
+      console.log('===chainProvider, caAddress', chainProvider, caAddress);
       return { contractOptions: { chainProvider }, address: caAddress };
     }
   }, [curChain, discoverProvider, walletInfo?.portkeyInfo?.pin, walletType]);
@@ -506,13 +503,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     async (params) => {
       const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
 
-      // todo
-      // const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', walletInfo?.portkeyInfo?.pin);
-      // if (!wallet.didWallet.managementAccount) return signInRef.current?.setOpen(true);
-
-      const caHash = did.didWallet.caInfo[originChainId].caHash;
-      const chainInfo = await getChainInfo(originChainId);
-      const [portkeyContract, tokenContract] = await Promise.all(
+      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const chainInfo = await getChainInfo(curChain);
+      const [portkeyContract] = await Promise.all(
         [chainInfo.caContractAddress, chainInfo.defaultToken.address].map((ca) =>
           getContractBasic({
             contractAddress: ca,
@@ -528,7 +521,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         caHash,
         amount: params.amount,
         spender: params.spender,
-        targetChainId: originChainId,
+        targetChainId: curChain,
         networkType: Network as NetworkType,
         dappInfo: {
           name: 'Hamster',

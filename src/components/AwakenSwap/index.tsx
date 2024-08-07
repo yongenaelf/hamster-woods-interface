@@ -51,7 +51,7 @@ export default function AwakenSwapModal(
           onConfirmSwap={onCancel}
           awaken={{
             instance: awakenInstance,
-            tokenApprove: walletType === WalletType.discover ? tokenApprove : undefined,
+            tokenApprove: walletType === WalletType.discover ? undefined : tokenApprove,
             getOptions,
           }}
         />

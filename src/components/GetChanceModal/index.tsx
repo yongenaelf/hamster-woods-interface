@@ -25,12 +25,14 @@ import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
 import { handleErrorMessage } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
+import { sleep } from '@portkey/utils';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
   acornsInUsd: number;
   elfInUsd: number;
   assetBalance: IBalance[];
+  updateAssetBalance?: () => void;
 };
 
 export default function GetChanceModal({
@@ -41,6 +43,7 @@ export default function GetChanceModal({
   elfInUsd,
   assetBalance,
   onConfirm,
+  updateAssetBalance,
   ...params
 }: ICustomModalProps & GetChanceModalPropsType) {
   const { serverConfigInfo, configInfo } = useSelector((state) => state);
@@ -374,8 +377,10 @@ export default function GetChanceModal({
         open={swapOpen}
         selectTokenInSymbol="ELF"
         selectTokenOutSymbol="USDT"
-        onCancel={() => {
+        onCancel={async () => {
           setSwapOpen(false);
+          await sleep(1000);
+          updateAssetBalance?.();
         }}
       />
     </CustomModal>
