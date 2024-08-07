@@ -46,7 +46,6 @@
       display: none !important;
     }
 
-    
     .etransfer-ui-deposit-select-token {
       pointer-events: none;
     }
@@ -98,6 +97,14 @@
     .etransfer-ui-deposit-tip {
       background-color: transparent;
       border-color: #fff;
+    }
+
+    .etransfer-ui-exchange-rate .etransfer-ui-flex-row-center {
+      align-items: start;
+    }
+
+    .etransfer-ui-exchange-rate div:last-child {
+      text-align: end;
     }
   }
 }
