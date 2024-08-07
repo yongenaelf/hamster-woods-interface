@@ -49,6 +49,10 @@ import contractRequest from 'contract/contractRequest';
 import { ACORNS_TOKEN } from 'constants/index';
 import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
+import DepositModal from 'components/Deposit';
+import { message } from 'antd';
+import { handleErrorMessage } from '@portkey/did-ui-react';
+import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function Game() {
   const [translate, setTranslate] = useState<{
@@ -62,6 +66,7 @@ export default function Game() {
   const address = useAddress();
   const router = useRouter();
   const { initializeContract, updatePlayerInformation, syncAccountInfo } = useWebLogin({});
+  const { getETransferAuthTokenFromApi } = useQueryAuthToken();
 
   const {
     isMobile,
@@ -78,6 +83,7 @@ export default function Game() {
     checkerboardCounts,
     curBeanPass,
   } = useGetState();
+  const { getETransferAuthToken } = useQueryAuthToken();
 
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<IBeanPassListItem | undefined>(curBeanPass);
 
@@ -110,7 +116,7 @@ export default function Game() {
 
   const [beanPassModalType, setBeanPassModalType] = useState<GetBeanPassStatus>(GetBeanPassStatus.Abled);
 
-  const [moreAcornsVisible, setMoreAcornsVisible] = useState(false);
+  const [depositVisible, setDepositVisible] = useState(false);
 
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
 
@@ -438,6 +444,15 @@ export default function Game() {
     await initializeContract();
   }, [initializeContract]);
 
+  const showDepositModal = useCallback(async () => {
+    try {
+      await getETransferAuthToken();
+      setDepositVisible(true);
+    } catch (error) {
+      message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+    }
+  }, [getETransferAuthToken]);
+
   const handleHasNft = useCallback(
     (hasNft: boolean) => {
       if (hasNft) {
@@ -474,7 +489,7 @@ export default function Game() {
 
   useEffectOnce(() => {
     showMessage.loading();
-
+    getETransferAuthTokenFromApi();
     setResetStart(chessboardResetStart);
     setTotalStep(chessboardTotalStep);
     currentNodeRef.current = curChessboardNode;
@@ -634,7 +649,7 @@ export default function Game() {
               changeCurDiceCount={changeCurDiceCount}
               go={go}
               getChance={getChance}
-              getMoreAcorns={() => setMoreAcornsVisible(true)}
+              getMoreAcorns={showDepositModal}
               showLockedAcorns={() => setLockedAcornsVisible(true)}
               purchasedChancesCount={playerInfo?.purchasedChancesCount}
             />
@@ -684,7 +699,9 @@ export default function Game() {
           onConfirm={handlePurchase}
         />
         <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
-        <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} />
+
+        <DepositModal open={depositVisible} onCancel={() => setDepositVisible(false)} />
+
         <PurchaseNoticeModal
           open={purchaseNoticeVisible}
           onConfirm={() => setPurchaseNoticeVisible(false)}

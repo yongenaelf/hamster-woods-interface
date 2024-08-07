@@ -236,6 +236,7 @@ export interface IConfigItems {
   isShowRampSell?: boolean;
   awakenUrl: string;
   awakenTutorialUrl: string;
+  eTransferTutorialUrl: string;
   eTransferUrl: string;
   eTransferDefaultChainId: string;
   eTransferDefaultNetwork: string;
