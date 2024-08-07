@@ -49,7 +49,9 @@ export default function GetChanceModal({
   const [showDepositModal, setShowDepositModal] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
+  const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
   const router = useRouter();
+  const { getETransferAuthToken } = useQueryAuthToken();
 
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
@@ -62,14 +64,6 @@ export default function GetChanceModal({
   const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
 
-  const handleMinus = useCallback(() => {
-    if (inputVal < 2) return;
-    setInputVal((pre) => pre - 1);
-  }, [inputVal]);
-  const handlePlus = useCallback(() => {
-    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
-    setInputVal((pre) => pre + 1);
-  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
   const handleInput = useCallback((value: string) => {
     if (!value) {
       setInputVal(0);
@@ -85,9 +79,39 @@ export default function GetChanceModal({
     onCancel?.();
   }, [onCancel]);
 
-  useEffect(() => {
-    setErrMsgTip('');
-  }, [inputVal]);
+  const onEnterTransfer = useCallback(async () => {
+    try {
+      await getETransferAuthToken();
+      setShowDepositModal(true);
+    } catch (error) {
+      message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
+    }
+  }, [getETransferAuthToken]);
+
+  const errorMessageTipDom = useCallback(() => {
+    if (!errMsgTip)
+      return (
+        <>
+          {`You can `}
+          <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
+            buy $ACORNS
+          </span>
+          {` with $USDT from other chains.`}
+        </>
+      );
+
+    if (errMsgTip && notEnoughAcorns)
+      return (
+        <>
+          {`Insufficient $ACORNS. You can use $USDT from other chains to `}
+          <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
+            buy $ACORNS
+          </span>
+        </>
+      );
+
+    return <span className="text-[#FF4D4D]">{errMsgTip}</span>;
+  }, [errMsgTip, notEnoughAcorns, onEnterTransfer]);
 
   const handleCheckPurchase = useCallback(() => {
     if (!inputVal) {
@@ -101,6 +125,7 @@ export default function GetChanceModal({
       ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
     ) {
       setErrMsgTip('Acorns is not enough');
+      setNotEnoughAcorns(true);
       return false;
     }
 
@@ -113,19 +138,35 @@ export default function GetChanceModal({
     return true;
   }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
+  const handleMinus = useCallback(() => {
+    if (inputVal < 2) return;
+    setInputVal((pre) => pre - 1);
+  }, [inputVal]);
+
+  const handlePlus = useCallback(() => {
+    if (inputVal >= (playerInfo?.weeklyPurchasedChancesCount ?? 0)) return;
+    setInputVal((pre) => pre + 1);
+  }, [inputVal, playerInfo?.weeklyPurchasedChancesCount]);
+
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
   }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
 
-  const { getETransferAuthToken } = useQueryAuthToken();
   const handleCancel = useCallback(() => {
     setInputVal(1);
     setExpand(false);
     setErrMsgTip('');
+    setNotEnoughAcorns(false);
     handleClose?.();
   }, [handleClose]);
+
+  useEffect(() => {
+    setErrMsgTip('');
+    setNotEnoughAcorns(false);
+    if (inputVal > 1) handleCheckPurchase();
+  }, [handleCheckPurchase, inputVal]);
 
   return (
     <CustomModal
@@ -173,7 +214,10 @@ export default function GetChanceModal({
             />
           </div>
         </div>
-        <div className="flex justify-center text-[14px] leading-[22px] text-[#FF4D4D] mt-2">{errMsgTip}</div>
+        <div className={`${isMobile ? 'text-[10px] leading-[18px]' : 'text-[14px] leading-[24px]'}  text-center`}>
+          {errorMessageTipDom()}
+        </div>
+
         {isMobile ? (
           <div className="flex flex-col space-y-[16px] items-center justify-between mt-[12px] w-full text-[14px]">
             <div>You pay</div>
@@ -218,7 +262,7 @@ export default function GetChanceModal({
           </div>
         )}
         {expand && (
-          <>
+          <div className={`${isMobile ? 'mb-[12px]' : 'mb-[40px]'}`}>
             <div
               className={`flex items-start justify-between mt-[12px] text-[#AE694C] ${
                 isMobile ? 'text-[14px] mt-[8px]' : 'text-[16px]'
@@ -263,12 +307,12 @@ export default function GetChanceModal({
                 <div>{`${formatAmountUSDShow(inputVal * chancePrice * acornsInUsd)}`}</div>
               </div>
             </div>
-          </>
+          </div>
         )}
         {assetBalance?.length ? (
           <div
             className={`flex flex-col bg-[#E8D1AE] rounded-[12px] ${
-              isMobile ? 'text-[16px] space-y-[8px] p-[8px] mt-[12px]' : 'text-[20px] space-y-[24px] p-[16px] mt-[40px]'
+              isMobile ? 'text-[16px] space-y-[8px] p-[8px]' : 'text-[20px] space-y-[24px] p-[16px]'
             }`}>
             <div className="flex font-black">Balance</div>
             <div className="flex justify-between items-center ">
@@ -276,18 +320,11 @@ export default function GetChanceModal({
                 acornsToken?.symbol
               }: ${divDecimalsStrShow(acornsToken?.balance, acornsToken?.decimals)}`}</div>
               <div
-                onClick={async () => {
-                  try {
-                    await getETransferAuthToken();
-                    setShowDepositModal(true);
-                  } catch (error) {
-                    message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
-                  }
-                }}
+                onClick={onEnterTransfer}
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Buy with USDT
+                Buy with $USDT
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
@@ -296,9 +333,9 @@ export default function GetChanceModal({
             )}`}</div>
           </div>
         ) : null}
-        {errMsgTip ? (
+        {errMsgTip && !notEnoughAcorns ? (
           <CommonDisabledBtn
-            title={'Purchase'}
+            title={notEnoughAcorns ? 'Buy $ACORNS with $USDT' : 'Purchase'}
             onClick={undefined}
             className={`flex justify-center items-center ${
               isMobile
@@ -308,8 +345,8 @@ export default function GetChanceModal({
           />
         ) : (
           <CommonBtn
-            title={'Purchase'}
-            onClick={handleConfirm}
+            title={notEnoughAcorns ? 'Buy $ACORNS with $USDT' : 'Purchase'}
+            onClick={notEnoughAcorns ? onEnterTransfer : handleConfirm}
             className={`flex justify-center items-center font-paytone ${
               isMobile
                 ? 'text-[20px] leading-[20px] mt-[24px] h-[48px] mb-[16px]'

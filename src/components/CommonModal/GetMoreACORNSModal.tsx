@@ -3,7 +3,7 @@ import NeatImageIcon from 'assets/images/neat.png';
 import CommonBtn from 'components/CommonBtn';
 import { useIsMobile } from 'redux/selector/mobile';
 import { useMemo, useState } from 'react';
-import { AppState, dispatch } from 'redux/store';
+import { AppState } from 'redux/store';
 import { useSelector } from 'react-redux';
 import DepositModal from 'components/Deposit';
 import { useQueryAuthToken } from 'hooks/authToken';
@@ -48,7 +48,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             If you need help using{' '}
             <span
               onClick={() => {
-                openPage(configInfo?.awakenTutorialUrl ?? '');
+                openPage(configInfo?.eTransferTutorialUrl ?? '');
               }}
               className="underline text-[#3989FF] font-[600]">
               ETransfer
