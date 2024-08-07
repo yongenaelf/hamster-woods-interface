@@ -36,7 +36,7 @@ export default function AwakenSwapModal(
       className={`${isMobile ? '!w-[358px]' : '!w-[1000px] md:!w-[1000px]'} `}
       open={open}
       centered
-      title="Deposit"
+      title="Swap"
       destroyOnClose
       {...props}>
       <div
