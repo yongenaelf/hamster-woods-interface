@@ -35,6 +35,7 @@ import discoverUtils from 'utils/discoverUtils';
 import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
 import { getContractBasic } from '@portkey/contracts';
+import { TTokenApproveHandler } from '@portkey/trader-core';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -544,7 +545,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       });
       if (approveResult.error) throw approveResult.error;
     },
-    [Network, curChain, walletInfo?.portkeyInfo?.pin],
+    [Network, curChain],
   );
 
   return {
