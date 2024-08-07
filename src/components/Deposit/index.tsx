@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import openPage from 'utils/openPage';
 import { AppState } from 'redux/store';
 import { useEffect } from 'react';
-import { etransferEvents, remove } from '@etransfer/utils';
+import { etransferEvents } from '@etransfer/utils';
 import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function DepositModal(
@@ -25,7 +25,7 @@ export default function DepositModal(
     const { remove } = etransferEvents.DeniedRequest.addListener(() => {
       getETransferAuthTokenFromApi();
     });
-    return remove;
+    return () => remove();
   }),
     [];
 
