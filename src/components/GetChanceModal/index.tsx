@@ -92,7 +92,7 @@ export default function GetChanceModal({
     if (!errMsgTip)
       return (
         <>
-          {`You can`}
+          {`You can `}
           <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
             buy $ACORNS
           </span>
@@ -103,7 +103,7 @@ export default function GetChanceModal({
     if (errMsgTip && notEnoughAcorns)
       return (
         <>
-          {`Insufficient $ACORNS. You can use $USDT from other chains to`}
+          {`Insufficient $ACORNS. You can use $USDT from other chains to `}
           <span className="underline font-black text-[#3989FF]" onClick={onEnterTransfer}>
             buy $ACORNS
           </span>
@@ -324,7 +324,7 @@ export default function GetChanceModal({
                 className={`${
                   isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
-                Buy $ACORNS with $USDT
+                Buy with $USDT
               </div>
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
@@ -335,7 +335,7 @@ export default function GetChanceModal({
         ) : null}
         {errMsgTip && !notEnoughAcorns ? (
           <CommonDisabledBtn
-            title={notEnoughAcorns ? 'Deposit USDT to purchase' : 'Purchase'}
+            title={notEnoughAcorns ? 'Buy $ACORNS with $USDT' : 'Purchase'}
             onClick={undefined}
             className={`flex justify-center items-center ${
               isMobile
@@ -345,7 +345,7 @@ export default function GetChanceModal({
           />
         ) : (
           <CommonBtn
-            title={notEnoughAcorns ? 'Deposit USDT to purchase' : 'Purchase'}
+            title={notEnoughAcorns ? 'Buy $ACORNS with $USDT' : 'Purchase'}
             onClick={notEnoughAcorns ? onEnterTransfer : handleConfirm}
             className={`flex justify-center items-center font-paytone ${
               isMobile
