@@ -105,6 +105,7 @@
 
     .etransfer-ui-exchange-rate div:last-child {
       text-align: end;
+      min-width: 80px;
     }
   }
 }
