@@ -2,7 +2,7 @@ import styles from './style.module.css';
 import { useIsMobile } from 'redux/selector/mobile';
 import CustomModal from 'components/CustomModal';
 import { ModalProps } from 'antd';
-import { ComponentType, Swap } from '@portkey/trader-react-ui';
+import { ComponentType, Swap, ISwapProps } from '@portkey/trader-react-ui';
 import { AwakenSwapper } from '@portkey/trader-core';
 import useWebLogin from 'hooks/useWebLogin';
 import '@portkey/trader-react-ui/dist/assets/index.css';
@@ -20,13 +20,12 @@ const awakenInstance = new AwakenSwapper({
 });
 
 export default function AwakenSwapModal(
-  props: ModalProps & {
-    onCancel: () => void;
-    selectTokenInSymbol: string;
-    selectTokenOutSymbol: string;
-  },
+  props: ModalProps &
+    ISwapProps & {
+      onCancel: () => void;
+    },
 ) {
-  const { open, selectTokenInSymbol, selectTokenOutSymbol } = props;
+  const { open, selectTokenInSymbol, selectTokenOutSymbol, onCancel } = props;
 
   const { getOptions, tokenApprove, walletType } = useWebLogin({});
 
@@ -38,6 +37,7 @@ export default function AwakenSwapModal(
       open={open}
       centered
       title="Deposit"
+      destroyOnClose
       {...props}>
       <div
         className={`overflow-auto mb-[8px] [&::-webkit-scrollbar]:hidden ${
@@ -47,7 +47,8 @@ export default function AwakenSwapModal(
           selectTokenInSymbol={selectTokenInSymbol}
           selectTokenOutSymbol={selectTokenOutSymbol}
           containerClassName={styles.depositWrap}
-          componentUiType={ComponentType.Mobile}
+          componentUiType={ComponentType.Web}
+          onConfirmSwap={onCancel}
           awaken={{
             instance: awakenInstance,
             tokenApprove: walletType === WalletType.discover ? tokenApprove : undefined,
