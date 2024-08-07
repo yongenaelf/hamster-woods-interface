@@ -164,6 +164,7 @@ export default function GetChanceModal({
 
   useEffect(() => {
     setErrMsgTip('');
+    setNotEnoughAcorns(false);
     if (inputVal > 1) handleCheckPurchase();
   }, [handleCheckPurchase, inputVal]);
 
