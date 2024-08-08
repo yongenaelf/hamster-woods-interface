@@ -242,6 +242,7 @@ export interface IConfigItems {
   eTransferDefaultNetwork: string;
   eTransferDefaultDepositToken: string;
   eTransferDefaultReceiveToken: string;
+  awakenSwapContractAddress: string;
 }
 
 export interface IChessboardData {

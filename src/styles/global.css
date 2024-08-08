@@ -130,20 +130,20 @@ button {
 .transactions-settings-modal,
 .select-token-modal-m,
 .tips-modal-m {
-  background-color: #EEE2C4 !important;
+  background-color: #eee2c4 !important;
   .common-modal-header,
   .content-wrap,
   .select-token-box,
   .tips-content,
   .modal-content-wrap {
-    background-color: #EEE2C4 !important;
+    background-color: #eee2c4 !important;
   }
   .common-modal-header {
     margin-bottom: 0;
     padding-bottom: 8px;
-    &.ant-modal-header .close-icon-btn {
+    &.portkey-trade-ant-modal-header .close-icon-btn {
       &:hover {
-        background-color: #EEE2C4;
+        background-color: #eee2c4;
       }
     }
   }
@@ -163,18 +163,38 @@ button {
       @apply font-paytone;
     }
   }
-  .fee-item, .fee-input {
-    color: #1A1A1A;
+  .fee-item,
+  .fee-input {
+    color: #1a1a1a;
     /* stylelint-disable-next-line alpha-value-notation */
     border-color: rgba(161, 90, 28, 0.4) !important;
   }
   .fee-item-ative {
-    border-color: #A15A1C !important;
-    color: #953D22 !important;
+    border-color: #a15a1c !important;
+    color: #953d22 !important;
   }
   .fee-input {
     &:hover {
-      border-color: #953D22 !important;
+      border-color: #953d22 !important;
     }
   }
+}
+
+.portkey-trade-ant-modal,
+.portkey-trade-ant-modal-content,
+.portkey-trade-ant-modal-body {
+  border-radius: 16px !important;
+}
+
+.portkey-trade-ant-tooltip-arrow {
+  transform: translateY(100%) rotate(180deg);
+}
+
+.portkey-trade-ant-modal-body {
+  overflow: hidden !important;
+}
+
+
+.portkey-trade-ant-drawer-body {
+  padding: 0 !important;
 }

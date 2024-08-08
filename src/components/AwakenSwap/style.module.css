@@ -1,5 +1,5 @@
-.depositWrap {
-  margin-bottom: 24px;
+.awakenWrap {
+  margin-bottom: 124px;
   :global {
     .swap-input-wrapper .swap-input-row2 .select-token-wrap {
       background-color: #a15a1c;
@@ -13,7 +13,10 @@
         pointer-events: none;
       }
       .show-token-wrap {
-        background-color: #F7EDD5;
+        background-color: #f7edd5;
+        .portkey-swap-common-svg {
+          display: none;
+        }
       }
     }
     .swap-input-wrapper .swap-input-row3 .show-max {
@@ -21,7 +24,7 @@
       color: #953d22;
     }
     .swap-panel-wrapper .swap-token-switch-wrap .swap-token-switch-btn {
-      display: none
+      display: none;
     }
     .swap-panel-wrapper .swap-btn-wrap .common-button {
       @apply bg-[var(--confirm-btn-bg)] text-center font-paytone text-xl leading-[48px] text-white;
@@ -64,17 +67,25 @@
       .common-tooltip {
         padding-bottom: 0;
 
-        .ant-tooltip-arrow {
-          transform: translateY(100%) rotate(180deg);
-
+        .portkey-trade-ant-tooltip-arrow {
           &::before {
             background-color: #e8d1ae;
           }
         }
-        .ant-tooltip-inner {
+        .portkey-trade-ant-tooltip-inner {
           background-color: #e8d1ae;
         }
       }
+    }
+
+    .portkey-trade-ant-modal,
+    .portkey-trade-ant-modal-content,
+    .portkey-trade-ant-modal-body {
+      border-radius: 8px !important;
+    }
+
+    .portkey-trade-ant-modal-body {
+      overflow: hidden !important;
     }
   }
 }
