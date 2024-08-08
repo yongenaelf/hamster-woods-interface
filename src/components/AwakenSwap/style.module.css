@@ -7,9 +7,14 @@
     .swap-input-wrapper {
       border: 1px solid #a15a1c;
     }
-    .swap-input-wrapper .swap-input-row2 .show-token-wrap {
-      background-color: #F7EDD5;
-      pointer-events: none;
+    .swap-input-wrapper .swap-input-row2 {
+      .select-token-wrap,
+      .show-token-wrap {
+        pointer-events: none;
+      }
+      .show-token-wrap {
+        background-color: #F7EDD5;
+      }
     }
     .swap-input-wrapper .swap-input-row3 .show-max {
       border-color: #953d22;

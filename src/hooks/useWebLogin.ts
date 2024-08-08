@@ -471,7 +471,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (WalletType.portkey === walletType) {
       const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
-      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const caHash = wallet.didWallet.aaInfo.accountInfo?.caHash || '';
       const chainInfo = await getChainInfo(curChain);
       return {
         contractOptions: {
