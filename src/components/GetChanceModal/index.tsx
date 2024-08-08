@@ -376,7 +376,7 @@ export default function GetChanceModal({
       <AwakenSwapModal
         open={swapOpen}
         selectTokenInSymbol="ELF"
-        selectTokenOutSymbol="USDT"
+        selectTokenOutSymbol="ACORNS"
         onCancel={async () => {
           setSwapOpen(false);
           await sleep(1000);

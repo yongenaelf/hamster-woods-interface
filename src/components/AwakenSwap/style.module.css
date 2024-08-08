@@ -9,13 +9,14 @@
     }
     .swap-input-wrapper .swap-input-row2 .show-token-wrap {
       background-color: #F7EDD5;
+      pointer-events: none;
     }
     .swap-input-wrapper .swap-input-row3 .show-max {
       border-color: #953D22;
       color: #953D22;
     }
     .swap-panel-wrapper .swap-token-switch-wrap .swap-token-switch-btn {
-      border: 4px solid #EEE2C4;
+      display: none
     }
     .swap-panel-wrapper .swap-btn-wrap .common-button {
       @apply bg-[var(--confirm-btn-bg)] text-center font-paytone text-xl leading-[48px] text-white;
