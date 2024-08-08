@@ -16,7 +16,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, socialLoginAuth } from '@portkey/did-ui-react';
+import { DIDWalletInfo, did, getChainInfo, managerApprove, socialLoginAuth } from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -33,6 +33,9 @@ import { sleep } from 'utils/common';
 import { getSyncHolder, trackLoginInfo } from 'utils/trackAddressInfo';
 import discoverUtils from 'utils/discoverUtils';
 import { KEY_NAME } from 'constants/platform';
+import { aelf } from '@portkey/utils';
+import { getContractBasic } from '@portkey/contracts';
+import { TTokenApproveHandler } from '@portkey/trader-core';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -462,6 +465,82 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     [didWalletInfo],
   );
 
+  const getOptions: any = useCallback(async () => {
+    if (WalletType.unknown === walletType) throw 'unknown';
+
+    if (WalletType.portkey === walletType) {
+      const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
+      if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
+      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const chainInfo = await getChainInfo(curChain);
+      return {
+        contractOptions: {
+          account: aelf.getWallet(wallet.didWallet.managementAccount.privateKey),
+          callType: 'ca' as any,
+          caHash,
+          caContractAddress: chainInfo.caContractAddress,
+        },
+        address: wallet.didWallet.aaInfo.accountInfo?.caAddress || '',
+      };
+    } else {
+      let provider;
+      if (discoverProvider?.isConnected()) {
+        provider = discoverProvider!;
+      } else {
+        provider = await detectProvider();
+      }
+      if (!provider) return;
+      // get chain provider
+      const chainProvider = await provider.getChain(curChain);
+      const accountsResult = await provider.request({ method: 'requestAccounts' });
+      const caAddress = accountsResult[curChain]?.[0];
+      console.log('===chainProvider, caAddress', chainProvider, caAddress);
+      return { contractOptions: { chainProvider }, address: caAddress };
+    }
+  }, [curChain, discoverProvider, walletInfo?.portkeyInfo?.pin, walletType]);
+
+  const tokenApprove: TTokenApproveHandler = useCallback(
+    async (params) => {
+      const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
+
+      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const chainInfo = await getChainInfo(curChain);
+      const [portkeyContract] = await Promise.all(
+        [chainInfo.caContractAddress, chainInfo.defaultToken.address].map((ca) =>
+          getContractBasic({
+            contractAddress: ca,
+            account: aelf.getWallet(did.didWallet.managementAccount?.privateKey || ''),
+            rpcUrl: chainInfo.endPoint,
+          }),
+        ),
+      );
+
+      const result = await managerApprove({
+        originChainId: originChainId,
+        symbol: params.symbol,
+        caHash,
+        amount: params.amount,
+        spender: params.spender,
+        targetChainId: curChain,
+        networkType: Network as NetworkType,
+        dappInfo: {
+          name: 'Hamster',
+        },
+      });
+      console.log(result, 'result===');
+
+      const approveResult = await portkeyContract.callSendMethod('ManagerApprove', '', {
+        caHash,
+        spender: params.spender,
+        symbol: result.symbol,
+        amount: result.amount,
+        guardiansApproved: result.guardiansApproved,
+      });
+      if (approveResult.error) throw approveResult.error;
+    },
+    [Network, curChain],
+  );
+
   return {
     isLogin,
     loading,
@@ -479,5 +558,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     getPortKeySignature,
     updatePlayerInformation,
     syncAccountInfo,
+    getOptions,
+    tokenApprove,
   };
 }

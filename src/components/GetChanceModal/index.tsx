@@ -24,12 +24,15 @@ import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
 import { handleErrorMessage } from '@portkey/did-ui-react';
+import AwakenSwapModal from 'components/AwakenSwap';
+import { sleep } from '@portkey/utils';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
   acornsInUsd: number;
   elfInUsd: number;
   assetBalance: IBalance[];
+  updateAssetBalance?: () => void;
 };
 
 export default function GetChanceModal({
@@ -40,6 +43,7 @@ export default function GetChanceModal({
   elfInUsd,
   assetBalance,
   onConfirm,
+  updateAssetBalance,
   ...params
 }: ICustomModalProps & GetChanceModalPropsType) {
   const { serverConfigInfo, configInfo } = useSelector((state) => state);
@@ -49,6 +53,7 @@ export default function GetChanceModal({
   const [showDepositModal, setShowDepositModal] = useState(false);
   const { playerInfo } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
+  const [swapOpen, setSwapOpen] = useState(false);
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
   const router = useRouter();
   const { getETransferAuthToken } = useQueryAuthToken();
@@ -63,6 +68,7 @@ export default function GetChanceModal({
   );
   const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
+  const showSwap = useMemo(() => ZERO.plus(ElfToken?.balance ?? 0).gt(ZERO), [ElfToken?.balance]);
 
   const handleInput = useCallback((value: string) => {
     if (!value) {
@@ -326,6 +332,17 @@ export default function GetChanceModal({
                 } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF]`}>
                 Buy with $USDT
               </div>
+              {showSwap && (
+                <div
+                  onClick={() => {
+                    setSwapOpen(true);
+                  }}
+                  className={`${
+                    isMobile ? 'px-[8px] py-[6px] text-[12px]' : 'px-[16px] py-[9px] text-[14px]'
+                  } flex items-center justify-center rounded-[8px] bg-[#A15A1C] font-black text-[#FFFFFF] ml-[8px]`}>
+                  Swap
+                </div>
+              )}
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
               ElfToken?.balance,
@@ -356,6 +373,16 @@ export default function GetChanceModal({
         )}
       </div>
       <DepositModal open={showDepositModal} onCancel={() => setShowDepositModal(false)} />
+      <AwakenSwapModal
+        open={swapOpen}
+        selectTokenInSymbol="ELF"
+        selectTokenOutSymbol="USDT"
+        onCancel={async () => {
+          setSwapOpen(false);
+          await sleep(1000);
+          updateAssetBalance?.();
+        }}
+      />
     </CustomModal>
   );
 }
