@@ -3,21 +3,12 @@ import { useIsMobile } from 'redux/selector/mobile';
 import CustomModal from 'components/CustomModal';
 import { ModalProps } from 'antd';
 import { ComponentType, Swap, ISwapProps } from '@portkey/trader-react-ui';
-import { AwakenSwapper } from '@portkey/trader-core';
+import { AwakenSwapper, IPortkeySwapperAdapter } from '@portkey/trader-core';
 import useWebLogin from 'hooks/useWebLogin';
 import '@portkey/trader-react-ui/dist/assets/index.css';
 import { WalletType } from 'types';
-
-// TODO
-const awakenInstance = new AwakenSwapper({
-  contractConfig: {
-    swapContractAddress: '2vahJs5WeWVJruzd1DuTAu3TwK8jktpJ2NNeALJJWEbPQCUW4Y',
-    rpcUrl: 'https://tdvw-test-node.aelf.io',
-  },
-  requestDefaults: {
-    baseURL: 'https://test.awaken.finance',
-  },
-});
+import useGetState from 'redux/state/useGetState';
+import { useEffect, useRef } from 'react';
 
 export default function AwakenSwapModal(
   props: ModalProps &
@@ -25,11 +16,25 @@ export default function AwakenSwapModal(
       onCancel: () => void;
     },
 ) {
+  const awakenInstanceRef = useRef<IPortkeySwapperAdapter>();
   const { open, selectTokenInSymbol, selectTokenOutSymbol, onCancel } = props;
-
   const { getOptions, tokenApprove, walletType } = useWebLogin({});
-
   const isMobile = useIsMobile();
+  const { configInfo } = useGetState();
+
+  useEffect(() => {
+    if (!configInfo) return;
+
+    awakenInstanceRef.current = new AwakenSwapper({
+      contractConfig: {
+        swapContractAddress: configInfo?.awakenSwapContractAddress,
+        rpcUrl: configInfo?.rpcUrl || '',
+      },
+      requestDefaults: {
+        baseURL: configInfo?.awakenUrl,
+      },
+    });
+  }, [configInfo, configInfo?.awakenSwapContractAddress, configInfo?.awakenUrl, configInfo?.rpcUrl]);
 
   return (
     <CustomModal
@@ -46,11 +51,11 @@ export default function AwakenSwapModal(
         <Swap
           selectTokenInSymbol={selectTokenInSymbol}
           selectTokenOutSymbol={selectTokenOutSymbol}
-          containerClassName={styles.depositWrap}
-          componentUiType={ComponentType.Web}
+          containerClassName={styles.awakenWrap}
+          componentUiType={isMobile ? ComponentType.Mobile : ComponentType.Web}
           onConfirmSwap={onCancel}
           awaken={{
-            instance: awakenInstance,
+            instance: awakenInstanceRef.current,
             tokenApprove: walletType === WalletType.discover ? undefined : tokenApprove,
             getOptions,
           }}
