@@ -3094,27 +3094,27 @@
     "@abp/signalr" "^7.0.0"
     "@portkey/utils" "^2.7.1-alpha.3"
 
-"@portkey/trader-core@0.0.1-alpha.13", "@portkey/trader-core@^0.0.1-alpha.13":
-  version "0.0.1-alpha.13"
-  resolved "https://registry.yarnpkg.com/@portkey/trader-core/-/trader-core-0.0.1-alpha.13.tgz#293d4d752df84c8929a0dadc5c6feb62d26a9b6c"
-  integrity sha512-4Z7ThKOk7INGb5QRYm2JeGdeDsReSQF9z5BpCgnREKUMc/fN2M076BhQWf3DOLoi/v6Y5C77Flp1ajALDsOuvQ==
+"@portkey/trader-core@0.0.1-alpha.14", "@portkey/trader-core@^0.0.1-alpha.14":
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/@portkey/trader-core/-/trader-core-0.0.1-alpha.14.tgz#3a529a358ba35844222085baaf8289551f668f70"
+  integrity sha512-BFpuN6fmekjRVBYf4biUQpHTTEKkmpn1QZHYJiwkE21j3UClect8S0JynpzcsiD7LN+sv35TRVURBZCU+5Vpqg==
   dependencies:
     "@portkey/contracts" "^2.7.1-alpha.4"
-    "@portkey/trader-services" "^0.0.1-alpha.13"
-    "@portkey/trader-types" "^0.0.1-alpha.13"
-    "@portkey/trader-utils" "^0.0.1-alpha.13"
+    "@portkey/trader-services" "^0.0.1-alpha.14"
+    "@portkey/trader-types" "^0.0.1-alpha.14"
+    "@portkey/trader-utils" "^0.0.1-alpha.14"
     "@portkey/types" "^2.7.1-alpha.4"
     "@portkey/utils" "^2.7.1-alpha.4"
     bignumber.js "^9.1.0"
 
-"@portkey/trader-react-ui@0.0.1-alpha.13":
-  version "0.0.1-alpha.13"
-  resolved "https://registry.yarnpkg.com/@portkey/trader-react-ui/-/trader-react-ui-0.0.1-alpha.13.tgz#8aebb80e845fffc0d63c00f0f90d1962e04ed551"
-  integrity sha512-lzXmn40eYO1Jl2DqudDFrE3QzdeCI0zWiUA8QN42Kq3LFZHFtPkIpmJhmtYSKZ0ElTxFLLKFXE6iPIqJDXu6iA==
+"@portkey/trader-react-ui@0.0.1-alpha.14":
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/@portkey/trader-react-ui/-/trader-react-ui-0.0.1-alpha.14.tgz#456ab0b2a192867404ed6664cb11078e8369ac05"
+  integrity sha512-U+fdIP7/scxtWFjff5eoyeKXC7JvquEntCb9FCI7epGRDvL+FI6kggKTq1HOyCiC5QGfPycFX7V/xmx92dbHlg==
   dependencies:
-    "@portkey/trader-core" "^0.0.1-alpha.13"
-    "@portkey/trader-types" "^0.0.1-alpha.13"
-    "@portkey/trader-utils" "^0.0.1-alpha.13"
+    "@portkey/trader-core" "^0.0.1-alpha.14"
+    "@portkey/trader-types" "^0.0.1-alpha.14"
+    "@portkey/trader-utils" "^0.0.1-alpha.14"
     "@types/react-infinite-scroller" "^1.2.5"
     antd "^5.19.4"
     clsx "^2.1.1"
@@ -3126,26 +3126,26 @@
     react-use "^17.4.0"
     uuid "^8.3.2"
 
-"@portkey/trader-services@^0.0.1-alpha.13":
-  version "0.0.1-alpha.13"
-  resolved "https://registry.yarnpkg.com/@portkey/trader-services/-/trader-services-0.0.1-alpha.13.tgz#ec3b0cc47bda43ebf3c087548a05591d8148cffc"
-  integrity sha512-czfCxhBmgkWHruIm4n0f5CfGafWPxIb9twdosJnMvQjVN7+ael0/650jRP2MNd7GThKnn9KZE3MAdvTD0glHYg==
+"@portkey/trader-services@^0.0.1-alpha.14":
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/@portkey/trader-services/-/trader-services-0.0.1-alpha.14.tgz#bcaabc4af5c2b1f5fb4e88f097329158d708cd76"
+  integrity sha512-jTBZwMFpIAqmvpfzYLy/YpXu0WW30hxMcqEDPbGTCOWiOCZsIXSgchMVR/+B87zYceYA7XQVgteDzBVXpSLTzQ==
   dependencies:
     "@portkey/request" "^2.7.1-alpha.4"
     "@portkey/types" "^2.7.1-alpha.4"
 
-"@portkey/trader-types@^0.0.1-alpha.13":
-  version "0.0.1-alpha.13"
-  resolved "https://registry.yarnpkg.com/@portkey/trader-types/-/trader-types-0.0.1-alpha.13.tgz#bd8d7fd68ace294adf849dd9438e90606f622e4e"
-  integrity sha512-8eyMP2uPHpNw7ibuOBNj49r9ZQouLCl2YwfX+aaJACHk0sY5MsYgdyW8SoA6doqM2e0K2i/PDq2kll5bq9UXUA==
+"@portkey/trader-types@^0.0.1-alpha.14":
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/@portkey/trader-types/-/trader-types-0.0.1-alpha.14.tgz#31286a99b4ec1b96999cd4408139383248c3687b"
+  integrity sha512-oNfDWBOZKcjpZ6/Hvsi1ADlu8RpUpmbAX3TXWo5ojyB9tauuk/KCCgIhGazUcw00CENA/FJHLNQiqaUGrDMiSA==
 
-"@portkey/trader-utils@^0.0.1-alpha.13":
-  version "0.0.1-alpha.13"
-  resolved "https://registry.yarnpkg.com/@portkey/trader-utils/-/trader-utils-0.0.1-alpha.13.tgz#4521fa1c56454b5bd30180119275f982f986e244"
-  integrity sha512-COd/8VJiio1MGTRfnsD6RbUVDbM9m74Wcfkr6PsmbUa2/LFqbFPP53nuy/4Dt45r8Bjx9M3kVW5okjeJbmdohg==
+"@portkey/trader-utils@^0.0.1-alpha.14":
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/@portkey/trader-utils/-/trader-utils-0.0.1-alpha.14.tgz#643b8df7c5bc1b873c9bb37c4661a0b31b670d1a"
+  integrity sha512-gdNHwvG5T/xLB+Hc7wFVUAjKRpLVkk4lMVMpy4CcUlgXn4L1Ep3B5mVSH+cdDxGB/KWk+FmdCQfzYNYq8GahwA==
   dependencies:
     "@awaken/sdk-core" "git+https://github.com/Awaken-Finance/sdk-core.git"
-    "@portkey/trader-types" "^0.0.1-alpha.13"
+    "@portkey/trader-types" "^0.0.1-alpha.14"
     loadsh "^0.0.4"
 
 "@portkey/types@2.6.6", "@portkey/types@2.7.1-alpha.3", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.7.1-alpha.3", "@portkey/types@^2.7.1-alpha.4":
