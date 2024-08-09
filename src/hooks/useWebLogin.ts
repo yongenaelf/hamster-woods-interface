@@ -503,7 +503,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     async (params) => {
       const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
 
-      const caHash = did.didWallet.caInfo[curChain].caHash;
+      const caHash = did.didWallet.aaInfo.accountInfo?.caHash || '';
       const chainInfo = await getChainInfo(curChain);
       const [portkeyContract] = await Promise.all(
         [chainInfo.caContractAddress, chainInfo.defaultToken.address].map((ca) =>

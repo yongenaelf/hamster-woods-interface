@@ -25,7 +25,9 @@ import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
 import { handleErrorMessage } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
-import { sleep } from '@portkey/utils';
+import { useAddress } from 'hooks/useAddress';
+import useWebLogin from 'hooks/useWebLogin';
+import { useBalance } from 'hooks/useBalance';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -47,6 +49,8 @@ export default function GetChanceModal({
   ...params
 }: ICustomModalProps & GetChanceModalPropsType) {
   const { serverConfigInfo, configInfo } = useSelector((state) => state);
+  const { updatePlayerInformation } = useWebLogin({});
+  const address = useAddress();
   const isMobile = useIsMobile();
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
@@ -57,6 +61,7 @@ export default function GetChanceModal({
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
   const router = useRouter();
   const { getETransferAuthToken } = useQueryAuthToken();
+  const getBalance = useBalance();
 
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
@@ -68,7 +73,19 @@ export default function GetChanceModal({
   );
   const acornsToken = useMemo(() => assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol), [assetBalance]);
   const ElfToken = useMemo(() => assetBalance?.find((item) => item.symbol === 'ELF'), [assetBalance]);
+  const [acornsBalance, setAcornsBalance] = useState(acornsToken?.balance);
+  const [ELFBalance, setELFBalance] = useState(ElfToken?.balance);
   const showSwap = useMemo(() => ZERO.plus(ElfToken?.balance ?? 0).gt(ZERO), [ElfToken?.balance]);
+
+  const updateBalance = useCallback(async () => {
+    const [_ELF, _ACORNS] = await Promise.all([getBalance('ELF'), getBalance('ACORNS')]);
+    setAcornsBalance(_ACORNS);
+    setELFBalance(_ELF);
+  }, [getBalance]);
+
+  useEffect(() => {
+    updateBalance();
+  }, [updateBalance]);
 
   const handleInput = useCallback((value: string) => {
     if (!value) {
@@ -127,8 +144,8 @@ export default function GetChanceModal({
 
     const acornsToken = assetBalance?.find((item) => item.symbol === ACORNS_TOKEN.symbol);
     if (
-      !acornsToken?.balance ||
-      ZERO.plus(divDecimals(acornsToken.balance, acornsToken.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
+      !acornsBalance ||
+      ZERO.plus(divDecimals(acornsBalance, acornsToken?.decimals)).lt(ZERO.plus(inputVal).times(chancePrice))
     ) {
       setErrMsgTip('Acorns is not enough');
       setNotEnoughAcorns(true);
@@ -142,7 +159,7 @@ export default function GetChanceModal({
       return false;
     }
     return true;
-  }, [assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
+  }, [acornsBalance, assetBalance, chancePrice, inputVal, playerInfo?.weeklyPurchasedChancesCount]);
 
   const handleMinus = useCallback(() => {
     if (inputVal < 2) return;
@@ -324,7 +341,7 @@ export default function GetChanceModal({
             <div className="flex justify-between items-center ">
               <div className="font-bold text-left overflow-hidden flex-1">{`${
                 acornsToken?.symbol
-              }: ${divDecimalsStrShow(acornsToken?.balance, acornsToken?.decimals)}`}</div>
+              }: ${divDecimalsStrShow(acornsBalance, acornsToken?.decimals)}`}</div>
               <div
                 onClick={onEnterTransfer}
                 className={`${
@@ -345,7 +362,7 @@ export default function GetChanceModal({
               )}
             </div>
             <div className="flex font-bold">{`${ElfToken?.symbol}: ${divDecimalsStrShow(
-              ElfToken?.balance,
+              ELFBalance,
               ElfToken?.decimals,
             )}`}</div>
           </div>
@@ -377,10 +394,10 @@ export default function GetChanceModal({
         open={swapOpen}
         selectTokenInSymbol="ELF"
         selectTokenOutSymbol="ACORNS"
-        onCancel={async () => {
+        onCancel={() => {
           setSwapOpen(false);
-          await sleep(1000);
-          updateAssetBalance?.();
+          updatePlayerInformation(address);
+          updateBalance();
         }}
       />
     </CustomModal>
