@@ -260,6 +260,7 @@ export default function Game() {
   }, [checkerboardContainerWidth]);
 
   const updateAssetBalance = useCallback(async () => {
+    if (!address) return;
     fetchBalance({ caAddress: addPrefixSuffix(address) }).then((res) => {
       setAssetBalance(res);
     });
@@ -500,9 +501,12 @@ export default function Game() {
         setOpacity(1);
       }, 25);
     }
-    updateAssetBalance();
     showMessage.hideLoading();
   });
+
+  useEffect(() => {
+    updateAssetBalance();
+  }, [updateAssetBalance]);
 
   // useEffect(() => {
   //   if (address) {
@@ -697,6 +701,7 @@ export default function Game() {
           open={getChanceModalVisible}
           onCancel={() => setGetChanceModalVisible(false)}
           onConfirm={handlePurchase}
+          updateAssetBalance={updateAssetBalance}
         />
         <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
 
