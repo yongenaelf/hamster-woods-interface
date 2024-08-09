@@ -8,8 +8,6 @@ export default function Intro() {
   const [rulesVisible, setRulesVisible] = useState(false);
   const { isMobile, configInfo } = useGetState();
 
-  console.log('configInfo?.gameRules', configInfo?.gameRules);
-
   return (
     <>
       <Image
