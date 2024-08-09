@@ -54,6 +54,7 @@ export default function AwakenSwapModal(
           containerClassName={styles.awakenWrap}
           componentUiType={isMobile ? ComponentType.Mobile : ComponentType.Web}
           onConfirmSwap={onCancel}
+          chainId={configInfo?.curChain}
           awaken={{
             instance: awakenInstanceRef.current,
             tokenApprove: walletType === WalletType.discover ? undefined : tokenApprove,
