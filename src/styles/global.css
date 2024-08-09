@@ -194,7 +194,9 @@ button {
   overflow: hidden !important;
 }
 
-
 .portkey-trade-ant-drawer-body {
   padding: 0 !important;
+}
+.swap-order-dot-line {
+  border-color: #fff;
 }
