@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
@@ -6,6 +6,7 @@ import { toggleShowTaskModal } from 'redux/reducer/info';
 import TaskModal from './components/TaskModal';
 import { TaskTabContent } from './components/TaskTabContent';
 import { FluxPointsTabContent } from './components/FluxPointsTabContent';
+import { usePoints } from './hook/socketPoints';
 
 enum Tabs {
   Tasks = 'Tasks',
@@ -19,6 +20,8 @@ export const Task = () => {
   const open = useSelector((state) => state?.info?.showTaskModal);
   const [tab, setTab] = useState<Tabs>(Tabs.Tasks);
   const isMobile = useIsMobile();
+  const { initSocket, pointsList } = usePoints();
+  const [finishSocket, setFinishSocket] = useState(false);
 
   const tabClassName = `${_tabClassName} ${
     isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
@@ -26,6 +29,14 @@ export const Task = () => {
   const onCancel = () => {
     dispatch(toggleShowTaskModal());
   };
+
+  useEffect(() => {
+    if (open && !finishSocket) {
+      initSocket();
+      setFinishSocket(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   return (
     <>
@@ -53,7 +64,7 @@ export const Task = () => {
                 isMobile ? 'p-[8px] mb-[8px]' : 'p-[24px] mb-[24px]'
               }`}>
               {tab === Tabs.Tasks ? <TaskTabContent /> : null}
-              {tab === Tabs.FluxPoints ? <FluxPointsTabContent /> : null}
+              {tab === Tabs.FluxPoints ? <FluxPointsTabContent pointsList={pointsList} /> : null}
             </div>
           </div>
         </div>

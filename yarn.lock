@@ -2945,12 +2945,20 @@
     "@abp/signalr" "^7.0.0"
     "@portkey/utils" "^2.7.1-alpha.3"
 
+"@portkey/socket@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-2.8.0.tgz#e0aa645e9af29a229f26770439a033a69aa9fdd2"
+  integrity sha512-KQm9fFufZT1nMTKBccb+3Vln83042rxqtFbcPlVpFfx8zVQd5BuWsOqViBO8iI6Z8lbbg5jRQJtGDoH0DxdiIQ==
+  dependencies:
+    "@abp/signalr" "^7.0.0"
+    "@portkey/utils" "^2.8.0"
+
 "@portkey/types@2.6.6", "@portkey/types@2.7.1-alpha.3", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.7.1-alpha.3":
   version "2.7.1-alpha.3"
   resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.7.1-alpha.3.tgz#e6735ff591c63f7162aa0975325fbd77cb8e3453"
   integrity sha512-8OUm6KZZ+JuJKSGdEXW1VMNnCnNw26jO1tgUXX44iHnyQo6J15dk7ZxFmRR2I3vWWYipFp75JZh4qFoeEXXjsg==
 
-"@portkey/utils@2.6.6", "@portkey/utils@2.7.1-alpha.3", "@portkey/utils@^2.7.1-alpha.3":
+"@portkey/utils@2.6.6", "@portkey/utils@2.7.1-alpha.3", "@portkey/utils@^2.7.1-alpha.3", "@portkey/utils@^2.8.0":
   version "2.7.1-alpha.3"
   resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.7.1-alpha.3.tgz#b9f49139fd0b3e47580b56653abe5b4ee9f7f514"
   integrity sha512-yiesBxNGd0HoyEzzBKr2UgHFro0cGMgNPAarRw8IYHDz1vYmp62wLNtdiPI1xM9vKrdaS0WSHHC0+gTcZzxUPQ==

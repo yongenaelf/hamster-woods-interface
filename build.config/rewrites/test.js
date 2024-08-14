@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     source: '/api/:path*',
-    destination: 'https://test-hamster.beangotown.com/api/:path*',
+    destination: 'https://hamster.beangotown.xyz/api/:path*',
   },
   {
     source: '/cms/:path*',
@@ -18,5 +18,5 @@ module.exports = [
   {
     source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
     destination: 'https://test.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
-  },
+  }
 ];
