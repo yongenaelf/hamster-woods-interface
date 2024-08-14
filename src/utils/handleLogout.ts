@@ -13,12 +13,13 @@ import { LoginStatus } from 'redux/types/reducerTypes';
 import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
+import { DEFAULT_PIN } from 'constants/login';
 
 export const handleSDKLogout = async () => {
-  window.localStorage.removeItem(KEY_NAME);
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
   if (originChainId) {
     try {
+      await did.load(DEFAULT_PIN, KEY_NAME);
       await did.logout({
         chainId: originChainId as ChainId,
       });
@@ -27,6 +28,7 @@ export const handleSDKLogout = async () => {
       console.error('portkey: error', error);
     }
   }
+  window.localStorage.removeItem(KEY_NAME);
 
   store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
   store.dispatch(setWalletInfo(null));

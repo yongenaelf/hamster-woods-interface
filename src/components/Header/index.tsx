@@ -125,8 +125,6 @@ export default function Header() {
       <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
 
       <DepositModal open={depositVisible} onCancel={() => setDepositVisible(false)} />
-
-      {/* <GetMoreACORNSModal open={moreAcornsVisible} onCancel={() => setMoreAcornsVisible(false)} /> */}
     </div>
   );
 }

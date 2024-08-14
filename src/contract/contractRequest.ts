@@ -139,6 +139,19 @@ export default class ContractRequest {
     return this.tokenContractView;
   };
 
+  public getBalance = async ({ symbol, owner }: { symbol: string; owner: string }) => {
+    const tokenContract = await this.getTokenContractView();
+    const balanceRes = await tokenContract.callViewMethod('GetBalance', {
+      symbol,
+      owner,
+    });
+
+    if (balanceRes.error) {
+      throw balanceRes.error;
+    }
+    return balanceRes.data;
+  };
+
   public checkAllowanceAndApprove = async ({
     approveTargetAddress,
     amount,
