@@ -6,6 +6,7 @@ import Setting from 'components/Header/components/Setting';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import styles from './index.module.css';
+import Task from 'components/Header/components/Task';
 
 function BoardLeft() {
   const { walletType } = useGetState();
@@ -17,6 +18,9 @@ function BoardLeft() {
             <Wallet />
           </div>
         )}
+        <div className="mb-[32px]">
+          <Task />
+        </div>
         <div className="mb-[32px]">
           <Intro />
         </div>

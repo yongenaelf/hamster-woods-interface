@@ -17,6 +17,7 @@ import { useIsMobile } from 'redux/selector/mobile';
 import DepositModal from 'components/Deposit';
 import { handleErrorMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
+import Task from './components/Task';
 
 export default function Header() {
   const { walletType } = useGetState();
@@ -62,6 +63,9 @@ export default function Header() {
     <div className={styles.headerContainer}>
       <div className={`${styles.header__menu}`}>
         {walletType !== WalletType.discover && <Wallet />}
+        <div className={`${walletType !== WalletType.discover ? 'mx-3' : ''}`}>
+          <Task />
+        </div>
         <div className="flex-grow"></div>
         <div className="mx-3">
           <Intro />
