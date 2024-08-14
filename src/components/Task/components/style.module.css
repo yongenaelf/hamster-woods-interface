@@ -34,3 +34,7 @@
 .scrollbar::-webkit-scrollbar {
   @apply !w-0;
 }
+
+.weight700{
+  font-weight: bold;
+}

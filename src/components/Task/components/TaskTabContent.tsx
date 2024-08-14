@@ -1,3 +1,125 @@
+import { TaskType } from './TaskItem';
+import { TaskItemList } from './TaskItemList';
+
 export const TaskTabContent = () => {
-  return <div>TaskTabContent</div>;
+  const a = [
+    {
+      title: 'Daily Task',
+      list: [
+        {
+          id: 1,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 2,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 3,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 4,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 5,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 6,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 7,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 8,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 9,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 10,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 11,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 12,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 13,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+        {
+          id: 14,
+          type: TaskType.Daily_Hop,
+          title: 'Take 1/15 HOPs in the game',
+          pointAmount: 100,
+          pointName: 'ACORNS point-3',
+          isComplete: true,
+        },
+      ],
+    },
+  ];
+  return <TaskItemList data={a} />;
 };
