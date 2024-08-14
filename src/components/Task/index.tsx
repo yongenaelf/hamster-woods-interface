@@ -6,6 +6,7 @@ import { toggleShowTaskModal } from 'redux/reducer/info';
 import TaskModal from './components/TaskModal';
 import { TaskTabContent } from './components/TaskTabContent';
 import { FluxPointsTabContent } from './components/FluxPointsTabContent';
+import { Item, TaskType } from './components/TaskItem';
 
 enum Tabs {
   Tasks = 'Tasks',
@@ -14,8 +15,10 @@ enum Tabs {
 
 const _tabClassName =
   'w-1/2 rounded-tl-lg h-auto rounded-tr-lg shadow-inner text-[#953D22] flex items-center justify-center font-paytone font-bold';
-
-export const Task = () => {
+export interface ITaskProps {
+  getChance?: () => void;
+}
+export const Task = (props: ITaskProps) => {
   const open = useSelector((state) => state?.info?.showTaskModal);
   const [tab, setTab] = useState<Tabs>(Tabs.Tasks);
   const isMobile = useIsMobile();
@@ -25,8 +28,14 @@ export const Task = () => {
   }`;
   const onCancel = () => {
     dispatch(toggleShowTaskModal());
+    setTab(Tabs.Tasks);
   };
-
+  const onTaskItemClick = (item: Item) => {
+    if (item.type === TaskType.Weekly_Purchase) {
+      props.getChance?.();
+    }
+    // setTab(Tabs.Tasks);
+  };
   return (
     <>
       <TaskModal
@@ -35,6 +44,13 @@ export const Task = () => {
         title="Tasks & Flux Points"
         onCancel={onCancel}>
         <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>
+          <div
+            className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold mx-[32px] ${
+              isMobile ? 'mb-2' : 'mb-4'
+            }`}>
+            Points will be updated upon task completion. Please allow some time for the update to reflect in case of any
+            delay.
+          </div>
           <div className={`flex flex-col flex-1 overflow-hidden ${isMobile ? 'px-[1rem]' : 'px-[2rem]'}`}>
             <div className={`flex w-full ${isMobile ? 'px-[16px]' : 'px-[40px]'} `}>
               <button
@@ -49,10 +65,10 @@ export const Task = () => {
               </button>
             </div>
             <div
-              className={`flex flex-col space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1 ${
-                isMobile ? 'p-[8px] mb-[8px]' : 'p-[24px] mb-[24px]'
+              className={` overflow-hidden flex flex-col space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1 ${
+                isMobile ? 'px-[8px] py-[0px]' : 'px-[24px] py-[0px]'
               }`}>
-              {tab === Tabs.Tasks ? <TaskTabContent /> : null}
+              {tab === Tabs.Tasks ? <TaskTabContent onItemClick={onTaskItemClick} /> : null}
               {tab === Tabs.FluxPoints ? <FluxPointsTabContent /> : null}
             </div>
           </div>
