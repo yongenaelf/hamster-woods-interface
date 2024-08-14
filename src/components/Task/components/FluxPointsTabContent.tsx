@@ -10,7 +10,10 @@ export const FluxPointsTabContent = ({ pointsList }: FluxPointsTabContentProps) 
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full h-full flex-col justify-start items-start inline-flex">
+    <div
+      className={`w-full h-full flex-col justify-start items-start inline-flex ${
+        isMobile ? 'py-[16px]' : 'py-[24px]'
+      } overflow-hidden`}>
       {/* header */}
       <div className="self-stretch h-9 px-4 py-[10px] bg-[#DEC49D] rounded-md flex flex-col justify-between items-start">
         <div className="self-stretch flex justify-start items-start gap-4 inline-flex">

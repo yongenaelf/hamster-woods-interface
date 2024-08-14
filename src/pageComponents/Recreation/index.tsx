@@ -17,7 +17,14 @@ import { GetBeanPassStatus, ShowBeanPassType } from 'components/CommonModal/type
 import GetBeanPassModal from 'components/CommonModal/GetBeanPassModal';
 import { useAddress } from 'hooks/useAddress';
 import { useRouter } from 'next/navigation';
-import { fetchBalance, fetchBeanPassList, fetchPrice, receiveHamsterPassNFT } from 'api/request';
+import {
+  fetchBalance,
+  fetchBeanPassList,
+  fetchPrice,
+  getDailyTask,
+  getWeeklyTask,
+  receiveHamsterPassNFT,
+} from 'api/request';
 import useWebLogin from 'hooks/useWebLogin';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import BoardLeft from './components/BoardLeft';
@@ -395,6 +402,7 @@ export default function Game() {
       showMessage.loading();
       const getNFTRes = await receiveHamsterPassNFT({
         caAddress: address,
+        domain: window.location.hostname,
       });
       const { claimable, reason, transactionId, hamsterPassInfo } = getNFTRes;
       if (!claimable) {
@@ -726,7 +734,7 @@ export default function Game() {
         />
       </div>
 
-      <GlobalCom />
+      <GlobalCom getChance={getChance} />
     </>
   );
 }
