@@ -49,8 +49,8 @@ export const TaskItemList = ({ data, onItemClick }: ITaskItemList) => {
                 <div
                   className={`${
                     isMobile ? 'text-[14px] leading-[18px] mt-[16px]' : 'text-[20px] leading-[24px] mt-[24px]'
-                  } inline-flex font-bold font-roboto mb-[8px]   text-[#953D22]`}>
-                  {item.title}
+                  } flex font-bold font-roboto mb-[8px]   text-[#953D22]`}>
+                  {item.title ?? '--'}
                 </div>
                 {item?.list.map((innerItem) => (
                   <TaskItem
