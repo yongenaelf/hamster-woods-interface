@@ -22,6 +22,9 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
     dispatch(toggleShowTaskModal());
     onItemClick?.(item);
   };
+  if (!item) {
+    return null;
+  }
   if (isMobile) {
     return (
       <div className="w-full h-auto px-3 mb-[8px] py-2 bg-[#DEC49D] rounded-[12px] flex-col justify-center items-start gap-1 inline-flex">
@@ -31,7 +34,7 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
           </div> */}
           <img className="w-4 h-4 overflow-hidden" src={item.icon} />
           <div className="flex-1 text-[#953D22] text-[12px] font-roboto font-bold leading-[18px] break-words">
-            {item.title}
+            {item.title ?? '--'}
           </div>
         </div>
         <div className="self-stretch flex justify-start items-center gap-2 inline-flex">
@@ -42,7 +45,7 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
             </div>
             <div className="flex-1 text-[#953D22] text-[12px] font-roboto font-bold leading-[18px] break-words">
               {item.type === TaskType.Weekly_Purchase ? '+' : ''}
-              {item.pointAmount} {item.pointName}
+              {item.pointAmount ?? '0'} {item.pointName ?? '--'}
             </div>
           </div>
           {/* </div> */}
@@ -69,7 +72,7 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
         {/* eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element */}
         <img className="w-6 h-6" src={item.icon} />
         <div className="flex-1 text-[#953D22] text-[14px] font-roboto font-bold leading-[16px] break-words">
-          {item.title}
+          {item.title ?? '--'}
         </div>
       </div>
       <div className="w-[224px] h-6 flex justify-start items-center gap-1">
@@ -78,7 +81,7 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
           <img className="w-[21.19px] h-[23.92px]" src={require('assets/images/point.png').default.src} />
         </div>
         <div className="text-[#953D22] text-[14px] font-roboto font-bold leading-[16px] break-words">
-          {item.pointAmount} {item.pointName}
+          {item.pointAmount ?? '0'} {item.pointName ?? '--'}
         </div>
       </div>
       <div className="w-14 h-6 flex justify-center items-center">
