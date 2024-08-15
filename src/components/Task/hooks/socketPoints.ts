@@ -1,6 +1,6 @@
-import { randomId, sleep } from '@portkey/utils';
+import { randomId } from '@portkey/utils';
 import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import signalR, { POINT_LIST_CHANGE } from 'socket';
 
 const targetClientId = randomId();

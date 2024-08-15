@@ -1,11 +1,11 @@
 import useSWR from 'swr';
 import { getDailyTask, getWeeklyTask } from 'api/request';
-import { useAddress } from 'hooks/useAddress';
 import { Item, TaskType } from '../components/TaskItem';
 import { IData } from '../components/TaskItemList';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useTask = () => {
-  const address = useAddress();
+  const address = useAddressWithPrefixSuffix();
 
   return useSWR(
     ['getWeeklyTask', address],
