@@ -6,7 +6,7 @@ import { toggleShowTaskModal } from 'redux/reducer/info';
 import TaskModal from './components/TaskModal';
 import { TaskTabContent } from './components/TaskTabContent';
 import { FluxPointsTabContent } from './components/FluxPointsTabContent';
-import { usePoints } from './hook/socketPoints';
+import { usePoints } from './hooks/socketPoints';
 import { Item, TaskType } from './components/TaskItem';
 
 enum Tabs {
