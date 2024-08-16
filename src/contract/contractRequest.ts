@@ -120,7 +120,7 @@ export default class ContractRequest {
       chainsList.forEach((item) => {
         this.chainInfoMap![item.chainId] = item;
       });
-      chainInfo = this.chainInfoMap?.[chainId];
+      chainInfo = this.chainInfoMap?.[this.chainId!];
     }
     if (!chainInfo) {
       throw new Error(`Chain is not running: ${this.chainId}`);

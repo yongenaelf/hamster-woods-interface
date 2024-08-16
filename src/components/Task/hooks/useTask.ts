@@ -34,6 +34,7 @@ export const useTask = () => {
         });
 
         result.push({
+          id: 1,
           title: 'Daily Tasks',
           list: transformData,
         });
@@ -54,6 +55,7 @@ export const useTask = () => {
           };
         });
         result.push({
+          id: 2,
           title: 'Weekly Tasks',
           list: transformData,
         });

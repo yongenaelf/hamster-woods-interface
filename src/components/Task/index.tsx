@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useIsMobile } from 'redux/selector/mobile';
 import { dispatch, useSelector } from 'redux/store';
@@ -23,15 +23,16 @@ export const Task = (props: ITaskProps) => {
   const open = useSelector((state) => state?.info?.showTaskModal);
   const [tab, setTab] = useState<Tabs>(Tabs.Tasks);
   const isMobile = useIsMobile();
-  const { initSocket, pointsList } = usePoints();
-  const [finishSocket, setFinishSocket] = useState(false);
+  const { initSocket, pointsList, disconnect, reconnect } = usePoints();
+  const finishSocket = useRef<boolean>(false);
 
   const tabClassName = `${_tabClassName} ${
     isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
   }`;
-  const onCancel = () => {
+  const onCancel = async () => {
     dispatch(toggleShowTaskModal());
     setTab(Tabs.Tasks);
+    await disconnect();
   };
   const onTaskItemClick = (item: Item) => {
     if (item.type === TaskType.Weekly_Purchase) {
@@ -41,12 +42,18 @@ export const Task = (props: ITaskProps) => {
   };
 
   useEffect(() => {
-    if (open && !finishSocket) {
-      initSocket();
-      setFinishSocket(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+    (async () => {
+      if (open) {
+        if (!finishSocket.current) {
+          await initSocket();
+          await reconnect();
+          finishSocket.current = true;
+        } else {
+          await reconnect();
+        }
+      }
+    })();
+  }, [initSocket, open, reconnect]);
 
   return (
     <>
