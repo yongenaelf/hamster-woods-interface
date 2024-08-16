@@ -108,8 +108,10 @@ export default class ContractRequest {
     this.viewContract = await this.getViewContract(contractAddress);
   }
 
-  public getChainInfo = async (chainId: ChainId = 'tDVV') => {
+  public getChainInfo = async (_chainId?: ChainId) => {
     let chainInfo;
+    const defaultChainId = process.env.NEXT_PUBLIC_APP_ENV === 'test' ? 'tDVW' : 'tDVV';
+    const chainId = _chainId ?? this.chainId ?? defaultChainId;
     if (this.chainInfoMap) {
       chainInfo = this.chainInfoMap[chainId];
     } else {
