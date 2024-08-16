@@ -3,7 +3,6 @@ import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 import { useCallback, useRef, useState } from 'react';
 import signalR, { POINT_LIST_CHANGE } from 'socket';
 import { IListen } from '@portkey/socket';
-import { HubConnectionState } from '@microsoft/signalr';
 
 const targetClientId = randomId();
 
@@ -25,26 +24,20 @@ export const usePoints = () => {
         url: '/api/app/fluxPoints',
         clientId: targetClientId,
       });
+      listenerRef.current = await signalR.listen(POINT_LIST_CHANGE, (data) => {
+        console.log('pointsListChange', data);
+        setPointsList(data?.body || []);
+      });
+      await signalR.invoke('pointsList', { caAddress: address, targetClientId: targetClientId });
     } catch (error) {
       console.log('Connection socket err', error);
     }
-  }, []);
+  }, [address]);
   const disconnect = useCallback(async () => {
     listenerRef.current?.remove();
     signalR.signalr?.off(POINT_LIST_CHANGE);
     await signalR.stop();
     console.log('Connection stop');
   }, []);
-  const reconnect = useCallback(async () => {
-    if (signalR.signalr?.state === HubConnectionState.Disconnected) {
-      await signalR.start();
-    }
-    listenerRef.current = await signalR.listen(POINT_LIST_CHANGE, (data) => {
-      console.log('pointsListChange', data);
-      setPointsList(data?.body || []);
-    });
-    await signalR.invoke('pointsList', { caAddress: address, targetClientId: targetClientId });
-    console.log('Connection started');
-  }, [address]);
-  return { signalR, initSocket, pointsList, disconnect, reconnect };
+  return { signalR, initSocket, pointsList, disconnect };
 };

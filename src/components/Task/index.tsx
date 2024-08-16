@@ -23,8 +23,7 @@ export const Task = (props: ITaskProps) => {
   const open = useSelector((state) => state?.info?.showTaskModal);
   const [tab, setTab] = useState<Tabs>(Tabs.Tasks);
   const isMobile = useIsMobile();
-  const { initSocket, pointsList, disconnect, reconnect } = usePoints();
-  const finishSocket = useRef<boolean>(false);
+  const { initSocket, pointsList, disconnect } = usePoints();
 
   const tabClassName = `${_tabClassName} ${
     isMobile ? 'text-[14px] leading-[16px] py-[8px]' : 'text-[20px] leading-[24px] py-[11px]'
@@ -44,14 +43,10 @@ export const Task = (props: ITaskProps) => {
   useEffect(() => {
     (async () => {
       if (open) {
-        if (!finishSocket.current) {
-          await initSocket();
-          finishSocket.current = true;
-        }
-        await reconnect();
+        await initSocket();
       }
     })();
-  }, [initSocket, open, reconnect]);
+  }, [initSocket, open]);
 
   return (
     <>
