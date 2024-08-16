@@ -3,6 +3,7 @@ import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 import { useCallback, useRef, useState } from 'react';
 import signalR, { POINT_LIST_CHANGE } from 'socket';
 import { IListen } from '@portkey/socket';
+import { HubConnectionState } from '@microsoft/signalr';
 
 const targetClientId = randomId();
 
@@ -30,11 +31,14 @@ export const usePoints = () => {
   }, []);
   const disconnect = useCallback(async () => {
     listenerRef.current?.remove();
+    signalR.signalr?.off(POINT_LIST_CHANGE);
     await signalR.stop();
     console.log('Connection stop');
   }, []);
   const reconnect = useCallback(async () => {
-    await signalR.start();
+    if (signalR.signalr?.state === HubConnectionState.Disconnected) {
+      await signalR.start();
+    }
     listenerRef.current = await signalR.listen(POINT_LIST_CHANGE, (data) => {
       console.log('pointsListChange', data);
       setPointsList(data?.body || []);
