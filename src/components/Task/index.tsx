@@ -46,11 +46,9 @@ export const Task = (props: ITaskProps) => {
       if (open) {
         if (!finishSocket.current) {
           await initSocket();
-          await reconnect();
           finishSocket.current = true;
-        } else {
-          await reconnect();
         }
+        await reconnect();
       }
     })();
   }, [initSocket, open, reconnect]);

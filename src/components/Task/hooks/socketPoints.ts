@@ -15,7 +15,7 @@ export type TPointItem = {
 export const usePoints = () => {
   const address = useAddressWithPrefixSuffix();
   const [pointsList, setPointsList] = useState<TPointItem[]>([]);
-  const removeRef = useRef<IListen>();
+  const listenerRef = useRef<IListen>();
   const initSocket = useCallback(async () => {
     if (!signalR) return;
 
@@ -29,13 +29,13 @@ export const usePoints = () => {
     }
   }, []);
   const disconnect = useCallback(async () => {
-    removeRef.current?.remove();
+    listenerRef.current?.remove();
     await signalR.stop();
     console.log('Connection stop');
   }, []);
   const reconnect = useCallback(async () => {
     await signalR.start();
-    removeRef.current = await signalR.listen(POINT_LIST_CHANGE, (data) => {
+    listenerRef.current = await signalR.listen(POINT_LIST_CHANGE, (data) => {
       console.log('pointsListChange', data);
       setPointsList(data?.body || []);
     });
