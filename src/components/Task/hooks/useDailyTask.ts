@@ -1,10 +1,10 @@
 import useSWR from 'swr';
 import { getDailyTask } from 'api/request';
-import { useAddress } from 'hooks/useAddress';
 import { Item, TaskType } from '../components/TaskItem';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useDailyTask = () => {
-  const address = useAddress();
+  const address = useAddressWithPrefixSuffix();
 
   return useSWR(
     ['getDailyTask', address],

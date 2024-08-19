@@ -1,11 +1,11 @@
 import useSWR from 'swr';
 import { getDailyTask, getWeeklyTask } from 'api/request';
-import { useAddress } from 'hooks/useAddress';
 import { Item, TaskType } from '../components/TaskItem';
 import { IData } from '../components/TaskItemList';
+import { useAddressWithPrefixSuffix } from 'hooks/useAddressWithPrefixSuffix';
 
 export const useTask = () => {
-  const address = useAddress();
+  const address = useAddressWithPrefixSuffix();
 
   return useSWR(
     ['getWeeklyTask', address],
@@ -26,7 +26,7 @@ export const useTask = () => {
             icon: item.imageUrl,
             title: item.isOverHop
               ? `Take over 15 HOPs in the game`
-              : `Take ${item.currentHopCount}/${item.hopCount} HOPs in the game`,
+              : `Take ${item.isComplete ? item.hopCount : item.currentHopCount}/${item.hopCount} HOPs in the game`,
             pointAmount: item.pointAmount,
             pointName: item.pointName,
             isComplete: item.isComplete,
@@ -34,6 +34,7 @@ export const useTask = () => {
         });
 
         result.push({
+          id: 1,
           title: 'Daily Tasks',
           list: transformData,
         });
@@ -54,6 +55,7 @@ export const useTask = () => {
           };
         });
         result.push({
+          id: 2,
           title: 'Weekly Tasks',
           list: transformData,
         });

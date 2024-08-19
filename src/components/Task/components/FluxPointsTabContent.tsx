@@ -43,13 +43,13 @@ export const FluxPointsTabContent = ({ pointsList }: FluxPointsTabContentProps) 
               className={`${
                 isMobile ? 'text-[12px]' : 'text-[16px]'
               } flex-1 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
-              {item?.behavior || ''}
+              {item?.behavior ?? '--'}
             </div>
             <div
               className={`${
                 isMobile ? 'text-[12px]' : 'text-[16px]'
               } w-50 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
-              {`${item?.pointAmount || ''} ${item?.pointName || ''}`}
+              {`${item?.pointAmount ?? '0'} ${item?.pointName ?? '--'}`}
             </div>
           </div>
         ))}

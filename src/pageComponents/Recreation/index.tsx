@@ -702,15 +702,17 @@ export default function Game() {
           onCancel={() => setBeanPassModalVisible(false)}
           onConfirm={handleConfirm}
         />
-        <GetChanceModal
-          acornsInUsd={acornsInUsd}
-          elfInUsd={elfInUsd}
-          assetBalance={assetBalance}
-          open={getChanceModalVisible}
-          onCancel={() => setGetChanceModalVisible(false)}
-          onConfirm={handlePurchase}
-          updateAssetBalance={updateAssetBalance}
-        />
+        {getChanceModalVisible && (
+          <GetChanceModal
+            acornsInUsd={acornsInUsd}
+            elfInUsd={elfInUsd}
+            assetBalance={assetBalance}
+            open={getChanceModalVisible}
+            onCancel={() => setGetChanceModalVisible(false)}
+            onConfirm={handlePurchase}
+            updateAssetBalance={updateAssetBalance}
+          />
+        )}
         <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
 
         <DepositModal open={depositVisible} onCancel={() => setDepositVisible(false)} />

@@ -23,6 +23,7 @@ const EmptyItem = () => {
 export type IData = {
   title: string;
   list: Item[];
+  id: any;
 };
 export interface ITaskItemList {
   data?: IData[];
@@ -45,12 +46,12 @@ export const TaskItemList = ({ data, onItemClick }: ITaskItemList) => {
         <div className={`${styles.scrollbar} h-full overflow-y-auto`} ref={listRef}>
           {data?.map((item) => {
             return (
-              <>
+              <div key={item.id}>
                 <div
                   className={`${
                     isMobile ? 'text-[14px] leading-[18px] mt-[16px]' : 'text-[20px] leading-[24px] mt-[24px]'
-                  } inline-flex font-bold font-roboto mb-[8px]   text-[#953D22]`}>
-                  {item.title}
+                  } flex font-bold font-roboto mb-[8px]   text-[#953D22]`}>
+                  {item.title ?? '--'}
                 </div>
                 {item?.list.map((innerItem) => (
                   <TaskItem
@@ -62,7 +63,7 @@ export const TaskItemList = ({ data, onItemClick }: ITaskItemList) => {
                     }}
                   />
                 ))}
-              </>
+              </div>
             );
           })}
         </div>
