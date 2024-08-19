@@ -11,7 +11,7 @@ import { Item, TaskType } from './components/TaskItem';
 
 enum Tabs {
   Tasks = 'Tasks',
-  FluxPoints = 'Flux Points',
+  FluxPoints = 'Points',
 }
 
 const _tabClassName =
@@ -53,15 +53,14 @@ export const Task = (props: ITaskProps) => {
       <TaskModal
         className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
         open={open}
-        title="Tasks & Flux Points"
+        title="Tasks & Points"
         onCancel={onCancel}>
         <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>
           <div
             className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold mx-[32px] ${
               isMobile ? 'mb-2' : 'mb-4'
             }`}>
-            Points will be updated upon task completion. Please allow some time for the update to reflect in case of any
-            delay.
+            {`Points will be updated upon task completion. Please allow some time for the update to reflect in case of any delay.`}
           </div>
           <div className={`flex flex-col flex-1 overflow-hidden ${isMobile ? 'px-[1rem]' : 'px-[2rem]'}`}>
             <div className={`flex w-full ${isMobile ? 'px-[16px]' : 'px-[40px]'} `}>

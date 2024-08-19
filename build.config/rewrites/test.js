@@ -18,5 +18,5 @@ module.exports = [
   {
     source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
     destination: 'https://test.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
-  }
+  },
 ];
