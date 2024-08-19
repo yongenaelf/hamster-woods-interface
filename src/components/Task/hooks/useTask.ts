@@ -26,7 +26,9 @@ export const useTask = () => {
             icon: item.imageUrl,
             title: item.isOverHop
               ? `Take over 15 HOPs in the game`
-              : `Take ${item.isComplete ? item.hopCount : item.currentHopCount}/${item.hopCount} HOPs in the game`,
+              : `Take ${item.isComplete ? item.hopCount : item.currentHopCount}/${item.hopCount} HOP${
+                  item.hopCount > 1 ? 's' : ''
+                } in the game`,
             pointAmount: item.pointAmount,
             pointName: item.pointName,
             isComplete: item.isComplete,
