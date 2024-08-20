@@ -53,6 +53,7 @@ export const Task = (props: ITaskProps) => {
       <TaskModal
         className={`${isMobile ? '!w-[358px]' : '!w-[750px]'}`}
         open={open}
+        destroyOnClose
         title="Tasks & Points"
         onCancel={onCancel}>
         <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>

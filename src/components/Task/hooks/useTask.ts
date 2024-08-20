@@ -70,6 +70,7 @@ export const useTask = () => {
     },
     {
       dedupingInterval: 0,
+      revalidateOnFocus: true,
     },
   );
 };
