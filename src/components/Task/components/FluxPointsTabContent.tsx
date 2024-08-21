@@ -1,6 +1,7 @@
 import { useIsMobile } from 'redux/selector/mobile';
 import styles from './style.module.css';
 import { TPointItem } from '../hook/socketPoints';
+import NoData from 'components/NoData';
 
 type FluxPointsTabContentProps = {
   pointsList: TPointItem[];
@@ -33,26 +34,32 @@ export const FluxPointsTabContent = ({ pointsList }: FluxPointsTabContentProps) 
       </div>
       {/* item  */}
       <div className={`${styles.scrollbar} h-full w-full overflow-y-auto overflow-hidden`}>
-        {pointsList?.map((item, index) => (
-          <div
-            key={index}
-            className={`${
-              isMobile ? 'px-2' : 'px-4'
-            } self-stretch py-3 border-b border-[#D3B68A] flex justify-start items-center gap-4 inline-flex w-full`}>
+        {pointsList && pointsList.length > 0 ? (
+          pointsList?.map((item, index) => (
             <div
+              key={index}
               className={`${
-                isMobile ? 'text-[12px]' : 'text-[16px]'
-              } flex-1 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
-              {item?.behavior ?? '--'}
+                isMobile ? 'px-2' : 'px-4'
+              } self-stretch py-3 border-b border-[#D3B68A] flex justify-start items-center gap-4 inline-flex w-full`}>
+              <div
+                className={`${
+                  isMobile ? 'text-[12px]' : 'text-[16px]'
+                } flex-1 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
+                {item?.behavior ?? '--'}
+              </div>
+              <div
+                className={`${
+                  isMobile ? 'text-[12px]' : 'text-[16px]'
+                } w-50 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
+                {`${item?.pointAmount ?? '0'} ${item?.pointName ?? '--'}`}
+              </div>
             </div>
-            <div
-              className={`${
-                isMobile ? 'text-[12px]' : 'text-[16px]'
-              } w-50 text-[#953D22] font-roboto font-normal leading-4 break-words`}>
-              {`${item?.pointAmount ?? '0'} ${item?.pointName ?? '--'}`}
-            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <NoData />
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
