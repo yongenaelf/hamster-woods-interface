@@ -56,7 +56,11 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
               <img className="w-[22px] h-[22px]" src={require('assets/images/button-task-ok.png').default.src} />
             ) : (
               // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
-              <img className="w-[48px] h-[22px]" src={require('assets/images/button-task-go.png').default.src} />
+              <img
+                className="w-[48px] h-[22px]"
+                src={require('assets/images/button-task-go.png').default.src}
+                onClick={handleGoClick}
+              />
             )}
           </div>
         </div>
@@ -87,7 +91,11 @@ export const TaskItem = ({ item, onItemClick }: { item: Item; onItemClick?: (ite
           <img className="w-[26px] h-[26px] " src={require('assets/images/button-task-ok.png').default.src} />
         ) : (
           // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
-          <img className="w-[56px] h-[26px]" src={require('assets/images/button-task-go.png').default.src} />
+          <img
+            className="w-[56px] h-[26px]"
+            src={require('assets/images/button-task-go.png').default.src}
+            onClick={handleGoClick}
+          />
         )}
       </div>
     </div>
