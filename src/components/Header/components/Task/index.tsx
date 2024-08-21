@@ -9,7 +9,7 @@ export default function Task() {
   return (
     <>
       <Image
-        src={require('assets/images/header-task.png')}
+        src={require(isMobile ? 'assets/images/header-task.png' : 'assets/images/header-task-pc.png')}
         alt=""
         className={`${isMobile ? styles.task : styles['task-pc']}`}
         onClick={() => {

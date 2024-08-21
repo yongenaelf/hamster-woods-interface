@@ -56,7 +56,7 @@ export const Task = (props: ITaskProps) => {
         destroyOnClose
         title="Tasks & Points"
         onCancel={onCancel}>
-        <div className={`${isMobile ? 'max-h-[50vh] h-[22rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>
+        <div className={`${isMobile ? 'max-h-[50vh] h-[42rem]' : 'h-[40rem]'} text-[#AE694C] flex flex-col`}>
           <div
             className={`${isMobile ? 'text-[12px]' : 'text-[16px]'} leading-[18px] font-bold mx-[32px] ${
               isMobile ? 'mb-2' : 'mb-4'
@@ -78,7 +78,7 @@ export const Task = (props: ITaskProps) => {
             </div>
             <div
               className={` overflow-hidden flex flex-col space-x-[8px] bg-[#E8D1AE] rounded-[8px] flex-1 ${
-                isMobile ? 'px-[8px] py-[0px]' : 'px-[24px] py-[0px]'
+                isMobile ? 'px-[8px] py-[0px] mb-[8px]' : 'px-[24px] py-[0px] mb-[24px]'
               }`}>
               {tab === Tabs.Tasks ? <TaskTabContent onItemClick={onTaskItemClick} /> : null}
               {tab === Tabs.FluxPoints ? <FluxPointsTabContent pointsList={pointsList} /> : null}
