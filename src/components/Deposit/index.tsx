@@ -53,7 +53,7 @@ export default function DepositModal(
             $USDT directly for $ACORNS. If you need help using `}
             <span
               className="underline font-black text-[#3989FF]"
-              onClick={() => openPage(configInfo?.awakenTutorialUrl ?? '')}>
+              onClick={() => openPage(configInfo?.eTransferTutorialUrl ?? '')}>
               ETransfer
             </span>{' '}
             {`, feel free to check out the tutorial.`}

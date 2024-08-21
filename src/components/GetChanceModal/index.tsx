@@ -79,8 +79,8 @@ export default function GetChanceModal({
 
   const updateBalance = useCallback(async () => {
     const [_ELF, _ACORNS] = await Promise.all([getBalance('ELF'), getBalance('ACORNS')]);
-    setAcornsBalance(_ACORNS);
-    setELFBalance(_ELF);
+    typeof _ACORNS !== 'undefined' && setAcornsBalance(_ACORNS);
+    typeof _ELF !== 'undefined' && setELFBalance(_ELF);
   }, [getBalance]);
 
   useEffect(() => {

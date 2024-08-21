@@ -15,6 +15,7 @@ const initialState: InfoStateType = {
   accountInfoSync: null,
   loginStatus: LoginStatus.UNLOGIN,
   showLeaderboard: false,
+  showTaskModal: false,
   showLeaderboardInfo: false,
   showGameRecord: false,
   assetVisible: false,
@@ -46,6 +47,9 @@ export const infoSlice = createSlice({
     },
     toggleShowLeaderboard(state) {
       state.showLeaderboard = !state.showLeaderboard;
+    },
+    toggleShowTaskModal(state) {
+      state.showTaskModal = !state.showTaskModal;
     },
     toggleShowLeaderboardInfo(state) {
       state.showLeaderboardInfo = !state.showLeaderboardInfo;
@@ -86,6 +90,7 @@ export const {
   setWalletType,
   setPlayerInfo,
   toggleShowLeaderboard,
+  toggleShowTaskModal,
   toggleShowLeaderboardInfo,
   toggleShowGameRecord,
   setAssetVisible,

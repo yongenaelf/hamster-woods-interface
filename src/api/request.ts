@@ -16,6 +16,9 @@ import {
   ILockInfoQuery,
   TLockInfosResponse,
   TUnlockInfo,
+  IBeanPassClaimReqEx,
+  TPointInfo,
+  TPointPurchaseInfo,
 } from 'types';
 import request, { cmsRequest } from './axios';
 import {
@@ -33,7 +36,7 @@ export const getHamsterPassClaimClaimable = async (
   return request.get('app/hamster-pass/claimable', { params: query });
 };
 
-export const receiveHamsterPassNFT = async (body: IBeanPassClaimReq): Promise<IBeanPassClaimRes> => {
+export const receiveHamsterPassNFT = async (body: IBeanPassClaimReqEx): Promise<IBeanPassClaimRes> => {
   return request.post('app/hamster-pass/claim', body);
 };
 
@@ -113,4 +116,12 @@ export const getLockInfos = async (query: ILockInfoQuery): Promise<TLockInfosRes
 
 export const getUnlockRecords = async (query: ILockInfoQuery): Promise<TUnlockInfo[]> => {
   return request.get('/app/lock/unlock-records', { params: query });
+};
+
+export const getDailyTask = async (query: IBeanPassClaimReq): Promise<TPointInfo[]> => {
+  return request.get('/app/points/daily', { params: query });
+};
+
+export const getWeeklyTask = async (query: IBeanPassClaimReq): Promise<TPointPurchaseInfo[]> => {
+  return request.get('/app/points/weekly', { params: query });
 };
