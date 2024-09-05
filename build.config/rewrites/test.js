@@ -8,10 +8,6 @@ module.exports = [
     destination: 'https://aa-portkey-test.portkey.finance/:path*',
   },
   {
-    source: '/api/app/graphql/hamsterwoods/:path*',
-    destination: 'https://gcptest-indexer-api.aefinder.io/api/app/graphql/hamsterwoods/:path*',
-  },
-  {
     source: '/api/:path*',
     destination: 'https://hamster.beangotown.xyz/api/:path*',
   },

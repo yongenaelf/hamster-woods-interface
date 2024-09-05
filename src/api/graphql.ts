@@ -18,8 +18,6 @@ function isError(err: unknown): err is Error {
 
 export const graphQLRequest = async <T>(document: RequestDocument) => {
   try {
-    console.log('beanGoTownGraphqlServer', store.getState().configInfo.configInfo!.beanGoTownGraphqlServer);
-
     return await request<T>(store.getState().configInfo.configInfo!.beanGoTownGraphqlServer, document);
   } catch (err) {
     const response = (err as { response: unknown }).response;
