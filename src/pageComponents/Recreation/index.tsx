@@ -576,6 +576,7 @@ export default function Game() {
   };
 
   const getHamsterPass = useCallback(async () => {
+    if (!address) return;
     const beanPassList = await fetchBeanPassList({ caAddress: address });
     setBeanPassInfoDto(beanPassList?.[0]);
   }, [address]);
