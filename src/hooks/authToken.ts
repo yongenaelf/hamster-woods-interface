@@ -14,8 +14,6 @@ import { getETransferJWT } from '@etransfer/utils';
 import { asyncStorage } from 'utils/lib';
 import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
-import { message } from 'antd';
-import showMessage from 'utils/setGlobalComponentsInfo';
 import { isJWTExpired } from 'utils/common';
 
 export function useQueryAuthToken() {
@@ -33,7 +31,7 @@ export function useQueryAuthToken() {
       const provider = discoverProvider;
       const signInfo = params.signInfo;
       const signedMsgObject = await provider.request({
-        method: 'wallet_getSignature',
+        method: 'wallet_getManagerSignature',
         payload: {
           data: signInfo || params.hexToBeSign,
         },
@@ -84,7 +82,7 @@ export function useQueryAuthToken() {
     let address: string;
     if (walletType !== WalletType.portkey) {
       // nightElf or discover
-      signInfo = AElf.utils.sha256(plainText);
+      signInfo = Buffer.from(plainTextOrigin).toString('hex');
       getSignature = getDiscoverSignature;
       address = walletInfo?.discoverInfo?.address || '';
     } else {
