@@ -188,6 +188,9 @@ export interface IBeanPassClaimRes {
 export interface IBeanPassClaimReq {
   caAddress: string;
 }
+export interface IBeanPassClaimReqEx extends IBeanPassClaimReq {
+  domain: string;
+}
 
 export interface IErrorResponse {
   code: string;
@@ -354,4 +357,24 @@ export type TUnlockInfo = {
   decimal: number;
   amount: number;
   transactionId: string;
+};
+
+export type TPointInfo = {
+  hopCount: number;
+  currentHopCount: number;
+  pointName: string;
+  isComplete: boolean;
+  pointAmount: number;
+  isOverHop: boolean;
+  imageUrl: string;
+};
+
+export type TPointPurchaseInfo = {
+  fromCount: number;
+  toCount: number;
+  currentPurchaseCount: number;
+  pointName: string;
+  pointAmount: number;
+  isComplete: boolean;
+  imageUrl: string;
 };

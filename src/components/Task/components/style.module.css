@@ -1,0 +1,40 @@
+/* stylelint-disable number-max-precision */
+
+.taskMobileModal {
+  :global {
+    .ant-modal-body {
+      @apply !pt-[16px];
+    }
+  }
+}
+
+.taskPcModal {
+  :global {
+    .ant-modal-body {
+      @apply !pt-[2rem];
+    }
+  }
+}
+
+.taskModal {
+  @apply relative  p-0;
+  :global {
+    .ant-modal-content {
+      @apply h-full bg-inherit shadow-none rounded-[32px];
+      .ant-modal-close {
+        @apply absolute top-1 right-1;
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+  }
+}
+
+.scrollbar::-webkit-scrollbar {
+  @apply !w-0;
+}
+
+.weight700{
+  font-weight: bold;
+}

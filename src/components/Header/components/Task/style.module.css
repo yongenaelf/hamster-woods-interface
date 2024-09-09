@@ -1,0 +1,46 @@
+.taskModal {
+  @apply px-0 overflow-hidden;
+
+  :global {
+    .ant-modal-content {
+      .ant-modal-body {
+        @apply pb-[16px] rounded-[16px];
+      }
+      .ant-modal-close {
+        @apply absolute top-[-16px] right-[8px];
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+  }
+}
+
+.mobileTaskModal {
+  :global {
+    .ant-modal-content {
+      .ant-modal-close {
+        @apply top-[-8px]
+      }
+    }
+  }
+}
+
+.task {
+  @apply h-10 w-10;
+}
+
+.task-pc {
+  @apply h-20 w-20;
+}
+
+.content {
+  @apply px-[32px];
+
+  &::-webkit-scrollbar {
+    @apply w-4 ml-[8px];
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply !rounded-lg;
+  }
+}

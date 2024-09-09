@@ -23,6 +23,7 @@ export type InfoStateType = {
   playerInfo?: IPlayerInformation;
   showLeaderboard: boolean;
   showLeaderboardInfo: boolean;
+  showTaskModal: boolean;
   showGameRecord: boolean;
   assetVisible: boolean;
   gameSetting?: IGameSetting;
