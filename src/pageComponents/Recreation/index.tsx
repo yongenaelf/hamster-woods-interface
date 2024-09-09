@@ -306,7 +306,7 @@ export default function Game() {
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
       } catch (error) {
-        console.log('===PurchaseChance error', error);
+        console.error('===PurchaseChance error', error);
         showMessage.error('Buy $ACORNS Failed');
       } finally {
         showMessage.hideLoading();
