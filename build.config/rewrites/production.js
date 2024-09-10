@@ -15,9 +15,4 @@ module.exports = [
     source: '/cms/:path*',
     destination: 'https://cms-hamster.beangotown.com/:path*',
   },
-  {
-    source: '/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
-    destination:
-      'https://dapp-hamster.beangotown.com/AElfIndexer_HamsterWoods/HamsterWoodsIndexerPluginSchema/graphql/:path*',
-  },
 ];
