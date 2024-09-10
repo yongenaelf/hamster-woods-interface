@@ -306,7 +306,7 @@ export default function Game() {
         updatePlayerInformation(address);
         setGetChanceModalVisible(false);
       } catch (error) {
-        console.log('===PurchaseChance error', error);
+        console.error('===PurchaseChance error', error);
         showMessage.error('Buy $ACORNS Failed');
       } finally {
         showMessage.hideLoading();
@@ -576,6 +576,7 @@ export default function Game() {
   };
 
   const getHamsterPass = useCallback(async () => {
+    if (!address) return;
     const beanPassList = await fetchBeanPassList({ caAddress: address });
     setBeanPassInfoDto(beanPassList?.[0]);
   }, [address]);
