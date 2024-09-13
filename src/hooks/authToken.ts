@@ -30,8 +30,9 @@ export function useQueryAuthToken() {
       if (!discoverProvider) throw new Error('Please download extension');
       const provider = discoverProvider;
       const signInfo = params.signInfo;
+      const checkMethod = (discoverProvider as any).methodCheck('wallet_getManagerSignature');
       const signedMsgObject = await provider.request({
-        method: 'wallet_getManagerSignature',
+        method: checkMethod ? 'wallet_getManagerSignature' : 'wallet_getSignature',
         payload: {
           data: signInfo || params.hexToBeSign,
         },
@@ -82,7 +83,15 @@ export function useQueryAuthToken() {
     let address: string;
     if (walletType !== WalletType.portkey) {
       // nightElf or discover
-      signInfo = Buffer.from(plainTextOrigin).toString('hex');
+      const discoverProvider = await DetectProvider.getDetectProvider();
+      if (!discoverProvider) throw new Error('Please download extension');
+
+      const checkMethod = (discoverProvider as any).methodCheck('wallet_getManagerSignature');
+      if (checkMethod) {
+        signInfo = Buffer.from(plainTextOrigin).toString('hex');
+      } else {
+        signInfo = AElf.utils.sha256(plainText);
+      }
       getSignature = getDiscoverSignature;
       address = walletInfo?.discoverInfo?.address || '';
     } else {
