@@ -2954,12 +2954,12 @@
     "@portkey/types" "^2.7.1-alpha.3"
     "@portkey/utils" "^2.7.1-alpha.3"
 
-"@portkey/detect-provider@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@portkey/detect-provider/-/detect-provider-2.2.0.tgz#c8543bc8d144056d4093800568fdfa239168d218"
-  integrity sha512-Tlzf8LWbdp+qahinSc/hYtRZ0Te3XWE6LA+eAnHgn9C4q4J+O9BiwagREjO0MvqUVqPJVbZovq28qf1FIu8ZQg==
+"@portkey/detect-provider@2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@portkey/detect-provider/-/detect-provider-2.2.4.tgz#f2554e3e46f0ec13b9dfaed0f40af48312d30af2"
+  integrity sha512-ycFTFGDg/9NSzo98HpncSihG+mhdYbkcFCgINcgEcIiHaJNeP5GgHVKb9cgcfEorqbCm3WLek4cAKDHh/ibRMQ==
   dependencies:
-    "@portkey/provider-types" "^2.2.0"
+    "@portkey/provider-types" "^2.2.4"
 
 "@portkey/detect-provider@^2.0.0-alpha.2":
   version "2.0.0-alpha.5"
@@ -3034,10 +3034,10 @@
     bowser "^2.11.0"
     query-string "^7.1.1"
 
-"@portkey/provider-types@2.2.0", "@portkey/provider-types@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@portkey/provider-types/-/provider-types-2.2.0.tgz#8cf9ec5a730a3eb1b90a9a97ce15153b90b5bda0"
-  integrity sha512-+rRoZKP8O//D4k9ZwRnkYYmDe76xMW87U84r1QDvwJ7n2oQTk8hy7fQ8c2ut0twVsIibZfevvxzOttbkJ1RNZQ==
+"@portkey/provider-types@2.2.4", "@portkey/provider-types@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@portkey/provider-types/-/provider-types-2.2.4.tgz#e9ca584db2877068036631988af86dd95034d4fb"
+  integrity sha512-80ebarxVJXfOPdIPkyoL4j2Qomga+MMgc2k99vwUOtmniKEl+QYxgly348cfY7JdaSjAU04RAf3p7vlxKlclxg==
   dependencies:
     "@portkey/types" "^2.0.0-alpha.0"
     "@types/readable-stream" "^2.3.15"

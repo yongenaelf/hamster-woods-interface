@@ -14,8 +14,6 @@ import { getETransferJWT } from '@etransfer/utils';
 import { asyncStorage } from 'utils/lib';
 import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
-import { message } from 'antd';
-import showMessage from 'utils/setGlobalComponentsInfo';
 import { isJWTExpired } from 'utils/common';
 
 export function useQueryAuthToken() {
@@ -32,8 +30,9 @@ export function useQueryAuthToken() {
       if (!discoverProvider) throw new Error('Please download extension');
       const provider = discoverProvider;
       const signInfo = params.signInfo;
+      const checkMethod = (discoverProvider as any).methodCheck('wallet_getManagerSignature');
       const signedMsgObject = await provider.request({
-        method: 'wallet_getSignature',
+        method: checkMethod ? 'wallet_getManagerSignature' : 'wallet_getSignature',
         payload: {
           data: signInfo || params.hexToBeSign,
         },
@@ -84,7 +83,15 @@ export function useQueryAuthToken() {
     let address: string;
     if (walletType !== WalletType.portkey) {
       // nightElf or discover
-      signInfo = AElf.utils.sha256(plainText);
+      const discoverProvider = await DetectProvider.getDetectProvider();
+      if (!discoverProvider) throw new Error('Please download extension');
+
+      const checkMethod = (discoverProvider as any).methodCheck('wallet_getManagerSignature');
+      if (checkMethod) {
+        signInfo = Buffer.from(plainTextOrigin).toString('hex');
+      } else {
+        signInfo = AElf.utils.sha256(plainText);
+      }
       getSignature = getDiscoverSignature;
       address = walletInfo?.discoverInfo?.address || '';
     } else {
