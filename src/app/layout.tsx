@@ -8,6 +8,7 @@ import Provider from 'provider';
 import 'styles/global.css';
 import 'styles/theme.css';
 import Layout from 'pageComponents/layout';
+import React from 'react';
 
 export const metadata = {
   title: 'Hamster Woods',
@@ -37,4 +38,4 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default RootLayout;
+export default React.memo(RootLayout);
