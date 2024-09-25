@@ -32,6 +32,7 @@ import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
 import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
+import { sleep } from '@portkey/utils';
 
 did.setConfig({
   referralInfo: {
@@ -39,6 +40,8 @@ did.setConfig({
     projectCode: HAMSTER_PROJECT_CODE,
   },
 });
+
+let isHandleSDKLogout = false;
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
@@ -60,10 +63,6 @@ const Layout = dynamic(
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
       const router = useRouter();
-
-      useEffect(() => {
-        TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
-      }, []);
 
       useEffect(() => {
         if (!window || !document) return;
@@ -124,7 +123,7 @@ const Layout = dynamic(
             store.dispatch(setChessboardData(res.data));
           });
 
-          configPromise.then((res) => {
+          configPromise.then(async (res) => {
             store.dispatch(
               setConfigInfo({
                 ...res.data,
@@ -146,6 +145,12 @@ const Layout = dynamic(
                 },
               },
             });
+
+            await sleep(3000);
+            if (!isHandleSDKLogout) {
+              isHandleSDKLogout = true;
+              TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
+            }
           });
 
           serverConfigPromise.then((res) => {
@@ -226,4 +231,4 @@ const Layout = dynamic(
   { ssr: false },
 );
 
-export default Layout;
+export default React.memo(Layout);
