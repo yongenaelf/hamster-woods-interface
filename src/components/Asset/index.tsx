@@ -9,15 +9,15 @@ import styles from './style.module.css';
 
 export default function MyAsset() {
   const router = useRouter();
-  const { walletInfo, walletType, isLogin, configInfo } = useGetState();
+  const { walletInfo, walletType, isLogin, isOnChainLogin, configInfo } = useGetState();
   const { isShowRampBuy, isShowRampSell } = configInfo!;
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else if (walletType !== WalletType.portkey) {
       router.push('/');
     }
-  }, [isLogin, router, walletType]);
+  }, [isLogin, isOnChainLogin, router, walletType]);
 
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
   return (

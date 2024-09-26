@@ -44,4 +44,5 @@ export enum LoginStatus {
   UNLOGIN = 1,
   LOGGED = 2,
   LOCK = 3,
+  ON_CHAIN_LOGGED = 4,
 }

@@ -78,6 +78,7 @@ export default function Game() {
   const {
     isMobile,
     isLogin,
+    isOnChainLogin,
     playerInfo,
     walletType,
     walletInfo,
@@ -477,24 +478,24 @@ export default function Game() {
   );
 
   useEffect(() => {
-    if (isLogin && needSync) {
+    if (isOnChainLogin && needSync) {
       syncAccountInfo();
     }
-  }, [isLogin, needSync, syncAccountInfo]);
+  }, [isLogin, isOnChainLogin, needSync, syncAccountInfo]);
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
       if (walletType !== WalletType.unknown && walletInfo && !needSync) {
         initContractAndCheckBeanPass();
       }
     }
-  }, [initContractAndCheckBeanPass, isLogin, needSync, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, needSync, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
-  }, [checkerboardData, hasNft]);
+  }, [hasNft, initCheckerboard]);
 
   useEffectOnce(() => {
     showMessage.loading();
