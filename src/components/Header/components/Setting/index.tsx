@@ -17,7 +17,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did, TelegramPlatform } from '@portkey/did-ui-react';
+import { did, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
@@ -27,7 +27,7 @@ import CommonRedBtn from 'components/CommonRedBtn';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
-  const { walletType, isMobile } = useGetState();
+  const { walletType, isMobile, isOnChainLogin } = useGetState();
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -57,6 +57,9 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
+    if (!isOnChainLogin) {
+      return singleMessage.warning('is Loaning');
+    }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);

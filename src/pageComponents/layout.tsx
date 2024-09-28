@@ -57,8 +57,15 @@ export const isCurrentTimeInterval = (date: [string, string]) => {
 const Layout = dynamic(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
+      // useEffect(() => {
+      //   console.log('mount!');
+      //   return () => {
+      //     console.log('unmount!');
+      //   };
+      // }, []);
+      // return null;
       const { children } = props;
-      const { isLogin } = useGetState();
+      const { isLogin, isOnChainLogin } = useGetState();
       const [isMobileDevice, setIsMobileDevice] = useState(false);
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
@@ -94,7 +101,7 @@ const Layout = dynamic(
       }, []);
 
       useEffect(() => {
-        if (!isLogin) {
+        if (!isLogin && !isOnChainLogin) {
           router.replace('/login');
         }
         if (typeof window !== undefined) {
@@ -103,6 +110,7 @@ const Layout = dynamic(
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
           }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
       const initConfigAndResource = async () => {
@@ -203,7 +211,7 @@ const Layout = dynamic(
         return null;
       }
 
-      if (isLogin && pathname === '/') {
+      if ((isLogin || isOnChainLogin) && pathname === '/') {
         return (
           <AntdLayout className="xx-wrapper flex h-full w-[100vw] flex-col overflow-hidden">
             {isMobileDevice && <Header />}

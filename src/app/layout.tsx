@@ -8,7 +8,7 @@ import Provider from 'provider';
 import 'styles/global.css';
 import 'styles/theme.css';
 import Layout from 'pageComponents/layout';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const metadata = {
   title: 'Hamster Woods',

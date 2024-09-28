@@ -58,10 +58,13 @@ import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
 import DepositModal from 'components/Deposit';
 import { message } from 'antd';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function Game() {
+  useEffect(() => {
+    console.log('wfs render Game page', new Date());
+  }, []);
   const [translate, setTranslate] = useState<{
     x: number;
     y: number;
@@ -78,6 +81,7 @@ export default function Game() {
   const {
     isMobile,
     isLogin,
+    isOnChainLogin,
     playerInfo,
     walletType,
     walletInfo,
@@ -223,7 +227,7 @@ export default function Game() {
     });
   };
 
-  const initCheckerboard = () => {
+  const initCheckerboard = useCallback(() => {
     resetPosition();
     setResetStart(chessboardResetStart);
     setTotalStep(chessboardTotalStep);
@@ -244,8 +248,9 @@ export default function Game() {
       linkedList.current.updateCurrentNode(curChessboardNode);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getList(firstNode, firstNodePosition, checkerboardData!, linkedList, firstNodePosition);
-  };
+  }, [chessboardResetStart, chessboardTotalStep, curChessboardNode, firstNode, firstNodePosition]);
 
   const updateCheckerboard = () => {
     setRoleAnimationDuration(0);
@@ -316,6 +321,9 @@ export default function Game() {
   );
 
   const go = async () => {
+    if (!isOnChainLogin) {
+      return singleMessage.warning('is Loaning');
+    }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
         onNftClick();
@@ -455,12 +463,15 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
+      if (!isOnChainLogin) {
+        return singleMessage.warning('is Loaning');
+      }
       await getETransferAuthToken();
       setDepositVisible(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin]);
 
   const handleHasNft = useCallback(
     (hasNft: boolean) => {
@@ -477,24 +488,24 @@ export default function Game() {
   );
 
   useEffect(() => {
-    if (isLogin && needSync) {
+    if (isOnChainLogin && needSync) {
       syncAccountInfo();
     }
-  }, [isLogin, needSync, syncAccountInfo]);
+  }, [isLogin, isOnChainLogin, needSync, syncAccountInfo]);
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
       if (walletType !== WalletType.unknown && walletInfo && !needSync) {
         initContractAndCheckBeanPass();
       }
     }
-  }, [initContractAndCheckBeanPass, isLogin, needSync, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, needSync, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
-  }, [checkerboardData, hasNft]);
+  }, [hasNft, checkerboardData]);
 
   useEffectOnce(() => {
     showMessage.loading();

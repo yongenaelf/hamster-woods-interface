@@ -26,7 +26,7 @@ const Layout = dynamic(
 
       const [hasLoadedSource, setHasLoadedSource] = useState(false);
 
-      const { isMobile: isMobileStore, chessBoardInfo, imageResources, isLogin, btnImageResources } = useGetState();
+      const { isMobile: isMobileStore, chessBoardInfo, imageResources, btnImageResources } = useGetState();
 
       const router = useRouter();
 

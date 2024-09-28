@@ -26,6 +26,7 @@ const useGetState = () => {
   return {
     isMobile: infoState.isMobile,
     isLogin: infoState.loginStatus === LoginStatus.LOGGED,
+    isOnChainLogin: infoState.loginStatus === LoginStatus.ON_CHAIN_LOGGED,
     isLock: infoState.loginStatus === LoginStatus.LOCK,
     walletType: infoState.walletType,
     walletInfo: infoState.walletInfo,
