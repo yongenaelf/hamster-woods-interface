@@ -36,6 +36,7 @@ import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
 import { getContractBasic } from '@portkey/contracts';
 import { TTokenApproveHandler } from '@portkey/trader-core';
+import { isLoginOnChain } from 'utils/wallet';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -234,10 +235,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     discoverUtils.removeDiscoverStorageSign();
     setLoading(true);
     const res = await getSocialToken({ type });
+    console.log('wfs onSocialFinish invoke start', new Date());
     await signHandle.onSocialFinish({
       type: res.provider,
       data: { accessToken: res.token },
     });
+    console.log('wfs onSocialFinish invoke end', new Date());
   };
 
   const handleGoogle = async () => {
@@ -245,6 +248,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   };
 
   const handleTeleGram = () => {
+    console.log('wfs clicked login button', new Date());
     handleThirdPart(SocialLoginType.TELEGRAM);
   };
 
@@ -253,10 +257,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   };
 
   const getSocialToken = async ({ type }: { type: SocialLoginType; clientId?: string; redirectURI?: string }) => {
+    console.log('wfs socialLoginAuth invoke start', new Date());
     const tokenRes = await socialLoginAuth({
       type,
       network: Network as NetworkType,
     });
+    console.log('wfs socialLoginAuth invoke end', new Date());
     return tokenRes;
   };
 
@@ -376,7 +382,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
             caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash,
           });
         }
-        store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+        if (isLoginOnChain()) {
+          store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+        } else {
+          store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+        }
       }
     },
     [curChain],
@@ -406,7 +416,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         });
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
+        await did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
+        console.log('wfs exe did save success!!');
         setDidWalletInfo(walletInfo as PortkeyInfoType);
         setWallet({
           portkeyInfo: walletInfo as PortkeyInfoType,

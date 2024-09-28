@@ -62,6 +62,9 @@ import { handleErrorMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function Game() {
+  useEffect(() => {
+    console.log('wfs render Game page', new Date());
+  }, []);
   const [translate, setTranslate] = useState<{
     x: number;
     y: number;
@@ -224,7 +227,7 @@ export default function Game() {
     });
   };
 
-  const initCheckerboard = () => {
+  const initCheckerboard = useCallback(() => {
     resetPosition();
     setResetStart(chessboardResetStart);
     setTotalStep(chessboardTotalStep);
@@ -245,8 +248,9 @@ export default function Game() {
       linkedList.current.updateCurrentNode(curChessboardNode);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getList(firstNode, firstNodePosition, checkerboardData!, linkedList, firstNodePosition);
-  };
+  }, [chessboardResetStart, chessboardTotalStep, curChessboardNode, firstNode, firstNodePosition]);
 
   const updateCheckerboard = () => {
     setRoleAnimationDuration(0);
@@ -495,7 +499,7 @@ export default function Game() {
 
   useEffect(() => {
     initCheckerboard();
-  }, [hasNft, initCheckerboard]);
+  }, [hasNft, checkerboardData]);
 
   useEffectOnce(() => {
     showMessage.loading();

@@ -237,7 +237,6 @@ export function useQueryAuthToken() {
 
   const getETransferAuthTokenFromApi = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-    console.log('wfs !isLogin && !isOnChainLogin', !isLogin && !isOnChainLogin);
     if (!isLogin && !isOnChainLogin) throw new Error('You are not logged in.');
     try {
       const managerAddress = await getManagerAddress();

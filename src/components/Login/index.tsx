@@ -90,15 +90,16 @@ export default function Login() {
 
   const onSignInHandler = useSignInHandler({ isErrorTip: true });
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+    console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
-    console.log('wallet is: handleSocialStep1Success', value);
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
+      console.log('wfs onSignInHandler invoke start', new Date());
       const signResult = await onSignInHandler(value);
-      console.log('wallet is: signResult', signResult);
+      console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
       if (signResult.nextStep === 'SetPinAndAddManager') {
         try {
@@ -114,11 +115,12 @@ export default function Login() {
             guardianIdentifier: guardianIdentifierInfo?.identifier,
             guardianApprovedList: approvedList,
           };
+          console.log('wfs createWallet invoke start', new Date());
           const didWallet = await createWallet(params);
-          console.log('wallet is: tglogin', didWallet);
+          console.log('wfs createWallet invoke end', new Date());
           didWallet && handleOnChainFinishWrapper(didWallet);
         } catch (e) {
-          console.log('wallet is: error', e);
+          console.log('wfs wallet is: error', e, new Date());
         }
         // didWallet && handlePortKeyLoginFinish(didWallet);
       } else {
@@ -159,15 +161,15 @@ export default function Login() {
   );
   const handleOnChainFinishWrapper = useCallback(
     async (wallet: DIDWalletInfo) => {
-      console.log('wfs onFinish invoke!', wallet);
+      console.log('wfs onFinish invoke start', wallet, new Date());
       await handleOnChainFinish(WalletType.portkey, wallet);
+      console.log('wfs onFinish invoke end', wallet, new Date());
     },
     [handleOnChainFinish],
   );
   const handleCreatePending = useCallback(
     async (createPendingInfo: CreatePendingInfo) => {
-      console.log('wfs onCreatePending invoke!', createPendingInfo);
-      console.log('wallet is: createPendingInfo', createPendingInfo);
+      console.log('wfs onCreatePending invoke!', createPendingInfo, new Date());
       if (createPendingInfo.createType === 'register') {
         return;
       }
@@ -186,7 +188,6 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log('wfs isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
     if (isLogin || isOnChainLogin) {
       router.replace('/');
     }

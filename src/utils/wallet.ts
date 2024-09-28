@@ -20,5 +20,5 @@ export const getCaHashAndOriginChainIdByWallet = async (
 };
 
 export const isLoginOnChain = () => {
-  return did.didWallet.isLoginStatus !== LoginStatusEnum.SUCCESS;
+  return did.didWallet.isLoginStatus === LoginStatusEnum.SUCCESS;
 };
