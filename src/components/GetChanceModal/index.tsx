@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
 import { useAddress } from 'hooks/useAddress';
 import useWebLogin from 'hooks/useWebLogin';
@@ -55,7 +55,7 @@ export default function GetChanceModal({
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const { playerInfo } = useGetState();
+  const { playerInfo, isOnChainLogin } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
   const [swapOpen, setSwapOpen] = useState(false);
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
@@ -104,12 +104,15 @@ export default function GetChanceModal({
 
   const onEnterTransfer = useCallback(async () => {
     try {
+      if (!isOnChainLogin) {
+        return singleMessage.warning('is Loaning');
+      }
       await getETransferAuthToken();
       setShowDepositModal(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin]);
 
   const errorMessageTipDom = useCallback(() => {
     if (!errMsgTip)
@@ -173,9 +176,12 @@ export default function GetChanceModal({
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
+    if (!isOnChainLogin) {
+      return singleMessage.warning('is Loaning');
+    }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
-  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, onConfirm]);
 
   const handleCancel = useCallback(() => {
     setInputVal(1);
@@ -352,6 +358,9 @@ export default function GetChanceModal({
               {showSwap && (
                 <div
                   onClick={() => {
+                    if (!isOnChainLogin) {
+                      return singleMessage.warning('is Loaning');
+                    }
                     setSwapOpen(true);
                   }}
                   className={`${

@@ -15,12 +15,12 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 import Task from './components/Task';
 
 export default function Header() {
-  const { walletType } = useGetState();
+  const { walletType, isOnChainLogin } = useGetState();
   const { playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
@@ -52,12 +52,15 @@ export default function Header() {
 
   const showDepositModal = useCallback(async () => {
     try {
+      if (!isOnChainLogin) {
+        return singleMessage.warning('is Loaning');
+      }
       await getETransferAuthToken();
       setDepositVisible(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin]);
 
   return (
     <div className={styles.headerContainer}>

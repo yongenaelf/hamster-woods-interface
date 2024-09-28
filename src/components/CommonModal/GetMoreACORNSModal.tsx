@@ -10,11 +10,12 @@ import { useQueryAuthToken } from 'hooks/authToken';
 import openPage from 'utils/openPage';
 import styles from './style.module.css';
 import { message } from 'antd';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
+import useGetState from 'redux/state/useGetState';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const { getETransferAuthToken } = useQueryAuthToken();
-
+  const { isOnChainLogin } = useGetState();
   const { configInfo } = useSelector((state: AppState) => state.configInfo);
   const [showDeposit, setShowDeposit] = useState(false);
   const isMobile = useIsMobile();
@@ -67,6 +68,9 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             try {
               // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
               // onCancel?.();
+              if (!isOnChainLogin) {
+                return singleMessage.warning('is Loaning');
+              }
               await getETransferAuthToken();
               setShowDeposit(true);
             } catch (error) {

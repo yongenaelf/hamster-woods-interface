@@ -237,8 +237,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     const res = await getSocialToken({ type });
     console.log('wfs onSocialFinish invoke start', new Date());
     await signHandle.onSocialFinish({
-      type: res.provider,
-      data: { accessToken: res.token },
+      type: res?.provider,
+      data:
+        type === SocialLoginType.TELEGRAM
+          ? { accessToken: res?.token }
+          : { accessToken: res?.token, idToken: res?.idToken, nonce: res?.nonce, timestamp: res?.timestamp },
     });
     console.log('wfs onSocialFinish invoke end', new Date());
   };

@@ -26,6 +26,7 @@ export default function MyAsset() {
         originChainId={originChainId as Chain}
         pin={walletInfo?.portkeyInfo?.pin}
         caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
+        isLoginOnChain={isOnChainLogin}
         didStorageKeyName={KEY_NAME}>
         <Asset
           isShowRamp={isShowRampBuy || isShowRampSell}

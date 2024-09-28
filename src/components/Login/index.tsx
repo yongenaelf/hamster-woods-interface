@@ -458,6 +458,9 @@ export default function Login() {
           const result = await verifySocialToken({
             accountType,
             token: authenticationInfo?.authToken,
+            idToken: authenticationInfo?.idToken,
+            nonce: authenticationInfo?.nonce,
+            timestamp: authenticationInfo?.timestamp,
             guardianIdentifier: identifier,
             verifier,
             chainId: curChain,
@@ -466,12 +469,15 @@ export default function Login() {
           });
           setLoading(false);
           console.log(result);
-          if (!result?.signature || !result?.verificationDoc) throw 'Verify social login error';
+          if (result?.zkLoginInfo && (!result?.signature || !result?.verificationDoc)) {
+            throw 'Verify social login error';
+          }
           onStep2OfSignUpFinish(
             {
               verifier,
-              verificationDoc: result.verificationDoc,
-              signature: result.signature,
+              verificationDoc: result?.verificationDoc,
+              signature: result?.signature,
+              zkLoginInfo: result?.zkLoginInfo,
             },
             value,
           );

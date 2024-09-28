@@ -58,7 +58,7 @@ import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
 import DepositModal from 'components/Deposit';
 import { message } from 'antd';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 
 export default function Game() {
@@ -321,6 +321,9 @@ export default function Game() {
   );
 
   const go = async () => {
+    if (!isOnChainLogin) {
+      return singleMessage.warning('is Loaning');
+    }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
         onNftClick();
@@ -460,12 +463,15 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
+      if (!isOnChainLogin) {
+        return singleMessage.warning('is Loaning');
+      }
       await getETransferAuthToken();
       setDepositVisible(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin]);
 
   const handleHasNft = useCallback(
     (hasNft: boolean) => {

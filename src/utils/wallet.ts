@@ -1,7 +1,7 @@
 import { GetCAHolderByManagerParams } from '@portkey/services';
 import { ChainId } from '@portkey/provider-types';
 import { did } from '@portkey/did-ui-react';
-import { LoginStatusEnum } from '@portkey/did';
+import { LoginStatusEnum } from '@portkey/types';
 
 export const getCaHashAndOriginChainIdByWallet = async (
   caAddress: string,
