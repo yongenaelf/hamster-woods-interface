@@ -50,6 +50,7 @@ export default function Setting() {
     }
     ContractRequest.get().resetConfig();
     did.reset();
+    console.log('wfs setLoginStatus=>LOCK 2');
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
     store.dispatch(setCurChessboardNode(null));
     store.dispatch(setChessboardResetStart(true));
