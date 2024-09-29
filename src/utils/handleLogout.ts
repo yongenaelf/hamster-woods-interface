@@ -14,6 +14,7 @@ import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
 import { DEFAULT_PIN } from 'constants/login';
+import { ETransferConfig, unsubscribeUserOrderRecord, WalletTypeEnum } from '@etransfer/ui-react';
 
 export const handleSDKLogout = async () => {
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
@@ -29,6 +30,13 @@ export const handleSDKLogout = async () => {
     }
   }
   window.localStorage.removeItem(KEY_NAME);
+
+  ETransferConfig.setConfig({
+    accountInfo: {
+      accounts: {},
+      walletType: WalletTypeEnum.unknown,
+    },
+  });
 
   store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
   store.dispatch(setWalletInfo(null));

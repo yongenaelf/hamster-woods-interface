@@ -36,6 +36,7 @@ import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
 import { getContractBasic } from '@portkey/contracts';
 import { TTokenApproveHandler } from '@portkey/trader-core';
+import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -168,6 +169,13 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   }, [discoverProvider]);
 
   const logout = useCallback(() => {
+    unsubscribeUserOrderRecord(address);
+    ETransferConfig.setConfig({
+      accountInfo: {
+        accounts: {},
+        walletType: WalletTypeEnum.unknown,
+      },
+    });
     store.dispatch(setWalletInfo(null));
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletType(WalletType.unknown));

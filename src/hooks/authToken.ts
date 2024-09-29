@@ -9,15 +9,18 @@ import DetectProvider from 'utils/InstanceProvider';
 import useGetState from 'redux/state/useGetState';
 import { did, handleErrorMessage } from '@portkey/did-ui-react';
 import { PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
-import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
+import { getAwakenWalletType, getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import { getETransferJWT } from '@etransfer/utils';
 import { asyncStorage } from 'utils/lib';
 import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
 import { isJWTExpired } from 'utils/common';
+import { useETransferAccounts } from './useAddress';
 
 export function useQueryAuthToken() {
   const { walletInfo, walletType, isLogin } = useGetState();
+
+  const accounts = useETransferAccounts();
 
   const getDiscoverSignature = useCallback(
     async (params: SignatureParams) => {
@@ -225,6 +228,10 @@ export function useQueryAuthToken() {
         authorization: {
           jwt: authToken,
         },
+        accountInfo: {
+          walletType: getAwakenWalletType(walletType),
+          accounts,
+        },
       });
       return authToken;
     } catch (error) {
@@ -233,7 +240,7 @@ export function useQueryAuthToken() {
     } finally {
       // showMessage.hideLoading();
     }
-  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
+  }, [accounts, getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo, walletType]);
 
   const getETransferAuthTokenFromApi = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
