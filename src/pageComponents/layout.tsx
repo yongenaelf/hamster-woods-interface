@@ -67,7 +67,7 @@ const Layout = dynamic(
       // }, []);
       // return null;
       const { children } = props;
-      const { isLogin, isOnChainLogin } = useGetState();
+      const { isInit, isLogin, isOnChainLogin } = useGetState();
       const [isMobileDevice, setIsMobileDevice] = useState(false);
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
@@ -108,7 +108,7 @@ const Layout = dynamic(
           router.replace('/login');
         }
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME)) {
+          if (window.localStorage.getItem(KEY_NAME) && isInit) {
             did.reset();
             console.log('wfs setLoginStatus=>12', pathname);
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
