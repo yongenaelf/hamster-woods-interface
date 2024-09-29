@@ -171,6 +171,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const logout = useCallback(() => {
     store.dispatch(setWalletInfo(null));
+    console.log('wfs setLoginStatus=>6');
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletType(WalletType.unknown));
     store.dispatch(setPlayerInfo(null));
@@ -359,6 +360,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           caAddress: (walletInfo as IDiscoverInfo).address!,
           caHash: '',
         });
+        console.log('wfs setLoginStatus=>7');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
         did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
@@ -385,9 +387,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
             caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash,
           });
         }
+        console.log('wfs handleFinish isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
         if (isLoginOnChain()) {
+          console.log('wfs setLoginStatus=>8');
           store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
         } else {
+          console.log('wfs setLoginStatus=>9');
           store.dispatch(setLoginStatus(LoginStatus.LOGGED));
         }
       }
@@ -417,6 +422,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           caAddress: (walletInfo as IDiscoverInfo).address!,
           caHash: '',
         });
+        console.log('wfs setLoginStatus=>10');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
         await did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
@@ -444,6 +450,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
             caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash,
           });
         }
+        console.log('wfs handleOnChainFinish isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
+        console.log('wfs setLoginStatus=>11');
         store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
       }
     },

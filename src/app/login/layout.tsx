@@ -90,7 +90,7 @@ const Layout = dynamic(
         if (typeof window !== undefined) {
           if (window.localStorage.getItem(KEY_NAME)) {
             did.reset();
-            console.log('wfs setLoginStatus=>LOCK 1');
+            console.log('wfs setLoginStatus=>1');
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
           }
         }
