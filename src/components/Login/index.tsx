@@ -209,6 +209,7 @@ export default function Login() {
         return;
       }
       if (window.localStorage.getItem(KEY_NAME)) {
+        console.log('wfs setLoginStatus=>LOCK 3');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
       } else if (TelegramPlatform.isTelegramPlatform()) {
