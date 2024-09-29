@@ -117,9 +117,19 @@ export default function Login() {
             guardianIdentifier: guardianIdentifierInfo?.identifier,
             guardianApprovedList: approvedList,
           };
-          console.log('wfs createWallet invoke start', new Date());
+          console.log(
+            'wfs createWallet invoke start',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
           const didWallet = await createWallet(params);
-          console.log('wfs createWallet invoke end', new Date());
+          console.log(
+            'wfs createWallet invoke end',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
           didWallet && handleOnChainFinishWrapper(didWallet);
         } catch (e) {
           console.log('wfs wallet is: error', e, new Date());
