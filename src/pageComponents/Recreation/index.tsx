@@ -494,6 +494,7 @@ export default function Game() {
   }, [isLogin, isOnChainLogin, needSync, syncAccountInfo]);
 
   useEffect(() => {
+    console.log('wfs Game page isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
     if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
