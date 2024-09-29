@@ -20,5 +20,6 @@ export const getCaHashAndOriginChainIdByWallet = async (
 };
 
 export const isLoginOnChain = () => {
+  console.log('wfs isLoginStatus', did.didWallet.isLoginStatus);
   return did.didWallet.isLoginStatus === LoginStatusEnum.SUCCESS;
 };

@@ -18,6 +18,7 @@ import DepositModal from 'components/Deposit';
 import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 import Task from './components/Task';
+import { loginOptTip } from 'constants/tip';
 
 export default function Header() {
   const { walletType, isOnChainLogin } = useGetState();
@@ -53,7 +54,7 @@ export default function Header() {
   const showDepositModal = useCallback(async () => {
     try {
       if (!isOnChainLogin && walletType === WalletType.portkey) {
-        return singleMessage.warning('is Loaning');
+        return singleMessage.warning(loginOptTip);
       }
       await getETransferAuthToken();
       setDepositVisible(true);

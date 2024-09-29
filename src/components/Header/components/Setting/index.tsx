@@ -24,6 +24,7 @@ import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode }
 import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
 import CommonRedBtn from 'components/CommonRedBtn';
+import { loginOptTip } from 'constants/tip';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -59,7 +60,7 @@ export default function Setting() {
 
   const handleExit = async () => {
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning('is Loaning');
+      return singleMessage.warning(loginOptTip);
     }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {

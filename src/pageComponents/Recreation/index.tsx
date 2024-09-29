@@ -60,6 +60,7 @@ import DepositModal from 'components/Deposit';
 import { message } from 'antd';
 import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
+import { loginOptTip } from 'constants/tip';
 
 export default function Game() {
   useEffect(() => {
@@ -322,7 +323,7 @@ export default function Game() {
 
   const go = async () => {
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning('is Loaning');
+      return singleMessage.warning(loginOptTip);
     }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
@@ -464,7 +465,7 @@ export default function Game() {
   const showDepositModal = useCallback(async () => {
     try {
       if (!isOnChainLogin && walletType === WalletType.portkey) {
-        return singleMessage.warning('is Loaning');
+        return singleMessage.warning(loginOptTip);
       }
       await getETransferAuthToken();
       setDepositVisible(true);
