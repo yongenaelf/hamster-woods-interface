@@ -210,7 +210,7 @@ export default function Login() {
       }
       if (window.localStorage.getItem(KEY_NAME)) {
         console.log('wfs setLoginStatus=>LOCK 3');
-        setLoginStatus(LoginStatus.LOCK);
+        // setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
       } else if (TelegramPlatform.isTelegramPlatform()) {
         // Automatically obtain Telegram authorization
