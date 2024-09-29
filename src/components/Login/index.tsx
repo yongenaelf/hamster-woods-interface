@@ -342,12 +342,12 @@ export default function Login() {
       let wallet;
       try {
         wallet = await did.load(v, KEY_NAME);
-        console.log('wallet is:', wallet.didWallet);
+        console.log('wallet is:', wallet.didWallet, !wallet.didWallet.aaInfo);
       } catch (err) {
         console.log(err);
         return;
       }
-      if (!wallet.didWallet.aaInfo) {
+      if (!wallet?.didWallet?.aaInfo?.accountInfo?.caAddress) {
         setIsErrorTipShow(true);
         setPasswordValue('');
         return;
