@@ -205,14 +205,23 @@ export default function Login() {
   const [_isWalletExist, setIsWalletExist] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== undefined) {
+      if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
+        loginEagerly();
+      }
+    }
+  }, [loginEagerly]);
+
+  useEffect(() => {
+    console.log('wfs setLoginStatus=>4 isLock', isLock);
     if (isLock || isGettingTelegramAuthRef.current) {
       return;
     }
     if (typeof window !== undefined) {
-      if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
-        loginEagerly();
-        return;
-      }
+      // if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
+      //   loginEagerly();
+      //   return;
+      // }
       if (window.localStorage.getItem(KEY_NAME)) {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
@@ -223,7 +232,7 @@ export default function Login() {
         handleTeleGram();
       }
     }
-  }, [isLock, loginEagerly, handleTeleGram]);
+  }, [isLock, handleTeleGram]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();
