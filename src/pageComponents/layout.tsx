@@ -32,6 +32,7 @@ import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
 import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
+import { getCurrentIp } from 'utils/ip';
 import { sleep } from '@portkey/utils';
 
 did.setConfig({
@@ -113,6 +114,20 @@ const Layout = dynamic(
           }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
+
+      useEffect(() => {
+        (async () => {
+          const ip = await getCurrentIp();
+          const activityId = (window?.Telegram?.WebApp?.initDataUnsafe?.start_param || '') as string;
+
+          did.setConfig({
+            extraInfo: {
+              ip,
+              activityId,
+            },
+          });
+        })();
       }, []);
 
       const initConfigAndResource = async () => {
