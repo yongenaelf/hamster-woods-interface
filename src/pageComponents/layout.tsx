@@ -66,7 +66,7 @@ const Layout = dynamic(
       // }, []);
       // return null;
       const { children } = props;
-      const { isLogin, isOnChainLogin } = useGetState();
+      const { isInit, isLogin, isOnChainLogin } = useGetState();
       const [isMobileDevice, setIsMobileDevice] = useState(false);
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
@@ -110,7 +110,9 @@ const Layout = dynamic(
           if (window.localStorage.getItem(KEY_NAME)) {
             did.reset();
             console.log('wfs setLoginStatus=>12', pathname);
-            store.dispatch(setLoginStatus(LoginStatus.LOCK));
+            if (isInit) {
+              store.dispatch(setLoginStatus(LoginStatus.LOCK));
+            }
           }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
