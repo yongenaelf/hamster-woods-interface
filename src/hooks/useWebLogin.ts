@@ -251,10 +251,10 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     handleThirdPart(SocialLoginType.GOOGLE);
   };
 
-  const handleTeleGram = () => {
+  const handleTeleGram = useCallback(() => {
     console.log('wfs clicked login button', new Date());
     handleThirdPart(SocialLoginType.TELEGRAM);
-  };
+  }, []);
 
   const handleApple = () => {
     handleThirdPart(SocialLoginType.APPLE);
