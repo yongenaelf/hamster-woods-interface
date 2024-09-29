@@ -101,6 +101,7 @@ const Layout = dynamic(
       }, []);
 
       useEffect(() => {
+        console.log('wfs common layout isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
         if (!isLogin && !isOnChainLogin) {
           router.replace('/login');
         }
