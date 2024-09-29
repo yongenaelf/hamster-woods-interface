@@ -107,12 +107,10 @@ const Layout = dynamic(
           router.replace('/login');
         }
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME)) {
+          if (window.localStorage.getItem(KEY_NAME) && isInit) {
             did.reset();
             console.log('wfs setLoginStatus=>12', pathname);
-            if (isInit) {
-              store.dispatch(setLoginStatus(LoginStatus.LOCK));
-            }
+            store.dispatch(setLoginStatus(LoginStatus.LOCK));
           }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
