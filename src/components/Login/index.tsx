@@ -25,7 +25,7 @@ import { setLoginStatus } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -53,6 +53,8 @@ import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
 import CommonBtn from 'components/CommonBtn';
 import ShowPageLoading from 'components/ShowPageLoading';
+import { isLoginOnChain } from 'utils/wallet';
+import { store } from 'redux/store';
 
 const components = {
   phone: PhoneIcon,
@@ -173,6 +175,7 @@ export default function Login() {
       if (createPendingInfo.createType === 'register') {
         return;
       }
+      window.localStorage.setItem(PORTKEY_LOGIN_SESSION_ID_KEY, createPendingInfo.sessionId);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
     },
@@ -387,6 +390,13 @@ export default function Login() {
         };
         await handleFinish(WalletType.portkey, walletInfo);
         setShowPageLoading(false);
+      }
+      const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+      if (sessionId && originChainId && !isLoginOnChain()) {
+        const { recoveryStatus } = await did.didWallet.getLoginStatus({ sessionId, chainId: originChainId as ChainId });
+        if (recoveryStatus === 'pass') {
+          store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+        }
       }
     },
     [configInfo, handleFinish],
