@@ -57,10 +57,11 @@ export const isCurrentTimeInterval = (date: [string, string]) => {
 const Layout = dynamic(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
+      // const router = useRouter();
       // useEffect(() => {
-      //   console.log('mount!');
+      //   console.log('mount!', pathname);
       //   return () => {
-      //     console.log('unmount!');
+      //     console.log('un mount!', pathname);
       //   };
       // }, []);
       // return null;
