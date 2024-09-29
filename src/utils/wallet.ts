@@ -1,6 +1,7 @@
 import { GetCAHolderByManagerParams } from '@portkey/services';
 import { ChainId } from '@portkey/provider-types';
 import { did } from '@portkey/did-ui-react';
+import { LoginStatusEnum } from '@portkey/types';
 
 export const getCaHashAndOriginChainIdByWallet = async (
   caAddress: string,
@@ -16,4 +17,9 @@ export const getCaHashAndOriginChainIdByWallet = async (
     caHash: caHash || '',
     originChainId,
   };
+};
+
+export const isLoginOnChain = () => {
+  console.log('wfs isLoginStatus', did.didWallet.isLoginStatus);
+  return did.didWallet.isLoginStatus === LoginStatusEnum.SUCCESS;
 };

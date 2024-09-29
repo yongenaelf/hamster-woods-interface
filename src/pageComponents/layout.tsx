@@ -33,6 +33,7 @@ import { convertToUtcTimestamp } from 'hooks/useCountDown';
 import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
 import { getCurrentIp } from 'utils/ip';
+import { sleep } from '@portkey/utils';
 
 did.setConfig({
   referralInfo: {
@@ -40,6 +41,8 @@ did.setConfig({
     projectCode: HAMSTER_PROJECT_CODE,
   },
 });
+
+let isHandleSDKLogout = false;
 
 export const isCurrentTimeInterval = (date: [string, string]) => {
   const startTime = new Date(date[0]).getTime();
@@ -55,16 +58,19 @@ export const isCurrentTimeInterval = (date: [string, string]) => {
 const Layout = dynamic(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
+      // useEffect(() => {
+      //   console.log('mount!');
+      //   return () => {
+      //     console.log('unmount!');
+      //   };
+      // }, []);
+      // return null;
       const { children } = props;
-      const { isLogin } = useGetState();
+      const { isLogin, isOnChainLogin } = useGetState();
       const [isMobileDevice, setIsMobileDevice] = useState(false);
       const [isFetchFinished, setIsFetchFinished] = useState(false);
 
       const router = useRouter();
-
-      useEffect(() => {
-        TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
-      }, []);
 
       useEffect(() => {
         if (!window || !document) return;
@@ -96,15 +102,18 @@ const Layout = dynamic(
       }, []);
 
       useEffect(() => {
-        if (!isLogin) {
+        console.log('wfs common layout isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
+        if (!isLogin && !isOnChainLogin) {
           router.replace('/login');
         }
         if (typeof window !== undefined) {
           if (window.localStorage.getItem(KEY_NAME)) {
             did.reset();
+            console.log('wfs setLoginStatus=>LOCK 4');
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
           }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
       useEffect(() => {
@@ -139,7 +148,7 @@ const Layout = dynamic(
             store.dispatch(setChessboardData(res.data));
           });
 
-          configPromise.then((res) => {
+          configPromise.then(async (res) => {
             store.dispatch(
               setConfigInfo({
                 ...res.data,
@@ -161,6 +170,12 @@ const Layout = dynamic(
                 },
               },
             });
+
+            await sleep(3000);
+            if (!isHandleSDKLogout) {
+              isHandleSDKLogout = true;
+              TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
+            }
           });
 
           serverConfigPromise.then((res) => {
@@ -213,7 +228,7 @@ const Layout = dynamic(
         return null;
       }
 
-      if (isLogin && pathname === '/') {
+      if ((isLogin || isOnChainLogin) && pathname === '/') {
         return (
           <AntdLayout className="xx-wrapper flex h-full w-[100vw] flex-col overflow-hidden">
             {isMobileDevice && <Header />}
@@ -241,4 +256,4 @@ const Layout = dynamic(
   { ssr: false },
 );
 
-export default Layout;
+export default React.memo(Layout);

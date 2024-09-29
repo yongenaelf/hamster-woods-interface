@@ -17,17 +17,18 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did, TelegramPlatform } from '@portkey/did-ui-react';
+import { did, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
 import CommonRedBtn from 'components/CommonRedBtn';
+import { loginOptTip } from 'constants/tip';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
-  const { walletType, isMobile } = useGetState();
+  const { walletType, isMobile, isOnChainLogin } = useGetState();
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -50,6 +51,7 @@ export default function Setting() {
     }
     ContractRequest.get().resetConfig();
     did.reset();
+    console.log('wfs setLoginStatus=>LOCK 2');
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
     store.dispatch(setCurChessboardNode(null));
     store.dispatch(setChessboardResetStart(true));
@@ -57,6 +59,9 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
+      return singleMessage.warning(loginOptTip);
+    }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);

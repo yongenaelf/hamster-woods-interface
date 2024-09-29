@@ -26,6 +26,9 @@ const useVerifier = () => {
     async ({
       accountType,
       token,
+      idToken,
+      nonce,
+      timestamp,
       guardianIdentifier,
       verifier,
       chainId,
@@ -35,6 +38,9 @@ const useVerifier = () => {
       guardianIdentifier: string;
       accountType: AccountType;
       token?: string;
+      idToken?: string;
+      nonce?: string;
+      timestamp?: number;
       verifier: IVerifier;
       chainId: ChainId;
       operationType: OperationTypeEnum;
@@ -66,6 +72,9 @@ const useVerifier = () => {
       if (!verifier?.id) throw 'Verifier is not missing';
       return verifyToken(accountType, {
         accessToken,
+        timestamp,
+        nonce,
+        idToken,
         id: guardianIdentifier,
         verifierId: verifier.id,
         chainId,

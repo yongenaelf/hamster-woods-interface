@@ -36,6 +36,7 @@ import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
 import { getContractBasic } from '@portkey/contracts';
 import { TTokenApproveHandler } from '@portkey/trader-core';
+import { isLoginOnChain } from 'utils/wallet';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -48,6 +49,7 @@ export type SignatureParams = {
 
 export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [isLogin, setIsLogin] = useState(false);
+  const [isOnChainLogin, setIsOnChainLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const { loginStatus } = useSelector(selectInfo);
   const [wallet, setWallet] = useState<WalletInfoType | null>(null);
@@ -182,10 +184,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         logout();
       });
     }
-  }, [discoverProvider, walletType]);
+  }, [discoverProvider, logout, walletType]);
 
   useEffect(() => {
     setIsLogin(loginStatus === LoginStatus.LOGGED);
+    setIsOnChainLogin(loginStatus === LoginStatus.ON_CHAIN_LOGGED);
   }, [loginStatus]);
 
   const handlePortKey = useCallback(async () => {
@@ -232,10 +235,15 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     discoverUtils.removeDiscoverStorageSign();
     setLoading(true);
     const res = await getSocialToken({ type });
+    console.log('wfs onSocialFinish invoke start', new Date());
     await signHandle.onSocialFinish({
-      type: res.provider,
-      data: { accessToken: res.token },
+      type: res?.provider,
+      data:
+        type === SocialLoginType.TELEGRAM
+          ? { accessToken: res?.token }
+          : { accessToken: res?.token, idToken: res?.idToken, nonce: res?.nonce, timestamp: res?.timestamp },
     });
+    console.log('wfs onSocialFinish invoke end', new Date());
   };
 
   const handleGoogle = async () => {
@@ -243,6 +251,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   };
 
   const handleTeleGram = () => {
+    console.log('wfs clicked login button', new Date());
     handleThirdPart(SocialLoginType.TELEGRAM);
   };
 
@@ -251,10 +260,12 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   };
 
   const getSocialToken = async ({ type }: { type: SocialLoginType; clientId?: string; redirectURI?: string }) => {
+    console.log('wfs socialLoginAuth invoke start', new Date());
     const tokenRes = await socialLoginAuth({
       type,
       network: Network as NetworkType,
     });
+    console.log('wfs socialLoginAuth invoke end', new Date());
     return tokenRes;
   };
 
@@ -374,7 +385,66 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
             caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash,
           });
         }
+        if (isLoginOnChain()) {
+          store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+        } else {
+          store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+        }
+      }
+    },
+    [curChain],
+  );
+
+  const handleOnChainFinish = useCallback(
+    async (type: WalletType, walletInfo: PortkeyInfoType | IDiscoverInfo) => {
+      console.log('wallet handleOnChainFinish', type, walletInfo);
+
+      if (type === WalletType.discover) {
+        store.dispatch(setWalletType(type));
+        localStorage.setItem(LOGIN_EARGLY_KEY, 'true');
+        setDiscoverInfo(walletInfo);
+        setWallet({ discoverInfo: walletInfo as IDiscoverInfo });
+        setCurWalletType(type);
+        store.dispatch(
+          setWalletInfo({
+            discoverInfo: walletInfo,
+          }),
+        );
+        InstanceProvider.setWalletInfoInstance({
+          discoverInfo: walletInfo,
+        });
+        trackLoginInfo({
+          caAddress: (walletInfo as IDiscoverInfo).address!,
+          caHash: '',
+        });
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
+      } else if (type === WalletType.portkey) {
+        await did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
+        console.log('wfs exe did save success!!');
+        setDidWalletInfo(walletInfo as PortkeyInfoType);
+        setWallet({
+          portkeyInfo: walletInfo as PortkeyInfoType,
+        });
+        setCurWalletType(type);
+        store.dispatch(setWalletType(WalletType.portkey));
+        if ((walletInfo as PortkeyInfoType).chainId !== curChain) {
+          InstanceProvider.setWalletInfoInstance({
+            portkeyInfo: walletInfo as PortkeyInfoType,
+          });
+          const holder = await getSyncHolder(curChain, walletInfo as DIDWalletInfo);
+          trackLoginInfo({ caAddress: holder.caAddress, caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash });
+        } else {
+          store.dispatch(
+            setWalletInfo({
+              portkeyInfo: walletInfo,
+            }),
+          );
+          trackLoginInfo({
+            caAddress: (walletInfo as PortkeyInfoType)!.caInfo!.caAddress,
+            caHash: (walletInfo as PortkeyInfoType)!.caInfo!.caHash,
+          });
+        }
+        store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
       }
     },
     [curChain],
@@ -543,6 +613,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   return {
     isLogin,
+    isOnChainLogin,
     loading,
     discoverDetected,
     wallet,
@@ -553,6 +624,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     handleTeleGram,
     handleApple,
     handleFinish,
+    handleOnChainFinish,
     initializeContract,
     getDiscoverSignature,
     getPortKeySignature,
