@@ -57,7 +57,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    if (!isOnChainLogin) {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
       return singleMessage.warning('is Loaning');
     }
     showMessage.loading('Signing out of Hamster Woods');

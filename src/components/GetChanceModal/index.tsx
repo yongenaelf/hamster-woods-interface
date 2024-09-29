@@ -13,7 +13,7 @@ import AddIcon from 'assets/images/add.png';
 import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
-import { IBalance } from 'types';
+import { IBalance, WalletType } from 'types';
 import { ZERO, divDecimals, divDecimalsStrShow, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import useGetState from 'redux/state/useGetState';
@@ -55,7 +55,7 @@ export default function GetChanceModal({
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const { playerInfo, isOnChainLogin } = useGetState();
+  const { playerInfo, isOnChainLogin, walletType } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
   const [swapOpen, setSwapOpen] = useState(false);
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
@@ -104,7 +104,7 @@ export default function GetChanceModal({
 
   const onEnterTransfer = useCallback(async () => {
     try {
-      if (!isOnChainLogin) {
+      if (!isOnChainLogin && walletType === WalletType.portkey) {
         return singleMessage.warning('is Loaning');
       }
       await getETransferAuthToken();
@@ -112,7 +112,7 @@ export default function GetChanceModal({
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin]);
+  }, [getETransferAuthToken, isOnChainLogin, walletType]);
 
   const errorMessageTipDom = useCallback(() => {
     if (!errMsgTip)
@@ -176,12 +176,12 @@ export default function GetChanceModal({
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
-    if (!isOnChainLogin) {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
       return singleMessage.warning('is Loaning');
     }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
-  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, onConfirm]);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, onConfirm, walletType]);
 
   const handleCancel = useCallback(() => {
     setInputVal(1);
@@ -358,7 +358,7 @@ export default function GetChanceModal({
               {showSwap && (
                 <div
                   onClick={() => {
-                    if (!isOnChainLogin) {
+                    if (!isOnChainLogin && walletType === WalletType.portkey) {
                       return singleMessage.warning('is Loaning');
                     }
                     setSwapOpen(true);

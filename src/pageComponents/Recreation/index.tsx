@@ -321,7 +321,7 @@ export default function Game() {
   );
 
   const go = async () => {
-    if (!isOnChainLogin) {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
       return singleMessage.warning('is Loaning');
     }
     if (goStatus !== Status.NONE) {
@@ -463,7 +463,7 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin) {
+      if (!isOnChainLogin && walletType === WalletType.portkey) {
         return singleMessage.warning('is Loaning');
       }
       await getETransferAuthToken();
@@ -471,7 +471,7 @@ export default function Game() {
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin]);
+  }, [getETransferAuthToken, isOnChainLogin, walletType]);
 
   const handleHasNft = useCallback(
     (hasNft: boolean) => {

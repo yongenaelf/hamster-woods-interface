@@ -52,7 +52,7 @@ export default function Header() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin) {
+      if (!isOnChainLogin && walletType === WalletType.portkey) {
         return singleMessage.warning('is Loaning');
       }
       await getETransferAuthToken();
@@ -60,7 +60,7 @@ export default function Header() {
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin]);
+  }, [getETransferAuthToken, isOnChainLogin, walletType]);
 
   return (
     <div className={styles.headerContainer}>

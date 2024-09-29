@@ -32,8 +32,8 @@ export const infoSlice = createSlice({
     },
     setWalletInfo(state, action) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { keyPair, childWallet, ...restWalletInfo } = action.payload.portkeyInfo.walletInfo;
-      action.payload.portkeyInfo.walletInfo = restWalletInfo;
+      // const { keyPair, childWallet, ...restWalletInfo } = action.payload.portkeyInfo.walletInfo;
+      // action.payload.portkeyInfo.walletInfo = restWalletInfo;
       state.walletInfo = action.payload;
     },
     setWalletType(state, action) {
