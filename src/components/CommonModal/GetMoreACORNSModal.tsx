@@ -13,6 +13,7 @@ import { message } from 'antd';
 import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
+import { loginOptTip } from 'constants/tip';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const { getETransferAuthToken } = useQueryAuthToken();
@@ -70,7 +71,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
               // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
               // onCancel?.();
               if (!isOnChainLogin && walletType === WalletType.portkey) {
-                return singleMessage.warning('is Loaning');
+                return singleMessage.warning(loginOptTip);
               }
               await getETransferAuthToken();
               setShowDeposit(true);

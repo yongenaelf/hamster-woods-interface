@@ -28,6 +28,7 @@ import AwakenSwapModal from 'components/AwakenSwap';
 import { useAddress } from 'hooks/useAddress';
 import useWebLogin from 'hooks/useWebLogin';
 import { useBalance } from 'hooks/useBalance';
+import { loginOptTip } from 'constants/tip';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -105,7 +106,7 @@ export default function GetChanceModal({
   const onEnterTransfer = useCallback(async () => {
     try {
       if (!isOnChainLogin && walletType === WalletType.portkey) {
-        return singleMessage.warning('is Loaning');
+        return singleMessage.warning(loginOptTip);
       }
       await getETransferAuthToken();
       setShowDepositModal(true);
@@ -177,7 +178,7 @@ export default function GetChanceModal({
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning('is Loaning');
+      return singleMessage.warning(loginOptTip);
     }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
@@ -359,7 +360,7 @@ export default function GetChanceModal({
                 <div
                   onClick={() => {
                     if (!isOnChainLogin && walletType === WalletType.portkey) {
-                      return singleMessage.warning('is Loaning');
+                      return singleMessage.warning(loginOptTip);
                     }
                     setSwapOpen(true);
                   }}
