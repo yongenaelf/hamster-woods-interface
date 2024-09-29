@@ -191,7 +191,9 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log('wfs Login useEffect1 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
     if (isLogin || isOnChainLogin) {
+      console.log('wfs Login useEffect2 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
       router.replace('/');
     }
   }, [isLogin, isOnChainLogin, router]);
@@ -212,8 +214,8 @@ export default function Login() {
         return;
       }
       if (window.localStorage.getItem(KEY_NAME)) {
-        console.log('wfs setLoginStatus=>LOCK 3');
-        // setLoginStatus(LoginStatus.LOCK);
+        console.log('wfs setLoginStatus=>4');
+        setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
       } else if (TelegramPlatform.isTelegramPlatform()) {
         // Automatically obtain Telegram authorization
@@ -395,6 +397,7 @@ export default function Login() {
       if (sessionId && originChainId && !isLoginOnChain()) {
         const { recoveryStatus } = await did.didWallet.getLoginStatus({ sessionId, chainId: originChainId as ChainId });
         if (recoveryStatus === 'pass') {
+          console.log('wfs setLoginStatus=>5');
           store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
         }
       }

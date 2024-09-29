@@ -64,7 +64,7 @@ import { loginOptTip } from 'constants/tip';
 
 export default function Game() {
   useEffect(() => {
-    console.log('wfs render Game page', new Date());
+    console.log('wfs render Game page', new Date(), isLogin, isOnChainLogin);
   }, []);
   const [translate, setTranslate] = useState<{
     x: number;
@@ -95,6 +95,7 @@ export default function Game() {
     checkerboardCounts,
     curBeanPass,
   } = useGetState();
+  console.log('wfs render Game page out', new Date(), isLogin, isOnChainLogin);
   const { getETransferAuthToken } = useQueryAuthToken();
 
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<IBeanPassListItem | undefined>(curBeanPass);

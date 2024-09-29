@@ -29,7 +29,7 @@ export const handleSDKLogout = async () => {
     }
   }
   window.localStorage.removeItem(KEY_NAME);
-
+  console.log('wfs setLoginStatus=>13');
   store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
   store.dispatch(setWalletInfo(null));
   store.dispatch(setWalletType(WalletType.unknown));

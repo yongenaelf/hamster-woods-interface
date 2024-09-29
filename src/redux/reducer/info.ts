@@ -40,6 +40,7 @@ export const infoSlice = createSlice({
       state.walletType = action.payload;
     },
     setLoginStatus(state, action) {
+      console.log('wfs setLoginStatus state', state, 'action.payload', action.payload);
       state.loginStatus = action.payload;
     },
     setAccountInfoSync(state, action) {
