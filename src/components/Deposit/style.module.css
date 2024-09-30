@@ -49,6 +49,9 @@
     .etransfer-ui-deposit-select-token {
       pointer-events: none;
     }
+    .etransfer-ui-check-txn-btn {
+      @apply bg-[#9a531f] border-0;
+    }
   }
 }
 
@@ -106,6 +109,10 @@
     .etransfer-ui-exchange-rate div:last-child {
       text-align: end;
       min-width: 80px;
+    }
+
+    .etransfer-ui-check-txn-btn {
+      @apply bg-[#9a531f] border-0;
     }
   }
 }
