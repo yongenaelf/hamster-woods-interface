@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
 import { useAddress } from 'hooks/useAddress';
 import useWebLogin from 'hooks/useWebLogin';
@@ -106,7 +106,7 @@ export default function GetChanceModal({
   const onEnterTransfer = useCallback(async () => {
     try {
       if (!isOnChainLogin && walletType === WalletType.portkey) {
-        return singleMessage.warning(loginOptTip);
+        return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
       setShowDepositModal(true);
@@ -178,7 +178,7 @@ export default function GetChanceModal({
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning(loginOptTip);
+      return loadingTip({ msg: loginOptTip });
     }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
@@ -360,7 +360,7 @@ export default function GetChanceModal({
                 <div
                   onClick={() => {
                     if (!isOnChainLogin && walletType === WalletType.portkey) {
-                      return singleMessage.warning(loginOptTip);
+                      return loadingTip({ msg: loginOptTip });
                     }
                     setSwapOpen(true);
                   }}

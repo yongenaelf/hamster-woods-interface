@@ -55,6 +55,7 @@ import CommonBtn from 'components/CommonBtn';
 import ShowPageLoading from 'components/ShowPageLoading';
 import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
+import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 
 const components = {
   phone: PhoneIcon,
@@ -173,11 +174,11 @@ export default function Login() {
   );
   const handleOnChainFinishWrapper = useCallback(
     async (wallet: DIDWalletInfo) => {
-      if (wallet.createType === 'register') {
+      console.log('wfs onFinish invoke start', wallet, new Date());
+      if (wallet.createType !== 'recovery') {
         handlePortKeyLoginFinish(wallet);
         return;
       }
-      console.log('wfs onFinish invoke start', wallet, new Date());
       await handleOnChainFinish(WalletType.portkey, wallet);
       console.log('wfs onFinish invoke end', wallet, new Date());
     },
@@ -198,6 +199,7 @@ export default function Login() {
 
   const createWallet = useLoginWallet({
     onCreatePending: handleCreatePending,
+    onError: handleSDKLogoutOffChain,
   });
 
   const { isLock, isLogin, isOnChainLogin, isMobile: isMobileStore } = useGetState();
@@ -376,7 +378,7 @@ export default function Login() {
         console.log(err);
         return;
       }
-      if (!wallet?.didWallet?.aaInfo?.accountInfo?.caAddress) {
+      if (!wallet?.didWallet?.aaInfo?.accountInfo?.caAddress && !wallet?.didWallet?.accountInfo.loginAccount) {
         setIsErrorTipShow(true);
         setPasswordValue('');
         return;
@@ -389,7 +391,9 @@ export default function Login() {
 
       setShowPageLoading(true);
       if (!caInfo) {
+        console.log('if');
         try {
+          console.log('originChainId', originChainId);
           caHash = wallet.didWallet.caInfo[originChainId].caHash;
           const caAddress = wallet.didWallet.caInfo[originChainId].caAddress;
           setIsUnlockShow(false);
@@ -406,6 +410,7 @@ export default function Login() {
           return;
         }
       } else {
+        console.log('else');
         setIsUnlockShow(false);
         const walletInfo = {
           caInfo,
@@ -428,21 +433,19 @@ export default function Login() {
             store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
             await did.save(v || '', KEY_NAME);
           }
+        } else {
+          if (wallet.didWallet.managementAccount?.address) {
+            const result = await did.didWallet.checkManagerIsExistByGQL({
+              chainId: originChainId as ChainId,
+              caHash,
+              managementAddress: wallet.didWallet.managementAccount?.address,
+            });
+            if (result) {
+              store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+              await did.save(v || '', KEY_NAME);
+            }
+          }
         }
-        // wfs::todo
-        // else {
-        //   const result =  await did.didWallet.checkManagerIsExistByGQL({
-        //     chainId: originChainId as ChainId,
-        //     caHash,
-        //     managementAddress: wallet.didWallet.managementAccount?.address!!,
-        //   });
-        //   if(result) {
-        //     store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-        //     await did.save(v || '', KEY_NAME)
-        //   } else {
-        //     // logout
-        //   }
-        // }
       }
     },
     [configInfo, handleFinish],
@@ -647,6 +650,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
+        onError={handleSDKLogoutOffChain}
         isShowScan={true}
         defaultChainId={curChain}
       />

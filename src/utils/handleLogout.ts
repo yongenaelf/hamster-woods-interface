@@ -50,3 +50,18 @@ export const handleSDKLogout = async () => {
   window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
   ContractRequest.get().resetConfig();
 };
+
+export const handleSDKLogoutOffChain = () => {
+  window.localStorage.removeItem(KEY_NAME);
+  store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
+  store.dispatch(setWalletInfo(null));
+  store.dispatch(setWalletType(WalletType.unknown));
+  store.dispatch(setPlayerInfo(null));
+  store.dispatch(setCurChessboardNode(null));
+  store.dispatch(setChessboardResetStart(true));
+  store.dispatch(setChessboardTotalStep(0));
+  store.dispatch(setIsNeedSyncAccountInfo(true));
+  window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+  ContractRequest.get().resetConfig();
+};
