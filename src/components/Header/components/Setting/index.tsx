@@ -4,7 +4,12 @@ import styles from './styles.module.css';
 import { useCallback, useState } from 'react';
 import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
-import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import {
+  KEY_NAME,
+  LOGIN_EARGLY_KEY,
+  PORTKEY_LOGIN_CHAIN_ID_KEY,
+  PORTKEY_LOGIN_SESSION_ID_KEY,
+} from 'constants/platform';
 import { dispatch, store } from 'redux/store';
 import {
   setIsNeedSyncAccountInfo,
@@ -17,17 +22,18 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did, TelegramPlatform } from '@portkey/did-ui-react';
+import { did, loadingTip, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
 import CommonRedBtn from 'components/CommonRedBtn';
+import { loginOptTip } from 'constants/tip';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
-  const { walletType, isMobile } = useGetState();
+  const { walletType, isMobile, isOnChainLogin } = useGetState();
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -50,6 +56,7 @@ export default function Setting() {
     }
     ContractRequest.get().resetConfig();
     did.reset();
+    console.log('wfs setLoginStatus=>2');
     store.dispatch(setLoginStatus(LoginStatus.LOCK));
     store.dispatch(setCurChessboardNode(null));
     store.dispatch(setChessboardResetStart(true));
@@ -57,6 +64,9 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
+      return loadingTip({ msg: loginOptTip });
+    }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
@@ -76,6 +86,7 @@ export default function Setting() {
     }
 
     setSettingModalVisible(false);
+    console.log('wfs setLoginStatus=>3');
     store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
     store.dispatch(setWalletInfo(null));
     store.dispatch(setWalletType(WalletType.unknown));
@@ -85,6 +96,7 @@ export default function Setting() {
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
     ContractRequest.get().resetConfig();
     showMessage.hideLoading();
     if (TelegramPlatform.isTelegramPlatform()) {

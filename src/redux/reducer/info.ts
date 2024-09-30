@@ -31,12 +31,16 @@ export const infoSlice = createSlice({
       state.isMobile = action.payload;
     },
     setWalletInfo(state, action) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // const { keyPair, childWallet, ...restWalletInfo } = action.payload.portkeyInfo.walletInfo;
+      // action.payload.portkeyInfo.walletInfo = restWalletInfo;
       state.walletInfo = action.payload;
     },
     setWalletType(state, action) {
       state.walletType = action.payload;
     },
     setLoginStatus(state, action) {
+      console.log('wfs setLoginStatus state', state, 'action.payload', action.payload);
       state.loginStatus = action.payload;
     },
     setAccountInfoSync(state, action) {

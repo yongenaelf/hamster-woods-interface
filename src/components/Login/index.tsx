@@ -17,6 +17,7 @@ import {
   useLoginWallet,
   AddManagerType,
   useSignInHandler,
+  CreatePendingInfo,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -24,7 +25,7 @@ import { setLoginStatus } from 'redux/reducer/info';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -52,6 +53,9 @@ import { getProto } from 'utils/deserializeLog';
 import discoverUtils from 'utils/discoverUtils';
 import CommonBtn from 'components/CommonBtn';
 import ShowPageLoading from 'components/ShowPageLoading';
+import { isLoginOnChain } from 'utils/wallet';
+import { store } from 'redux/store';
+import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 
 const components = {
   phone: PhoneIcon,
@@ -89,29 +93,49 @@ export default function Login() {
 
   const onSignInHandler = useSignInHandler({ isErrorTip: true });
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+    console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
+      console.log('wfs onSignInHandler invoke start', new Date());
       const signResult = await onSignInHandler(value);
+      console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
       if (signResult.nextStep === 'SetPinAndAddManager') {
-        const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
-        const approvedList = signResult.value.approvedList;
-        if (!approvedList) return;
-        const type: AddManagerType = guardianIdentifierInfo?.isLoginGuardian ? 'recovery' : 'register';
-        const params = {
-          pin: DEFAULT_PIN,
-          type,
-          chainId: guardianIdentifierInfo.chainId,
-          accountType: guardianIdentifierInfo.accountType,
-          guardianIdentifier: guardianIdentifierInfo?.identifier,
-          guardianApprovedList: approvedList,
-        };
-        const didWallet = await createWallet(params);
-        didWallet && handlePortKeyLoginFinish(didWallet);
+        try {
+          const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
+          const approvedList = signResult.value.approvedList;
+          if (!approvedList) return;
+          const type: AddManagerType = guardianIdentifierInfo?.isLoginGuardian ? 'recovery' : 'register';
+          const params = {
+            pin: DEFAULT_PIN,
+            type,
+            chainId: guardianIdentifierInfo.chainId,
+            accountType: guardianIdentifierInfo.accountType,
+            guardianIdentifier: guardianIdentifierInfo?.identifier,
+            guardianApprovedList: approvedList,
+          };
+          console.log(
+            'wfs createWallet invoke start',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
+          const didWallet = await createWallet(params);
+          console.log(
+            'wfs createWallet invoke end',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
+          didWallet && handleOnChainFinishWrapper(didWallet);
+        } catch (e) {
+          console.log('wfs wallet is: error', e, new Date());
+        }
+        // didWallet && handlePortKeyLoginFinish(didWallet);
       } else {
         setLoading(false);
         setCurrentLifeCircle({
@@ -123,7 +147,6 @@ export default function Login() {
       }
     }
   };
-
   const signHandle = useSignHandler({
     onSuccess: handleSocialStep1Success,
     defaultChainId: curChain,
@@ -132,22 +155,64 @@ export default function Login() {
     onChainIdChange: undefined,
     onError: undefined,
   });
+  const { handlePortKey, handleFinish, handleOnChainFinish, handleApple, handleGoogle, handleTeleGram, loginEagerly } =
+    useWebLogin({
+      signHandle,
+    });
 
-  const { handlePortKey, handleFinish, handleApple, handleGoogle, handleTeleGram, loginEagerly } = useWebLogin({
-    signHandle,
+  const handlePortKeyLoginFinish = useCallback(
+    async (wallet: DIDWalletInfo) => {
+      console.log('wallet is:', wallet);
+      signInRef.current?.setOpen(false);
+      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
+      setShowPageLoading(true);
+      await handleFinish(WalletType.portkey, wallet);
+      setShowPageLoading(false);
+      setLoading(false);
+    },
+    [handleFinish],
+  );
+  const handleOnChainFinishWrapper = useCallback(
+    async (wallet: DIDWalletInfo) => {
+      console.log('wfs onFinish invoke start', wallet, new Date());
+      if (wallet.createType !== 'recovery') {
+        handlePortKeyLoginFinish(wallet);
+        return;
+      }
+      await handleOnChainFinish(WalletType.portkey, wallet);
+      console.log('wfs onFinish invoke end', wallet, new Date());
+    },
+    [handleOnChainFinish],
+  );
+  const handleCreatePending = useCallback(
+    async (createPendingInfo: CreatePendingInfo) => {
+      console.log('wfs onCreatePending invoke!', createPendingInfo, new Date());
+      if (createPendingInfo.createType === 'register') {
+        return;
+      }
+      window.localStorage.setItem(PORTKEY_LOGIN_SESSION_ID_KEY, createPendingInfo.sessionId);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
+    },
+    [handlePortKeyLoginFinish],
+  );
+
+  const createWallet = useLoginWallet({
+    onCreatePending: handleCreatePending,
+    onError: handleSDKLogoutOffChain,
   });
 
-  const createWallet = useLoginWallet();
-
-  const { isLock, isLogin, isMobile: isMobileStore } = useGetState();
+  const { isLock, isLogin, isOnChainLogin, isMobile: isMobileStore } = useGetState();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isLogin) {
+    console.log('wfs Login useEffect1 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
+    if (isLogin || isOnChainLogin) {
+      console.log('wfs Login useEffect2 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
       router.replace('/');
     }
-  }, [isLogin, router]);
+  }, [isLogin, isOnChainLogin, router]);
 
   const isInIOS = isMobile().apple.device;
 
@@ -156,24 +221,36 @@ export default function Login() {
   const [_isWalletExist, setIsWalletExist] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== undefined) {
+      if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
+        loginEagerly();
+      }
+    }
+  }, [loginEagerly]);
+
+  useEffect(() => {
+    console.log('wfs setLoginStatus=>4 isLock', isLock);
     if (isLock || isGettingTelegramAuthRef.current) {
       return;
     }
     if (typeof window !== undefined) {
-      if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
-        loginEagerly();
-        return;
-      }
+      // if (window.localStorage.getItem(LOGIN_EARGLY_KEY)) {
+      //   loginEagerly();
+      //   return;
+      // }
       if (window.localStorage.getItem(KEY_NAME)) {
+        console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
       } else if (TelegramPlatform.isTelegramPlatform()) {
         // Automatically obtain Telegram authorization
         isGettingTelegramAuthRef.current = true;
         handleTeleGram();
+      } else if (isPortkeyApp()) {
+        handlePortKey();
       }
     }
-  }, [isLock, loginEagerly, handleTeleGram]);
+  }, [isLock, handleTeleGram, handlePortKey]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();
@@ -298,11 +375,12 @@ export default function Login() {
       let wallet;
       try {
         wallet = await did.load(v, KEY_NAME);
+        console.log('wallet is:', wallet.didWallet, !wallet.didWallet.aaInfo);
       } catch (err) {
         console.log(err);
         return;
       }
-      if (!wallet.didWallet.accountInfo.loginAccount) {
+      if (!wallet?.didWallet?.aaInfo?.accountInfo?.caAddress && !wallet?.didWallet?.accountInfo.loginAccount) {
         setIsErrorTipShow(true);
         setPasswordValue('');
         return;
@@ -315,7 +393,9 @@ export default function Login() {
 
       setShowPageLoading(true);
       if (!caInfo) {
+        console.log('if');
         try {
+          console.log('originChainId', originChainId);
           caHash = wallet.didWallet.caInfo[originChainId].caHash;
           const caAddress = wallet.didWallet.caInfo[originChainId].caAddress;
           setIsUnlockShow(false);
@@ -327,10 +407,12 @@ export default function Login() {
           });
         } catch (err) {
           showMessage.error();
+          console.log('wallet is: unlock error', err);
           setShowPageLoading(false);
           return;
         }
       } else {
+        console.log('else');
         setIsUnlockShow(false);
         const walletInfo = {
           caInfo,
@@ -340,6 +422,32 @@ export default function Login() {
         };
         await handleFinish(WalletType.portkey, walletInfo);
         setShowPageLoading(false);
+      }
+      const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+      if (!isLoginOnChain()) {
+        if (sessionId && originChainId) {
+          const { recoveryStatus } = await did.didWallet.getLoginStatus({
+            sessionId,
+            chainId: originChainId as ChainId,
+          });
+          if (recoveryStatus === 'pass') {
+            console.log('wfs setLoginStatus=>5');
+            store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+            await did.save(v || '', KEY_NAME);
+          }
+        } else {
+          if (wallet.didWallet.managementAccount?.address) {
+            const result = await did.didWallet.checkManagerIsExistByGQL({
+              chainId: originChainId as ChainId,
+              caHash,
+              managementAddress: wallet.didWallet.managementAccount?.address,
+            });
+            if (result) {
+              store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+              await did.save(v || '', KEY_NAME);
+            }
+          }
+        }
       }
     },
     [configInfo, handleFinish],
@@ -352,17 +460,6 @@ export default function Login() {
   }, [isLock, unlock]);
 
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
-
-  const handlePortKeyLoginFinish = useCallback(
-    async (wallet: DIDWalletInfo) => {
-      signInRef.current?.setOpen(false);
-      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
-      setShowPageLoading(true);
-      await handleFinish(WalletType.portkey, wallet);
-      setShowPageLoading(false);
-    },
-    [handleFinish],
-  );
 
   const onStep2OfSignUpFinish = useCallback(
     async (res: TSignUpVerifier, value?: IGuardianIdentifierInfo) => {
@@ -423,6 +520,9 @@ export default function Login() {
           const result = await verifySocialToken({
             accountType,
             token: authenticationInfo?.authToken,
+            idToken: authenticationInfo?.idToken,
+            nonce: authenticationInfo?.nonce,
+            timestamp: authenticationInfo?.timestamp,
             guardianIdentifier: identifier,
             verifier,
             chainId: curChain,
@@ -431,12 +531,15 @@ export default function Login() {
           });
           setLoading(false);
           console.log(result);
-          if (!result?.signature || !result?.verificationDoc) throw 'Verify social login error';
+          if (result?.zkLoginInfo && (!result?.signature || !result?.verificationDoc)) {
+            throw 'Verify social login error';
+          }
           onStep2OfSignUpFinish(
             {
               verifier,
-              verificationDoc: result.verificationDoc,
-              signature: result.signature,
+              verificationDoc: result?.verificationDoc,
+              signature: result?.signature,
+              zkLoginInfo: result?.zkLoginInfo,
             },
             value,
           );
@@ -505,7 +608,7 @@ export default function Login() {
             }}
             className={`${styles.unlockBtn} !bg-[#A15A1C] ${isMobileStore ? '' : '!mt-[80px]'}`}
             title="Unlock"></CommonBtn>
-        ) : isLogin ? null : (
+        ) : isLogin || isOnChainLogin ? null : (
           <>
             {renderLoginMethods(false)}
             {!isInApp && (
@@ -547,7 +650,9 @@ export default function Login() {
         design={design}
         defaultLifeCycle={currentLifeCircle}
         className={style}
-        onFinish={handlePortKeyLoginFinish}
+        onFinish={handleOnChainFinishWrapper}
+        onCreatePending={handleCreatePending}
+        onError={handleSDKLogoutOffChain}
         isShowScan={true}
         defaultChainId={curChain}
       />

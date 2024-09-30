@@ -9,15 +9,18 @@ import DetectProvider from 'utils/InstanceProvider';
 import useGetState from 'redux/state/useGetState';
 import { did, handleErrorMessage } from '@portkey/did-ui-react';
 import { PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
-import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
+import { getAwakenWalletType, getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import { getETransferJWT } from '@etransfer/utils';
 import { asyncStorage } from 'utils/lib';
 import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
 import { isJWTExpired } from 'utils/common';
+import { useETransferAccounts } from './useAddress';
 
 export function useQueryAuthToken() {
-  const { walletInfo, walletType, isLogin } = useGetState();
+  const { walletInfo, walletType, isLogin, isOnChainLogin } = useGetState();
+
+  const accounts = useETransferAccounts();
 
   const getDiscoverSignature = useCallback(
     async (params: SignatureParams) => {
@@ -139,7 +142,7 @@ export function useQueryAuthToken() {
 
         const caInfo = did.didWallet.aaInfo.accountInfo ?? did.didWallet.caInfo?.[originChainId];
 
-        console.log(caInfo, did.didWallet, ' did.didWallet.aaInfo==originChainId');
+        console.log(caInfo, did.didWallet, ' did.didWallet.aaInfo==originChainId', 'originChainId', originChainId);
 
         if (!caInfo.caHash || !caInfo.caAddress || !originChainId) throw new Error('You are not logged in.');
         return {
@@ -196,7 +199,7 @@ export function useQueryAuthToken() {
 
   const getETransferAuthToken = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-    if (!isLogin) throw new Error('You are not logged in.');
+    if (!isLogin && !isOnChainLogin) throw new Error('You are not logged in.');
     try {
       // showMessage.loading();
 
@@ -225,6 +228,10 @@ export function useQueryAuthToken() {
         authorization: {
           jwt: authToken,
         },
+        accountInfo: {
+          walletType: getAwakenWalletType(walletType),
+          accounts,
+        },
       });
       return authToken;
     } catch (error) {
@@ -233,11 +240,11 @@ export function useQueryAuthToken() {
     } finally {
       // showMessage.hideLoading();
     }
-  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
+  }, [accounts, getCaInfo, getManagerAddress, getUserInfo, isLogin, isOnChainLogin, walletInfo, walletType]);
 
   const getETransferAuthTokenFromApi = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-    if (!isLogin) throw new Error('You are not logged in.');
+    if (!isLogin && !isOnChainLogin) throw new Error('You are not logged in.');
     try {
       const managerAddress = await getManagerAddress();
       const { caHash, originChainId } = await getCaInfo();
@@ -264,7 +271,7 @@ export function useQueryAuthToken() {
       console.log(error);
       throw error;
     }
-  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
+  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, isOnChainLogin, walletInfo]);
 
   return { getETransferAuthToken, getETransferAuthTokenFromApi, getUserInfo };
 }
