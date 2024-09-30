@@ -413,12 +413,32 @@ export default function Login() {
         setShowPageLoading(false);
       }
       const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
-      if (sessionId && originChainId && !isLoginOnChain()) {
-        const { recoveryStatus } = await did.didWallet.getLoginStatus({ sessionId, chainId: originChainId as ChainId });
-        if (recoveryStatus === 'pass') {
-          console.log('wfs setLoginStatus=>5');
-          store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+      if (!isLoginOnChain()) {
+        if (sessionId && originChainId) {
+          const { recoveryStatus } = await did.didWallet.getLoginStatus({
+            sessionId,
+            chainId: originChainId as ChainId,
+          });
+          if (recoveryStatus === 'pass') {
+            console.log('wfs setLoginStatus=>5');
+            store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+            await did.save(v || '', KEY_NAME);
+          }
         }
+        // wfs::todo
+        // else {
+        //   const result =  await did.didWallet.checkManagerIsExistByGQL({
+        //     chainId: originChainId as ChainId,
+        //     caHash,
+        //     managementAddress: wallet.didWallet.managementAccount?.address!!,
+        //   });
+        //   if(result) {
+        //     store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+        //     await did.save(v || '', KEY_NAME)
+        //   } else {
+        //     // logout
+        //   }
+        // }
       }
     },
     [configInfo, handleFinish],
