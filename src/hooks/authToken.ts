@@ -139,7 +139,7 @@ export function useQueryAuthToken() {
 
         const caInfo = did.didWallet.aaInfo.accountInfo ?? did.didWallet.caInfo?.[originChainId];
 
-        console.log(caInfo, did.didWallet, ' did.didWallet.aaInfo==originChainId');
+        console.log(caInfo, did.didWallet, ' did.didWallet.aaInfo==originChainId', 'originChainId', originChainId);
 
         if (!caInfo.caHash || !caInfo.caAddress || !originChainId) throw new Error('You are not logged in.');
         return {
