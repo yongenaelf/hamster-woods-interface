@@ -173,6 +173,10 @@ export default function Login() {
   );
   const handleOnChainFinishWrapper = useCallback(
     async (wallet: DIDWalletInfo) => {
+      if (wallet.createType === 'register') {
+        handlePortKeyLoginFinish(wallet);
+        return;
+      }
       console.log('wfs onFinish invoke start', wallet, new Date());
       await handleOnChainFinish(WalletType.portkey, wallet);
       console.log('wfs onFinish invoke end', wallet, new Date());
