@@ -246,9 +246,11 @@ export default function Login() {
         // Automatically obtain Telegram authorization
         isGettingTelegramAuthRef.current = true;
         handleTeleGram();
+      } else if (isPortkeyApp()) {
+        handlePortKey();
       }
     }
-  }, [isLock, handleTeleGram]);
+  }, [isLock, handleTeleGram, handlePortKey]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();
