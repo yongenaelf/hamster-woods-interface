@@ -58,7 +58,7 @@ import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
 import DepositModal from 'components/Deposit';
 import { message } from 'antd';
-import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 import { loginOptTip } from 'constants/tip';
 
@@ -324,7 +324,7 @@ export default function Game() {
 
   const go = async () => {
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning(loginOptTip);
+      return loadingTip({ msg: loginOptTip });
     }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
@@ -466,7 +466,7 @@ export default function Game() {
   const showDepositModal = useCallback(async () => {
     try {
       if (!isOnChainLogin && walletType === WalletType.portkey) {
-        return singleMessage.warning(loginOptTip);
+        return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
       setDepositVisible(true);

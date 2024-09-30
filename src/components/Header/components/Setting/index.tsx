@@ -22,7 +22,7 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
+import { did, loadingTip, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
@@ -65,7 +65,7 @@ export default function Setting() {
 
   const handleExit = async () => {
     if (!isOnChainLogin && walletType === WalletType.portkey) {
-      return singleMessage.warning(loginOptTip);
+      return loadingTip({ msg: loginOptTip });
     }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
