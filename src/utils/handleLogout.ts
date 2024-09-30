@@ -10,11 +10,11 @@ import {
 } from 'redux/reducer/info';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
 import { DEFAULT_PIN } from 'constants/login';
-import { ETransferConfig, unsubscribeUserOrderRecord, WalletTypeEnum } from '@etransfer/ui-react';
+import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
 
 export const handleSDKLogout = async () => {
   const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
@@ -47,5 +47,6 @@ export const handleSDKLogout = async () => {
   store.dispatch(setChessboardTotalStep(0));
   store.dispatch(setIsNeedSyncAccountInfo(true));
   window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
   ContractRequest.get().resetConfig();
 };

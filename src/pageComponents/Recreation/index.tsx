@@ -58,10 +58,14 @@ import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
 import DepositModal from 'components/Deposit';
 import { message } from 'antd';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
+import { loginOptTip } from 'constants/tip';
 
 export default function Game() {
+  useEffect(() => {
+    console.log('wfs render Game page', new Date(), isLogin, isOnChainLogin);
+  }, []);
   const [translate, setTranslate] = useState<{
     x: number;
     y: number;
@@ -78,6 +82,7 @@ export default function Game() {
   const {
     isMobile,
     isLogin,
+    isOnChainLogin,
     playerInfo,
     walletType,
     walletInfo,
@@ -90,6 +95,7 @@ export default function Game() {
     checkerboardCounts,
     curBeanPass,
   } = useGetState();
+  console.log('wfs render Game page out', new Date(), isLogin, isOnChainLogin);
   const { getETransferAuthToken } = useQueryAuthToken();
 
   const [beanPassInfoDto, setBeanPassInfoDto] = useState<IBeanPassListItem | undefined>(curBeanPass);
@@ -223,7 +229,7 @@ export default function Game() {
     });
   };
 
-  const initCheckerboard = () => {
+  const initCheckerboard = useCallback(() => {
     resetPosition();
     setResetStart(chessboardResetStart);
     setTotalStep(chessboardTotalStep);
@@ -244,8 +250,9 @@ export default function Game() {
       linkedList.current.updateCurrentNode(curChessboardNode);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getList(firstNode, firstNodePosition, checkerboardData!, linkedList, firstNodePosition);
-  };
+  }, [chessboardResetStart, chessboardTotalStep, curChessboardNode, firstNode, firstNodePosition]);
 
   const updateCheckerboard = () => {
     setRoleAnimationDuration(0);
@@ -316,6 +323,9 @@ export default function Game() {
   );
 
   const go = async () => {
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
+      return singleMessage.warning(loginOptTip);
+    }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
         onNftClick();
@@ -455,12 +465,15 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
+      if (!isOnChainLogin && walletType === WalletType.portkey) {
+        return singleMessage.warning(loginOptTip);
+      }
       await getETransferAuthToken();
       setDepositVisible(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin, walletType]);
 
   const handleHasNft = useCallback(
     (hasNft: boolean) => {
@@ -477,24 +490,36 @@ export default function Game() {
   );
 
   useEffect(() => {
-    if (isLogin && needSync) {
+    if ((isLogin || isOnChainLogin) && needSync) {
       syncAccountInfo();
     }
-  }, [isLogin, needSync, syncAccountInfo]);
+  }, [isLogin, isOnChainLogin, needSync, syncAccountInfo]);
 
   useEffect(() => {
-    if (!isLogin) {
+    console.log(
+      'wfs Game page isLogin',
+      isLogin,
+      'isOnChainLogin',
+      isOnChainLogin,
+      'walletType',
+      walletType,
+      'walletInfo',
+      walletInfo,
+      'needSync',
+      needSync,
+    );
+    if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
       if (walletType !== WalletType.unknown && walletInfo && !needSync) {
         initContractAndCheckBeanPass();
       }
     }
-  }, [initContractAndCheckBeanPass, isLogin, needSync, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, needSync, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
-  }, [checkerboardData, hasNft]);
+  }, [hasNft, checkerboardData]);
 
   useEffectOnce(() => {
     showMessage.loading();

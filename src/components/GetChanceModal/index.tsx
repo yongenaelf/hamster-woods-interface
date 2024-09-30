@@ -13,7 +13,7 @@ import AddIcon from 'assets/images/add.png';
 import ELFIcon from 'assets/images/elf.png';
 import { isValidNumber } from 'utils/common';
 import { useSelector } from 'redux/store';
-import { IBalance } from 'types';
+import { IBalance, WalletType } from 'types';
 import { ZERO, divDecimals, divDecimalsStrShow, formatAmountUSDShow } from 'utils/calculate';
 import { ACORNS_TOKEN } from 'constants/index';
 import useGetState from 'redux/state/useGetState';
@@ -23,11 +23,12 @@ import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage } from '@portkey/did-ui-react';
+import { handleErrorMessage, singleMessage } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
 import { useAddress } from 'hooks/useAddress';
 import useWebLogin from 'hooks/useWebLogin';
 import { useBalance } from 'hooks/useBalance';
+import { loginOptTip } from 'constants/tip';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -55,7 +56,7 @@ export default function GetChanceModal({
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const { playerInfo } = useGetState();
+  const { playerInfo, isOnChainLogin, walletType } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
   const [swapOpen, setSwapOpen] = useState(false);
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
@@ -104,12 +105,15 @@ export default function GetChanceModal({
 
   const onEnterTransfer = useCallback(async () => {
     try {
+      if (!isOnChainLogin && walletType === WalletType.portkey) {
+        return singleMessage.warning(loginOptTip);
+      }
       await getETransferAuthToken();
       setShowDepositModal(true);
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken]);
+  }, [getETransferAuthToken, isOnChainLogin, walletType]);
 
   const errorMessageTipDom = useCallback(() => {
     if (!errMsgTip)
@@ -173,9 +177,12 @@ export default function GetChanceModal({
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
+    if (!isOnChainLogin && walletType === WalletType.portkey) {
+      return singleMessage.warning(loginOptTip);
+    }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
-  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, onConfirm]);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, onConfirm, walletType]);
 
   const handleCancel = useCallback(() => {
     setInputVal(1);
@@ -352,6 +359,9 @@ export default function GetChanceModal({
               {showSwap && (
                 <div
                   onClick={() => {
+                    if (!isOnChainLogin && walletType === WalletType.portkey) {
+                      return singleMessage.warning(loginOptTip);
+                    }
                     setSwapOpen(true);
                   }}
                   className={`${

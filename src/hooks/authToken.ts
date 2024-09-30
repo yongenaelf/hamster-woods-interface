@@ -18,7 +18,7 @@ import { isJWTExpired } from 'utils/common';
 import { useETransferAccounts } from './useAddress';
 
 export function useQueryAuthToken() {
-  const { walletInfo, walletType, isLogin } = useGetState();
+  const { walletInfo, walletType, isLogin, isOnChainLogin } = useGetState();
 
   const accounts = useETransferAccounts();
 
@@ -199,7 +199,7 @@ export function useQueryAuthToken() {
 
   const getETransferAuthToken = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-    if (!isLogin) throw new Error('You are not logged in.');
+    if (!isLogin && !isOnChainLogin) throw new Error('You are not logged in.');
     try {
       // showMessage.loading();
 
@@ -240,11 +240,11 @@ export function useQueryAuthToken() {
     } finally {
       // showMessage.hideLoading();
     }
-  }, [accounts, getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo, walletType]);
+  }, [accounts, getCaInfo, getManagerAddress, getUserInfo, isLogin, isOnChainLogin, walletInfo, walletType]);
 
   const getETransferAuthTokenFromApi = useCallback(async () => {
     if (!walletInfo) throw new Error('Failed to obtain walletInfo information.');
-    if (!isLogin) throw new Error('You are not logged in.');
+    if (!isLogin && !isOnChainLogin) throw new Error('You are not logged in.');
     try {
       const managerAddress = await getManagerAddress();
       const { caHash, originChainId } = await getCaInfo();
@@ -271,7 +271,7 @@ export function useQueryAuthToken() {
       console.log(error);
       throw error;
     }
-  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, walletInfo]);
+  }, [getCaInfo, getManagerAddress, getUserInfo, isLogin, isOnChainLogin, walletInfo]);
 
   return { getETransferAuthToken, getETransferAuthTokenFromApi, getUserInfo };
 }

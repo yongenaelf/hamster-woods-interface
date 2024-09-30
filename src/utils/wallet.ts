@@ -3,6 +3,7 @@ import { ChainId } from '@portkey/provider-types';
 import { did } from '@portkey/did-ui-react';
 import { WalletTypeEnum } from '@etransfer/ui-react';
 import { WalletType } from 'types';
+import { LoginStatusEnum } from '@portkey/types';
 
 export const getCaHashAndOriginChainIdByWallet = async (
   caAddress: string,
@@ -29,4 +30,8 @@ export const getAwakenWalletType = (walletType: WalletType): WalletTypeEnum => {
     default:
       return WalletTypeEnum.unknown;
   }
+};
+export const isLoginOnChain = () => {
+  console.log('wfs isLoginStatus', did.didWallet.isLoginStatus);
+  return did.didWallet.isLoginStatus === LoginStatusEnum.SUCCESS;
 };
