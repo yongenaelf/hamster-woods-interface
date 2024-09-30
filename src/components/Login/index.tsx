@@ -117,9 +117,19 @@ export default function Login() {
             guardianIdentifier: guardianIdentifierInfo?.identifier,
             guardianApprovedList: approvedList,
           };
-          console.log('wfs createWallet invoke start', new Date());
+          console.log(
+            'wfs createWallet invoke start',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
           const didWallet = await createWallet(params);
-          console.log('wfs createWallet invoke end', new Date());
+          console.log(
+            'wfs createWallet invoke end',
+            new Date(),
+            'did.didWallet.managementAccount',
+            did.didWallet.managementAccount,
+          );
           didWallet && handleOnChainFinishWrapper(didWallet);
         } catch (e) {
           console.log('wfs wallet is: error', e, new Date());
@@ -403,12 +413,32 @@ export default function Login() {
         setShowPageLoading(false);
       }
       const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
-      if (sessionId && originChainId && !isLoginOnChain()) {
-        const { recoveryStatus } = await did.didWallet.getLoginStatus({ sessionId, chainId: originChainId as ChainId });
-        if (recoveryStatus === 'pass') {
-          console.log('wfs setLoginStatus=>5');
-          store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+      if (!isLoginOnChain()) {
+        if (sessionId && originChainId) {
+          const { recoveryStatus } = await did.didWallet.getLoginStatus({
+            sessionId,
+            chainId: originChainId as ChainId,
+          });
+          if (recoveryStatus === 'pass') {
+            console.log('wfs setLoginStatus=>5');
+            store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+            await did.save(v || '', KEY_NAME);
+          }
         }
+        // wfs::todo
+        // else {
+        //   const result =  await did.didWallet.checkManagerIsExistByGQL({
+        //     chainId: originChainId as ChainId,
+        //     caHash,
+        //     managementAddress: wallet.didWallet.managementAccount?.address!!,
+        //   });
+        //   if(result) {
+        //     store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
+        //     await did.save(v || '', KEY_NAME)
+        //   } else {
+        //     // logout
+        //   }
+        // }
       }
     },
     [configInfo, handleFinish],
