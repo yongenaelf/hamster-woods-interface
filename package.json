@@ -19,7 +19,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@etransfer/ui-react": "^1.4.1",
+    "@etransfer/ui-react": "^1.7.0",
     "@headlessui/react": "^1.7.16",
     "@portkey/contracts": "2.11.0-alpha.6",
     "@portkey/detect-provider": "2.2.4",

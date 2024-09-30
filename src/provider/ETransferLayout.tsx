@@ -7,7 +7,7 @@ import '@etransfer/ui-react/dist/assets/index.css';
 import { ChainId } from '@portkey/types';
 
 export default function ETransferLayout({ children }: { children: React.ReactNode }) {
-  const { configInfo } = useGetState();
+  const { configInfo, walletType } = useGetState();
 
   useEffect(() => {
     if (!configInfo) return;
@@ -26,10 +26,11 @@ export default function ETransferLayout({ children }: { children: React.ReactNod
         jwt: '', // ETransfer Auth Token
       },
       networkType: configInfo?.network as NetworkType, // 'TESTNET' | 'MAINNET'
+      etransferSocketUrl: configInfo?.eTransferUrl,
       etransferAuthUrl: configInfo?.eTransferUrl,
       etransferUrl: configInfo?.eTransferUrl,
     });
-  }, [configInfo]);
+  }, [configInfo, walletType]);
 
   if (!configInfo) {
     return <>{children}</>;
