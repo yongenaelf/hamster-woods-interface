@@ -33,7 +33,7 @@ import { loginOptTip } from 'constants/tip';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
-  const { walletType, isMobile, isOnChainLogin } = useGetState();
+  const { walletType, isMobile, isOnChainLogin, needSync } = useGetState();
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -64,7 +64,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    if (!isOnChainLogin && walletType === WalletType.portkey) {
+    if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     showMessage.loading('Signing out of Hamster Woods');
