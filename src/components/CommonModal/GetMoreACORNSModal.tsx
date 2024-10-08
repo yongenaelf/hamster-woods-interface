@@ -17,7 +17,7 @@ import { loginOptTip } from 'constants/tip';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const { getETransferAuthToken } = useQueryAuthToken();
-  const { isOnChainLogin, walletType } = useGetState();
+  const { isOnChainLogin, walletType, needSync } = useGetState();
   const { configInfo } = useSelector((state: AppState) => state.configInfo);
   const [showDeposit, setShowDeposit] = useState(false);
   const isMobile = useIsMobile();
@@ -70,7 +70,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             try {
               // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
               // onCancel?.();
-              if (!isOnChainLogin && walletType === WalletType.portkey) {
+              if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
                 return loadingTip({ msg: loginOptTip });
               }
               await getETransferAuthToken();

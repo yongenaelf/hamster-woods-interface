@@ -21,7 +21,7 @@ import Task from './components/Task';
 import { loginOptTip } from 'constants/tip';
 
 export default function Header() {
-  const { walletType, isOnChainLogin } = useGetState();
+  const { walletType, isOnChainLogin, needSync } = useGetState();
   const { playerInfo } = useGetState();
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [lockedAcornsVisible, setLockedAcornsVisible] = useState(false);
@@ -53,7 +53,7 @@ export default function Header() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey) {
+      if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
@@ -61,7 +61,7 @@ export default function Header() {
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin, walletType]);
+  }, [getETransferAuthToken, isOnChainLogin, needSync, walletType]);
 
   return (
     <div className={styles.headerContainer}>

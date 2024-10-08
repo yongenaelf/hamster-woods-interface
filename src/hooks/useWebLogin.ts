@@ -104,7 +104,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         if (originChainId === curChain) {
           syncAddress.current = true;
         } else {
-          showMessage.loading('Syncing on-chain account info');
+          // showMessage.loading('Syncing on-chain account info');
           let accountSyncInfo;
           try {
             accountSyncInfo = (await getAccountInfoSync(curChain, wallet?.portkeyInfo)) ?? {};
