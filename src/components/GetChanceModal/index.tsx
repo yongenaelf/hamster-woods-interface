@@ -105,7 +105,7 @@ export default function GetChanceModal({
 
   const onEnterTransfer = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+      if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
@@ -177,7 +177,7 @@ export default function GetChanceModal({
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
-    if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     if (!handleCheckPurchase()) return;
@@ -359,7 +359,7 @@ export default function GetChanceModal({
               {showSwap && (
                 <div
                   onClick={() => {
-                    if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+                    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
                       return loadingTip({ msg: loginOptTip });
                     }
                     setSwapOpen(true);
