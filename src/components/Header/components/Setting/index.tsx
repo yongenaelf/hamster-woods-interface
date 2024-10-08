@@ -64,7 +64,7 @@ export default function Setting() {
   }, [walletType]);
 
   const handleExit = async () => {
-    if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     showMessage.loading('Signing out of Hamster Woods');

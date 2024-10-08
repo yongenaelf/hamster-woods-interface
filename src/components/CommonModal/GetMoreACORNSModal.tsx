@@ -70,7 +70,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
             try {
               // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
               // onCancel?.();
-              if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+              if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
                 return loadingTip({ msg: loginOptTip });
               }
               await getETransferAuthToken();

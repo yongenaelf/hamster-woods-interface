@@ -323,7 +323,7 @@ export default function Game() {
   );
 
   const go = async () => {
-    if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     if (goStatus !== Status.NONE) {
@@ -465,7 +465,7 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+      if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();

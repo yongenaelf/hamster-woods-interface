@@ -53,7 +53,7 @@ export default function Header() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey && needSync) {
+      if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
