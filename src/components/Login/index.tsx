@@ -472,6 +472,7 @@ export default function Login() {
           verifierId: res.verifier.id,
           verificationDoc: res.verificationDoc,
           signature: res.signature,
+          zkLoginInfo: res.zkLoginInfo,
         },
       ];
       if (TelegramPlatform.isTelegramPlatform()) {
@@ -531,7 +532,7 @@ export default function Login() {
           });
           setLoading(false);
           console.log(result);
-          if (result?.zkLoginInfo && (!result?.signature || !result?.verificationDoc)) {
+          if (!result?.zkLoginInfo && (!result?.signature || !result?.verificationDoc)) {
             throw 'Verify social login error';
           }
           onStep2OfSignUpFinish(
