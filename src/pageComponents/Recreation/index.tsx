@@ -505,17 +505,17 @@ export default function Game() {
       walletType,
       'walletInfo',
       walletInfo,
-      'needSync',
-      needSync,
+      // 'needSync',
+      // needSync,
     );
     if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
-      if (walletType !== WalletType.unknown && walletInfo && !needSync) {
+      if (walletType !== WalletType.unknown && walletInfo) {
         initContractAndCheckBeanPass();
       }
     }
-  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, needSync, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();
