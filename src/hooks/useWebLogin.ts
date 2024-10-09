@@ -106,6 +106,20 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         } else {
           // showMessage.loading('Syncing on-chain account info');
           let accountSyncInfo;
+          store.dispatch(
+            setWalletInfo({
+              portkeyInfo: {
+                caInfo: {
+                  caAddress: wallet?.portkeyInfo?.caInfo?.caAddress,
+                  caHash: wallet?.portkeyInfo?.caInfo?.caHash,
+                },
+                pin: wallet?.portkeyInfo?.pin,
+                chainId: curChain,
+                walletInfo: wallet?.portkeyInfo?.walletInfo,
+                accountInfo: wallet?.portkeyInfo?.accountInfo,
+              },
+            }),
+          );
           try {
             accountSyncInfo = (await getAccountInfoSync(curChain, wallet?.portkeyInfo)) ?? {};
           } catch (err) {
@@ -113,21 +127,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           }
           const { holder, filteredHolders } = accountSyncInfo!;
           if (holder && filteredHolders && filteredHolders.length) {
-            store.dispatch(
-              setWalletInfo({
-                portkeyInfo: {
-                  caInfo: {
-                    caAddress: holder.caAddress,
-                    caHash: holder.caHash,
-                  },
-                  pin: wallet?.portkeyInfo?.pin,
-                  chainId: curChain,
-                  walletInfo: wallet?.portkeyInfo?.walletInfo,
-                  accountInfo: wallet?.portkeyInfo?.accountInfo,
-                },
-              }),
-            );
-
             syncAddress.current = true;
           } else {
             await sleep(5000);
