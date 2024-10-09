@@ -104,8 +104,22 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         if (originChainId === curChain) {
           syncAddress.current = true;
         } else {
-          showMessage.loading('Syncing on-chain account info');
+          // showMessage.loading('Syncing on-chain account info');
           let accountSyncInfo;
+          store.dispatch(
+            setWalletInfo({
+              portkeyInfo: {
+                caInfo: {
+                  caAddress: wallet?.portkeyInfo?.caInfo?.caAddress,
+                  caHash: wallet?.portkeyInfo?.caInfo?.caHash,
+                },
+                pin: wallet?.portkeyInfo?.pin,
+                chainId: curChain,
+                walletInfo: wallet?.portkeyInfo?.walletInfo,
+                accountInfo: wallet?.portkeyInfo?.accountInfo,
+              },
+            }),
+          );
           try {
             accountSyncInfo = (await getAccountInfoSync(curChain, wallet?.portkeyInfo)) ?? {};
           } catch (err) {
@@ -113,21 +127,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
           }
           const { holder, filteredHolders } = accountSyncInfo!;
           if (holder && filteredHolders && filteredHolders.length) {
-            store.dispatch(
-              setWalletInfo({
-                portkeyInfo: {
-                  caInfo: {
-                    caAddress: holder.caAddress,
-                    caHash: holder.caHash,
-                  },
-                  pin: wallet?.portkeyInfo?.pin,
-                  chainId: curChain,
-                  walletInfo: wallet?.portkeyInfo?.walletInfo,
-                  accountInfo: wallet?.portkeyInfo?.accountInfo,
-                },
-              }),
-            );
-
             syncAddress.current = true;
           } else {
             await sleep(5000);
@@ -325,7 +324,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       return false;
     }
     return true;
-  }, [walletInfo, walletType]);
+  }, [configInfo, curChain, updatePlayerInformation, walletInfo, walletType]);
 
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';

@@ -323,7 +323,7 @@ export default function Game() {
   );
 
   const go = async () => {
-    if (!isOnChainLogin && walletType === WalletType.portkey) {
+    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     if (goStatus !== Status.NONE) {
@@ -465,7 +465,7 @@ export default function Game() {
 
   const showDepositModal = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey) {
+      if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
@@ -473,7 +473,7 @@ export default function Game() {
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin, walletType]);
+  }, [getETransferAuthToken, isOnChainLogin, needSync, walletType]);
 
   const handleHasNft = useCallback(
     (hasNft: boolean) => {
@@ -505,17 +505,17 @@ export default function Game() {
       walletType,
       'walletInfo',
       walletInfo,
-      'needSync',
-      needSync,
+      // 'needSync',
+      // needSync,
     );
     if (!isLogin && !isOnChainLogin) {
       router.push('/login');
     } else {
-      if (walletType !== WalletType.unknown && walletInfo && !needSync) {
+      if (walletType !== WalletType.unknown && walletInfo) {
         initContractAndCheckBeanPass();
       }
     }
-  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, needSync, router, walletInfo, walletType]);
+  }, [initContractAndCheckBeanPass, isLogin, isOnChainLogin, router, walletInfo, walletType]);
 
   useEffect(() => {
     initCheckerboard();

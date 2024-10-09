@@ -56,7 +56,7 @@ export default function GetChanceModal({
   const [inputVal, setInputVal] = useState(1);
   const [expand, setExpand] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const { playerInfo, isOnChainLogin, walletType } = useGetState();
+  const { playerInfo, isOnChainLogin, walletType, needSync } = useGetState();
   const [errMsgTip, setErrMsgTip] = useState('');
   const [swapOpen, setSwapOpen] = useState(false);
   const [notEnoughAcorns, setNotEnoughAcorns] = useState(false);
@@ -105,7 +105,7 @@ export default function GetChanceModal({
 
   const onEnterTransfer = useCallback(async () => {
     try {
-      if (!isOnChainLogin && walletType === WalletType.portkey) {
+      if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
         return loadingTip({ msg: loginOptTip });
       }
       await getETransferAuthToken();
@@ -113,7 +113,7 @@ export default function GetChanceModal({
     } catch (error) {
       message.error(handleErrorMessage(error, 'Get etransfer auth token error'));
     }
-  }, [getETransferAuthToken, isOnChainLogin, walletType]);
+  }, [getETransferAuthToken, isOnChainLogin, needSync, walletType]);
 
   const errorMessageTipDom = useCallback(() => {
     if (!errMsgTip)
@@ -177,12 +177,12 @@ export default function GetChanceModal({
 
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
-    if (!isOnChainLogin && walletType === WalletType.portkey) {
+    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return loadingTip({ msg: loginOptTip });
     }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
-  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, onConfirm, walletType]);
+  }, [chancePrice, errMsgTip, handleCheckPurchase, inputVal, isOnChainLogin, needSync, onConfirm, walletType]);
 
   const handleCancel = useCallback(() => {
     setInputVal(1);
@@ -359,7 +359,7 @@ export default function GetChanceModal({
               {showSwap && (
                 <div
                   onClick={() => {
-                    if (!isOnChainLogin && walletType === WalletType.portkey) {
+                    if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
                       return loadingTip({ msg: loginOptTip });
                     }
                     setSwapOpen(true);
