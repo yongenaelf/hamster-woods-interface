@@ -325,7 +325,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       return false;
     }
     return true;
-  }, [walletInfo, walletType]);
+  }, [configInfo, curChain, updatePlayerInformation, walletInfo, walletType]);
 
   const onAccountsSuccess = useCallback(async (provider: IPortkeyProvider, accounts: AccountsType) => {
     let nickName = 'Wallet 01';
