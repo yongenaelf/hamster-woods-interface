@@ -1,0 +1,75 @@
+.pcLoadingModal {
+  @apply relative !w-[527px] !h-[160px] rounded-[24px] p-[32px] bg-[#EEE2C4] text-center text-[#953D22];
+
+  .progressContainer {
+    padding: 0 40px;
+  }
+
+  :global {
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-modal-content {
+      @apply h-full bg-inherit shadow-none;
+      .ant-modal-close {
+        @apply w-[24px] h-[24px] absolute right-[-18Px] top-[-18Px];
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+    .ant-modal-body {
+      @apply w-full p-0;
+      .ant-progress-line {
+        @apply w-[321px] h-[32px] ;
+        .ant-progress-outer {
+          border: 4px solid #A15A1C;
+          border-radius: 16px;
+          .ant-progress-bg {
+            height: 22px !important;
+            margin: 2px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.mobileLoadingModal {
+  @apply relative !w-[325px] !h-[112px]  p-[24px] rounded-[24px] bg-[#EEE2C4];
+
+  .progressContainer {
+    padding: 0 16px;
+  }
+
+  :global {
+    .ant-modal-header,
+    .ant-modal-footer {
+      @apply hidden;
+    }
+    .ant-modal-content {
+      @apply h-full bg-inherit shadow-none;
+      .ant-modal-close {
+        @apply w-[20px] h-[20px] absolute right-[-8px] top-[-8px];
+        .ant-modal-close-x {
+          @apply w-full h-full;
+        }
+      }
+    }
+    .ant-modal-body {
+      @apply w-full p-[0];
+      .ant-progress-line {
+        @apply w-[207px] h-[16px];
+        .ant-progress-outer {
+          border: 0.15rem solid #A15A1C;
+          border-radius: 1.75rem;
+          .ant-progress-bg {
+            height: 1.25rem !important;
+            margin: 2px;
+          }
+        }
+      }
+    }
+  }
+}

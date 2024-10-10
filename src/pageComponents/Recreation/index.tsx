@@ -58,9 +58,10 @@ import { addPrefixSuffix } from 'utils/addressFormatting';
 import { checkerboardData } from 'constants/checkerboardData';
 import DepositModal from 'components/Deposit';
 import { message } from 'antd';
-import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
-import { loginOptTip } from 'constants/tip';
+import LoadingModal from 'components/LoadingModal';
+import { useLoadingCountdown } from 'hooks/useCountDown';
 
 export default function Game() {
   useEffect(() => {
@@ -153,6 +154,8 @@ export default function Game() {
   const [elfInUsd, setElfInUsd] = useState(0.35);
   const [assetBalance, setAssetBalance] = useState<IBalance[]>([]);
 
+  const [syncLoading, setSyncLoading] = useState(false);
+  useLoadingCountdown();
   const translateRef = useRef<{
     x: number;
     y: number;
@@ -324,7 +327,7 @@ export default function Game() {
 
   const go = async () => {
     if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-      return loadingTip({ msg: loginOptTip });
+      return setSyncLoading(true);
     }
     if (goStatus !== Status.NONE) {
       if (!hasNft) {
@@ -466,7 +469,7 @@ export default function Game() {
   const showDepositModal = useCallback(async () => {
     try {
       if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-        return loadingTip({ msg: loginOptTip });
+        return setSyncLoading(true);
       }
       await getETransferAuthToken();
       setDepositVisible(true);
@@ -765,6 +768,7 @@ export default function Game() {
             setGetChanceModalVisible(true);
           }}
         />
+        <LoadingModal open={syncLoading} onCancel={() => setSyncLoading(false)} />
       </div>
 
       <GlobalCom getChance={getChance} />
