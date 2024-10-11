@@ -20,6 +20,7 @@ const initialState: InfoStateType = {
   showGameRecord: false,
   assetVisible: false,
   isNeedSyncAccountInfo: true,
+  loadingCountdown: 0,
 };
 
 // Actual Slice
@@ -70,6 +71,9 @@ export const infoSlice = createSlice({
     setIsNeedSyncAccountInfo(state, action) {
       state.isNeedSyncAccountInfo = action.payload;
     },
+    setLoadingCountdown(state, action) {
+      state.loadingCountdown = action.payload;
+    },
     setCurBeanPass(state, action) {
       state.curBeanPass = action.payload;
     },
@@ -100,6 +104,7 @@ export const {
   setAssetVisible,
   setGameSetting,
   setIsNeedSyncAccountInfo,
+  setLoadingCountdown,
   setCurBeanPass,
 } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
