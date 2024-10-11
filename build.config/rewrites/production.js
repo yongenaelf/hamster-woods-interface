@@ -11,8 +11,4 @@ module.exports = [
     source: '/api/:path*',
     destination: 'https://hamster.beangotown.com/api/:path*',
   },
-  {
-    source: '/cms/:path*',
-    destination: 'https://cms-hamster.beangotown.com/:path*',
-  },
 ];
