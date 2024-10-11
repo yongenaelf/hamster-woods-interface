@@ -13,6 +13,7 @@ import {
 import { dispatch, store } from 'redux/store';
 import {
   setIsNeedSyncAccountInfo,
+  setLoadingCountdown,
   setLoginStatus,
   setPlayerInfo,
   setWalletInfo,
@@ -22,18 +23,19 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types/index';
-import { did, loadingTip, singleMessage, TelegramPlatform } from '@portkey/did-ui-react';
+import { did, TelegramPlatform } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import ContractRequest from 'contract/contractRequest';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
 import CommonRedBtn from 'components/CommonRedBtn';
-import { loginOptTip } from 'constants/tip';
+import LoadingModal from 'components/LoadingModal';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
   const { walletType, isMobile, isOnChainLogin, needSync } = useGetState();
+  const [syncLoading, setSyncLoading] = useState(false);
 
   const handleCancel = () => {
     setSettingModalVisible(false);
@@ -65,7 +67,7 @@ export default function Setting() {
 
   const handleExit = async () => {
     if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-      return loadingTip({ msg: loginOptTip });
+      return setSyncLoading(true);
     }
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
@@ -95,6 +97,7 @@ export default function Setting() {
     store.dispatch(setChessboardResetStart(true));
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
+    store.dispatch(setLoadingCountdown(0));
     window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
     window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
     ContractRequest.get().resetConfig();
@@ -136,6 +139,7 @@ export default function Setting() {
             className={`!bg-[#F75D56] ${isMobile ? styles.buttonMobile : styles.button}`}></CommonRedBtn>
         </div>
       </CustomModal>
+      <LoadingModal open={syncLoading} onCancel={() => setSyncLoading(false)} />
     </>
   );
 }

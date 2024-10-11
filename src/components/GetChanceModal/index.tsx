@@ -23,12 +23,12 @@ import { useRouter } from 'next/navigation';
 import { useQueryAuthToken } from 'hooks/authToken';
 import QuestionImage from 'assets/images/recreation/question.png';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 import AwakenSwapModal from 'components/AwakenSwap';
 import { useAddress } from 'hooks/useAddress';
 import useWebLogin from 'hooks/useWebLogin';
 import { useBalance } from 'hooks/useBalance';
-import { loginOptTip } from 'constants/tip';
+import LoadingModal from 'components/LoadingModal';
 
 export type GetChanceModalPropsType = {
   onConfirm?: (n: number, chancePrice: number) => void;
@@ -63,6 +63,7 @@ export default function GetChanceModal({
   const router = useRouter();
   const { getETransferAuthToken } = useQueryAuthToken();
   const getBalance = useBalance();
+  const [syncLoading, setSyncLoading] = useState(false);
 
   const chancePrice = useMemo(
     () => serverConfigInfo.serverConfigInfo?.chancePrice || 1,
@@ -106,7 +107,7 @@ export default function GetChanceModal({
   const onEnterTransfer = useCallback(async () => {
     try {
       if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-        return loadingTip({ msg: loginOptTip });
+        return setSyncLoading(true);
       }
       await getETransferAuthToken();
       setShowDepositModal(true);
@@ -178,7 +179,7 @@ export default function GetChanceModal({
   const handleConfirm = useCallback(() => {
     if (errMsgTip) return;
     if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-      return loadingTip({ msg: loginOptTip });
+      return setSyncLoading(true);
     }
     if (!handleCheckPurchase()) return;
     onConfirm?.(inputVal, chancePrice);
@@ -360,7 +361,7 @@ export default function GetChanceModal({
                 <div
                   onClick={() => {
                     if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-                      return loadingTip({ msg: loginOptTip });
+                      return setSyncLoading(true);
                     }
                     setSwapOpen(true);
                   }}
@@ -410,6 +411,7 @@ export default function GetChanceModal({
           updateBalance();
         }}
       />
+      <LoadingModal open={syncLoading} onCancel={() => setSyncLoading(false)} />
     </CustomModal>
   );
 }

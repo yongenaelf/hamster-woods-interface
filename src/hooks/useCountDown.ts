@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { setLoadingCountdown } from 'redux/reducer/info';
 import useGetState from 'redux/state/useGetState';
+import { store } from 'redux/store';
 const MILLISECOND_CONVERT_SECOND = 1000;
 const SECOND_CONVERT_HOUR = 60 * 60;
 
@@ -67,4 +69,27 @@ export function convertToUtcTimestamp(timestamp: number) {
 
   const utcTimestamp = timestamp + offset;
   return utcTimestamp;
+}
+
+export function useLoadingCountdown() {
+  const interval = useRef<number | null>(null);
+
+  const { needSync, loadingCountdown, isOnChainLogin } = useGetState();
+
+  useEffect(() => {
+    interval.current = window.setInterval(() => {
+      if (!needSync && isOnChainLogin) {
+        store.dispatch(setLoadingCountdown(100));
+        interval.current && window.clearInterval(interval.current);
+      } else {
+        const n = Number(loadingCountdown) || 0;
+        if (n < 86) {
+          store.dispatch(setLoadingCountdown(n + 1));
+        }
+      }
+    }, 100);
+    return () => {
+      interval.current && window.clearInterval(interval.current);
+    };
+  }, [isOnChainLogin, loadingCountdown, needSync]);
 }

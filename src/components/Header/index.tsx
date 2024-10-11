@@ -15,10 +15,10 @@ import LockedAcornsModal from 'components/LockedAcornsModal';
 import { divDecimalsStrShow } from 'utils/calculate';
 import { useIsMobile } from 'redux/selector/mobile';
 import DepositModal from 'components/Deposit';
-import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 import { useQueryAuthToken } from 'hooks/authToken';
 import Task from './components/Task';
-import { loginOptTip } from 'constants/tip';
+import LoadingModal from 'components/LoadingModal';
 
 export default function Header() {
   const { walletType, isOnChainLogin, needSync } = useGetState();
@@ -37,6 +37,7 @@ export default function Header() {
   );
   const tooltipRef = useRef<any>(null);
   const { getETransferAuthToken } = useQueryAuthToken();
+  const [syncLoading, setSyncLoading] = useState(false);
 
   useEffect(() => {
     const handleDocumentClick = (event: any) => {
@@ -54,7 +55,7 @@ export default function Header() {
   const showDepositModal = useCallback(async () => {
     try {
       if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-        return loadingTip({ msg: loginOptTip });
+        return setSyncLoading(true);
       }
       await getETransferAuthToken();
       setDepositVisible(true);
@@ -129,6 +130,7 @@ export default function Header() {
       <LockedAcornsModal open={lockedAcornsVisible} onCancel={() => setLockedAcornsVisible(false)} />
 
       <DepositModal open={depositVisible} onCancel={() => setDepositVisible(false)} />
+      <LoadingModal open={syncLoading} onCancel={() => setSyncLoading(false)} />
     </div>
   );
 }
