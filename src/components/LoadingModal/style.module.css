@@ -37,7 +37,7 @@
 }
 
 .mobileLoadingModal {
-  @apply relative !w-[325px] !h-[112px]  p-[24px] rounded-[24px] bg-[#EEE2C4];
+  @apply relative !w-[330px] !h-[112px]  p-[24px] rounded-[24px] bg-[#EEE2C4];
 
   .progressContainer {
     padding: 0 16px;
