@@ -143,8 +143,10 @@
   color: #55585E;
   font-size: 14px;
   font-weight: 400;
+  text-align: center;
   line-height: 20px;
-  margin-bottom: 32px;
+  margin-left: 14px;
+  margin-right: 14px;
   .unlock_footer_highlight {
     color: #5D42FF;
   }
