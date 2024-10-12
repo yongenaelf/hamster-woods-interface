@@ -132,7 +132,7 @@ class Request {
   }
 }
 
-const cmsRequest = new Request({ baseURL: '/cms' });
+const cmsRequest = new Request({ baseURL: 'https://cms-hamster.beangotown.com' });
 // const tokenRequest = new Request({
 //   baseURL: '/connect',
 // });

@@ -10,16 +10,17 @@ import { useQueryAuthToken } from 'hooks/authToken';
 import openPage from 'utils/openPage';
 import styles from './style.module.css';
 import { message } from 'antd';
-import { handleErrorMessage, loadingTip } from '@portkey/did-ui-react';
+import { handleErrorMessage } from '@portkey/did-ui-react';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
-import { loginOptTip } from 'constants/tip';
+import LoadingModal from 'components/LoadingModal';
 
 export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustomModalProps) {
   const { getETransferAuthToken } = useQueryAuthToken();
   const { isOnChainLogin, walletType, needSync } = useGetState();
   const { configInfo } = useSelector((state: AppState) => state.configInfo);
   const [showDeposit, setShowDeposit] = useState(false);
+  const [syncLoading, setSyncLoading] = useState(false);
   const isMobile = useIsMobile();
   const textClassName = useMemo(
     () => `${isMobile ? 'text-[16px] leading-[24px]' : 'text-[24px] leading-[32px]'} mb-[12px]`,
@@ -71,7 +72,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
               // openPage(`${configInfo?.awakenUrl}/trading/ACORNS_ELF_0.3`);
               // onCancel?.();
               if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
-                return loadingTip({ msg: loginOptTip });
+                return setSyncLoading(true);
               }
               await getETransferAuthToken();
               setShowDeposit(true);
@@ -82,6 +83,7 @@ export default function GetMoreACORNSModal({ open, onCancel, ...props }: ICustom
         />
       </div>
       <DepositModal open={showDeposit} onCancel={() => setShowDeposit(false)} />
+      <LoadingModal open={syncLoading} onCancel={() => setSyncLoading(false)} />
     </CustomModal>
   );
 }

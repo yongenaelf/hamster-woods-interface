@@ -29,6 +29,7 @@ export type InfoStateType = {
   gameSetting?: IGameSetting;
   isNeedSyncAccountInfo: boolean;
   curBeanPass?: IBeanPassListItem;
+  loadingCountdown?: number;
 };
 
 export type PageLoadingType = {

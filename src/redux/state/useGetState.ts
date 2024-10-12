@@ -35,6 +35,7 @@ const useGetState = () => {
     playerInfo: infoState.playerInfo,
     gameSetting: infoState.gameSetting,
     needSync: infoState.isNeedSyncAccountInfo,
+    loadingCountdown: infoState.loadingCountdown,
     curBeanPass: infoState.curBeanPass,
     configInfo,
     chessBoardInfo,
