@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { cmsUrl } from 'constants/cms';
 import { SentryMessageType, captureMessage } from 'utils/captureMessage';
 import showMessage from 'utils/setGlobalComponentsInfo';
 
@@ -132,7 +133,7 @@ class Request {
   }
 }
 
-const cmsRequest = new Request({ baseURL: '/cms' });
+const cmsRequest = new Request({ baseURL: cmsUrl });
 // const tokenRequest = new Request({
 //   baseURL: '/connect',
 // });
