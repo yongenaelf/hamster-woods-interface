@@ -624,11 +624,11 @@ export default function Login() {
   const forgetPinElement = useMemo(() => {
     return (
       <span className={styles.unlock_footer_text}>
-        Forget Pin Code? Click{' '}
+        Forgot your PIN? Click{' '}
         <a className={styles.unlock_footer_highlight} onClick={onForgetPin}>
-          Here
+          here
         </a>{' '}
-        To Log Back In
+        to log back in.
       </span>
     );
   }, [onForgetPin]);
