@@ -18,10 +18,18 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
+  loadingTip,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { setLoginStatus } from 'redux/reducer/info';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import {
+  setLoginStatus,
+  setIsNeedSyncAccountInfo,
+  setPlayerInfo,
+  setWalletInfo,
+  setWalletType,
+} from 'redux/reducer/info';
+import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
@@ -45,6 +53,7 @@ import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
 import { DEFAULT_PIN } from 'constants/login';
+import { loginOptTip } from 'constants/tip';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
 import showMessage from 'utils/setGlobalComponentsInfo';
@@ -56,6 +65,7 @@ import ShowPageLoading from 'components/ShowPageLoading';
 import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
 import { handleSDKLogoutOffChain } from 'utils/handleLogout';
+import ContractRequest from 'contract/contractRequest';
 
 const components = {
   phone: PhoneIcon,
@@ -202,7 +212,7 @@ export default function Login() {
     onError: handleSDKLogoutOffChain,
   });
 
-  const { isLock, isLogin, isOnChainLogin, isMobile: isMobileStore } = useGetState();
+  const { isLock, isLogin, isOnChainLogin, isMobile: isMobileStore, walletType } = useGetState();
 
   const router = useRouter();
 
@@ -583,6 +593,46 @@ export default function Login() {
     initializeProto();
   }, [configInfo?.rpcUrl, configInfo?.beanGoTownContractAddress]);
 
+  const onForgetPin = useCallback(() => {
+    showMessage.loading('Signing out of Hamster Woods');
+    if (walletType === WalletType.portkey) {
+      window.localStorage.removeItem(KEY_NAME);
+      did.reset();
+    } else if (walletType === WalletType.discover) {
+      window.localStorage.removeItem(LOGIN_EARGLY_KEY);
+    }
+
+    store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
+    store.dispatch(setWalletInfo(null));
+    store.dispatch(setWalletType(WalletType.unknown));
+    store.dispatch(setPlayerInfo(null));
+    store.dispatch(setCurChessboardNode(null));
+    store.dispatch(setChessboardResetStart(true));
+    store.dispatch(setChessboardTotalStep(0));
+    store.dispatch(setIsNeedSyncAccountInfo(true));
+    window.localStorage.removeItem(KEY_NAME);
+    window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+    ContractRequest.get().resetConfig();
+    setIsUnlockShow(false);
+    showMessage.hideLoading();
+    if (TelegramPlatform.isTelegramPlatform()) {
+      TelegramPlatform.close();
+    }
+  }, [walletType]);
+
+  const forgetPinElement = useMemo(() => {
+    return (
+      <span className={styles.unlock_footer_text}>
+        Forgot your PIN? Click{' '}
+        <a className={styles.unlock_footer_highlight} onClick={onForgetPin}>
+          here
+        </a>{' '}
+        to log back in.
+      </span>
+    );
+  }, [onForgetPin]);
+
   return (
     <div
       className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
@@ -671,6 +721,7 @@ export default function Login() {
           setPasswordValue(v);
         }}
         isWrongPassword={isErrorTipShow}
+        footer={forgetPinElement}
       />
 
       <ShowPageLoading open={showPageLoading} />
