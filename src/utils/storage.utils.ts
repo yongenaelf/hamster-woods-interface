@@ -11,6 +11,14 @@ export class StorageUtils {
     return TelegramPlatform.isTelegramPlatform() ? `${keyName}-${TelegramPlatform.getTelegramUserId()}` : keyName;
   }
 
+  static getWalletPreKey() {
+    return STORAGE_KEYS.WALLET_KEY_NAME;
+  }
+
+  static getWalletKey() {
+    return StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+  }
+
   static getSessionStorage() {
     return localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.PORTKEY_LOGIN_SESSION_ID_KEY));
   }

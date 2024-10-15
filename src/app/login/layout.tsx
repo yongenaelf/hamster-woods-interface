@@ -94,8 +94,8 @@ const Layout = dynamic(
       useEffect(() => {
         if (typeof window !== undefined) {
           if (
-            window.localStorage.getItem(STORAGE_KEYS.WALLET_KEY_NAME) ||
-            window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))
+            window.localStorage.getItem(StorageUtils.getWalletPreKey()) ||
+            window.localStorage.getItem(StorageUtils.getWalletKey())
           ) {
             did.reset();
             console.log('wfs setLoginStatus=>1');

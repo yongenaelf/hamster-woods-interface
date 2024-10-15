@@ -14,11 +14,11 @@ import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
 import { DEFAULT_PIN } from 'constants/login';
 import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
-import { STORAGE_KEYS, StorageUtils } from './storage.utils';
+import { StorageUtils } from './storage.utils';
 
 export const handleSDKLogout = async () => {
   const originChainId = StorageUtils.getOriginChainId();
-  const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+  const keyName = StorageUtils.getWalletKey();
 
   if (originChainId) {
     try {
