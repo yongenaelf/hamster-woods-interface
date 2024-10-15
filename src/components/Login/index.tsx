@@ -32,7 +32,7 @@ import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode }
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -247,10 +247,7 @@ export default function Login() {
       //   loginEagerly();
       //   return;
       // }
-      if (
-        window.localStorage.getItem(StorageUtils.getWalletPreKey()) ||
-        window.localStorage.getItem(StorageUtils.getWalletKey())
-      ) {
+      if (window.localStorage.getItem(StorageUtils.getWalletKey())) {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
@@ -395,8 +392,11 @@ export default function Login() {
           if (preWallet?.didWallet?.managementAccount) {
             wallet = preWallet;
             localStorage.setItem(keyName, localStorage.getItem(KEY_NAME) || '');
+            localStorage.removeItem(KEY_NAME);
             const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
             sessionId && StorageUtils.setSessionStorage(sessionId);
+            localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+            localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
           } else {
             StorageUtils.removeWallet();
             window.location.reload();
