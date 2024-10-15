@@ -18,7 +18,6 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
-  loadingTip,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -249,8 +248,8 @@ export default function Login() {
       //   return;
       // }
       if (
-        window.localStorage.getItem(KEY_NAME) ||
-        window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))
+        window.localStorage.getItem(StorageUtils.getWalletPreKey()) ||
+        window.localStorage.getItem(StorageUtils.getWalletKey())
       ) {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
@@ -387,7 +386,7 @@ export default function Login() {
     async (v: string) => {
       let wallet;
       try {
-        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+        const keyName = StorageUtils.getWalletKey();
 
         wallet = await did.load(v, keyName);
 
@@ -463,7 +462,7 @@ export default function Login() {
           if (recoveryStatus === 'pass') {
             console.log('wfs setLoginStatus=>5');
             store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-            const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+            const keyName = StorageUtils.getWalletKey();
 
             await did.save(v || '', keyName);
           }
@@ -476,7 +475,7 @@ export default function Login() {
             });
             if (result) {
               store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-              const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+              const keyName = StorageUtils.getWalletKey();
 
               await did.save(v || '', keyName);
             }

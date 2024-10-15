@@ -11,13 +11,12 @@ import { store } from 'redux/store';
 import { setIsMobile, setLoginStatus } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import { Store } from 'utils/store';
-import { handleSDKLogout } from 'utils/handleLogout';
 import { ConfigProvider, TelegramPlatform, did } from '@portkey/did-ui-react';
 
 import { useRouter, usePathname } from 'next/navigation';
 
 import useGetState from 'redux/state/useGetState';
-import { KEY_NAME, TELEGRAM_BOT_ID } from 'constants/platform';
+import { TELEGRAM_BOT_ID } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import {
   fetchChessboardConfig,
@@ -111,8 +110,8 @@ const Layout = dynamic(
 
         if (typeof window !== undefined) {
           if (
-            (window.localStorage.getItem(KEY_NAME) ||
-              window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))) &&
+            (window.localStorage.getItem(StorageUtils.getWalletPreKey()) ||
+              window.localStorage.getItem(StorageUtils.getWalletKey())) &&
             isInit
           ) {
             did.reset();
@@ -181,7 +180,6 @@ const Layout = dynamic(
             await sleep(3000);
             if (!isHandleSDKLogout) {
               isHandleSDKLogout = true;
-              // TelegramPlatform.initializeTelegramWebApp({ tg: handleSDKLogout });
             }
           });
 

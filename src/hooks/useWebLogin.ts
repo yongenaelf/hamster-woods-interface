@@ -375,7 +375,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>7');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+        const keyName = StorageUtils.getWalletKey();
 
         did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         setDidWalletInfo(walletInfo as PortkeyInfoType);
@@ -439,7 +439,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>10');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+        const keyName = StorageUtils.getWalletKey();
 
         await did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         console.log('wfs exe did save success!!');
@@ -563,7 +563,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (WalletType.unknown === walletType) throw 'unknown';
 
     if (WalletType.portkey === walletType) {
-      const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+      const keyName = StorageUtils.getWalletKey();
 
       const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', keyName);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
