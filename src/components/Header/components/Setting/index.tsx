@@ -4,12 +4,7 @@ import styles from './styles.module.css';
 import { useCallback, useState } from 'react';
 import CommonBtn from 'components/CommonBtn';
 import { useRouter } from 'next/navigation';
-import {
-  KEY_NAME,
-  LOGIN_EARGLY_KEY,
-  PORTKEY_LOGIN_CHAIN_ID_KEY,
-  PORTKEY_LOGIN_SESSION_ID_KEY,
-} from 'constants/platform';
+import { KEY_NAME, LOGIN_EARGLY_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { dispatch, store } from 'redux/store';
 import {
   setIsNeedSyncAccountInfo,
@@ -31,6 +26,7 @@ import showMessage from 'utils/setGlobalComponentsInfo';
 import CustomModal from 'components/CustomModal';
 import CommonRedBtn from 'components/CommonRedBtn';
 import LoadingModal from 'components/LoadingModal';
+import { getOriginChainIdByStorage, getOriginChainIdKeyName } from 'utils/handleLogout';
 export default function Setting() {
   const [settingModalVisible, setSettingModalVisible] = useState(false);
 
@@ -72,7 +68,7 @@ export default function Setting() {
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
       window.localStorage.removeItem(KEY_NAME);
-      const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+      const originChainId = getOriginChainIdByStorage();
       if (originChainId) {
         try {
           await did.logout({
@@ -98,7 +94,7 @@ export default function Setting() {
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
     store.dispatch(setLoadingCountdown(0));
-    window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    window.localStorage.removeItem(getOriginChainIdKeyName());
     window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
     ContractRequest.get().resetConfig();
     showMessage.hideLoading();
