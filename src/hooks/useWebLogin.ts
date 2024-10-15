@@ -64,7 +64,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const [didWalletInfo, setDidWalletInfo] = useState<PortkeyInfoType>();
 
   const syncAddress = useRef<boolean>(false);
-
   const { walletType, walletInfo } = useGetState();
 
   const { configInfo } = store.getState();
@@ -170,7 +169,6 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   }, [discoverProvider]);
 
   const logout = useCallback(() => {
-    unsubscribeUserOrderRecord(address);
     ETransferConfig.setConfig({
       accountInfo: {
         accounts: {},
