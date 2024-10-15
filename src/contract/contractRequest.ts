@@ -17,7 +17,7 @@ import getAccountInfoSync from 'utils/getAccountInfoSync';
 import { compareVersion } from 'utils/version';
 import BigNumber from 'bignumber.js';
 import { timesDecimals } from 'utils/calculate';
-import { PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { getOriginChainIdByStorage } from 'utils/handleLogout';
 import { message } from 'antd';
 
 interface IContractConfig {
@@ -208,7 +208,7 @@ export default class ContractRequest {
         if (result?.error) throw result.error;
         return true;
       } else if (this.walletType === WalletType.portkey) {
-        const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || 'tDVV') as ChainId;
+        const originChainId = (getOriginChainIdByStorage() || 'tDVV') as ChainId;
 
         const result = await managerApprove({
           originChainId,

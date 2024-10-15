@@ -1,11 +1,12 @@
 import { Asset, PortkeyAssetProvider } from '@portkey/did-ui-react';
-import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { KEY_NAME } from 'constants/platform';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import { LeftOutlined } from '@ant-design/icons';
 import styles from './style.module.css';
+import { getOriginChainIdByStorage } from 'utils/handleLogout';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function MyAsset() {
     }
   }, [isLogin, isOnChainLogin, router, walletType]);
 
-  const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
+  const originChainId = getOriginChainIdByStorage() || '';
   return (
     <div className={styles.asset}>
       <PortkeyAssetProvider

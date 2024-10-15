@@ -175,7 +175,7 @@ const Layout = dynamic(
             await sleep(3000);
             if (!isHandleSDKLogout) {
               isHandleSDKLogout = true;
-              TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
+              // TelegramPlatform.initializeTelegramWebApp({ tg: handleSDKLogout });
             }
           });
 

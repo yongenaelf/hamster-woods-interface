@@ -33,7 +33,7 @@ import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode }
 import { LoginStatus } from 'redux/types/reducerTypes';
 import isMobile, { isMobileDevices } from 'utils/isMobile';
 import isPortkeyApp from 'utils/inPortkeyApp';
-import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { SignInDesignType, SocialLoginType, OperationTypeEnum, TSignUpVerifier } from 'types/index';
 import styles from './style.module.css';
 import { useRouter } from 'next/navigation';
@@ -64,7 +64,7 @@ import CommonBtn from 'components/CommonBtn';
 import ShowPageLoading from 'components/ShowPageLoading';
 import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
-import { handleSDKLogoutOffChain } from 'utils/handleLogout';
+import { getOriginChainIdByStorage, getOriginChainIdKeyName, handleSDKLogoutOffChain } from 'utils/handleLogout';
 import ContractRequest from 'contract/contractRequest';
 
 const components = {
@@ -174,7 +174,7 @@ export default function Login() {
     async (wallet: DIDWalletInfo) => {
       console.log('wallet is:', wallet);
       signInRef.current?.setOpen(false);
-      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
+      localStorage.setItem(getOriginChainIdKeyName(), wallet.chainId);
       setShowPageLoading(true);
       await handleFinish(WalletType.portkey, wallet);
       setShowPageLoading(false);
@@ -384,7 +384,10 @@ export default function Login() {
     async (v: string) => {
       let wallet;
       try {
-        wallet = await did.load(v, KEY_NAME);
+        const keyName = TelegramPlatform.isTelegramPlatform()
+          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+          : KEY_NAME;
+        wallet = await did.load(v, keyName);
         console.log('wallet is:', wallet.didWallet, !wallet.didWallet.aaInfo);
       } catch (err) {
         console.log(err);
@@ -397,7 +400,7 @@ export default function Login() {
       }
 
       const caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
-      const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+      const originChainId = getOriginChainIdByStorage();
       if (!originChainId) return;
       let caHash = caInfo?.caHash;
 
@@ -443,7 +446,10 @@ export default function Login() {
           if (recoveryStatus === 'pass') {
             console.log('wfs setLoginStatus=>5');
             store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-            await did.save(v || '', KEY_NAME);
+            const keyName = TelegramPlatform.isTelegramPlatform()
+              ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+              : KEY_NAME;
+            await did.save(v || '', keyName);
           }
         } else {
           if (wallet.didWallet.managementAccount?.address) {
@@ -454,7 +460,10 @@ export default function Login() {
             });
             if (result) {
               store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-              await did.save(v || '', KEY_NAME);
+              const keyName = TelegramPlatform.isTelegramPlatform()
+                ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+                : KEY_NAME;
+              await did.save(v || '', keyName);
             }
           }
         }
@@ -611,7 +620,7 @@ export default function Login() {
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
     window.localStorage.removeItem(KEY_NAME);
-    window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    window.localStorage.removeItem(getOriginChainIdKeyName());
     window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
     ContractRequest.get().resetConfig();
     setIsUnlockShow(false);

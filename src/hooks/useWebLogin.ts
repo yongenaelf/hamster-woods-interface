@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isMobileDevices } from 'utils/isMobile';
-import { LOGIN_EARGLY_KEY, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { LOGIN_EARGLY_KEY } from 'constants/platform';
 import { IPortkeyProvider } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import {
@@ -16,7 +16,14 @@ import {
 import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
-import { DIDWalletInfo, did, getChainInfo, managerApprove, socialLoginAuth } from '@portkey/did-ui-react';
+import {
+  DIDWalletInfo,
+  TelegramPlatform,
+  did,
+  getChainInfo,
+  managerApprove,
+  socialLoginAuth,
+} from '@portkey/did-ui-react';
 import isPortkeyApp from 'utils/inPortkeyApp';
 import openPageInDiscover from 'utils/openDiscoverPage';
 import getAccountInfoSync from 'utils/getAccountInfoSync';
@@ -38,6 +45,7 @@ import { getContractBasic } from '@portkey/contracts';
 import { TTokenApproveHandler } from '@portkey/trader-core';
 import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
 import { isLoginOnChain } from 'utils/wallet';
+import { getOriginChainIdByStorage } from 'utils/handleLogout';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -92,7 +100,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       return;
     }
 
-    const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+    const originChainId = getOriginChainIdByStorage();
     const wallet = await InstanceProvider.getWalletInstance();
     if (!wallet?.discoverInfo && !wallet?.portkeyInfo) {
       return;
@@ -370,7 +378,10 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>7');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
+        const keyName = TelegramPlatform.isTelegramPlatform()
+          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+          : KEY_NAME;
+        did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         setDidWalletInfo(walletInfo as PortkeyInfoType);
         setWallet({
           portkeyInfo: walletInfo as PortkeyInfoType,
@@ -432,7 +443,10 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>10');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        await did.save((walletInfo as PortkeyInfoType)?.pin || '', KEY_NAME);
+        const keyName = TelegramPlatform.isTelegramPlatform()
+          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+          : KEY_NAME;
+        await did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         console.log('wfs exe did save success!!');
         setDidWalletInfo(walletInfo as PortkeyInfoType);
         setWallet({
@@ -554,7 +568,10 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (WalletType.unknown === walletType) throw 'unknown';
 
     if (WalletType.portkey === walletType) {
-      const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', KEY_NAME);
+      const keyName = TelegramPlatform.isTelegramPlatform()
+        ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
+        : KEY_NAME;
+      const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', keyName);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
       const caHash = wallet.didWallet.aaInfo.accountInfo?.caHash || '';
       const chainInfo = await getChainInfo(curChain);
@@ -586,7 +603,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const tokenApprove: TTokenApproveHandler = useCallback(
     async (params) => {
-      const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || curChain) as ChainId;
+      const originChainId = (getOriginChainIdByStorage() || curChain) as ChainId;
 
       const caHash = did.didWallet.aaInfo.accountInfo?.caHash || '';
       const chainInfo = await getChainInfo(curChain);
