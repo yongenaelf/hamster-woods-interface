@@ -11,8 +11,9 @@ import { did } from '@portkey/did-ui-react';
 
 import { useRouter } from 'next/navigation';
 import useGetState from 'redux/state/useGetState';
-import { KEY_NAME } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
+import { STORAGE_KEYS, StorageUtils } from 'utils/storage.utils';
+import { initVConsole } from 'utils/vconsole';
 
 const MAX_SINGLE_REQUEST_TIME = 3 * 1000;
 const MAX_SHEDULE_TIME = 30 * 1000;
@@ -21,6 +22,10 @@ const Layout = dynamic(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const { children } = props;
+
+      useEffect(() => {
+        initVConsole();
+      }, []);
 
       const unLoadSourceRef = useRef(0);
 
@@ -88,7 +93,10 @@ const Layout = dynamic(
 
       useEffect(() => {
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME)) {
+          if (
+            window.localStorage.getItem(STORAGE_KEYS.WALLET_KEY_NAME) ||
+            window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))
+          ) {
             did.reset();
             console.log('wfs setLoginStatus=>1');
             store.dispatch(setLoginStatus(LoginStatus.LOCK));

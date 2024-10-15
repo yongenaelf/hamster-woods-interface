@@ -15,7 +15,7 @@ import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
 import { isJWTExpired } from 'utils/common';
 import { useETransferAccounts } from './useAddress';
-import { getOriginChainIdByStorage } from 'utils/handleLogout';
+import { StorageUtils } from 'utils/storage.utils';
 
 export function useQueryAuthToken() {
   const { walletInfo, walletType, isLogin, isOnChainLogin } = useGetState();
@@ -138,7 +138,7 @@ export function useQueryAuthToken() {
   const getCaInfo: () => Promise<{ caHash: string; originChainId: ChainId; caAddress: string }> =
     useCallback(async () => {
       if (walletType === WalletType.portkey) {
-        const originChainId = (getOriginChainIdByStorage() || '') as ChainId;
+        const originChainId = (StorageUtils.getOriginChainId() || '') as ChainId;
 
         const caInfo = did.didWallet.aaInfo.accountInfo ?? did.didWallet.caInfo?.[originChainId];
 

@@ -6,7 +6,7 @@ import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import { LeftOutlined } from '@ant-design/icons';
 import styles from './style.module.css';
-import { getOriginChainIdByStorage } from 'utils/handleLogout';
+import { StorageUtils } from 'utils/storage.utils';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function MyAsset() {
     }
   }, [isLogin, isOnChainLogin, router, walletType]);
 
-  const originChainId = getOriginChainIdByStorage() || '';
+  const originChainId = StorageUtils.getOriginChainId() || '';
   return (
     <div className={styles.asset}>
       <PortkeyAssetProvider

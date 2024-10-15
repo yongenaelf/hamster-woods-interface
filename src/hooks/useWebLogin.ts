@@ -39,13 +39,12 @@ import { NetworkType } from 'constants/index';
 import { sleep } from 'utils/common';
 import { getSyncHolder, trackLoginInfo } from 'utils/trackAddressInfo';
 import discoverUtils from 'utils/discoverUtils';
-import { KEY_NAME } from 'constants/platform';
 import { aelf } from '@portkey/utils';
 import { getContractBasic } from '@portkey/contracts';
 import { TTokenApproveHandler } from '@portkey/trader-core';
 import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
 import { isLoginOnChain } from 'utils/wallet';
-import { getOriginChainIdByStorage } from 'utils/handleLogout';
+import { STORAGE_KEYS, StorageUtils } from 'utils/storage.utils';
 
 export type DiscoverDetectState = 'unknown' | 'detected' | 'not-detected';
 
@@ -99,7 +98,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       return;
     }
 
-    const originChainId = getOriginChainIdByStorage();
+    const originChainId = StorageUtils.getOriginChainId();
     const wallet = await InstanceProvider.getWalletInstance();
     if (!wallet?.discoverInfo && !wallet?.portkeyInfo) {
       return;
@@ -376,9 +375,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>7');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        const keyName = TelegramPlatform.isTelegramPlatform()
-          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-          : KEY_NAME;
+        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
         did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         setDidWalletInfo(walletInfo as PortkeyInfoType);
         setWallet({
@@ -441,9 +439,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         console.log('wfs setLoginStatus=>10');
         store.dispatch(setLoginStatus(LoginStatus.LOGGED));
       } else if (type === WalletType.portkey) {
-        const keyName = TelegramPlatform.isTelegramPlatform()
-          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-          : KEY_NAME;
+        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
         await did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         console.log('wfs exe did save success!!');
         setDidWalletInfo(walletInfo as PortkeyInfoType);
@@ -566,9 +563,8 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
     if (WalletType.unknown === walletType) throw 'unknown';
 
     if (WalletType.portkey === walletType) {
-      const keyName = TelegramPlatform.isTelegramPlatform()
-        ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-        : KEY_NAME;
+      const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
       const wallet = await did.load(walletInfo?.portkeyInfo?.pin || '', keyName);
       if (!wallet.didWallet.managementAccount) throw 'no managementAccount';
       const caHash = wallet.didWallet.aaInfo.accountInfo?.caHash || '';
@@ -601,7 +597,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
 
   const tokenApprove: TTokenApproveHandler = useCallback(
     async (params) => {
-      const originChainId = (getOriginChainIdByStorage() || curChain) as ChainId;
+      const originChainId = (StorageUtils.getOriginChainId() || curChain) as ChainId;
 
       const caHash = did.didWallet.aaInfo.accountInfo?.caHash || '';
       const chainInfo = await getChainInfo(curChain);
