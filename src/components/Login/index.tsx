@@ -53,7 +53,6 @@ import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
 import { DEFAULT_PIN } from 'constants/login';
-import { loginOptTip } from 'constants/tip';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
 import showMessage from 'utils/setGlobalComponentsInfo';
@@ -64,8 +63,9 @@ import CommonBtn from 'components/CommonBtn';
 import ShowPageLoading from 'components/ShowPageLoading';
 import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
-import { getOriginChainIdByStorage, getOriginChainIdKeyName, handleSDKLogoutOffChain } from 'utils/handleLogout';
+import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 import ContractRequest from 'contract/contractRequest';
+import { STORAGE_KEYS, StorageUtils } from 'utils/storage.utils';
 
 const components = {
   phone: PhoneIcon,
@@ -174,7 +174,7 @@ export default function Login() {
     async (wallet: DIDWalletInfo) => {
       console.log('wallet is:', wallet);
       signInRef.current?.setOpen(false);
-      localStorage.setItem(getOriginChainIdKeyName(), wallet.chainId);
+      StorageUtils.setOriginChainId(wallet.chainId);
       setShowPageLoading(true);
       await handleFinish(WalletType.portkey, wallet);
       setShowPageLoading(false);
@@ -200,7 +200,7 @@ export default function Login() {
       if (createPendingInfo.createType === 'register') {
         return;
       }
-      window.localStorage.setItem(PORTKEY_LOGIN_SESSION_ID_KEY, createPendingInfo.sessionId);
+      StorageUtils.setSessionStorage(createPendingInfo.sessionId);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
     },
@@ -248,7 +248,10 @@ export default function Login() {
       //   loginEagerly();
       //   return;
       // }
-      if (window.localStorage.getItem(KEY_NAME)) {
+      if (
+        window.localStorage.getItem(KEY_NAME) ||
+        window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))
+      ) {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
@@ -384,10 +387,24 @@ export default function Login() {
     async (v: string) => {
       let wallet;
       try {
-        const keyName = TelegramPlatform.isTelegramPlatform()
-          ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-          : KEY_NAME;
+        const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
         wallet = await did.load(v, keyName);
+
+        if (!wallet?.didWallet.managementAccount) {
+          const preWallet = await did.load(v, KEY_NAME);
+          if (preWallet?.didWallet?.managementAccount) {
+            wallet = preWallet;
+            localStorage.setItem(keyName, localStorage.getItem(KEY_NAME) || '');
+            const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+            sessionId && StorageUtils.setSessionStorage(sessionId);
+          } else {
+            StorageUtils.removeWallet();
+            window.location.reload();
+          }
+        }
+        wallet.didWallet.originChainId && StorageUtils.setOriginChainId(wallet.didWallet.originChainId);
+
         console.log('wallet is:', wallet.didWallet, !wallet.didWallet.aaInfo);
       } catch (err) {
         console.log(err);
@@ -400,7 +417,7 @@ export default function Login() {
       }
 
       const caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
-      const originChainId = getOriginChainIdByStorage();
+      const originChainId = StorageUtils.getOriginChainId();
       if (!originChainId) return;
       let caHash = caInfo?.caHash;
 
@@ -436,7 +453,7 @@ export default function Login() {
         await handleFinish(WalletType.portkey, walletInfo);
         setShowPageLoading(false);
       }
-      const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+      const sessionId = StorageUtils.getSessionStorage();
       if (!isLoginOnChain()) {
         if (sessionId && originChainId) {
           const { recoveryStatus } = await did.didWallet.getLoginStatus({
@@ -446,9 +463,8 @@ export default function Login() {
           if (recoveryStatus === 'pass') {
             console.log('wfs setLoginStatus=>5');
             store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-            const keyName = TelegramPlatform.isTelegramPlatform()
-              ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-              : KEY_NAME;
+            const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
             await did.save(v || '', keyName);
           }
         } else {
@@ -460,9 +476,8 @@ export default function Login() {
             });
             if (result) {
               store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-              const keyName = TelegramPlatform.isTelegramPlatform()
-                ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-                : KEY_NAME;
+              const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
               await did.save(v || '', keyName);
             }
           }
@@ -473,6 +488,7 @@ export default function Login() {
   );
 
   useEffect(() => {
+    console.log(isLock, 'isLock=====111');
     if (TelegramPlatform.isTelegramPlatform() && isLock) {
       unlock(DEFAULT_PIN);
     }
@@ -605,7 +621,7 @@ export default function Login() {
   const onForgetPin = useCallback(() => {
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
-      window.localStorage.removeItem(KEY_NAME);
+      StorageUtils.removeWallet();
       did.reset();
     } else if (walletType === WalletType.discover) {
       window.localStorage.removeItem(LOGIN_EARGLY_KEY);
@@ -619,9 +635,9 @@ export default function Login() {
     store.dispatch(setChessboardResetStart(true));
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
-    window.localStorage.removeItem(KEY_NAME);
-    window.localStorage.removeItem(getOriginChainIdKeyName());
-    window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+    StorageUtils.removeWallet();
+    StorageUtils.removeOriginChainId();
+    StorageUtils.removeSessionStorage();
     ContractRequest.get().resetConfig();
     setIsUnlockShow(false);
     showMessage.hideLoading();

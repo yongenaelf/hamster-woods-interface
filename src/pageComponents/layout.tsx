@@ -34,6 +34,7 @@ import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
 import { getCurrentIp } from 'utils/ip';
 import { sleep } from '@portkey/utils';
+import { STORAGE_KEYS, StorageUtils } from 'utils/storage.utils';
 
 did.setConfig({
   referralInfo: {
@@ -107,8 +108,13 @@ const Layout = dynamic(
         if (!isLogin && !isOnChainLogin) {
           router.replace('/login');
         }
+
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME) && isInit) {
+          if (
+            (window.localStorage.getItem(KEY_NAME) ||
+              window.localStorage.getItem(StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME))) &&
+            isInit
+          ) {
             did.reset();
             console.log('wfs setLoginStatus=>12', pathname);
             store.dispatch(setLoginStatus(LoginStatus.LOCK));

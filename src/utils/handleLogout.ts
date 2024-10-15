@@ -1,4 +1,4 @@
-import { did, TelegramPlatform } from '@portkey/did-ui-react';
+import { did } from '@portkey/did-ui-react';
 import { ChainId } from '@portkey/provider-types';
 import { store } from 'redux/store';
 import {
@@ -10,29 +10,18 @@ import {
 } from 'redux/reducer/info';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
 import { DEFAULT_PIN } from 'constants/login';
 import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
-
-export const getOriginChainIdKeyName = () => {
-  return TelegramPlatform.isTelegramPlatform() ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}` : KEY_NAME;
-};
-
-export const getOriginChainIdByStorage = () => {
-  const keyName = getOriginChainIdKeyName();
-
-  return localStorage.getItem(keyName);
-};
+import { STORAGE_KEYS, StorageUtils } from './storage.utils';
 
 export const handleSDKLogout = async () => {
-  const originChainId = getOriginChainIdByStorage();
+  const originChainId = StorageUtils.getOriginChainId();
+  const keyName = StorageUtils.getStorageKey(STORAGE_KEYS.WALLET_KEY_NAME);
+
   if (originChainId) {
     try {
-      const keyName = TelegramPlatform.isTelegramPlatform()
-        ? `${KEY_NAME}-${TelegramPlatform.getTelegramUserId()}`
-        : KEY_NAME;
       await did.load(DEFAULT_PIN, keyName);
       await did.logout({
         chainId: originChainId as ChainId,
@@ -42,7 +31,7 @@ export const handleSDKLogout = async () => {
       console.error('portkey: error', error);
     }
   }
-  window.localStorage.removeItem(KEY_NAME);
+  StorageUtils.removeWallet();
 
   ETransferConfig.setConfig({
     accountInfo: {
@@ -59,13 +48,13 @@ export const handleSDKLogout = async () => {
   store.dispatch(setChessboardResetStart(true));
   store.dispatch(setChessboardTotalStep(0));
   store.dispatch(setIsNeedSyncAccountInfo(true));
-  window.localStorage.removeItem(getOriginChainIdKeyName());
-  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+  StorageUtils.removeOriginChainId();
+  StorageUtils.removeSessionStorage();
   ContractRequest.get().resetConfig();
 };
 
 export const handleSDKLogoutOffChain = () => {
-  window.localStorage.removeItem(KEY_NAME);
+  StorageUtils.removeWallet();
   store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
   store.dispatch(setWalletInfo(null));
   store.dispatch(setWalletType(WalletType.unknown));
@@ -74,7 +63,7 @@ export const handleSDKLogoutOffChain = () => {
   store.dispatch(setChessboardResetStart(true));
   store.dispatch(setChessboardTotalStep(0));
   store.dispatch(setIsNeedSyncAccountInfo(true));
-  window.localStorage.removeItem(getOriginChainIdKeyName());
-  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+  StorageUtils.removeOriginChainId();
+  StorageUtils.removeSessionStorage();
   ContractRequest.get().resetConfig();
 };
