@@ -398,8 +398,7 @@ export default function Login() {
             localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
             localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
           } else {
-            StorageUtils.removeWallet();
-            window.location.reload();
+            TelegramPlatform.isTelegramPlatform() && (StorageUtils.removeWallet(), window.location.reload());
           }
         }
         wallet.didWallet.originChainId && StorageUtils.setOriginChainId(wallet.didWallet.originChainId);
