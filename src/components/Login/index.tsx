@@ -113,7 +113,7 @@ export default function Login() {
       const signResult = await onSignInHandler(value);
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
-      if (signResult.nextStep === 'SetPinAndAddManager') {
+      if (signResult.nextStep === 'SetPinAndAddManager' && TelegramPlatform.isTelegramPlatform()) {
         try {
           const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
           const approvedList = signResult.value.approvedList;
