@@ -18,6 +18,8 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
+  ConfigProvider,
+  LifeCycleType,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -64,7 +66,7 @@ import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
 import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 import ContractRequest from 'contract/contractRequest';
-import { STORAGE_KEYS, StorageUtils } from 'utils/storage.utils';
+import { StorageUtils } from 'utils/storage.utils';
 
 const components = {
   phone: PhoneIcon,
@@ -78,11 +80,6 @@ const components = {
 
 type IconType = 'apple' | 'google' | 'portkey' | 'email' | 'phone' | 'qrcode' | 'telegram';
 
-interface IAuthenticationInfo {
-  googleAccessToken?: string;
-  appleIdToken?: string;
-}
-
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
   const isGettingTelegramAuthRef = useRef(false);
@@ -93,6 +90,12 @@ export default function Login() {
 
   const { configInfo } = useGetState();
   const { curChain } = configInfo!;
+
+  const isTelegramPlatform = useMemo(() => {
+    // TODO test data
+    // return true;
+    return TelegramPlatform.isTelegramPlatform();
+  }, []);
 
   const [showPageLoading, setShowPageLoading] = useState(false);
 
@@ -113,7 +116,7 @@ export default function Login() {
       const signResult = await onSignInHandler(value);
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
-      if (signResult.nextStep === 'SetPinAndAddManager' && TelegramPlatform.isTelegramPlatform()) {
+      if (signResult.nextStep === 'SetPinAndAddManager' && isTelegramPlatform) {
         try {
           const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
           const approvedList = signResult.value.approvedList;
@@ -251,7 +254,7 @@ export default function Login() {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
-      } else if (TelegramPlatform.isTelegramPlatform()) {
+      } else if (isTelegramPlatform) {
         // Automatically obtain Telegram authorization
         isGettingTelegramAuthRef.current = true;
         handleTeleGram();
@@ -259,7 +262,7 @@ export default function Login() {
         handlePortKey();
       }
     }
-  }, [isLock, handleTeleGram, handlePortKey]);
+  }, [isLock, handleTeleGram, handlePortKey, isTelegramPlatform]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();
@@ -278,17 +281,6 @@ export default function Login() {
   const closeModal = () => {
     setDrawerVisible(false);
     setModalVisible(false);
-  };
-
-  const handlePhone = () => {
-    discoverUtils.removeDiscoverStorageSign();
-    closeModal();
-    setStyle(styles.inputForm);
-    setDesign('Web2Design');
-    setCurrentLifeCircle({});
-    setTimeout(() => {
-      signInRef.current?.setOpen(true);
-    }, 500);
   };
 
   const handleQrcode = () => {
@@ -398,7 +390,7 @@ export default function Login() {
             localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
             localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
           } else {
-            TelegramPlatform.isTelegramPlatform() && (StorageUtils.removeWallet(), window.location.reload());
+            isTelegramPlatform && (StorageUtils.removeWallet(), window.location.reload());
           }
         }
         wallet.didWallet.originChainId && StorageUtils.setOriginChainId(wallet.didWallet.originChainId);
@@ -482,15 +474,15 @@ export default function Login() {
         }
       }
     },
-    [configInfo, handleFinish],
+    [configInfo, handleFinish, isTelegramPlatform],
   );
 
   useEffect(() => {
     console.log(isLock, 'isLock=====111');
-    if (TelegramPlatform.isTelegramPlatform() && isLock) {
+    if (isTelegramPlatform && isLock) {
       unlock(DEFAULT_PIN);
     }
-  }, [isLock, unlock]);
+  }, [isLock, isTelegramPlatform, unlock]);
 
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
@@ -508,7 +500,7 @@ export default function Login() {
           zkLoginInfo: res.zkLoginInfo,
         },
       ];
-      if (TelegramPlatform.isTelegramPlatform()) {
+      if (isTelegramPlatform) {
         const params = {
           pin: DEFAULT_PIN,
           type: 'register' as AddManagerType,
@@ -531,7 +523,7 @@ export default function Login() {
         }, 500);
       }
     },
-    [createWallet, curChain, handlePortKeyLoginFinish],
+    [createWallet, curChain, handlePortKeyLoginFinish, isTelegramPlatform],
   );
 
   const onSignUp = useCallback(
@@ -639,10 +631,10 @@ export default function Login() {
     ContractRequest.get().resetConfig();
     setIsUnlockShow(false);
     showMessage.hideLoading();
-    if (TelegramPlatform.isTelegramPlatform()) {
+    if (isTelegramPlatform) {
       TelegramPlatform.close();
     }
-  }, [walletType]);
+  }, [isTelegramPlatform, walletType]);
 
   const forgetPinElement = useMemo(() => {
     return (
@@ -656,16 +648,44 @@ export default function Login() {
     );
   }, [onForgetPin]);
 
+  const onLifeCycleChange = useCallback(
+    (liftCycle: LifeCycleType) => {
+      console.log(liftCycle, 'liftCycle===');
+      if (!isTelegramPlatform) return;
+      if (liftCycle === 'GuardianApproval' || liftCycle === 'Step2OfSkipGuardianApprove') {
+        ConfigProvider.setGlobalConfig({
+          globalLoadingHandler: undefined,
+        });
+        return;
+      }
+      // if (liftCycle === 'SetPinAndAddManager') {
+      //   ConfigProvider.setGlobalConfig({
+      //     globalLoadingHandler: {
+      //       onSetLoading: (loadingInfo) => {
+      //         console.log(loadingInfo, 'loadingInfo===SetPinAndAddManager');
+      //       },
+      //     },
+      //   });
+      //   return;
+      // }
+    },
+    [isTelegramPlatform],
+  );
+
   return (
     <div
-      className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
+      className={`cursor-custom ${
+        isTelegramPlatform ? '' : `${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `
+      } `}
       style={{
-        backgroundImage: `url(${
-          require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
-            .default.src
-        })`,
+        backgroundImage: isTelegramPlatform
+          ? ''
+          : `url(${
+              require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+                .default.src
+            })`,
       }}>
-      {!isMobileStore ? (
+      {!isMobileStore && !isTelegramPlatform ? (
         <img
           className="z-10 w-[400px] h-[400px]"
           width={400}
@@ -674,7 +694,8 @@ export default function Login() {
           alt="logo"
         />
       ) : null}
-      {!TelegramPlatform.isTelegramPlatform() &&
+
+      {!isTelegramPlatform &&
         (isLock ? (
           <CommonBtn
             onClick={() => {
@@ -718,7 +739,7 @@ export default function Login() {
       </Modal>
 
       <SignIn
-        pin={TelegramPlatform.isTelegramPlatform() ? DEFAULT_PIN : undefined}
+        pin={isTelegramPlatform ? DEFAULT_PIN : undefined}
         keyboard
         ref={signInRef}
         design={design}
@@ -726,6 +747,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
+        onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
         defaultChainId={curChain}
@@ -747,7 +769,7 @@ export default function Login() {
         footer={forgetPinElement}
       />
 
-      <ShowPageLoading open={showPageLoading} />
+      {!isTelegramPlatform && <ShowPageLoading open={showPageLoading} />}
     </div>
   );
 }

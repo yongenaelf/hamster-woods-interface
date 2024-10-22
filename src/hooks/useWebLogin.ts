@@ -17,6 +17,7 @@ import { LoginStatus } from 'redux/types/reducerTypes';
 import { store, useSelector } from 'redux/store';
 import { AccountsType, IDiscoverInfo, SocialLoginType, WalletType, PortkeyInfoType, WalletInfoType } from 'types';
 import {
+  ConfigProvider,
   DIDWalletInfo,
   TelegramPlatform,
   did,
@@ -260,11 +261,29 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   };
 
   const handleGoogle = async () => {
+    // TODO
+    // TelegramPlatform.isTelegramPlatform() &&
+    // ConfigProvider.setGlobalConfig({
+    //   globalLoadingHandler: {
+    //     onSetLoading: (loadingInfo) => {
+    //       console.log(loadingInfo, 'loadingInfo===');
+    //     },
+    //   },
+    // });
     handleThirdPart(SocialLoginType.GOOGLE);
   };
 
   const handleTeleGram = useCallback(() => {
     console.log('wfs clicked login button', new Date());
+    // TODO
+    TelegramPlatform.isTelegramPlatform() &&
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: {
+          onSetLoading: (loadingInfo) => {
+            console.log(loadingInfo, 'loadingInfo===');
+          },
+        },
+      });
     handleThirdPart(SocialLoginType.TELEGRAM);
   }, []);
 
@@ -353,7 +372,9 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
   const handleFinish = useCallback(
     async (type: WalletType, walletInfo: PortkeyInfoType | IDiscoverInfo) => {
       console.log('wallet', type, walletInfo);
-
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: undefined,
+      });
       if (type === WalletType.discover) {
         store.dispatch(setWalletType(type));
         localStorage.setItem(LOGIN_EARGLY_KEY, 'true');

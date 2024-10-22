@@ -2513,23 +2513,23 @@
     schema-utils "^4.2.0"
     source-map "^0.7.3"
 
-"@portkey/accounts@2.13.1", "@portkey/accounts@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/accounts/-/accounts-2.13.1.tgz#2f91ecdcee641f09dafd4253f9ed6a78ca2024e9"
-  integrity sha512-EvZX9Jw/+ZyE7EX4DIRGoOXC2tSXBYkhh9REu2PhkAY07CxeM5xDpp+VmRyFP+HPUxf7iNOstxMo5hiGXDcY4g==
+"@portkey/accounts@2.14.0-alpha.0", "@portkey/accounts@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/accounts/-/accounts-2.14.0-alpha.0.tgz#58b2012a99427b0362f177aaab5491a5c864ed73"
+  integrity sha512-JBsVptytXwkxqoT52zld9DzzFl94kx9OngcRb8LCqhk8NQ74ZutPwtmuwKyCIbQhuQoIT8xHB7p3u0BAQdkEsA==
   dependencies:
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
-    "@portkey/validator" "^2.13.1"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
+    "@portkey/validator" "^2.14.0-alpha.0"
 
-"@portkey/contracts@2.13.1", "@portkey/contracts@^2.13.1", "@portkey/contracts@^2.7.1-alpha.4":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/contracts/-/contracts-2.13.1.tgz#3e8a41a71d37394f0c5ec865d1ef26996980c397"
-  integrity sha512-Y62yTg5r/Cvu4FIWzeblR5JM3e/GOTwKB/ghBoQf7GRi0qE7QGkHToFVLJaCSlS4IxGY+Ud0xwlnigKStm6bFQ==
+"@portkey/contracts@2.14.0-alpha.0", "@portkey/contracts@^2.14.0-alpha.0", "@portkey/contracts@^2.7.1-alpha.4":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/contracts/-/contracts-2.14.0-alpha.0.tgz#8d230f8643e7a16e60ca757d6a2e00a0c3bac2ca"
+  integrity sha512-iAYoPDz5c5jJPlULkEXL91LddFzapS02cwlw9zH5vz8L1WV6UwkPSDm7vlAbhFc/34C/nUH3fOElvv8hTKyyBA==
   dependencies:
     "@portkey/provider-types" "^2.1.0"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
 
 "@portkey/detect-provider@2.2.4":
   version "2.2.4"
@@ -2545,24 +2545,24 @@
   dependencies:
     "@portkey/provider-types" "^2.3.3"
 
-"@portkey/did-ui-react@2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/did-ui-react/-/did-ui-react-2.13.1.tgz#ef20755e2c83bb12a4c0bab647bab9f8351592ec"
-  integrity sha512-W2qODFbhW0KPnNEOU1fT3kiMKZ1LEx3HMmD9fk72va1FBgxArzHJhsDH1t5emzrCTkCTKThjH9s89X/nFXQkQg==
+"@portkey/did-ui-react@2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/did-ui-react/-/did-ui-react-2.14.0-alpha.0.tgz#c83a71caf1c809c47a56b19b2423e28765f7c732"
+  integrity sha512-VvivtyIG45k09Hpo2x2PZbBgnY9FZ7lGQ8zIX0yROFZJy+aSIuYau0515eb/WR6/FHILJIyRl5BetQQluLy7PQ==
   dependencies:
     "@matt-block/react-recaptcha-v2" "^2.0.0"
-    "@portkey/accounts" "^2.13.1"
-    "@portkey/contracts" "^2.13.1"
-    "@portkey/did" "^2.13.1"
-    "@portkey/graphql" "^2.13.1"
-    "@portkey/onboarding" "^2.13.1"
-    "@portkey/ramp" "^2.13.1"
-    "@portkey/request" "^2.13.1"
-    "@portkey/services" "^2.13.1"
-    "@portkey/socket" "^2.13.1"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
-    "@portkey/validator" "^2.13.1"
+    "@portkey/accounts" "^2.14.0-alpha.0"
+    "@portkey/contracts" "^2.14.0-alpha.0"
+    "@portkey/did" "^2.14.0-alpha.0"
+    "@portkey/graphql" "^2.14.0-alpha.0"
+    "@portkey/onboarding" "^2.14.0-alpha.0"
+    "@portkey/ramp" "^2.14.0-alpha.0"
+    "@portkey/request" "^2.14.0-alpha.0"
+    "@portkey/services" "^2.14.0-alpha.0"
+    "@portkey/socket" "^2.14.0-alpha.0"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
+    "@portkey/validator" "^2.14.0-alpha.0"
     "@rc-component/portal" "1.0.2"
     antd "4.24.14"
     antd-mobile "5.33.0"
@@ -2571,43 +2571,44 @@
     lottie-web "5.9.6"
     moment "^2.29.4"
     query-string "^7.1.1"
+    rc-notification "^4.0.0"
     react-i18next "^11.18.6"
     react-qrcode-logo "2.9.0"
     react-use "^17.4.0"
     spark-md5 "^3.0.2"
     uuid "^8.3.2"
 
-"@portkey/did@2.13.1", "@portkey/did@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/did/-/did-2.13.1.tgz#7da32b4904360918eb4162e4a89240534bef932a"
-  integrity sha512-tqR6O7T8S6rBRIDkFXmXC3KJYkFx+F6OJY+kZ503BQp25kSCwdQ5abLi7CfB6C+WCKmKTdl7xz2dBKNwVL21qg==
+"@portkey/did@2.14.0-alpha.0", "@portkey/did@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/did/-/did-2.14.0-alpha.0.tgz#6c8aade94705c03585dd5cfa9473bccca9d170de"
+  integrity sha512-lxm13fsWwP+mSszZjeURlFkShiFdhQjvd0DMgk6JuEtwz3el1LWRdbTRkTXETN4iSKds54c8XSgbO+Ldd2oScw==
   dependencies:
-    "@portkey/accounts" "^2.13.1"
-    "@portkey/contracts" "^2.13.1"
-    "@portkey/graphql" "^2.13.1"
-    "@portkey/request" "^2.13.1"
-    "@portkey/services" "^2.13.1"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/accounts" "^2.14.0-alpha.0"
+    "@portkey/contracts" "^2.14.0-alpha.0"
+    "@portkey/graphql" "^2.14.0-alpha.0"
+    "@portkey/request" "^2.14.0-alpha.0"
+    "@portkey/services" "^2.14.0-alpha.0"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
 
-"@portkey/graphql@2.13.1", "@portkey/graphql@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/graphql/-/graphql-2.13.1.tgz#9d0dc21854040dd9229b666a9a1a8929637cd3a6"
-  integrity sha512-WyJ0g2Y8SchyilqTT+0C4Hv7PwhQ1tzFedoQOiyVa8fxoIgyrLCJFyhwbyl77vZ11nWIzJO34is7bRxcQneEgA==
+"@portkey/graphql@2.14.0-alpha.0", "@portkey/graphql@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/graphql/-/graphql-2.14.0-alpha.0.tgz#60907716b78defda17ba57d893599c695c511e42"
+  integrity sha512-NRqldgFBDWfKpyTEXxG5mkNxhf/y5Rsfw0+4l/vLexELjKlBReNYVCMSgokzGalJvrIf6VHo8Ek5STm/j6Y/vA==
   dependencies:
     "@apollo/client" "^3.7.3"
-    "@portkey/types" "^2.13.1"
+    "@portkey/types" "^2.14.0-alpha.0"
     graphql "^16.6.0"
     subscriptions-transport-ws "^0.11.0"
 
-"@portkey/onboarding@2.13.1", "@portkey/onboarding@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/onboarding/-/onboarding-2.13.1.tgz#19b0c511468e9ac2c2f5433ced8ffb6aba8e73f7"
-  integrity sha512-qSbocaNTsQ3c9R9mE2ubx6IXt+X2Qz0R58mXnkha5xB0lBTZSK3Kvh8Ep22kpizmKacBqh0uzgLFAzjRjwPXbA==
+"@portkey/onboarding@2.14.0-alpha.0", "@portkey/onboarding@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/onboarding/-/onboarding-2.14.0-alpha.0.tgz#fcca194a8b8e2b57d992274b0f2bcd7b121b612a"
+  integrity sha512-aNc4I6YeG3LXRBvChYVnLqyXElGVC6LutpHsSbcilgmqoqwChMp/WQOtC9Wftstnb0C2xeiXS4BMGqs3WkQoyQ==
   dependencies:
     "@portkey/detect-provider" "^2.0.0-alpha.2"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
     bowser "^2.11.0"
     query-string "^7.1.1"
 
@@ -2627,42 +2628,42 @@
     "@portkey/types" "^2.0.0-alpha.0"
     "@types/readable-stream" "^2.3.15"
 
-"@portkey/ramp@2.13.1", "@portkey/ramp@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/ramp/-/ramp-2.13.1.tgz#3d5184e31576297d6bad68c1e1bfd7b290d34e6a"
-  integrity sha512-u+VzMbbuTdYuBK9lD6YwhNto/9RMGJ6DDr4vMnK5ca7KUftPeeDkrFhAF9DgC4FnJYLb/4XSIxnY/wVWylAvVA==
+"@portkey/ramp@2.14.0-alpha.0", "@portkey/ramp@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/ramp/-/ramp-2.14.0-alpha.0.tgz#32e4bf7a744fa8beeb595621ea6ff04610ee3d37"
+  integrity sha512-LdPaBrLM4TOJbkrgrmD432+J8KExr9tvzpSqDcauSLJGcB3zAdybpYk/pA+YSVM0ScV6tHribDYo5BMh9civ1w==
   dependencies:
-    "@portkey/request" "^2.13.1"
-    "@portkey/socket" "^2.13.1"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/request" "^2.14.0-alpha.0"
+    "@portkey/socket" "^2.14.0-alpha.0"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
     query-string "^7.1.1"
 
-"@portkey/request@2.13.1", "@portkey/request@^2.13.1", "@portkey/request@^2.7.1-alpha.4":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/request/-/request-2.13.1.tgz#db22366e7c2eca4a16f412ea4274ae4c0aad88d0"
-  integrity sha512-lBUK/tZ/rMGIwYa/3z/KU7xAwueenCexwhfzdQlhNVwFAbV6d1mbm5ORZL2kE1m+3CmLW+1NyaVIPE9RBW0Qlw==
+"@portkey/request@2.14.0-alpha.0", "@portkey/request@^2.14.0-alpha.0", "@portkey/request@^2.7.1-alpha.4":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/request/-/request-2.14.0-alpha.0.tgz#cebc9f9188f95dfd82cb4aeef5c886bf106e72b9"
+  integrity sha512-kQIX6ftJ/7ixgjlY/+pf1xAFjJ7TnvZ2bNdisV9214LvzcrdwMdn9ydkTdpG7s6ap7WfS6BYYYhKWA6eH9zdHA==
   dependencies:
-    "@portkey/types" "^2.13.1"
+    "@portkey/types" "^2.14.0-alpha.0"
     query-string "^7.1.1"
 
-"@portkey/services@2.13.1", "@portkey/services@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/services/-/services-2.13.1.tgz#1439d045c4cbd5b39d308859283353dd202eba4c"
-  integrity sha512-aC/n04Zl48Y0SBK1FcxQVFv3GsxkNHihRlJhjwX1dAE1qumOx2w6JEOjVvDy3wNMGBl/65n9SpPXZ+JBjtU1Ww==
+"@portkey/services@2.14.0-alpha.0", "@portkey/services@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/services/-/services-2.14.0-alpha.0.tgz#3a5600f8437101745f93553cfc90a202e55fc7ab"
+  integrity sha512-lVjZN2YqFLMgPKDApJBBoUpNtnH5ODHLmole9ZfwG/6jtfoG+aquT/5KYn5IMVoUh+HEwW/98slsioHE93yhVQ==
   dependencies:
-    "@portkey/graphql" "^2.13.1"
-    "@portkey/request" "^2.13.1"
-    "@portkey/types" "^2.13.1"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/graphql" "^2.14.0-alpha.0"
+    "@portkey/request" "^2.14.0-alpha.0"
+    "@portkey/types" "^2.14.0-alpha.0"
+    "@portkey/utils" "^2.14.0-alpha.0"
 
-"@portkey/socket@2.13.1", "@portkey/socket@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/socket/-/socket-2.13.1.tgz#7fc04bdd8c8f3ffb698aeba11d03049ec23a4aa7"
-  integrity sha512-I5B0zAClTl9k1mlMXgik8mpf2YoJA+XWPnJ0cyd7Br86ywZLs16aifQwNqqcmkW773422F0H2mBXx9mVaB6aNg==
+"@portkey/socket@2.14.0-alpha.0", "@portkey/socket@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/socket/-/socket-2.14.0-alpha.0.tgz#7ff31a72545cca053c1147b7040a0612a1cc1167"
+  integrity sha512-yhnUh9+bRG9vAAilMMYrIchkdvyIKRwdPfQIHgebLaMfL2Jmfq1wukBb/zVjEJhnRLCftC3CWw5/IOxeXMnuHA==
   dependencies:
     "@abp/signalr" "^7.0.0"
-    "@portkey/utils" "^2.13.1"
+    "@portkey/utils" "^2.14.0-alpha.0"
 
 "@portkey/socket@^2.8.0":
   version "2.10.5"
@@ -2726,22 +2727,22 @@
     "@portkey/trader-types" "^0.0.1-alpha.17"
     loadsh "^0.0.4"
 
-"@portkey/types@2.13.1", "@portkey/types@2.6.6", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.13.1", "@portkey/types@^2.7.1-alpha.4":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/types/-/types-2.13.1.tgz#c0dc9742d65ca5600924f484abe0590d8f672855"
-  integrity sha512-htWT6Uwvyao9k9hUCMW51xU/Rzg3RUxsXAGrnq0YQ/Hv81loUPdgxo/4fsEYfK9y8mTVMbWhe4CmCJNaxD8SGA==
+"@portkey/types@2.14.0-alpha.0", "@portkey/types@2.6.6", "@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.14.0-alpha.0", "@portkey/types@^2.7.1-alpha.4":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.14.0-alpha.0.tgz#79dd60c60f810ea1f989fdbe12fd49e75b08203b"
+  integrity sha512-3WAq0fMQT87iKWDCjdcuY8VOpeJqCp6WOXp+dQxFwQmM9tycClBFXQD5iyJAd/wkqh0eVTtBxA+HB3m6zpzs9w==
 
-"@portkey/utils@2.13.1", "@portkey/utils@2.6.6", "@portkey/utils@^2.10.5", "@portkey/utils@^2.13.1", "@portkey/utils@^2.7.1-alpha.4":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/utils/-/utils-2.13.1.tgz#f4e53b7273159f806f070ade8f72f19a859a46ef"
-  integrity sha512-nccdajCYatH+4LS/PYLG24pg7SwbyLvQNoaTgoN8IzKvFWnlwNj6+5RRpOvYMfQGxpNtD+4+JZghfsb9YFJxog==
+"@portkey/utils@2.14.0-alpha.0", "@portkey/utils@2.6.6", "@portkey/utils@^2.10.5", "@portkey/utils@^2.14.0-alpha.0", "@portkey/utils@^2.7.1-alpha.4":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.14.0-alpha.0.tgz#a14721a8049169b8afe58fa593e52abaa9b05063"
+  integrity sha512-8q2KL7re4WO/VDYM62lq/tfm973wkasBGrCOyiSEkDY9ZQjJqd1uqKWmaEqSs9AKz3WPV3IcdUcbKdb7MZOs5g==
   dependencies:
     node-forge "^1.3.1"
 
-"@portkey/validator@2.13.1", "@portkey/validator@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.npmjs.org/@portkey/validator/-/validator-2.13.1.tgz#443ad34aa7547c99b8534f5d82f7535fa7d02f9e"
-  integrity sha512-+FsqqrxtWnrn3wLprDljXCdYy6JPfAjzRGscEMSC31VB1h6obVGjdaqqI/c8Bzhx0ixzm78LmqIPtSQ0o3x9SQ==
+"@portkey/validator@2.14.0-alpha.0", "@portkey/validator@^2.14.0-alpha.0":
+  version "2.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@portkey/validator/-/validator-2.14.0-alpha.0.tgz#a37fcee5d72d45303e59ea33944f65999ef5c8cc"
+  integrity sha512-ZhBBxv9MzXaMHZE6dZjAfN08CdYR3IA3tcqgbPg6+dh0i/bxq/a0lwiqbGwSdsFa7+1ibXA3rFxQnZO2+iMySw==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -12200,7 +12201,7 @@ rc-motion@^2.0.0, rc-motion@^2.0.1, rc-motion@^2.2.0, rc-motion@^2.3.0, rc-motio
     classnames "^2.2.1"
     rc-util "^5.43.0"
 
-rc-notification@~4.6.0, rc-notification@~4.6.1:
+rc-notification@^4.0.0, rc-notification@~4.6.0, rc-notification@~4.6.1:
   version "4.6.1"
   resolved "https://registry.npmjs.org/rc-notification/-/rc-notification-4.6.1.tgz#068e8674f4bd7926a447eca512915d4b41b15c91"
   integrity sha512-NSmFYwrrdY3+un1GvDAJQw62Xi9LNMSsoQyo95tuaYrcad5Bn9gJUL8AREufRxSQAQnr64u3LtP3EUyLYT6bhw==
@@ -13765,7 +13766,16 @@ string-convert@^0.2.0:
   resolved "https://registry.npmjs.org/string-convert/-/string-convert-0.2.1.tgz#6982cc3049fbb4cd85f8b24568b9d9bf39eeff97"
   integrity sha512-u/1tdPl4yQnPBjnVrmdLo9gtuLvELKsAoRapekWggdiQNvvvum+jYF329d84NAa660KQw7pB2n36KrIKVoXa3A==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -13859,7 +13869,14 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -15076,7 +15093,7 @@ wordwrap@^1.0.0:
   resolved "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
   resolved "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
@@ -15089,6 +15106,15 @@ wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
   dependencies:
     ansi-styles "^4.0.0"
     string-width "^4.1.0"
