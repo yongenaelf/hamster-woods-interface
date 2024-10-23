@@ -185,7 +185,7 @@ export default function Login() {
 
   const beforeLastGuardianApprove = useCallback(
     ({ pin, chainId, caInfo }: { pin: string; chainId: ChainId; caInfo: any }) => {
-      if (TelegramPlatform.isTelegramPlatform()) {
+      if (isTelegramPlatform) {
         handleFinish(WalletType.portkey, {
           pin,
           chainId,
@@ -193,7 +193,7 @@ export default function Login() {
         });
       }
     },
-    [handleFinish],
+    [handleFinish, isTelegramPlatform],
   );
   const handlePortKeyLoginFinish = useCallback(
     async (wallet: DIDWalletInfo) => {
