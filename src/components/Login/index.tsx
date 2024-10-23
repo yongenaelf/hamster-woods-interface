@@ -232,6 +232,17 @@ export default function Login() {
     [handlePortKeyLoginFinish],
   );
 
+  const beforeCreatePending = useCallback(
+    async (createPendingInfo: CreatePendingInfo) => {
+      if (createPendingInfo.createType === 'register') {
+        return;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
+    },
+    [handlePortKeyLoginFinish],
+  );
+
   const createWallet = useLoginWallet({
     onCreatePending: handleCreatePending,
     onError: handleSDKLogoutOffChain,
@@ -770,6 +781,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
+        beforeCreatePending={beforeCreatePending}
         onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
