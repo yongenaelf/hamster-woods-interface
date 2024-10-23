@@ -11,13 +11,12 @@ import { store } from 'redux/store';
 import { setIsMobile, setLoginStatus } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 import { Store } from 'utils/store';
-import { handleSDKLogout } from 'utils/handleLogout';
 import { ConfigProvider, TelegramPlatform, did } from '@portkey/did-ui-react';
 
 import { useRouter, usePathname } from 'next/navigation';
 
 import useGetState from 'redux/state/useGetState';
-import { KEY_NAME, TELEGRAM_BOT_ID } from 'constants/platform';
+import { TELEGRAM_BOT_ID } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
 import {
   fetchChessboardConfig,
@@ -34,6 +33,7 @@ import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
 import { getCurrentIp } from 'utils/ip';
 import { sleep } from '@portkey/utils';
+import { StorageUtils } from 'utils/storage.utils';
 
 did.setConfig({
   referralInfo: {
@@ -107,8 +107,9 @@ const Layout = dynamic(
         if (!isLogin && !isOnChainLogin) {
           router.replace('/login');
         }
+
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME) && isInit) {
+          if (window.localStorage.getItem(StorageUtils.getWalletKey()) && isInit) {
             did.reset();
             console.log('wfs setLoginStatus=>12', pathname);
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
@@ -175,7 +176,7 @@ const Layout = dynamic(
             await sleep(3000);
             if (!isHandleSDKLogout) {
               isHandleSDKLogout = true;
-              TelegramPlatform.initializeTelegramWebApp({ handleLogout: handleSDKLogout });
+              // TelegramPlatform.initializeTelegramWebApp({ tgUserChanged: ()=>{} });
             }
           });
 

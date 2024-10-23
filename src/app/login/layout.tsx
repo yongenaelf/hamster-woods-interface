@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import LoadingAnimation from 'components/Loading/LoadingAnimation';
 
@@ -7,12 +7,13 @@ import dynamic from 'next/dynamic';
 
 import { store } from 'redux/store';
 import { setLoginStatus } from 'redux/reducer/info';
-import { did } from '@portkey/did-ui-react';
+import { did, TelegramPlatform } from '@portkey/did-ui-react';
 
 import { useRouter } from 'next/navigation';
 import useGetState from 'redux/state/useGetState';
-import { KEY_NAME } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
+import { StorageUtils } from 'utils/storage.utils';
+import { initVConsole } from 'utils/vconsole';
 
 const MAX_SINGLE_REQUEST_TIME = 3 * 1000;
 const MAX_SHEDULE_TIME = 30 * 1000;
@@ -21,6 +22,10 @@ const Layout = dynamic(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const { children } = props;
+
+      useEffect(() => {
+        initVConsole();
+      }, []);
 
       const unLoadSourceRef = useRef(0);
 
@@ -88,7 +93,7 @@ const Layout = dynamic(
 
       useEffect(() => {
         if (typeof window !== undefined) {
-          if (window.localStorage.getItem(KEY_NAME)) {
+          if (window.localStorage.getItem(StorageUtils.getWalletKey())) {
             did.reset();
             console.log('wfs setLoginStatus=>1');
             store.dispatch(setLoginStatus(LoginStatus.LOCK));
@@ -135,20 +140,30 @@ const Layout = dynamic(
         router.prefetch('/');
       }, []);
 
-      return hasLoadedSource ? (
+      const isTelegramPlatform = useMemo(() => {
+        // TODO test data
+        // return true;
+        return TelegramPlatform.isTelegramPlatform();
+      }, []);
+
+      return hasLoadedSource && !isTelegramPlatform ? (
         <>
           {children}
           <div
             className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${
-                require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
-                  .default.src
-              })`,
+              backgroundImage: isTelegramPlatform
+                ? ''
+                : `url(${
+                    require(isMobileStore
+                      ? 'assets/images/bg/game-bg-mobile-mask.png'
+                      : 'assets/images/bg/game-bg-pc.png').default.src
+                  })`,
             }}></div>
         </>
       ) : (
         <>
+          {isTelegramPlatform && hasLoadedSource && children}
           <LoadingAnimation />
           <div
             className="w-[100vw] h-[100vh] absolute top-0 left-0 !bg-cover bg-center bg-no-repeat z-[-1000]"

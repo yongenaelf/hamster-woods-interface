@@ -10,17 +10,19 @@ import {
 } from 'redux/reducer/info';
 import { setChessboardResetStart, setChessboardTotalStep, setCurChessboardNode } from 'redux/reducer/chessboardData';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY, PORTKEY_LOGIN_SESSION_ID_KEY } from 'constants/platform';
 import { WalletType } from 'types/index';
 import ContractRequest from 'contract/contractRequest';
 import { DEFAULT_PIN } from 'constants/login';
 import { ETransferConfig, WalletTypeEnum } from '@etransfer/ui-react';
+import { StorageUtils } from './storage.utils';
 
 export const handleSDKLogout = async () => {
-  const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+  const originChainId = StorageUtils.getOriginChainId();
+  const keyName = StorageUtils.getWalletKey();
+
   if (originChainId) {
     try {
-      await did.load(DEFAULT_PIN, KEY_NAME);
+      await did.load(DEFAULT_PIN, keyName);
       await did.logout({
         chainId: originChainId as ChainId,
       });
@@ -29,7 +31,7 @@ export const handleSDKLogout = async () => {
       console.error('portkey: error', error);
     }
   }
-  window.localStorage.removeItem(KEY_NAME);
+  StorageUtils.removeWallet();
 
   ETransferConfig.setConfig({
     accountInfo: {
@@ -46,13 +48,13 @@ export const handleSDKLogout = async () => {
   store.dispatch(setChessboardResetStart(true));
   store.dispatch(setChessboardTotalStep(0));
   store.dispatch(setIsNeedSyncAccountInfo(true));
-  window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
-  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+  StorageUtils.removeOriginChainId();
+  StorageUtils.removeSessionStorage();
   ContractRequest.get().resetConfig();
 };
 
 export const handleSDKLogoutOffChain = () => {
-  window.localStorage.removeItem(KEY_NAME);
+  StorageUtils.removeWallet();
   store.dispatch(setLoginStatus(LoginStatus.UNLOGIN));
   store.dispatch(setWalletInfo(null));
   store.dispatch(setWalletType(WalletType.unknown));
@@ -61,7 +63,7 @@ export const handleSDKLogoutOffChain = () => {
   store.dispatch(setChessboardResetStart(true));
   store.dispatch(setChessboardTotalStep(0));
   store.dispatch(setIsNeedSyncAccountInfo(true));
-  window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
-  window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+  StorageUtils.removeOriginChainId();
+  StorageUtils.removeSessionStorage();
   ContractRequest.get().resetConfig();
 };

@@ -1,11 +1,11 @@
 import { Asset, PortkeyAssetProvider } from '@portkey/did-ui-react';
-import { KEY_NAME, PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import { LeftOutlined } from '@ant-design/icons';
 import styles from './style.module.css';
+import { StorageUtils } from 'utils/storage.utils';
 
 export default function MyAsset() {
   const router = useRouter();
@@ -19,7 +19,8 @@ export default function MyAsset() {
     }
   }, [isLogin, isOnChainLogin, router, walletType]);
 
-  const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '';
+  const originChainId = StorageUtils.getOriginChainId() || '';
+
   return (
     <div className={styles.asset}>
       <PortkeyAssetProvider
@@ -27,7 +28,7 @@ export default function MyAsset() {
         pin={walletInfo?.portkeyInfo?.pin}
         caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         isLoginOnChain={isOnChainLogin}
-        didStorageKeyName={KEY_NAME}>
+        didStorageKeyName={StorageUtils.getWalletKey()}>
         <Asset
           isShowRamp={isShowRampBuy || isShowRampSell}
           isShowRampBuy={isShowRampBuy}

@@ -2,8 +2,6 @@ import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState 
 
 import styles from './index.module.css';
 import useGetState from 'redux/state/useGetState';
-import { TelegramPlatform } from '@portkey/did-ui-react';
-import isMobileDevice from 'utils/isMobile';
 
 export enum Status {
   LOADING = 'loading',
