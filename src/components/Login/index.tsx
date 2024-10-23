@@ -19,6 +19,7 @@ import {
   useSignInHandler,
   CreatePendingInfo,
   loadingTip,
+  TOnSuccessExtraData,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -102,7 +103,7 @@ export default function Login() {
   >({});
 
   const onSignInHandler = useSignInHandler({ isErrorTip: true });
-  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData: TOnSuccessExtraData) => {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
@@ -111,7 +112,16 @@ export default function Login() {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
       console.log('wfs onSignInHandler invoke start', new Date());
-      const signResult = await onSignInHandler(value);
+      const signResult = await onSignInHandler(value, () =>
+        beforeLastGuardianApprove({
+          pin: DEFAULT_PIN,
+          chainId: extraData.originChainId,
+          caInfo: {
+            caAddress: extraData.caAddress,
+            caHash: extraData.caHash,
+          },
+        }),
+      );
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
       if (signResult.nextStep === 'SetPinAndAddManager') {
@@ -170,6 +180,18 @@ export default function Login() {
       signHandle,
     });
 
+  const beforeLastGuardianApprove = useCallback(
+    ({ pin, chainId, caInfo }: { pin: string; chainId: ChainId; caInfo: any }) => {
+      if (TelegramPlatform.isTelegramPlatform()) {
+        handleFinish(WalletType.portkey, {
+          pin,
+          chainId,
+          caInfo,
+        });
+      }
+    },
+    [handleFinish],
+  );
   const handlePortKeyLoginFinish = useCallback(
     async (wallet: DIDWalletInfo) => {
       console.log('wallet is:', wallet);
