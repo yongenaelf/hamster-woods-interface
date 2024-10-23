@@ -93,6 +93,9 @@ export default function Login() {
   const { configInfo } = useGetState();
   const { curChain } = configInfo!;
 
+  const originChainIdRef = useRef<ChainId>('tDVV');
+  const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
+
   const isTelegramPlatform = useMemo(() => {
     // TODO test data
     // return true;
@@ -105,26 +108,32 @@ export default function Login() {
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
   >({});
 
-  const onSignInHandler = useSignInHandler({ isErrorTip: true });
+  const beforeLastGuardianApprove = () => {
+    if (isTelegramPlatform) {
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainIdRef.current,
+        caInfo: caInfoRef.current,
+      });
+    }
+  };
+
+  const onSignInHandler = useSignInHandler({ isErrorTip: true, beforeLastGuardianApprove });
   const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData: TOnSuccessExtraData) => {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
+    originChainIdRef.current = extraData.originChainId;
+    caInfoRef.current = {
+      caAddress: extraData.caAddress,
+      caHash: extraData.caHash,
+    };
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
     } else {
       console.log('wfs onSignInHandler invoke start', new Date());
-      const signResult = await onSignInHandler(value, () =>
-        beforeLastGuardianApprove({
-          pin: DEFAULT_PIN,
-          chainId: extraData.originChainId,
-          caInfo: {
-            caAddress: extraData.caAddress,
-            caHash: extraData.caHash,
-          },
-        }),
-      );
+      const signResult = await onSignInHandler(value);
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
       if (signResult.nextStep === 'SetPinAndAddManager' && isTelegramPlatform) {
@@ -183,18 +192,6 @@ export default function Login() {
       signHandle,
     });
 
-  const beforeLastGuardianApprove = useCallback(
-    ({ pin, chainId, caInfo }: { pin: string; chainId: ChainId; caInfo: any }) => {
-      if (isTelegramPlatform) {
-        handleFinish(WalletType.portkey, {
-          pin,
-          chainId,
-          caInfo,
-        });
-      }
-    },
-    [handleFinish, isTelegramPlatform],
-  );
   const handlePortKeyLoginFinish = useCallback(
     async (wallet: DIDWalletInfo) => {
       console.log('wallet is:', wallet);
@@ -781,7 +778,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
-        beforeCreatePending={beforeCreatePending}
+        beforeCreatePending={beforeLastGuardianApprove}
         onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
