@@ -5,5 +5,18 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "tailwindCSS.emmetCompletions": true,
   "emmet.triggerExpansionOnTab": true,
-  "cSpell.words": ["simsun"]
+  "cSpell.words": [
+    "simsun"
+  ],
+  "search.exclude": {
+    "**/.next": true,
+    "**/assets": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
 }
