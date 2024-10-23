@@ -229,16 +229,22 @@ export default function Login() {
     [handlePortKeyLoginFinish],
   );
 
-  const beforeCreatePending = useCallback(
-    async (createPendingInfo: CreatePendingInfo) => {
-      if (createPendingInfo.createType === 'register') {
-        return;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
-    },
-    [handlePortKeyLoginFinish],
-  );
+  const beforeCreatePending = useCallback(async () => {
+    if (isTelegramPlatform) {
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: {
+          onSetLoading: (loadingInfo) => {
+            console.log(loadingInfo, 'loadingInfo===');
+          },
+        },
+      });
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainIdRef.current,
+        caInfo: caInfoRef.current,
+      });
+    }
+  }, [handleFinish, isTelegramPlatform]);
 
   const createWallet = useLoginWallet({
     onCreatePending: handleCreatePending,
@@ -778,7 +784,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
-        beforeCreatePending={beforeLastGuardianApprove}
+        beforeCreatePending={beforeCreatePending}
         onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
