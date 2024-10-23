@@ -18,6 +18,8 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
+  loadingTip,
+  TOnSuccessExtraData,
   ConfigProvider,
   LifeCycleType,
 } from '@portkey/did-ui-react';
@@ -91,6 +93,9 @@ export default function Login() {
   const { configInfo } = useGetState();
   const { curChain } = configInfo!;
 
+  const originChainIdRef = useRef<ChainId>('tDVV');
+  const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
+
   const isTelegramPlatform = useMemo(() => {
     // TODO test data
     // return true;
@@ -103,11 +108,26 @@ export default function Login() {
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
   >({});
 
-  const onSignInHandler = useSignInHandler({ isErrorTip: true });
-  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+  const beforeLastGuardianApprove = () => {
+    if (isTelegramPlatform) {
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainIdRef.current,
+        caInfo: caInfoRef.current,
+      });
+    }
+  };
+
+  const onSignInHandler = useSignInHandler({ isErrorTip: true, beforeLastGuardianApprove });
+  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData: TOnSuccessExtraData) => {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
+    originChainIdRef.current = extraData.originChainId;
+    caInfoRef.current = {
+      caAddress: extraData.caAddress,
+      caHash: extraData.caHash,
+    };
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
@@ -203,6 +223,17 @@ export default function Login() {
         return;
       }
       StorageUtils.setSessionStorage(createPendingInfo.sessionId);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
+    },
+    [handlePortKeyLoginFinish],
+  );
+
+  const beforeCreatePending = useCallback(
+    async (createPendingInfo: CreatePendingInfo) => {
+      if (createPendingInfo.createType === 'register') {
+        return;
+      }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
     },
@@ -747,6 +778,7 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
+        beforeCreatePending={beforeLastGuardianApprove}
         onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
