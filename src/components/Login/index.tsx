@@ -18,10 +18,13 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
-  loadingTip,
   TOnSuccessExtraData,
   ConfigProvider,
   LifeCycleType,
+  GuardianApprovalModal,
+  NetworkType,
+  useMultiVerify,
+  getOperationDetails,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -90,12 +93,16 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
+  const [approvalVisible, setApprovalVisible] = useState(false);
+  const identifierRef = useRef<string>();
+
   const { configInfo } = useGetState();
-  const { curChain } = configInfo!;
-
-  const originChainIdRef = useRef<ChainId>('tDVV');
+  const { curChain, network } = configInfo!;
+  const [originChainId, setOriginChainId] = useState<ChainId>('tDVV');
+  const [caHash, setCaHash] = useState<string>('');
   const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
-
+  const [guardianList, setGuardianList] = useState<[]>();
+  const multiVerify = useMultiVerify();
   const isTelegramPlatform = useMemo(() => {
     // TODO test data
     // return true;
@@ -112,7 +119,7 @@ export default function Login() {
     if (isTelegramPlatform) {
       handleFinish(WalletType.portkey, {
         pin: DEFAULT_PIN,
-        chainId: originChainIdRef.current,
+        chainId: originChainId,
         caInfo: caInfoRef.current,
       });
     }
@@ -123,7 +130,8 @@ export default function Login() {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
-    originChainIdRef.current = extraData.originChainId;
+    setOriginChainId(extraData.originChainId);
+    setCaHash(extraData.caHash);
     caInfoRef.current = {
       caAddress: extraData.caAddress,
       caHash: extraData.caHash,
@@ -136,6 +144,7 @@ export default function Login() {
       const signResult = await onSignInHandler(value);
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
+      identifierRef.current = signResult.value.guardianIdentifierInfo?.identifier;
       if (signResult.nextStep === 'SetPinAndAddManager' && isTelegramPlatform) {
         try {
           const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
@@ -170,6 +179,13 @@ export default function Login() {
         // didWallet && handlePortKeyLoginFinish(didWallet);
       } else {
         setLoading(false);
+        if (isTelegramPlatform) {
+          setGuardianList(signResult.value.guardianList || []);
+          setTimeout(() => {
+            setApprovalVisible(true);
+          }, 500);
+          return;
+        }
         setCurrentLifeCircle({
           [signResult.nextStep as any]: signResult.value,
         });
@@ -240,11 +256,11 @@ export default function Login() {
       });
       handleFinish(WalletType.portkey, {
         pin: DEFAULT_PIN,
-        chainId: originChainIdRef.current,
+        chainId: originChainId,
         caInfo: caInfoRef.current,
       });
     }
-  }, [handleFinish, isTelegramPlatform]);
+  }, [handleFinish, isTelegramPlatform, originChainId]);
 
   const createWallet = useLoginWallet({
     onCreatePending: handleCreatePending,
@@ -255,6 +271,29 @@ export default function Login() {
 
   const router = useRouter();
 
+  const onTGSignInApprovalSuccess = useCallback(
+    async (guardian) => {
+      setApprovalVisible(false);
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainId,
+        caInfo: caInfoRef.current,
+      });
+      const res = await multiVerify(guardian);
+      const params = {
+        pin: DEFAULT_PIN,
+        type: 'recovery' as AddManagerType,
+        chainId: originChainId,
+        accountType: 'Telegram',
+        guardianIdentifier: identifierRef.current,
+        guardianApprovedList: res,
+      };
+      const didWallet = await createWallet(params);
+
+      didWallet && handleOnChainFinishWrapper(didWallet);
+    },
+    [createWallet, handleFinish, handleOnChainFinishWrapper, multiVerify, originChainId],
+  );
   useEffect(() => {
     console.log('wfs Login useEffect1 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
     if (isLogin || isOnChainLogin) {
@@ -790,6 +829,23 @@ export default function Login() {
         isShowScan={true}
         defaultChainId={curChain}
       />
+
+      {guardianList?.length && (
+        <GuardianApprovalModal
+          open={approvalVisible}
+          isAsyncVerify
+          networkType={network as NetworkType}
+          caHash={caHash}
+          originChainId={originChainId}
+          targetChainId={curChain}
+          guardianList={guardianList}
+          operationType={OperationTypeEnum.communityRecovery}
+          operationDetails={getOperationDetails(OperationTypeEnum.communityRecovery)}
+          onClose={() => setApprovalVisible(false)}
+          onBack={() => setApprovalVisible(false)}
+          onApprovalSuccess={onTGSignInApprovalSuccess}
+        />
+      )}
 
       <Unlock
         keyboard
