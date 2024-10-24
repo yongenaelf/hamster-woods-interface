@@ -187,6 +187,10 @@ export default function Login() {
           setGuardianList(signResult.value.guardianList || []);
           setTimeout(() => {
             setApprovalVisible(true);
+
+            ConfigProvider.setGlobalConfig({
+              globalLoadingHandler: undefined,
+            });
           }, 500);
           return;
         }
@@ -277,6 +281,13 @@ export default function Login() {
 
   const onTGSignInApprovalSuccess = useCallback(
     async (guardian: any) => {
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: {
+          onSetLoading: (loadingInfo) => {
+            console.log(loadingInfo, 'loadingInfo===');
+          },
+        },
+      });
       setApprovalVisible(false);
       handleFinish(WalletType.portkey, {
         pin: DEFAULT_PIN,
