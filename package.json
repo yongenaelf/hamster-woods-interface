@@ -1,11 +1,9 @@
 {
-  "name": "hamster-woods-interface",
+  "name": "next-demo",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
+    "dev": "NEXT_PUBLIC_APP_ENV=development next dev",
     "dev:testnet": "NEXT_PUBLIC_APP_ENV=test next dev",
     "dev:main": "NEXT_PUBLIC_APP_ENV=production next dev",
     "dev:testnet-https": "NEXT_PUBLIC_APP_ENV=test next dev --experimental-https",
@@ -48,6 +46,7 @@
     "graphql-request": "^6.1.0",
     "lottie-react": "^2.4.0",
     "next": "^14.2.13",
+    "next-babel-conditional-ssg-ssr": "^1.0.0",
     "next-compose-plugins": "^2.2.1",
     "next-redux-wrapper": "^8.1.0",
     "qs": "^6.11.2",
