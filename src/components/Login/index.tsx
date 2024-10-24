@@ -128,16 +128,18 @@ export default function Login() {
   };
 
   const onSignInHandler = useSignInHandler({ isErrorTip: true, beforeLastGuardianApprove });
-  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData: TOnSuccessExtraData) => {
+  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData?: TOnSuccessExtraData) => {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
-    setOriginChainId(extraData.originChainId);
-    setCaHash(extraData.caHash);
-    caInfoRef.current = {
-      caAddress: extraData.caAddress,
-      caHash: extraData.caHash,
-    };
+    if (extraData) {
+      setOriginChainId(extraData.originChainId);
+      setCaHash(extraData.caHash);
+      caInfoRef.current = {
+        caAddress: extraData.caAddress,
+        caHash: extraData.caHash,
+      };
+    }
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
@@ -247,7 +249,7 @@ export default function Login() {
     [handlePortKeyLoginFinish],
   );
 
-  const beforeCreatePending = useCallback(async () => {
+  const beforeCreatePending = useCallback(() => {
     if (isTelegramPlatform) {
       ConfigProvider.setGlobalConfig({
         globalLoadingHandler: {
