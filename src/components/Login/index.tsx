@@ -25,6 +25,7 @@ import {
   NetworkType,
   useMultiVerify,
   getOperationDetails,
+  UserGuardianStatus,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -72,6 +73,7 @@ import { store } from 'redux/store';
 import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 import ContractRequest from 'contract/contractRequest';
 import { StorageUtils } from 'utils/storage.utils';
+import { AccountType, GuardiansApproved } from '@portkey/services';
 
 const components = {
   phone: PhoneIcon,
@@ -101,7 +103,7 @@ export default function Login() {
   const [originChainId, setOriginChainId] = useState<ChainId>('tDVV');
   const [caHash, setCaHash] = useState<string>('');
   const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
-  const [guardianList, setGuardianList] = useState<[]>();
+  const [guardianList, setGuardianList] = useState<UserGuardianStatus[]>();
   const multiVerify = useMultiVerify();
   const isTelegramPlatform = useMemo(() => {
     // TODO test data
@@ -272,7 +274,7 @@ export default function Login() {
   const router = useRouter();
 
   const onTGSignInApprovalSuccess = useCallback(
-    async (guardian) => {
+    async (guardian: any) => {
       setApprovalVisible(false);
       handleFinish(WalletType.portkey, {
         pin: DEFAULT_PIN,
@@ -284,9 +286,9 @@ export default function Login() {
         pin: DEFAULT_PIN,
         type: 'recovery' as AddManagerType,
         chainId: originChainId,
-        accountType: 'Telegram',
-        guardianIdentifier: identifierRef.current,
-        guardianApprovedList: res,
+        accountType: 'Telegram' as AccountType,
+        guardianIdentifier: identifierRef.current || '',
+        guardianApprovedList: res as GuardiansApproved[],
       };
       const didWallet = await createWallet(params);
 
