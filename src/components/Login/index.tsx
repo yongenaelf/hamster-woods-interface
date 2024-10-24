@@ -18,7 +18,14 @@ import {
   AddManagerType,
   useSignInHandler,
   CreatePendingInfo,
-  loadingTip,
+  TOnSuccessExtraData,
+  ConfigProvider,
+  LifeCycleType,
+  GuardianApprovalModal,
+  NetworkType,
+  useMultiVerify,
+  getOperationDetails,
+  UserGuardianStatus,
 } from '@portkey/did-ui-react';
 import { Drawer, Modal } from 'antd';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -53,7 +60,6 @@ import { CloseIcon } from 'assets/images/index';
 import useWebLogin from 'hooks/useWebLogin';
 import { KEY_NAME } from 'constants/platform';
 import { DEFAULT_PIN } from 'constants/login';
-import { loginOptTip } from 'constants/tip';
 import useGetState from 'redux/state/useGetState';
 import { ChainId } from '@portkey/types';
 import showMessage from 'utils/setGlobalComponentsInfo';
@@ -66,6 +72,8 @@ import { isLoginOnChain } from 'utils/wallet';
 import { store } from 'redux/store';
 import { handleSDKLogoutOffChain } from 'utils/handleLogout';
 import ContractRequest from 'contract/contractRequest';
+import { StorageUtils } from 'utils/storage.utils';
+import { AccountType, GuardiansApproved } from '@portkey/services';
 
 const components = {
   phone: PhoneIcon,
@@ -79,11 +87,6 @@ const components = {
 
 type IconType = 'apple' | 'google' | 'portkey' | 'email' | 'phone' | 'qrcode' | 'telegram';
 
-interface IAuthenticationInfo {
-  googleAccessToken?: string;
-  appleIdToken?: string;
-}
-
 export default function Login() {
   const signInRef = useRef<{ setOpen: Function }>(null);
   const isGettingTelegramAuthRef = useRef(false);
@@ -92,8 +95,21 @@ export default function Login() {
 
   const [design, setDesign] = useState<SignInDesignType>('Web2Design');
 
+  const [approvalVisible, setApprovalVisible] = useState(false);
+  const identifierRef = useRef<string>();
+
   const { configInfo } = useGetState();
-  const { curChain } = configInfo!;
+  const { curChain, network } = configInfo!;
+  const [originChainId, setOriginChainId] = useState<ChainId>('tDVV');
+  const [caHash, setCaHash] = useState<string>('');
+  const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
+  const [guardianList, setGuardianList] = useState<UserGuardianStatus[]>();
+  const multiVerify = useMultiVerify();
+  const isTelegramPlatform = useMemo(() => {
+    // TODO test data
+    // return true;
+    return TelegramPlatform.isTelegramPlatform();
+  }, []);
 
   const [showPageLoading, setShowPageLoading] = useState(false);
 
@@ -101,11 +117,29 @@ export default function Login() {
     TStep2SignInLifeCycle | TStep1LifeCycle | TStep3LifeCycle | TStep2SignUpLifeCycle
   >({});
 
-  const onSignInHandler = useSignInHandler({ isErrorTip: true });
-  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo) => {
+  const beforeLastGuardianApprove = () => {
+    if (isTelegramPlatform) {
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainId,
+        caInfo: caInfoRef.current,
+      });
+    }
+  };
+
+  const onSignInHandler = useSignInHandler({ isErrorTip: true, beforeLastGuardianApprove });
+  const handleSocialStep1Success = async (value: IGuardianIdentifierInfo, extraData?: TOnSuccessExtraData) => {
     console.log('wfs onSuccess invoke start', value, new Date());
     setDrawerVisible(false);
     setModalVisible(false);
+    if (extraData) {
+      setOriginChainId(extraData.originChainId);
+      setCaHash(extraData.caHash);
+      caInfoRef.current = {
+        caAddress: extraData.caAddress,
+        caHash: extraData.caHash,
+      };
+    }
     if (!did.didWallet.managementAccount) did.create();
     if (!value.isLoginGuardian) {
       await onSignUp(value as IGuardianIdentifierInfo);
@@ -114,7 +148,8 @@ export default function Login() {
       const signResult = await onSignInHandler(value);
       console.log('wfs onSignInHandler invoke end', signResult, new Date());
       if (!signResult) return;
-      if (signResult.nextStep === 'SetPinAndAddManager') {
+      identifierRef.current = signResult.value.guardianIdentifierInfo?.identifier;
+      if (signResult.nextStep === 'SetPinAndAddManager' && isTelegramPlatform) {
         try {
           const guardianIdentifierInfo = signResult.value.guardianIdentifierInfo;
           const approvedList = signResult.value.approvedList;
@@ -148,6 +183,17 @@ export default function Login() {
         // didWallet && handlePortKeyLoginFinish(didWallet);
       } else {
         setLoading(false);
+        if (isTelegramPlatform) {
+          setGuardianList(signResult.value.guardianList || []);
+          setTimeout(() => {
+            setApprovalVisible(true);
+
+            ConfigProvider.setGlobalConfig({
+              globalLoadingHandler: undefined,
+            });
+          }, 500);
+          return;
+        }
         setCurrentLifeCircle({
           [signResult.nextStep as any]: signResult.value,
         });
@@ -174,7 +220,7 @@ export default function Login() {
     async (wallet: DIDWalletInfo) => {
       console.log('wallet is:', wallet);
       signInRef.current?.setOpen(false);
-      localStorage.setItem(PORTKEY_LOGIN_CHAIN_ID_KEY, wallet.chainId);
+      StorageUtils.setOriginChainId(wallet.chainId);
       setShowPageLoading(true);
       await handleFinish(WalletType.portkey, wallet);
       setShowPageLoading(false);
@@ -200,12 +246,29 @@ export default function Login() {
       if (createPendingInfo.createType === 'register') {
         return;
       }
-      window.localStorage.setItem(PORTKEY_LOGIN_SESSION_ID_KEY, createPendingInfo.sessionId);
+      StorageUtils.setSessionStorage(createPendingInfo.sessionId);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await handlePortKeyLoginFinish(createPendingInfo.didWallet!);
     },
     [handlePortKeyLoginFinish],
   );
+
+  const beforeCreatePending = useCallback(() => {
+    if (isTelegramPlatform) {
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: {
+          onSetLoading: (loadingInfo) => {
+            console.log(loadingInfo, 'loadingInfo===');
+          },
+        },
+      });
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainId,
+        caInfo: caInfoRef.current,
+      });
+    }
+  }, [handleFinish, isTelegramPlatform, originChainId]);
 
   const createWallet = useLoginWallet({
     onCreatePending: handleCreatePending,
@@ -216,6 +279,36 @@ export default function Login() {
 
   const router = useRouter();
 
+  const onTGSignInApprovalSuccess = useCallback(
+    async (guardian: any) => {
+      ConfigProvider.setGlobalConfig({
+        globalLoadingHandler: {
+          onSetLoading: (loadingInfo) => {
+            console.log(loadingInfo, 'loadingInfo===');
+          },
+        },
+      });
+      setApprovalVisible(false);
+      handleFinish(WalletType.portkey, {
+        pin: DEFAULT_PIN,
+        chainId: originChainId,
+        caInfo: caInfoRef.current,
+      });
+      const res = await multiVerify(guardian);
+      const params = {
+        pin: DEFAULT_PIN,
+        type: 'recovery' as AddManagerType,
+        chainId: originChainId,
+        accountType: 'Telegram' as AccountType,
+        guardianIdentifier: identifierRef.current || '',
+        guardianApprovedList: res as GuardiansApproved[],
+      };
+      const didWallet = await createWallet(params);
+
+      didWallet && handleOnChainFinishWrapper(didWallet);
+    },
+    [createWallet, handleFinish, handleOnChainFinishWrapper, multiVerify, originChainId],
+  );
   useEffect(() => {
     console.log('wfs Login useEffect1 isLogin', isLogin, 'isOnChainLogin', isOnChainLogin);
     if (isLogin || isOnChainLogin) {
@@ -248,11 +341,11 @@ export default function Login() {
       //   loginEagerly();
       //   return;
       // }
-      if (window.localStorage.getItem(KEY_NAME)) {
+      if (window.localStorage.getItem(StorageUtils.getWalletKey())) {
         console.log('wfs setLoginStatus=>4');
         setLoginStatus(LoginStatus.LOCK);
         setIsWalletExist(true);
-      } else if (TelegramPlatform.isTelegramPlatform()) {
+      } else if (isTelegramPlatform) {
         // Automatically obtain Telegram authorization
         isGettingTelegramAuthRef.current = true;
         handleTeleGram();
@@ -260,7 +353,7 @@ export default function Login() {
         handlePortKey();
       }
     }
-  }, [isLock, handleTeleGram, handlePortKey]);
+  }, [isLock, handleTeleGram, handlePortKey, isTelegramPlatform]);
 
   const handleEmail = () => {
     discoverUtils.removeDiscoverStorageSign();
@@ -279,17 +372,6 @@ export default function Login() {
   const closeModal = () => {
     setDrawerVisible(false);
     setModalVisible(false);
-  };
-
-  const handlePhone = () => {
-    discoverUtils.removeDiscoverStorageSign();
-    closeModal();
-    setStyle(styles.inputForm);
-    setDesign('Web2Design');
-    setCurrentLifeCircle({});
-    setTimeout(() => {
-      signInRef.current?.setOpen(true);
-    }, 500);
   };
 
   const handleQrcode = () => {
@@ -384,7 +466,26 @@ export default function Login() {
     async (v: string) => {
       let wallet;
       try {
-        wallet = await did.load(v, KEY_NAME);
+        const keyName = StorageUtils.getWalletKey();
+
+        wallet = await did.load(v, keyName);
+
+        if (!wallet?.didWallet.managementAccount) {
+          const preWallet = await did.load(v, KEY_NAME);
+          if (preWallet?.didWallet?.managementAccount) {
+            wallet = preWallet;
+            localStorage.setItem(keyName, localStorage.getItem(KEY_NAME) || '');
+            localStorage.removeItem(KEY_NAME);
+            const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+            sessionId && StorageUtils.setSessionStorage(sessionId);
+            localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+            localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+          } else {
+            isTelegramPlatform && (StorageUtils.removeWallet(), window.location.reload());
+          }
+        }
+        wallet.didWallet.originChainId && StorageUtils.setOriginChainId(wallet.didWallet.originChainId);
+
         console.log('wallet is:', wallet.didWallet, !wallet.didWallet.aaInfo);
       } catch (err) {
         console.log(err);
@@ -397,7 +498,7 @@ export default function Login() {
       }
 
       const caInfo = wallet.didWallet.caInfo[configInfo!.curChain];
-      const originChainId = localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
+      const originChainId = StorageUtils.getOriginChainId();
       if (!originChainId) return;
       let caHash = caInfo?.caHash;
 
@@ -433,7 +534,7 @@ export default function Login() {
         await handleFinish(WalletType.portkey, walletInfo);
         setShowPageLoading(false);
       }
-      const sessionId = localStorage.getItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+      const sessionId = StorageUtils.getSessionStorage();
       if (!isLoginOnChain()) {
         if (sessionId && originChainId) {
           const { recoveryStatus } = await did.didWallet.getLoginStatus({
@@ -443,7 +544,9 @@ export default function Login() {
           if (recoveryStatus === 'pass') {
             console.log('wfs setLoginStatus=>5');
             store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-            await did.save(v || '', KEY_NAME);
+            const keyName = StorageUtils.getWalletKey();
+
+            await did.save(v || '', keyName);
           }
         } else {
           if (wallet.didWallet.managementAccount?.address) {
@@ -454,20 +557,23 @@ export default function Login() {
             });
             if (result) {
               store.dispatch(setLoginStatus(LoginStatus.ON_CHAIN_LOGGED));
-              await did.save(v || '', KEY_NAME);
+              const keyName = StorageUtils.getWalletKey();
+
+              await did.save(v || '', keyName);
             }
           }
         }
       }
     },
-    [configInfo, handleFinish],
+    [configInfo, handleFinish, isTelegramPlatform],
   );
 
   useEffect(() => {
-    if (TelegramPlatform.isTelegramPlatform() && isLock) {
+    console.log(isLock, 'isLock=====111');
+    if (isTelegramPlatform && isLock) {
       unlock(DEFAULT_PIN);
     }
-  }, [isLock, unlock]);
+  }, [isLock, isTelegramPlatform, unlock]);
 
   const { getRecommendationVerifier, verifySocialToken } = useVerifier();
 
@@ -485,7 +591,7 @@ export default function Login() {
           zkLoginInfo: res.zkLoginInfo,
         },
       ];
-      if (TelegramPlatform.isTelegramPlatform()) {
+      if (isTelegramPlatform) {
         const params = {
           pin: DEFAULT_PIN,
           type: 'register' as AddManagerType,
@@ -508,7 +614,7 @@ export default function Login() {
         }, 500);
       }
     },
-    [createWallet, curChain, handlePortKeyLoginFinish],
+    [createWallet, curChain, handlePortKeyLoginFinish, isTelegramPlatform],
   );
 
   const onSignUp = useCallback(
@@ -596,7 +702,7 @@ export default function Login() {
   const onForgetPin = useCallback(() => {
     showMessage.loading('Signing out of Hamster Woods');
     if (walletType === WalletType.portkey) {
-      window.localStorage.removeItem(KEY_NAME);
+      StorageUtils.removeWallet();
       did.reset();
     } else if (walletType === WalletType.discover) {
       window.localStorage.removeItem(LOGIN_EARGLY_KEY);
@@ -610,16 +716,16 @@ export default function Login() {
     store.dispatch(setChessboardResetStart(true));
     store.dispatch(setChessboardTotalStep(0));
     store.dispatch(setIsNeedSyncAccountInfo(true));
-    window.localStorage.removeItem(KEY_NAME);
-    window.localStorage.removeItem(PORTKEY_LOGIN_CHAIN_ID_KEY);
-    window.localStorage.removeItem(PORTKEY_LOGIN_SESSION_ID_KEY);
+    StorageUtils.removeWallet();
+    StorageUtils.removeOriginChainId();
+    StorageUtils.removeSessionStorage();
     ContractRequest.get().resetConfig();
     setIsUnlockShow(false);
     showMessage.hideLoading();
-    if (TelegramPlatform.isTelegramPlatform()) {
+    if (isTelegramPlatform) {
       TelegramPlatform.close();
     }
-  }, [walletType]);
+  }, [isTelegramPlatform, walletType]);
 
   const forgetPinElement = useMemo(() => {
     return (
@@ -633,16 +739,44 @@ export default function Login() {
     );
   }, [onForgetPin]);
 
+  const onLifeCycleChange = useCallback(
+    (liftCycle: LifeCycleType) => {
+      console.log(liftCycle, 'liftCycle===');
+      if (!isTelegramPlatform) return;
+      if (liftCycle === 'GuardianApproval' || liftCycle === 'Step2OfSkipGuardianApprove') {
+        ConfigProvider.setGlobalConfig({
+          globalLoadingHandler: undefined,
+        });
+        return;
+      }
+      // if (liftCycle === 'SetPinAndAddManager') {
+      //   ConfigProvider.setGlobalConfig({
+      //     globalLoadingHandler: {
+      //       onSetLoading: (loadingInfo) => {
+      //         console.log(loadingInfo, 'loadingInfo===SetPinAndAddManager');
+      //       },
+      //     },
+      //   });
+      //   return;
+      // }
+    },
+    [isTelegramPlatform],
+  );
+
   return (
     <div
-      className={`cursor-custom ${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `}
+      className={`cursor-custom ${
+        isTelegramPlatform ? '' : `${styles.loginContainer} ${isMobileStore ? '' : '!pt-[14.8vh]'} `
+      } `}
       style={{
-        backgroundImage: `url(${
-          require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
-            .default.src
-        })`,
+        backgroundImage: isTelegramPlatform
+          ? ''
+          : `url(${
+              require(isMobileStore ? 'assets/images/bg/game-bg-mobile-mask.png' : 'assets/images/bg/game-bg-pc.png')
+                .default.src
+            })`,
       }}>
-      {!isMobileStore ? (
+      {!isMobileStore && !isTelegramPlatform ? (
         <img
           className="z-10 w-[400px] h-[400px]"
           width={400}
@@ -651,7 +785,8 @@ export default function Login() {
           alt="logo"
         />
       ) : null}
-      {!TelegramPlatform.isTelegramPlatform() &&
+
+      {!isTelegramPlatform &&
         (isLock ? (
           <CommonBtn
             onClick={() => {
@@ -695,7 +830,7 @@ export default function Login() {
       </Modal>
 
       <SignIn
-        pin={TelegramPlatform.isTelegramPlatform() ? DEFAULT_PIN : undefined}
+        pin={isTelegramPlatform ? DEFAULT_PIN : undefined}
         keyboard
         ref={signInRef}
         design={design}
@@ -703,10 +838,29 @@ export default function Login() {
         className={style}
         onFinish={handleOnChainFinishWrapper}
         onCreatePending={handleCreatePending}
+        beforeCreatePending={beforeCreatePending}
+        onLifeCycleChange={onLifeCycleChange}
         onError={handleSDKLogoutOffChain}
         isShowScan={true}
         defaultChainId={curChain}
       />
+
+      {guardianList?.length && (
+        <GuardianApprovalModal
+          open={approvalVisible}
+          isAsyncVerify
+          networkType={network as NetworkType}
+          caHash={caHash}
+          originChainId={originChainId}
+          targetChainId={curChain}
+          guardianList={guardianList}
+          operationType={OperationTypeEnum.communityRecovery}
+          operationDetails={getOperationDetails(OperationTypeEnum.communityRecovery)}
+          onClose={() => setApprovalVisible(false)}
+          onBack={() => setApprovalVisible(false)}
+          onApprovalSuccess={onTGSignInApprovalSuccess}
+        />
+      )}
 
       <Unlock
         keyboard
@@ -724,7 +878,7 @@ export default function Login() {
         footer={forgetPinElement}
       />
 
-      <ShowPageLoading open={showPageLoading} />
+      {!isTelegramPlatform && <ShowPageLoading open={showPageLoading} />}
     </div>
   );
 }

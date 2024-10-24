@@ -7,8 +7,7 @@ import { eTransferCore } from '@etransfer/core';
 import { WalletType } from 'types';
 import DetectProvider from 'utils/InstanceProvider';
 import useGetState from 'redux/state/useGetState';
-import { did, handleErrorMessage } from '@portkey/did-ui-react';
-import { PORTKEY_LOGIN_CHAIN_ID_KEY } from 'constants/platform';
+import { did } from '@portkey/did-ui-react';
 import { getAwakenWalletType, getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import { getETransferJWT } from '@etransfer/utils';
 import { asyncStorage } from 'utils/lib';
@@ -16,6 +15,7 @@ import { ChainId } from '@portkey/types';
 import { ETransferConfig } from '@etransfer/ui-react';
 import { isJWTExpired } from 'utils/common';
 import { useETransferAccounts } from './useAddress';
+import { StorageUtils } from 'utils/storage.utils';
 
 export function useQueryAuthToken() {
   const { walletInfo, walletType, isLogin, isOnChainLogin } = useGetState();
@@ -138,7 +138,7 @@ export function useQueryAuthToken() {
   const getCaInfo: () => Promise<{ caHash: string; originChainId: ChainId; caAddress: string }> =
     useCallback(async () => {
       if (walletType === WalletType.portkey) {
-        const originChainId = (localStorage.getItem(PORTKEY_LOGIN_CHAIN_ID_KEY) || '') as ChainId;
+        const originChainId = (StorageUtils.getOriginChainId() || '') as ChainId;
 
         const caInfo = did.didWallet.aaInfo.accountInfo ?? did.didWallet.caInfo?.[originChainId];
 
