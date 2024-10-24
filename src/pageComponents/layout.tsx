@@ -18,16 +18,8 @@ import { useRouter, usePathname } from 'next/navigation';
 import useGetState from 'redux/state/useGetState';
 import { TELEGRAM_BOT_ID } from 'constants/platform';
 import { LoginStatus } from 'redux/types/reducerTypes';
-import {
-  fetchChessboardConfig,
-  fetchChessboardData,
-  fetchConfigItems,
-  fetchNoticeModal,
-  fetchServerConfig,
-} from 'api/request';
+import { fetchConfigItems, fetchServerConfig } from 'api/request';
 import { setConfigInfo } from 'redux/reducer/configInfo';
-import { setChessboardData } from 'redux/reducer/chessboardData';
-import { setNoticeModal } from 'redux/reducer/noticeModal';
 import { convertToUtcTimestamp } from 'hooks/useCountDown';
 import { setServerConfigInfo } from 'redux/reducer/serverConfigInfo';
 import { HAMSTER_PROJECT_CODE } from 'constants/login';
@@ -133,72 +125,44 @@ const Layout = dynamic(
       }, []);
 
       const initConfigAndResource = async () => {
-        const chessboardConfigPromise = fetchChessboardConfig();
-        const noticeModalPromise = fetchNoticeModal();
+        const serverConfigPromise = fetchServerConfig();
+        const configPromise = fetchConfigItems();
 
-        chessboardConfigPromise.then((chessboardConfig) => {
-          let url = 'chessboard_data';
-          Object.keys(chessboardConfig.data).map((key) => {
-            if (isCurrentTimeInterval(chessboardConfig.data[key])) {
-              url = key;
-            }
-          });
-
-          const serverConfigPromise = fetchServerConfig();
-          const configPromise = fetchConfigItems();
-          const chessBoardPromise = fetchChessboardData(url).then((res) => {
-            store.dispatch(setChessboardData(res.data));
-          });
-
-          configPromise.then(async (res) => {
-            store.dispatch(
-              setConfigInfo({
-                ...res.data,
-                isHalloween: chessboardConfig?.data?.['chessboard_data_halloween']
-                  ? isCurrentTimeInterval(chessboardConfig.data['chessboard_data_halloween'])
-                  : false,
-              }),
-            );
-            ConfigProvider.setGlobalConfig({
-              storageMethod: new Store(),
-              requestDefaults: {
-                baseURL: res.data.portkeyServer,
+        configPromise.then(async (res) => {
+          store.dispatch(
+            setConfigInfo({
+              ...res.data,
+              isHalloween: false,
+            }),
+          );
+          ConfigProvider.setGlobalConfig({
+            storageMethod: new Store(),
+            requestDefaults: {
+              baseURL: res.data.portkeyServer,
+            },
+            serviceUrl: res.data.portkeyServiceUrl,
+            graphQLUrl: res.data.graphqlServer,
+            socialLogin: {
+              Telegram: {
+                botId: TELEGRAM_BOT_ID,
               },
-              serviceUrl: res.data.portkeyServiceUrl,
-              graphQLUrl: res.data.graphqlServer,
-              socialLogin: {
-                Telegram: {
-                  botId: TELEGRAM_BOT_ID,
-                },
-              },
-            });
-
-            await sleep(3000);
-            if (!isHandleSDKLogout) {
-              isHandleSDKLogout = true;
-              // TelegramPlatform.initializeTelegramWebApp({ tgUserChanged: ()=>{} });
-            }
+            },
           });
 
-          serverConfigPromise.then((res) => {
-            console.log('===serverConfig', res);
-            store.dispatch(setServerConfigInfo(res));
-          });
-
-          Promise.all([chessBoardPromise, configPromise, serverConfigPromise]).then((res) => {
-            setIsFetchFinished(true);
-          });
+          await sleep(3000);
+          if (!isHandleSDKLogout) {
+            isHandleSDKLogout = true;
+            // TelegramPlatform.initializeTelegramWebApp({ tgUserChanged: ()=>{} });
+          }
         });
 
-        noticeModalPromise.then((res) => {
-          if (res?.data?.halloween) {
-            store.dispatch(
-              setNoticeModal({
-                ...res.data.halloween,
-                open: false,
-              }),
-            );
-          }
+        serverConfigPromise.then((res) => {
+          console.log('===serverConfig', res);
+          store.dispatch(setServerConfigInfo(res));
+        });
+
+        Promise.all([configPromise, serverConfigPromise]).then((res) => {
+          setIsFetchFinished(true);
         });
       };
 
