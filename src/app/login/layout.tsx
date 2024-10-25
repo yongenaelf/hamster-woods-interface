@@ -24,7 +24,9 @@ const Layout = dynamic(
       const { children } = props;
 
       useEffect(() => {
-        initVConsole();
+        if (process.env.NEXT_PUBLIC_APP_ENV !== 'production') {
+          initVConsole();
+        }
       }, []);
 
       const unLoadSourceRef = useRef(0);
