@@ -251,8 +251,10 @@ export default class ContractRequest {
       if (!chainInfo) {
         throw new Error(`Chain is not running: ${this.chainId}`);
       }
+
+      // TODO
       const didWalletInfo = this.wallet.portkeyInfo!;
-      const account = aelf.getWallet(didWalletInfo?.walletInfo?.privateKey);
+      const account = aelf.getWallet(did.didWallet.managementAccount?.privateKey || '');
       const caContract = await getContractBasic({
         contractAddress: chainInfo.caContractAddress,
         account,
@@ -381,7 +383,7 @@ export default class ContractRequest {
       return Promise.reject(result);
     }
 
-    const { transactionId, TransactionId } = result.result || result;
+    const { transactionId, TransactionId } = result?.result || result;
     const resTransactionId = TransactionId || transactionId;
     const transaction = await getTxResultRetry({
       TransactionId: resTransactionId!,
@@ -456,8 +458,7 @@ export default class ContractRequest {
       this.contractCaptureMessage(params, result, MethodType.CALLSENDMETHOD);
       return Promise.reject(result);
     }
-
-    const { transactionId, TransactionId } = result.result || result;
+    const { transactionId, TransactionId } = result?.result || result;
     const resTransactionId = TransactionId || transactionId;
 
     return Promise.resolve({
