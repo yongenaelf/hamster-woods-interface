@@ -100,7 +100,7 @@ export default function Login() {
 
   const { configInfo } = useGetState();
   const { curChain, network } = configInfo!;
-  const [originChainId, setOriginChainId] = useState<ChainId>('tDVV');
+  const [originChainId, setOriginChainId] = useState<ChainId>(curChain);
   const [caHash, setCaHash] = useState<string>('');
   const caInfoRef = useRef<{ caAddress: string; caHash: string }>({ caAddress: '', caHash: '' });
   const [guardianList, setGuardianList] = useState<UserGuardianStatus[]>();
@@ -238,7 +238,7 @@ export default function Login() {
       await handleOnChainFinish(WalletType.portkey, wallet);
       console.log('wfs onFinish invoke end', wallet, new Date());
     },
-    [handleOnChainFinish],
+    [handleOnChainFinish, handlePortKeyLoginFinish],
   );
   const handleCreatePending = useCallback(
     async (createPendingInfo: CreatePendingInfo) => {
