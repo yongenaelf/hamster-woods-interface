@@ -24,7 +24,7 @@ export default function MyAsset() {
   return (
     <div className={styles.asset}>
       <PortkeyAssetProvider
-        originChainId={originChainId as Chain}
+        originChainId={(originChainId || walletInfo?.portkeyInfo?.chainId) as Chain}
         pin={walletInfo?.portkeyInfo?.pin}
         caHash={walletInfo?.portkeyInfo?.caInfo?.caHash}
         isLoginOnChain={isOnChainLogin}

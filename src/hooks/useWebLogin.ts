@@ -396,6 +396,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
       } else if (type === WalletType.portkey) {
         const keyName = StorageUtils.getWalletKey();
 
+        store.dispatch(
+          setWalletInfo({
+            portkeyInfo: walletInfo,
+          }),
+        );
         did.save((walletInfo as PortkeyInfoType)?.pin || '', keyName);
         setDidWalletInfo(walletInfo as PortkeyInfoType);
         setWallet({
@@ -430,7 +435,7 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         }
       }
     },
-    [curChain],
+    [curChain, isLogin, isOnChainLogin],
   );
 
   const handleOnChainFinish = useCallback(
@@ -470,6 +475,11 @@ export default function useWebLogin({ signHandle }: { signHandle?: any }) {
         });
         setCurWalletType(type);
         store.dispatch(setWalletType(WalletType.portkey));
+        store.dispatch(
+          setWalletInfo({
+            portkeyInfo: walletInfo,
+          }),
+        );
         if ((walletInfo as PortkeyInfoType).chainId !== curChain) {
           InstanceProvider.setWalletInfoInstance({
             portkeyInfo: walletInfo as PortkeyInfoType,
