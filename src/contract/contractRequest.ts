@@ -108,20 +108,23 @@ export default class ContractRequest {
     this.viewContract = await this.getViewContract(contractAddress);
   }
 
+  public getChainInfoMap = async () => {
+    if (!this.chainInfoMap) {
+      const chainsList = await did.services.getChainsInfo();
+      const chainInfoMap = {} as any;
+      chainsList.forEach((item) => {
+        chainInfoMap[item.chainId] = item;
+      });
+      this.chainInfoMap = chainInfoMap;
+    }
+    return this.chainInfoMap;
+  };
+
   public getChainInfo = async (_chainId?: ChainId) => {
-    let chainInfo;
     const defaultChainId = process.env.NEXT_PUBLIC_APP_ENV === 'test' ? 'tDVW' : 'tDVV';
     const chainId = _chainId ?? this.chainId ?? defaultChainId;
-    if (this.chainInfoMap) {
-      chainInfo = this.chainInfoMap[chainId];
-    } else {
-      const chainsList = await did.services.getChainsInfo();
-      this.chainInfoMap = {} as any;
-      chainsList.forEach((item) => {
-        this.chainInfoMap![item.chainId] = item;
-      });
-      chainInfo = this.chainInfoMap?.[this.chainId!];
-    }
+    const chainInfoMap = await this.getChainInfoMap();
+    const chainInfo = chainInfoMap?.[chainId];
     if (!chainInfo) {
       throw new Error(`Chain is not running: ${this.chainId}`);
     }
@@ -246,8 +249,7 @@ export default class ContractRequest {
 
   private getCaContract = async () => {
     if (!this.caContract) {
-      const chainsInfo = await did.services.getChainsInfo();
-      const chainInfo = chainsInfo.find((chain) => chain.chainId === this.chainId);
+      const chainInfo = await this.getChainInfo(this.chainId);
       if (!chainInfo) {
         throw new Error(`Chain is not running: ${this.chainId}`);
       }
@@ -559,7 +561,8 @@ export default class ContractRequest {
     const originChainId = rst[0].originChainId;
 
     // get every chain HolderInfo
-    const chainsInfo = await did.services.getChainsInfo();
+    const chainsInfoMap = await this.getChainInfoMap();
+    const chainsInfo = Object.values(chainsInfoMap ?? {});
     const result = await Promise.all(
       chainsInfo.map(async (item) => {
         const contract = await this.getViewContracts(item.endPoint, item.chainId, item.caContractAddress);
