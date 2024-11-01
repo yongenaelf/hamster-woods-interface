@@ -22,7 +22,7 @@ export default function GetBeanPassModal({ type, ...props }: BeanPassModalPropsT
         btnText: walletType !== WalletType.discover ? 'Go to wallet' : '',
         contentArr: [
           'You need to have a HamsterPass NFT to start the game.',
-          `To claim the free HamsterPass, please make sure your MainChain and SideChain balances combined to be no less than ${
+          `To claim the free HamsterPass, please make sure your MainChain and dAppChain balances combined to be no less than ${
             configInfo!.minElfNum
           } ELF.`,
         ],
