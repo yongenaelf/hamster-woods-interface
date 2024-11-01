@@ -11,6 +11,49 @@ interface ResponseType<T> {
   data: T;
 }
 
+const pendings: Record<string, AxiosRequestConfig[]> = {};
+const caches: Record<string, AxiosResponse> = {};
+const cacheUtils = {
+  getUniqueUrl: (config: AxiosRequestConfig) => {
+    // hash the config to get unique key, if
+    return JSON.stringify([config.url, config.params, config.data]);
+  },
+  isCached: function (config: AxiosRequestConfig) {
+    const uniqueUrl = this.getUniqueUrl(config);
+    return caches[uniqueUrl] !== undefined;
+  },
+  isPending: function (config: AxiosRequestConfig) {
+    const uniqueUrl = this.getUniqueUrl(config);
+    if (!pendings[uniqueUrl]) {
+      pendings[uniqueUrl] = [config];
+      return false;
+    } else {
+      console.log(`cache url: ${uniqueUrl}`);
+      pendings[uniqueUrl].push(config);
+      return true;
+    }
+  },
+  setCachedResponse: function (config: AxiosRequestConfig, response: AxiosResponse) {
+    const uniqueUrl = this.getUniqueUrl(config);
+    caches[uniqueUrl] = response;
+    if (pendings[uniqueUrl]) {
+      pendings[uniqueUrl].forEach((configItem) => {
+        configItem.isFinished = true;
+      });
+    }
+  },
+  getError: function (config: AxiosRequestConfig) {
+    const skipXHRError = new Error('skip') as Error & { isSkipXHR: boolean; requestConfig: typeof config };
+    skipXHRError.isSkipXHR = true;
+    skipXHRError.requestConfig = config;
+    return skipXHRError;
+  },
+  getCachedResponse: function (config: AxiosRequestConfig) {
+    const uniqueUrl = this.getUniqueUrl(config);
+    return caches[uniqueUrl];
+  },
+};
+
 class Request {
   instance: AxiosInstance;
   baseConfig: AxiosRequestConfig = { baseURL: '/api', timeout: 60000 };
@@ -18,12 +61,45 @@ class Request {
   constructor(config: AxiosRequestConfig) {
     this.instance = axios.create(Object.assign({}, this.baseConfig, config));
 
-    this.instance.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+    this.instance.interceptors.request.use((config) => {
+      // need to opt-in with isCacheable to use cache
+      if (config.isCacheable) {
+        if (cacheUtils.isCached(config)) {
+          const error = cacheUtils.getError(config);
+          throw error;
+        }
+        if (cacheUtils.isPending(config)) {
+          return new Promise((_resolve, reject) => {
+            const interval = setInterval(() => {
+              if (config.isFinished) {
+                clearInterval(interval);
+                const error = cacheUtils.getError(config);
+                reject(error);
+              }
+            }, 200);
+          });
+        } else {
+          // the head of cacheable requests queue, get the response by http request
+          return config;
+        }
+      } else {
         return config;
+      }
+    });
+
+    // This should be the *first* response interceptor to add
+    this.instance.interceptors.response.use(
+      function (response) {
+        cacheUtils.setCachedResponse(response.config, response);
+        return response;
       },
-      (error) => {
-        console.error(`something were wrong when fetch ${config?.url}`, error);
+      function (error) {
+        /* recover from error back to normality
+         * but this time we use an cached response result
+         **/
+        if (error.isSkipXHR) {
+          return cacheUtils.getCachedResponse(error.requestConfig);
+        }
         return Promise.reject(error);
       },
     );
@@ -138,5 +214,7 @@ const cmsRequest = new Request({ baseURL: cmsUrl });
 //   baseURL: '/connect',
 // });
 
-export default new Request({});
+const req = new Request({});
+export default req;
+
 export { cmsRequest };

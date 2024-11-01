@@ -5,5 +5,29 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "tailwindCSS.emmetCompletions": true,
   "emmet.triggerExpansionOnTab": true,
-  "cSpell.words": ["simsun"]
+  "cSpell.words": [
+    "simsun"
+  ],
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.fixAll": "never"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ]
 }
