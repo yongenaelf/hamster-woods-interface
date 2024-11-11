@@ -1,6 +1,7 @@
 import { getHamsterPassClaimClaimable } from 'api/request';
 import LoadingModal from 'components/LoadingModal';
 import { useAddress } from 'hooks/useAddress';
+import useOpenGuardianApprove from 'hooks/useOpenGuardianApprove';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
@@ -8,9 +9,14 @@ import useGetState from 'redux/state/useGetState';
 import { WalletType } from 'types';
 import showMessage from 'utils/setGlobalComponentsInfo';
 
+import { store } from 'redux/store';
+import { setCurrentFnAfterApprove } from 'redux/reducer/info';
+import { CurrentFnAfterApproveType } from 'redux/types/reducerTypes';
+
 export default function Wallet() {
   const { isMobile, isOnChainLogin, walletType, needSync } = useGetState();
   const [syncLoading, setSyncLoading] = useState(false);
+  const { openGuardianApprove } = useOpenGuardianApprove();
 
   const router = useRouter();
 
@@ -20,6 +26,10 @@ export default function Wallet() {
     if ((!isOnChainLogin && walletType === WalletType.portkey) || needSync) {
       return setSyncLoading(true);
     }
+    if (openGuardianApprove()) {
+      return;
+    }
+
     showMessage.loading();
     let checkAccountInitStatusRes;
     try {
@@ -35,9 +45,10 @@ export default function Wallet() {
     }
     if (!checkAccountInitStatusRes) return false;
     return true;
-  }, [address, isOnChainLogin, needSync, walletType]);
+  }, [address, isOnChainLogin, needSync, openGuardianApprove, walletType]);
 
   const handleAsset = async () => {
+    store.dispatch(setCurrentFnAfterApprove(CurrentFnAfterApproveType.TOKEN));
     const isAbleInit = await checkAccountInitStatus();
     isAbleInit && router.push('/asset');
   };

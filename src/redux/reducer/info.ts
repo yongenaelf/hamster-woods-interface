@@ -3,6 +3,7 @@ import { AppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { InfoStateType, LoginStatus } from 'redux/types/reducerTypes';
 import { WalletType } from 'types';
+import { CurrentFnAfterApproveType } from 'redux/types/reducerTypes';
 
 const initialState: InfoStateType = {
   isMobile: false,
@@ -21,6 +22,12 @@ const initialState: InfoStateType = {
   assetVisible: false,
   isNeedSyncAccountInfo: true,
   loadingCountdown: 0,
+  isManagerReadOnly: false,
+  guardianListForFirstNeed: [],
+  guardianListForFirstNeedForAssetEntrance: [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  currentFnAfterApprove: CurrentFnAfterApproveType.NONE,
+  isManagerReadOnlyIsExecuteEnd: false,
 };
 
 // Actual Slice
@@ -77,6 +84,21 @@ export const infoSlice = createSlice({
     setCurBeanPass(state, action) {
       state.curBeanPass = action.payload;
     },
+    setIsManagerReadOnly(state, action) {
+      state.isManagerReadOnly = action.payload;
+    },
+    setGuardianListForFirstNeed(state, action) {
+      state.guardianListForFirstNeed = action.payload;
+    },
+    setGuardianListForFirstNeedForAssetEntrance(state, action) {
+      state.guardianListForFirstNeedForAssetEntrance = action.payload;
+    },
+    setCurrentFnAfterApprove(state, action) {
+      state.currentFnAfterApprove = action.payload;
+    },
+    setIsManagerReadOnlyIsExecuteEnd(state, action) {
+      state.isManagerReadOnlyIsExecuteEnd = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -106,6 +128,11 @@ export const {
   setIsNeedSyncAccountInfo,
   setLoadingCountdown,
   setCurBeanPass,
+  setIsManagerReadOnly,
+  setGuardianListForFirstNeed,
+  setGuardianListForFirstNeedForAssetEntrance,
+  setCurrentFnAfterApprove,
+  setIsManagerReadOnlyIsExecuteEnd,
 } = infoSlice.actions;
 export const selectInfo = (state: AppState) => state.info;
 export default infoSlice.reducer;

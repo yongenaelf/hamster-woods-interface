@@ -30,7 +30,19 @@ export type InfoStateType = {
   isNeedSyncAccountInfo: boolean;
   curBeanPass?: IBeanPassListItem;
   loadingCountdown?: number;
+  isManagerReadOnly?: boolean;
+  guardianListForFirstNeed?: any[];
+  guardianListForFirstNeedForAssetEntrance?: any[];
+  currentFnAfterApprove?: CurrentFnAfterApproveType;
+  isManagerReadOnlyIsExecuteEnd?: boolean;
 };
+
+export enum CurrentFnAfterApproveType {
+  GO = 'GO',
+  GET_CHANCE = 'GET_CHANCE',
+  TOKEN = 'TOKEN',
+  NONE = 'NONE',
+}
 
 export type PageLoadingType = {
   open: boolean;

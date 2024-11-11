@@ -16,12 +16,13 @@ import { getTxResultOnce, getTxResultRetry } from 'utils/getTxResult';
 import { SECONDS_60 } from 'constants/time';
 import { ChainId } from '@portkey/types';
 const { configInfo } = store.getState();
+import { clearManagerReadonlyStatusInMainChain } from 'utils/clearManagerReadonlyStatus';
+import { setGuardianListForFirstNeedForAssetEntrance } from 'redux/reducer/info';
 
 export enum ContractMethodType {
   SEND,
   VIEW,
 }
-
 const bingoContract = async <T, R>(methodName: string, params: T, type: ContractMethodType) => {
   const contract = contractRequest.get();
   const contractAddress = configInfo.configInfo!.beanGoTownContractAddress;
@@ -111,7 +112,13 @@ export const Play = async ({
       });
       result = finalTxRes.txResult;
     }
+    store.dispatch(setGuardianListForFirstNeedForAssetEntrance([]));
 
+    clearManagerReadonlyStatusInMainChain(
+      store.getState().info.walletInfo?.portkeyInfo?.caInfo?.caAddress,
+      store.getState().info.walletInfo?.portkeyInfo?.caInfo?.caHash,
+      store.getState().info.guardianListForFirstNeed,
+    );
     return {
       TransactionId: transactionId,
       TxResult: result,
@@ -162,6 +169,13 @@ export const PurchaseChance = async ({
       });
       result = finalTxRes.txResult;
     }
+    store.dispatch(setGuardianListForFirstNeedForAssetEntrance([]));
+
+    clearManagerReadonlyStatusInMainChain(
+      store.getState().info.walletInfo?.portkeyInfo?.caInfo?.caAddress,
+      store.getState().info.walletInfo?.portkeyInfo?.caInfo?.caHash,
+      store.getState().info.guardianListForFirstNeed,
+    );
 
     return {
       TransactionId: transactionId,
